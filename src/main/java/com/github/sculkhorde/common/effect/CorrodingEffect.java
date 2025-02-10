@@ -19,7 +19,7 @@ public class CorrodingEffect extends MobEffect {
 
     public static int liquidColor = ColorUtil.hexToRGB(ColorUtil.sculkAcidColor1);
     public static MobEffectCategory effectType = MobEffectCategory.HARMFUL;
-    public long COOLDOWN = TickUnits.convertSecondsToTicks(1);
+    public long COOLDOWN = TickUnits.convertSecondsToTicks(3);
     public long cooldownTicksRemaining = COOLDOWN;
     private Optional<LivingEntity> attacker = Optional.empty();
 
