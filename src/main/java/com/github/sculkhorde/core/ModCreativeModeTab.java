@@ -48,6 +48,7 @@ public class ModCreativeModeTab {
                 if(ModConfig.isExperimentalFeaturesEnabled()) event.accept(ModItems.SOUL_ANIMATOR.get());
                 if(ModConfig.isExperimentalFeaturesEnabled()) event.accept(ModBlocks.GOLEM_OF_WRATH_ANIMATOR_BLOCK.get());
                 if(ModConfig.isExperimentalFeaturesEnabled()) event.accept(ModBlocks.DEPLETED_GOLEM_OF_WRATH_ANIMATOR_BLOCK.get());
+                if(ModConfig.isExperimentalFeaturesEnabled()) event.accept(ModItems.BLADE_OF_PURITY.get());
 
                 event.accept(ModItems.SCULK_SPORE_SPEWER_SPAWN_EGG.get());
                 event.accept(ModItems.SCULK_MITE_SPAWN_EGG.get());
