@@ -1,4 +1,4 @@
-package com.github.sculkhorde.common.block.InfestationEntries;
+package com.github.sculkhorde.systems.block_infestation_system.infestation_entries;
 
 import com.github.sculkhorde.core.ModConfig;
 import net.minecraft.core.BlockPos;

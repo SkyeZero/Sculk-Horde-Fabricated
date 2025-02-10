@@ -4,7 +4,7 @@ import com.github.sculkhorde.common.entity.infection.CursorSurfacePurifierEntity
 import com.github.sculkhorde.core.ModBlocks;
 import com.github.sculkhorde.core.ModConfig;
 import com.github.sculkhorde.core.SculkHorde;
-import com.github.sculkhorde.systems.BlockInfestationSystem;
+import com.github.sculkhorde.systems.block_infestation_system.BlockInfestationSystem;
 import com.github.sculkhorde.util.BlockAlgorithms;
 import com.github.sculkhorde.util.EntityAlgorithms;
 import net.minecraft.core.BlockPos;

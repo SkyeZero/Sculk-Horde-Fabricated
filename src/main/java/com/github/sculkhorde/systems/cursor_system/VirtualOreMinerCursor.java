@@ -1,6 +1,6 @@
 package com.github.sculkhorde.systems.cursor_system;
 
-import com.github.sculkhorde.systems.BlockInfestationSystem;
+import com.github.sculkhorde.systems.block_infestation_system.BlockInfestationSystem;
 import com.github.sculkhorde.util.BlockAlgorithms;
 import com.github.sculkhorde.util.ParticleUtil;
 import com.github.sculkhorde.util.PlayerProfileHandler;

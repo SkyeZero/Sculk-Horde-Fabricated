@@ -1,11 +1,11 @@
 package com.github.sculkhorde.systems.chunk_cursor_system;
 
-import com.github.sculkhorde.common.block.InfestationEntries.BlockInfestationTable;
+import com.github.sculkhorde.systems.block_infestation_system.infestation_entries.BlockInfestationTable;
 import com.github.sculkhorde.common.blockentity.SculkBeeNestBlockEntity;
 import com.github.sculkhorde.core.ModBlocks;
 import com.github.sculkhorde.core.ModConfig;
 import com.github.sculkhorde.core.SculkHorde;
-import com.github.sculkhorde.systems.BlockInfestationSystem;
+import com.github.sculkhorde.systems.block_infestation_system.BlockInfestationSystem;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;

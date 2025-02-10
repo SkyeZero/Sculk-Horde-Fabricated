@@ -1,6 +1,6 @@
-package com.github.sculkhorde.systems;
+package com.github.sculkhorde.systems.block_infestation_system;
 
-import com.github.sculkhorde.common.block.InfestationEntries.BlockInfestationTable;
+import com.github.sculkhorde.systems.block_infestation_system.infestation_entries.BlockInfestationTable;
 import com.github.sculkhorde.common.block.SculkNodeBlock;
 import com.github.sculkhorde.common.blockentity.SculkBeeNestBlockEntity;
 import com.github.sculkhorde.common.pools.PoolBlocks;
@@ -34,6 +34,7 @@ public class BlockInfestationSystem {
 
     public static ArrayList<BlockInfestationTable> INFESTATION_TABLES = new ArrayList<>();
     public static BlockInfestationTable explicitInfectableBlocks;
+    public static BlockInfestationTable explicitCurableBlocks;
     public static BlockInfestationTable tagInfectableBlocks;
     public static BlockInfestationTable tagInfectableNonFullBlocks;
     public static BlockInfestationTable configInfectableBlocks;
@@ -219,10 +220,20 @@ public class BlockInfestationSystem {
         explicitInfectableBlocks.addEntry(0, "minecraft:air", "minecraft:sculk_vein");
         explicitInfectableBlocks.addEntry(0, "minecraft:air", "sculkhorde:tendrils");
 
-
+        // Used for blocks that only have a cured version, like sculk shroom blocks and living rock
+        explicitCurableBlocks = new BlockInfestationTable(1, false);
+        explicitInfectableBlocks.addOnlyCurableEntry(1, Blocks.STONE, ModBlocks.SCULK_LIVING_ROCK_BLOCK.get());
+        explicitInfectableBlocks.addOnlyCurableEntry(1, Blocks.IRON_ORE, ModBlocks.CALCITE_ORE.get());
+        explicitInfectableBlocks.addOnlyCurableEntry(2, Blocks.MUSHROOM_STEM, ModBlocks.FUNGAL_SCULK_STEM_BLOCK.get());
+        explicitInfectableBlocks.addOnlyCurableEntry(3, Blocks.BROWN_MUSHROOM_BLOCK, ModBlocks.FUNGAL_SCULK_BLOCK.get());
+        explicitInfectableBlocks.addOnlyCurableEntry(4, Blocks.AMETHYST_BLOCK, ModBlocks.SOULITE_BLOCK.get());
+        explicitInfectableBlocks.addOnlyCurableEntry(5, Blocks.AMETHYST_BLOCK, ModBlocks.DEPLETED_SOULITE_BLOCK.get());
+        explicitInfectableBlocks.addOnlyCurableEntry(6, Blocks.BUDDING_AMETHYST, ModBlocks.BUDDING_SOULITE_BLOCK.get());
+        explicitInfectableBlocks.addOnlyCurableEntry(7, Blocks.AMETHYST_CLUSTER, ModBlocks.SOULITE_CLUSTER_BLOCK.get());
+        explicitInfectableBlocks.addOnlyCurableEntry(8, Blocks.AMETHYST_CLUSTER, ModBlocks.SOULITE_BUD_BLOCK.get());
 
         // Used to infect non-full blocks. Priority Matters
-        tagInfectableNonFullBlocks = new BlockInfestationTable(1, false);
+        tagInfectableNonFullBlocks = new BlockInfestationTable(2, false);
         tagInfectableNonFullBlocks.addEntry(1, BlockTags.STAIRS, BlockTags.MINEABLE_WITH_AXE, Tiers.IRON, ModBlocks.INFESTED_WOOD_STAIRS.get(), Blocks.OAK_STAIRS);
         tagInfectableNonFullBlocks.addEntry(2, BlockTags.STAIRS, BlockTags.MINEABLE_WITH_PICKAXE, Tiers.IRON, ModBlocks.INFESTED_STURDY_STAIRS.get(), Blocks.COBBLESTONE_STAIRS);
         tagInfectableNonFullBlocks.addEntry(3, BlockTags.STAIRS, ModBlocks.BlockTags.CONVERTS_TO_CRUMBLING_VARIANT, Tiers.IRON, ModBlocks.INFESTED_CRUMBLING_STAIRS.get(), Blocks.MOSSY_COBBLESTONE_STAIRS); //vanilla doesn't have any stairs that match these criteria so this is about the best i could get
@@ -237,14 +248,14 @@ public class BlockInfestationSystem {
         tagInfectableNonFullBlocks.addEntry(12, BlockTags.FENCE_GATES, ModBlocks.INFESTED_STURDY_FENCE_GATE.get(), Blocks.OAK_FENCE_GATE);
 
         // Used to infect generic types of blocks like wood-like, stone-like, etc. Priority Matters
-        tagInfectableBlocks = new BlockInfestationTable(2, true);
+        tagInfectableBlocks = new BlockInfestationTable(3, true);
         tagInfectableBlocks.addEntry(1, net.minecraft.tags.BlockTags.LOGS, ModBlocks.INFESTED_LOG.get(), Blocks.OAK_LOG);
         tagInfectableBlocks.addEntry(2, BlockTags.MINEABLE_WITH_AXE, ModBlocks.INFESTED_WOOD_MASS.get(), Blocks.OAK_PLANKS);
         tagInfectableBlocks.addEntry(3, BlockTags.MINEABLE_WITH_PICKAXE, Tiers.IRON, ModBlocks.INFESTED_STURDY_MASS.get(), Blocks.COBBLESTONE);
         tagInfectableBlocks.addEntry(4, BlockTags.MINEABLE_WITH_SHOVEL, Tiers.IRON, ModBlocks.INFESTED_CRUMPLED_MASS.get(), Blocks.COARSE_DIRT);
         tagInfectableBlocks.addEntry(5, BlockTags.MINEABLE_WITH_HOE, Tiers.IRON, ModBlocks.INFESTED_COMPOST_MASS.get(), Blocks.MOSS_BLOCK);
 
-        configInfectableBlocks = new BlockInfestationTable(3, false);
+        configInfectableBlocks = new BlockInfestationTable(4, false);
         configInfectableBlocks.addEntry(ModBlocks.INFESTED_STURDY_MASS.get());
 
         BlockInfestationAPI.addBlockInfestationTable(explicitInfectableBlocks);

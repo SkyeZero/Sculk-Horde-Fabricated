@@ -1,8 +1,7 @@
-package com.github.sculkhorde.common.block.InfestationEntries;
+package com.github.sculkhorde.systems.block_infestation_system.infestation_entries;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.state.BlockState;
 
 public interface ITagInfestedBlock {
     ITagInfestedBlockEntity getTagInfestedBlockEntity(Level level, BlockPos blockPos);

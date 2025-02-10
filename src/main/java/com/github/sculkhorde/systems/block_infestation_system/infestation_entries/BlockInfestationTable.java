@@ -1,4 +1,4 @@
-package com.github.sculkhorde.common.block.InfestationEntries;
+package com.github.sculkhorde.systems.block_infestation_system.infestation_entries;
 
 import com.github.sculkhorde.core.SculkHorde;
 import com.github.sculkhorde.util.BlockAlgorithms;
@@ -81,6 +81,12 @@ public class BlockInfestationTable{
     public void addEntry(ITagInfestedBlock infectedVariant)
     {
         entries.add(new ConfigInfestationTableEntry(infectedVariant));
+        entries.sort(Comparator.comparing(IBlockInfestationEntry::getPriority));
+    }
+
+    public void addOnlyCurableEntry(float priority, Block normalVariant, Block infectedVariant)
+    {
+        entries.add(new BlockExplicitCurableTableEntry(priority, normalVariant, infectedVariant));
         entries.sort(Comparator.comparing(IBlockInfestationEntry::getPriority));
     }
 

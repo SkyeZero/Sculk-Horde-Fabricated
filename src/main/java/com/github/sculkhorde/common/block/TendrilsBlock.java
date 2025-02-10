@@ -1,7 +1,7 @@
 package com.github.sculkhorde.common.block;
 
 import com.github.sculkhorde.core.ModBlocks;
-import com.github.sculkhorde.systems.BlockInfestationSystem;
+import com.github.sculkhorde.systems.block_infestation_system.BlockInfestationSystem;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;

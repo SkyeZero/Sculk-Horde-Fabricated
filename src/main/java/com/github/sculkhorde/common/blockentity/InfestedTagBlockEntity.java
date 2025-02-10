@@ -1,6 +1,6 @@
 package com.github.sculkhorde.common.blockentity;
 
-import com.github.sculkhorde.common.block.InfestationEntries.ITagInfestedBlockEntity;
+import com.github.sculkhorde.systems.block_infestation_system.infestation_entries.ITagInfestedBlockEntity;
 import com.github.sculkhorde.core.ModBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderGetter;

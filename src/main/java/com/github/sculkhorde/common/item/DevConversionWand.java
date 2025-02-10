@@ -1,6 +1,6 @@
 package com.github.sculkhorde.common.item;
 
-import com.github.sculkhorde.systems.BlockInfestationSystem;
+import com.github.sculkhorde.systems.block_infestation_system.BlockInfestationSystem;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.TooltipFlag;

@@ -1,10 +1,8 @@
-package com.github.sculkhorde.common.block.InfestationEntries;
+package com.github.sculkhorde.systems.block_infestation_system.infestation_entries;
 
-import net.minecraft.core.BlockPos;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.Tiers;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
