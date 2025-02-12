@@ -45,7 +45,7 @@ public class ZoltraakAttackRenderer extends GeoEntityRenderer<ZoltraakAttackEnti
     @Override
     public void actuallyRender(PoseStack poseStack, ZoltraakAttackEntity animatable, BakedGeoModel model, RenderType renderType, MultiBufferSource bufferSource, VertexConsumer buffer, boolean isReRender, float partialTick, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
         poseStack.pushPose();
-        
+
         if (!isReRender) {
             float motionThreshold = this.getMotionAnimThreshold(animatable);
             Vec3 velocity = animatable.getDeltaMovement();
