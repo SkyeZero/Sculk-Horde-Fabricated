@@ -155,9 +155,9 @@ public class ZoltraakAttackEntity extends SpecialEffectEntity implements GeoEnti
                 completedAttack = true;
                 triggerAnim(DESPAWN_ANIMATION_CONTROLLER_ID, DESPAWN_ANIMATION_ID);
             }
-            else if(targetPos.isPresent())
+            else if(targetPos.isEmpty())
             {
-                // TODO Implement zoltraak without living entity target
+                discard();
             }
         }
 
