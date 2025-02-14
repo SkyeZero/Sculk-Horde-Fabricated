@@ -30,8 +30,12 @@ import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib.animatable.GeoEntity;
+import software.bernie.geckolib.constant.DefaultAnimations;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.EnumSet;
@@ -290,9 +294,24 @@ public class GolemOfWrathEntity extends PathfinderMob implements GeoEntity, IPur
 
     // #### Animation Code ####
 
+    public static final String ATTACK_MELEE_ID = "attack.melee";
+    private static final RawAnimation ATTACK_MELEE_ANIMATION = RawAnimation.begin().thenPlay(ATTACK_MELEE_ID);
+
+    public static final String SPIN_ATTACK_MELEE_ID = "attack.spin";
+    private static final RawAnimation SPIN_ATTACK_MELEE_ANIMATION = RawAnimation.begin().thenPlay(SPIN_ATTACK_MELEE_ID);
+
+    public static final String COMBAT_ATTACK_ANIMATION_CONTROLLER_ID = "attack_controller";
+    private final AnimationController COMBAT_ATTACK_ANIMATION_CONTROLLER = new AnimationController<>(this, COMBAT_ATTACK_ANIMATION_CONTROLLER_ID, state -> PlayState.STOP)
+            .transitionLength(5)
+            .triggerableAnim(ATTACK_MELEE_ID, ATTACK_MELEE_ANIMATION)
+            .triggerableAnim(SPIN_ATTACK_MELEE_ID, SPIN_ATTACK_MELEE_ANIMATION);
+
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-
+        controllers.add(
+                DefaultAnimations.genericWalkRunIdleController(this).transitionLength(5),
+                COMBAT_ATTACK_ANIMATION_CONTROLLER
+        );
     }
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {
@@ -350,7 +369,7 @@ public class GolemOfWrathEntity extends PathfinderMob implements GeoEntity, IPur
 
         @Override
         protected void triggerAnimation() {
-            //((SculkRavagerEntity)mob).triggerAnim("attack_controller", "attack_animation");
+            triggerAnim(COMBAT_ATTACK_ANIMATION_CONTROLLER_ID, ATTACK_MELEE_ID);
         }
 
         @Override
@@ -376,24 +395,19 @@ public class GolemOfWrathEntity extends PathfinderMob implements GeoEntity, IPur
         }
     }
 
-    class GroundSlamAttackGoal extends Goal
-    {
-
-        protected long ATTACK_COOLDOWN = TickUnits.convertSecondsToTicks(6);
-        protected long timeOfLastAttack = 0;
+    class GroundSlamAttackGoal extends CustomMeleeAttackGoal {
 
         protected long CHECK_INTERVAL = TickUnits.convertSecondsToTicks(2);
         protected long timeOfLastCheck = 0;
 
-        protected long timeOfAttackStart = 0;
-        protected long DAMAGE_DELAY = TickUnits.convertSecondsToTicks(1);
-        protected boolean isAttackOver = false;
+        public GroundSlamAttackGoal() {
+            super(GolemOfWrathEntity.this, 1.0D, false, 10);
+        }
 
         @Override
         public boolean canUse() {
 
-            if(Math.abs(level().getGameTime() - timeOfLastAttack) < ATTACK_COOLDOWN)
-            {
+            if (!super.canUse()) {
                 return false;
             }
 
@@ -411,56 +425,43 @@ public class GolemOfWrathEntity extends PathfinderMob implements GeoEntity, IPur
 
         @Override
         public boolean canContinueToUse() {
-            return !isAttackOver;
+            return !canUse();
         }
 
         @Override
-        public void start() {
-            timeOfAttackStart = level().getGameTime();
-            timeOfLastAttack = timeOfAttackStart;
+        protected int getAttackInterval() {
+            return TickUnits.convertSecondsToTicks(6);
         }
 
         @Override
-        public void tick() {
-            super.tick();
+        public void onTargetHurt(LivingEntity target) {
+            super.onTargetHurt(target);
+            List<LivingEntity> entities = EntityAlgorithms.getAllInfectionModEntitiesInBoundingBox((ServerLevel) level(), getBoundingBox().inflate(7));
+            float pushAwayStrength = 5f; // Increased push strength for better outwards effect
+            float pushUpStrength = 3f;   // Separate push up strength for vertical component.
 
-            if (level().isClientSide()) {
-                return;
-            }
-
-            if (Math.abs(level().getGameTime() - timeOfAttackStart) >= DAMAGE_DELAY) {
-                List<LivingEntity> entities = EntityAlgorithms.getAllInfectionModEntitiesInBoundingBox((ServerLevel) level(), getBoundingBox().inflate(7));
-                float pushAwayStrength = 5f; // Increased push strength for better outwards effect
-                float pushUpStrength = 3f;   // Separate push up strength for vertical component.
-
-                for (LivingEntity entity : entities)
-                {
-                    if(entity.getUUID().equals(GolemOfWrathEntity.this.getUUID()))
-                    {
-                        continue;
-                    }
-
-                    EntityAlgorithms.pushAwayEntitiesFromPosition(position(), entity, pushAwayStrength, pushUpStrength);
-                    CursorSurfacePurifierEntity cursor = new CursorSurfacePurifierEntity(entity.level());
-                    cursor.setPos(entity.position());
-                    cursor.setTickIntervalMilliseconds(10);
-                    cursor.setMaxLifeTimeMillis(TimeUnit.SECONDS.toMillis(60));
-                    cursor.setMaxTransformations(20);
-                    entity.level().addFreshEntity(cursor);
+            for (LivingEntity entity : entities) {
+                if (entity.getUUID().equals(GolemOfWrathEntity.this.getUUID())) {
+                    continue;
                 }
-                SoundUtil.playHostileSoundInLevel(level(), blockPosition(), SoundEvents.RAVAGER_ATTACK);
-                isAttackOver = true;
+
+                EntityAlgorithms.pushAwayEntitiesFromPosition(position(), entity, pushAwayStrength, pushUpStrength);
+                CursorSurfacePurifierEntity cursor = new CursorSurfacePurifierEntity(entity.level());
+                cursor.setPos(entity.position());
+                cursor.setTickIntervalMilliseconds(10);
+                cursor.setMaxLifeTimeMillis(TimeUnit.SECONDS.toMillis(60));
+                cursor.setMaxTransformations(20);
+                entity.level().addFreshEntity(cursor);
             }
+            SoundUtil.playHostileSoundInLevel(level(), blockPosition(), SoundEvents.RAVAGER_ATTACK);
         }
 
         @Override
-        public void stop() {
-            super.stop();
-            isAttackOver = false;
+        protected void triggerAnimation() {
+            triggerAnim(COMBAT_ATTACK_ANIMATION_CONTROLLER_ID, SPIN_ATTACK_MELEE_ID);
         }
     }
-
-    class NavigateToBoundBlockIfTooFarOrIdle extends Goal {
+        class NavigateToBoundBlockIfTooFarOrIdle extends Goal {
         private final PathfinderMob mob;
         private double wantedX;
         private double wantedY;

@@ -14,12 +14,18 @@ public class ZoltraakAttackGoal extends ReaperCastSpellGoal
 
     @Override
     protected int getBaseCastingTime() {
-        return TickUnits.convertSecondsToTicks(0.5F);
+        return TickUnits.convertSecondsToTicks(1.25F);
     }
 
     @Override
     protected int getCooldownTicksElapsed() {
         return TickUnits.convertSecondsToTicks(8);
+    }
+
+    @Override
+    protected void playCastingAnimation()
+    {
+        mob.triggerAnim(SculkSoulReaperEntity.COMBAT_ATTACK_ANIMATION_CONTROLLER_ID, SculkSoulReaperEntity.ZOLTRAAK_SPELL_USE_ID);
     }
 
     @Override

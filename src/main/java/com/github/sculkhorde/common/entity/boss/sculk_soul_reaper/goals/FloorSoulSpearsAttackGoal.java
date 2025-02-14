@@ -94,6 +94,17 @@ public class FloorSoulSpearsAttackGoal extends ReaperCastSpellGoal
         spawners.clear();
     }
 
+    @Override
+    protected int getBaseCastingTime() {
+        return TickUnits.convertSecondsToTicks(1F);
+    }
+
+    @Override
+    protected void playCastingAnimation()
+    {
+        mob.triggerAnim(SculkSoulReaperEntity.COMBAT_ATTACK_ANIMATION_CONTROLLER_ID, SculkSoulReaperEntity.FLOOR_SPEARS_SPELL_USE_ID);
+    }
+
 
     public class FloorSoulSpearsSpawner {
         private final ServerLevel level;

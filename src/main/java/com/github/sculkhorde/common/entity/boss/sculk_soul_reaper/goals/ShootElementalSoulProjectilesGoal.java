@@ -110,5 +110,20 @@ public class ShootElementalSoulProjectilesGoal extends ReaperCastSpellGoal
         attackkIntervalCooldown = attackIntervalTicks;
     }
 
+    @Override
+    protected int getBaseCastingTime() {
+        return TickUnits.convertSecondsToTicks(0.75F);
+    }
+
+    @Override
+    protected void playCastingAnimation()
+    {
+        mob.triggerAnim(SculkSoulReaperEntity.COMBAT_ATTACK_ANIMATION_CONTROLLER_ID, SculkSoulReaperEntity.ELEMENTAL_PROJECTILE_SPELL_CHARGE_ID);
+    }
+
+    @Override
+    protected void playAttackAnimation() {
+        mob.triggerAnim(SculkSoulReaperEntity.COMBAT_ATTACK_ANIMATION_CONTROLLER_ID, SculkSoulReaperEntity.ELEMENTAL_PROJECTILE_SPELL_SHOOT_ID);
+    }
 }
 //projectileEntity.shoot(d0, d1 + d3 * (double)0.2F, d2, 1.6F, (float)(14 - mob.level().getDifficulty().getId() * 4));

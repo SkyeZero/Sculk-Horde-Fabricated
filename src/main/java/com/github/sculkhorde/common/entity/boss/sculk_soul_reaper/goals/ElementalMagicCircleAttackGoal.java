@@ -2,6 +2,7 @@ package com.github.sculkhorde.common.entity.boss.sculk_soul_reaper.goals;
 
 import com.github.sculkhorde.common.entity.boss.sculk_soul_reaper.*;
 import com.github.sculkhorde.util.BlockAlgorithms;
+import com.github.sculkhorde.util.TickUnits;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
@@ -39,8 +40,6 @@ public class ElementalMagicCircleAttackGoal extends ReaperCastSpellGoal
 
         return true;
     }
-
-
 
     @Override
     protected void doAttackTick() {
@@ -131,5 +130,16 @@ public class ElementalMagicCircleAttackGoal extends ReaperCastSpellGoal
             case 3 -> new ElementalBreezeMagicCircleAttackAttackEntity(mob.level(), x, y, z, angle, owner);
             default -> new ElementalFireMagicCircleAttackEntity(mob.level(), x, y, z, angle, owner);
         };
+    }
+
+    @Override
+    protected int getBaseCastingTime() {
+        return TickUnits.convertSecondsToTicks(0.75F);
+    }
+
+    @Override
+    protected void playCastingAnimation()
+    {
+        mob.triggerAnim(SculkSoulReaperEntity.COMBAT_ATTACK_ANIMATION_CONTROLLER_ID, SculkSoulReaperEntity.MAGIC_CIRCLE_SPELL_USE_ID);
     }
 }
