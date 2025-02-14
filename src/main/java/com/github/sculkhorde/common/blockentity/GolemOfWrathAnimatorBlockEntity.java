@@ -104,6 +104,17 @@ public class GolemOfWrathAnimatorBlockEntity extends BlockEntity {
         if(blockEntity.getGolem().isEmpty())
         {
             blockEntity.spawnGolem();
+            return;
+        }
+
+        LivingEntity golem = blockEntity.getGolemAsLivingEntity().get();
+
+        if(golem.isDeadOrDying()
+                && BlockAlgorithms.getBlockDistance(golem.blockPosition(), blockPos) > blockEntity.getGolem().get().getMaxDistanceFromBoundBlockBeforeDeath()
+                && golem.isRemoved())
+        {
+            golem.hurt(golem.damageSources().magic(), Integer.MAX_VALUE);
+            blockEntity.spawnGolem();
         }
 
     }
