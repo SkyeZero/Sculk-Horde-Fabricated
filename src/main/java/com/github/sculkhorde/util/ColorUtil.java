@@ -38,6 +38,28 @@ public class ColorUtil {
     public static String purityDarkColor2 = "752802";
     public static String purityDarkColor3 = "541209"; // Darkest
 
+    public static String getRandomSculkLightColor(RandomSource rng)
+    {
+        int index = rng.nextInt(7);
+        switch (index)
+        {
+            case 0:
+                return sculkLightColor1;
+            case 1:
+                return sculkLightColor2;
+            case 2:
+                return sculkLightColor3;
+            case 3:
+                return sculkLightColor4;
+            case 4:
+                return sculkLightColor5;
+            case 5:
+                return sculkLightColor6;
+            default:
+                return sculkLightColor1;
+        }
+    }
+
 
     public static String getRandomHexAcidColor(RandomSource rng)
     {

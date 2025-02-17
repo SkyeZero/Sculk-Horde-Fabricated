@@ -17,5 +17,6 @@ public class ModMobEffects {
     public static final RegistryObject<CorrodingEffect> CORRODED = EFFECTS.register("corroded", CorrodingEffect::new);
     public static final RegistryObject<DenseEffect> DENSE = EFFECTS.register("dense", DenseEffect::new);
     public static final RegistryObject<SoulDisruptionEffect> SOUL_DISRUPTION = EFFECTS.register("soul_disruption", SoulDisruptionEffect::new);
+    public static final RegistryObject<DiseasedAtmosphereEffect> DISEASED_ATMOSPHERE = EFFECTS.register("diseased_atmosphere", DiseasedAtmosphereEffect::new);
 
 }
