@@ -131,7 +131,7 @@
   "item.sculkhorde.crying_souls": "Almas agonizantes",
   "tooltip.sculkhorde.crying_souls.functionality": "§7§oUsado para crear almas puras y el barredor de sculk.",
   "tooltip.sculkhorde.crying_souls.lore": "§7§oLas almas de los asimilados. Perdieron sus cuerpos, memorias y personalidad. La única cosa que perdura es su angonía.",
-  "item.sculkhorde.essence_of_purity": "Escencia de pureza",
+  "item.sculkhorde.essence_of_purity": "Esencia de pureza",
   "tooltip.sculkhorde.essence_of_purity.functionality": "§7§oUna escencia pura que se usa para crear ítems de pureza.",
   "tooltip.sculkhorde.essence_of_purity.lore": "§7§oIrradia la cálidez de un amanecer y te llena con un sentimiento de alivio.",
   "item.sculkhorde.pure_souls": "Almas puras",
@@ -156,7 +156,7 @@
   "tooltip.sculkhorde.soul_harvester.functionality": "§7§oUn bloque usado para convertir un corazón de la horda inactivo a su variante activa. Requiere almas para funcionar. Sacrifica criaturas cerca de este bloque para recolectar almas.",
   "tooltip.sculkhorde.soul_harvester.lore": "§7§oRobas las almas de los vivos, entonces los represa a un destino peor que la muerte. Si pones tu oído cerca de este bloque, puedes oir sus gritos de ayuda. Este cosechador de almas puede imbuir objetos con las almas coleccionadas, transformandolas en objetos de valor y pecado.",
 
-  "block.sculkhorde.infestation_ward_block": "Infestation Ward Block",
+  "block.sculkhorde.infestation_ward_block": "Bloque de guarda de infestación",
   "tooltip.sculkhorde.infestation_ward_block.functionality": "§7§oUn bloque que previene la infestación de sculk de propagarse a cualquier bloque adyacente. Incluye diagonales. Idealmente usado para crear un perímetro alrededor de un área para prevenir que la infestación cruce.",
   "tooltip.sculkhorde.infestation_ward_block.lore": "§7§oLa robustez de roca vivente, combinado con §e§oescencia de pureza§r§7§o, crea un gran repelente de infestación para bloques. Caminar sobre él te hace sentir angelical.",
   "block.sculkhorde.infested_mud": "Barro infestado",
