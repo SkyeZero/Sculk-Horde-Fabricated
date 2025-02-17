@@ -1,7 +1,7 @@
 package com.github.sculkhorde.common.entity;
 
 import com.github.sculkhorde.common.block.GolemOfWrathAnimatorBlock;
-import com.github.sculkhorde.common.entity.goal.CustomMeleeAttackGoal;
+import com.github.sculkhorde.common.entity.goal.CustomAttackGoal;
 import com.github.sculkhorde.common.entity.goal.NearestInfectionModEntityTargetGoal;
 import com.github.sculkhorde.common.entity.infection.CursorSurfacePurifierEntity;
 import com.github.sculkhorde.core.ModBlocks;
@@ -18,10 +18,15 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.util.DefaultRandomPos;
 import net.minecraft.world.level.Level;
@@ -149,7 +154,7 @@ public class GolemOfWrathEntity extends PathfinderMob implements GeoEntity, IPur
                         new FloatGoal(this),
                         new GroundSlamAttackGoal(),
                         new MeleeAttackGoal(),
-                        new NavigateToBoundBlockIfTooFarOrIdle(),
+                        new GolemOfWrathNavigation(),
                         //WaterAvoidingRandomWalkingGoal(mob, speedModifier)
                         new WaterAvoidingRandomStrollGoal(this, 0.7D),
                 };
@@ -197,6 +202,15 @@ public class GolemOfWrathEntity extends PathfinderMob implements GeoEntity, IPur
         {
             removeEffect(ModMobEffects.CORRODED.get());
         }
+
+        if(getLastAttacker() != null && getTarget() != null && EntityAlgorithms.isInfectionModEntity.test(getLastAttacker()))
+        {
+            if(distanceTo(getLastAttacker()) < distanceTo(getTarget()))
+            {
+                setTarget(getLastAttacker());
+            }
+        }
+
 
         // If we do not belong to a block, ignore
         if(!belongsToBoundBlock())
@@ -336,30 +350,12 @@ public class GolemOfWrathEntity extends PathfinderMob implements GeoEntity, IPur
         this.playSound(SoundEvents.IRON_GOLEM_STEP, 0.15F, 1.0F);
     }
 
-    class MeleeAttackGoal extends CustomMeleeAttackGoal
+    class MeleeAttackGoal extends CustomAttackGoal
     {
 
         public MeleeAttackGoal()
         {
-            super(GolemOfWrathEntity.this, 1.0D, false, 10);
-        }
-
-        @Override
-        public boolean canUse()
-        {
-            return mob.getTarget() != null;
-        }
-
-        @Override
-        public boolean canContinueToUse()
-        {
-            return canUse();
-        }
-
-        protected double getAttackReachSqr(LivingEntity pAttackTarget)
-        {
-            float entityBoundingBoxWidth = GolemOfWrathEntity.this.getBbWidth();
-            return entityBoundingBoxWidth * 2.0F + pAttackTarget.getBbWidth();
+            super(GolemOfWrathEntity.this, GolemOfWrathEntity.this.getBbWidth() * 2, 10);
         }
 
         @Override
@@ -395,13 +391,15 @@ public class GolemOfWrathEntity extends PathfinderMob implements GeoEntity, IPur
         }
     }
 
-    class GroundSlamAttackGoal extends CustomMeleeAttackGoal {
-
-        protected long CHECK_INTERVAL = TickUnits.convertSecondsToTicks(2);
-        protected long timeOfLastCheck = 0;
+    class GroundSlamAttackGoal extends CustomAttackGoal {
 
         public GroundSlamAttackGoal() {
-            super(GolemOfWrathEntity.this, 1.0D, false, 10);
+            super(GolemOfWrathEntity.this, 1.0F,  10);
+        }
+
+        @Override
+        public long getCanUseCheckInterval() {
+            return TickUnits.convertSecondsToTicks(2);
         }
 
         @Override
@@ -411,16 +409,8 @@ public class GolemOfWrathEntity extends PathfinderMob implements GeoEntity, IPur
                 return false;
             }
 
-            if (Math.abs(level().getGameTime() - timeOfLastCheck) >= CHECK_INTERVAL) {
-                timeOfLastCheck = level().getGameTime();
-
-                List<LivingEntity> hostiles = EntityAlgorithms.getAllInfectionModEntitiesInBoundingBox((ServerLevel) level(), getBoundingBox().inflate(7));
-
-                return hostiles.size() > 4;
-            }
-
-
-            return false;
+            List<LivingEntity> hostiles = EntityAlgorithms.getAllInfectionModEntitiesInBoundingBox((ServerLevel) level(), getBoundingBox().inflate(7));
+            return hostiles.size() > 4;
         }
 
         @Override
@@ -461,74 +451,74 @@ public class GolemOfWrathEntity extends PathfinderMob implements GeoEntity, IPur
             triggerAnim(COMBAT_ATTACK_ANIMATION_CONTROLLER_ID, SPIN_ATTACK_MELEE_ID);
         }
     }
-        class NavigateToBoundBlockIfTooFarOrIdle extends Goal {
-        private final PathfinderMob mob;
-        private double wantedX;
-        private double wantedY;
-        private double wantedZ;
-        private final double speedModifier;
+    protected class GolemOfWrathNavigation extends Goal {
+        protected final PathfinderMob mob;
+        protected double wantedX;
+        protected double wantedY;
+        protected double wantedZ;
+        protected final double speedModifier;
 
-        public NavigateToBoundBlockIfTooFarOrIdle() {
+        // Add cooldown-related fields
+        protected int pathRecalculationCooldown = 0;
+        protected static final int PATH_RECALCULATION_INTERVAL_TICKS = TickUnits.convertSecondsToTicks(1); // Ticks (1 second at 20 ticks/sec)
+
+        public GolemOfWrathNavigation() {
             this.mob = GolemOfWrathEntity.this;
             this.speedModifier = 1;
             this.setFlags(EnumSet.of(Flag.MOVE));
         }
 
-        public IPurityGolemEntity getGolem()
-        {
+        public IPurityGolemEntity getGolem() {
             return (IPurityGolemEntity) mob;
         }
 
-        public boolean canUse()
-        {
+        public boolean canUse() {
+            // Decrement cooldown
+            if (pathRecalculationCooldown > 0) {
+                pathRecalculationCooldown--;
+                return false;
+            }
+
             boolean doesGolemBelongToABoundBlockThatIsPresent = getGolem().belongsToBoundBlock() && getGolem().isBoundBlockPresent();
 
-            if(!doesGolemBelongToABoundBlockThatIsPresent)
-            {
+            if(!doesGolemBelongToABoundBlockThatIsPresent) {
                 return false;
             }
 
             boolean isGolemTooFarFromBoundBlock = BlockAlgorithms.getBlockDistanceXZ(mob.blockPosition(), getGolem().getBoundBlockPos().get()) >= getGolem().getMaxTravelDistanceFromBoundBlock();
             boolean isGolemIdle = mob.getTarget() == null;
             boolean isGolemTooCloseToBoundBlock = BlockAlgorithms.getBlockDistanceXZ(mob.blockPosition(), getGolem().getBoundBlockPos().get()) < 10;
+            boolean shouldGoToBoundBlock = (isGolemTooFarFromBoundBlock || isGolemIdle) && !isGolemTooCloseToBoundBlock;
+            boolean shouldChaseTarget = !isGolemIdle;
 
-            if ((isGolemTooFarFromBoundBlock || isGolemIdle) && !isGolemTooCloseToBoundBlock)
-            {
-                Vec3 vec3 = DefaultRandomPos.getPosTowards(this.mob, 16, 7, getBoundBlockPos().get().getCenter(), (double)((float)Math.PI / 2F));
-                if (vec3 == null)
-                {
-                    return false;
-                }
-                else
-                {
-                    this.wantedX = vec3.x;
-                    this.wantedY = vec3.y;
-                    this.wantedZ = vec3.z;
-                    return true;
-                }
+            Vec3 potentialPosition = null;
+            if(shouldGoToBoundBlock) {
+                potentialPosition = DefaultRandomPos.getPosTowards(this.mob, 16, 7, getBoundBlockPos().get().getCenter(), Math.PI / 2F);
+            }
+            else if(shouldChaseTarget) {
+                potentialPosition = DefaultRandomPos.getPosTowards(this.mob, 16, 7, getTarget().position(), Math.PI / 2F);
+            }
+
+            if(potentialPosition != null) {
+                this.wantedX = potentialPosition.x;
+                this.wantedY = potentialPosition.y;
+                this.wantedZ = potentialPosition.z;
+                // Reset cooldown when new path is calculated
+                pathRecalculationCooldown = PATH_RECALCULATION_INTERVAL_TICKS;
+                return true;
             }
 
             return false;
         }
 
         public boolean canContinueToUse() {
-
-            boolean doesGolemBelongToABoundBlockThatIsPresent = getGolem().belongsToBoundBlock() && getGolem().isBoundBlockPresent();
-
-            if(!doesGolemBelongToABoundBlockThatIsPresent)
-            {
-                return false;
-            }
-
-            boolean isGolemTooFarFromBoundBlock = BlockAlgorithms.getBlockDistanceXZ(mob.blockPosition(), getGolem().getBoundBlockPos().get()) >= getGolem().getMaxTravelDistanceFromBoundBlock();
-            boolean isGolemIdle = mob.getTarget() == null;
-            boolean isGolemTooCloseToBoundBlock = BlockAlgorithms.getBlockDistanceXZ(mob.blockPosition(), getGolem().getBoundBlockPos().get()) < 10;
-
-
-            return (isGolemTooFarFromBoundBlock || isGolemIdle) && !isGolemTooCloseToBoundBlock && !getNavigation().isDone();
+            // Allow continued use even during cooldown
+            return !mob.getNavigation().isDone();
         }
 
         public void stop() {
+            // Reset cooldown when stopping
+            pathRecalculationCooldown = 0;
         }
 
         public void start() {
