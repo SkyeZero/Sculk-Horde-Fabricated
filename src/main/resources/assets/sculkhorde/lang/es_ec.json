@@ -121,7 +121,7 @@
   "tooltip.sculkhorde.sculk_bee_nest_cell.lore": "§7§oUna célula hogar de las abejas de sculk. Estas células sirven como tuneles para las abejas, y almacenamientos para la resina.",
   "block.sculkhorde.sculk_living_rock": "Roca viviente de sculk",
   "tooltip.sculkhorde.sculk_living_rock.functionality": "Decorativa y puede ser usada para crear §e§overrugas de infestación§r§7§o.",
-  "tooltip.sculkhorde.sculk_living_rock.lore": "§7§oThis rock feels warm to the touch, but also very hard and durable. It flexes as if it is breathing.",
+  "tooltip.sculkhorde.sculk_living_rock.lore": "§7§oEsta roca se siente tibia al tacto, pero también dura y resistente. Se mueve como si estuviese respirando.",
   "block.sculkhorde.sculk_living_rock_root": "Raíz de roca viviente de sculk",
   "tooltip.sculkhorde.sculk_living_rock_root.functionality": "§7§oEl núcleo de la estructura de roca viviente. Este núcleo permite que la estructura se regenere.",
   "tooltip.sculkhorde.sculk_living_rock_root.lore": "§7§oEl núcleo de la esctructura de roca viviente. Este núcleo es casi indistinguible del resto de la estructura. Debes de tener cuidado para no romperlo. Sin embargo, siempre aparece en el centro.",
