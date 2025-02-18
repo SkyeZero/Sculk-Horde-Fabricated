@@ -39,7 +39,7 @@ public abstract class CursorEntity extends Entity
     protected State state = State.IDLE;
 
     protected int MAX_TRANSFORMATIONS = 100;
-    protected int currentTransformations = 0;
+    public int currentTransformations = 0;
     protected int MAX_RANGE = 20;
     protected long MAX_LIFETIME_MILLIS = TimeUnit.SECONDS.toMillis(60 * 5);
     protected long creationTickTime = System.currentTimeMillis();

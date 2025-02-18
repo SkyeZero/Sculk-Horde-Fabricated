@@ -1,5 +1,6 @@
-package com.github.sculkhorde.common.entity.infection;
+package com.github.sculkhorde.systems.infestation_systems.node_infestation;
 
+import com.github.sculkhorde.common.entity.infection.CursorProberEntity;
 import com.github.sculkhorde.core.SculkHorde;
 import com.github.sculkhorde.systems.cursor_system.CursorSystem;
 import com.github.sculkhorde.systems.cursor_system.VirtualSurfaceInfestorCursor;

@@ -1,6 +1,6 @@
-package com.github.sculkhorde.systems.block_infestation_system;
+package com.github.sculkhorde.systems.infestation_systems.block_infestation_system;
 
-import com.github.sculkhorde.systems.block_infestation_system.infestation_entries.BlockInfestationTable;
+import com.github.sculkhorde.systems.infestation_systems.block_infestation_system.infestation_entries.BlockInfestationTable;
 import com.github.sculkhorde.common.block.SculkNodeBlock;
 import com.github.sculkhorde.common.blockentity.SculkBeeNestBlockEntity;
 import com.github.sculkhorde.common.pools.PoolBlocks;

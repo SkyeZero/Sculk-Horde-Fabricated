@@ -1,7 +1,7 @@
 package com.github.sculkhorde.common.blockentity;
 
 import com.github.sculkhorde.common.block.SculkNodeBlock;
-import com.github.sculkhorde.common.entity.infection.SculkNodeInfectionHandler;
+import com.github.sculkhorde.systems.infestation_systems.node_infestation.NodeBranchingInfestationSystem;
 import com.github.sculkhorde.common.structures.procedural.SculkNodeProceduralStructure;
 import com.github.sculkhorde.core.ModBlockEntities;
 import com.github.sculkhorde.core.ModConfig;
@@ -36,7 +36,7 @@ public class SculkNodeBlockEntity extends BlockEntity
 
     public static final int tickIntervalSeconds = 1;
 
-    private SculkNodeInfectionHandler infectionHandler;
+    private NodeBranchingInfestationSystem infectionHandler;
 
     public SculkNodeBlockEntity(BlockPos blockPos, BlockState blockState) {
         super(ModBlockEntities.SCULK_NODE_BLOCK_ENTITY.get(), blockPos, blockState);
@@ -78,7 +78,7 @@ public class SculkNodeBlockEntity extends BlockEntity
     {
         if(infectionHandler == null)
         {
-            infectionHandler = new SculkNodeInfectionHandler(this, getBlockPos());
+            infectionHandler = new NodeBranchingInfestationSystem(this, getBlockPos());
             infectionHandler.spawnOnSurface = false;
         }
     }

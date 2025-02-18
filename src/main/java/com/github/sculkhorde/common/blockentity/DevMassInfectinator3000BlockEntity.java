@@ -1,29 +1,13 @@
 package com.github.sculkhorde.common.blockentity;
 
-import com.github.sculkhorde.common.entity.ISculkSmartEntity;
-import com.github.sculkhorde.common.entity.SculkBeeHarvesterEntity;
-import com.github.sculkhorde.common.entity.infection.DevInfectionHandler;
-import com.github.sculkhorde.common.entity.infection.SculkNodeInfectionHandler;
-import com.github.sculkhorde.common.structures.procedural.SculkNodeProceduralStructure;
+import com.github.sculkhorde.systems.infestation_systems.node_infestation.DevNodeBranchingInfestationSystem;
 import com.github.sculkhorde.core.ModBlockEntities;
 import com.github.sculkhorde.core.ModConfig;
-import com.github.sculkhorde.core.SculkHorde;
-import com.github.sculkhorde.util.EntityAlgorithms;
-import com.github.sculkhorde.util.TickUnits;
 import net.minecraft.core.BlockPos;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.concurrent.TimeUnit;
 
 public class DevMassInfectinator3000BlockEntity extends BlockEntity
@@ -33,14 +17,14 @@ public class DevMassInfectinator3000BlockEntity extends BlockEntity
 
     public static final int tickIntervalSeconds = 1;
 
-    private DevInfectionHandler infectionHandler1;
-    private DevInfectionHandler infectionHandler2;
-    private DevInfectionHandler infectionHandler3;
-    private DevInfectionHandler infectionHandler4;
-    private DevInfectionHandler infectionHandler5;
-    private DevInfectionHandler infectionHandler6;
-    private DevInfectionHandler infectionHandler7;
-    private DevInfectionHandler infectionHandler8;
+    private DevNodeBranchingInfestationSystem infectionHandler1;
+    private DevNodeBranchingInfestationSystem infectionHandler2;
+    private DevNodeBranchingInfestationSystem infectionHandler3;
+    private DevNodeBranchingInfestationSystem infectionHandler4;
+    private DevNodeBranchingInfestationSystem infectionHandler5;
+    private DevNodeBranchingInfestationSystem infectionHandler6;
+    private DevNodeBranchingInfestationSystem infectionHandler7;
+    private DevNodeBranchingInfestationSystem infectionHandler8;
 
     public DevMassInfectinator3000BlockEntity(BlockPos blockPos, BlockState blockState) {
         super(ModBlockEntities.DEV_MASS_INFECTINATOR_3000_BLOCK_ENTITY.get(), blockPos, blockState);
@@ -56,35 +40,35 @@ public class DevMassInfectinator3000BlockEntity extends BlockEntity
     {
         if(infectionHandler1 == null)
         {
-            infectionHandler1 = new DevInfectionHandler(this, getBlockPos());
+            infectionHandler1 = new DevNodeBranchingInfestationSystem(this, getBlockPos());
         }
         if(infectionHandler2 == null)
         {
-            infectionHandler2 = new DevInfectionHandler(this, getBlockPos());
+            infectionHandler2 = new DevNodeBranchingInfestationSystem(this, getBlockPos());
         }
         if(infectionHandler3 == null)
         {
-            infectionHandler3 = new DevInfectionHandler(this, getBlockPos());
+            infectionHandler3 = new DevNodeBranchingInfestationSystem(this, getBlockPos());
         }
         if(infectionHandler4 == null)
         {
-            infectionHandler4 = new DevInfectionHandler(this, getBlockPos());
+            infectionHandler4 = new DevNodeBranchingInfestationSystem(this, getBlockPos());
         }
         if(infectionHandler5 == null)
         {
-            infectionHandler5 = new DevInfectionHandler(this, getBlockPos());
+            infectionHandler5 = new DevNodeBranchingInfestationSystem(this, getBlockPos());
         }
         if(infectionHandler6 == null)
         {
-            infectionHandler6 = new DevInfectionHandler(this, getBlockPos());
+            infectionHandler6 = new DevNodeBranchingInfestationSystem(this, getBlockPos());
         }
         if(infectionHandler7 == null)
         {
-            infectionHandler7 = new DevInfectionHandler(this, getBlockPos());
+            infectionHandler7 = new DevNodeBranchingInfestationSystem(this, getBlockPos());
         }
         if(infectionHandler8 == null)
         {
-            infectionHandler8 = new DevInfectionHandler(this, getBlockPos());
+            infectionHandler8 = new DevNodeBranchingInfestationSystem(this, getBlockPos());
         }
     }
     public static void tick(Level level, BlockPos blockPos, BlockState blockState, DevMassInfectinator3000BlockEntity blockEntity)

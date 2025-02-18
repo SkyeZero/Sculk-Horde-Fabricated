@@ -1,13 +1,11 @@
-package com.github.sculkhorde.common.entity.infection;
+package com.github.sculkhorde.systems.infestation_systems.node_infestation;
 
-import com.github.sculkhorde.core.SculkHorde;
-import com.github.sculkhorde.util.TickUnits;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
-public class DevInfectionHandler {
+public class DevNodeBranchingInfestationSystem {
 
     // The parent tile entity
     private BlockEntity parent = null;
@@ -23,7 +21,7 @@ public class DevInfectionHandler {
     private DevInfectionTree downInfectionTree;
 
 
-    public DevInfectionHandler(BlockEntity parent, BlockPos origin) {
+    public DevNodeBranchingInfestationSystem(BlockEntity parent, BlockPos origin) {
         this.parent = parent;
         this.world = (ServerLevel) parent.getLevel();
         this.origin = origin;

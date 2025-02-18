@@ -29,7 +29,7 @@ public class CursorProberEntity extends CursorSurfaceInfectorEntity {
         super(pType, pLevel);
     }
 
-    protected void setPreferedDirection(Direction direction) {
+    public void setPreferedDirection(Direction direction) {
         this.preferedDirection = direction;
     }
 

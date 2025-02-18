@@ -92,7 +92,7 @@ public class DiseasedAtmosphereEffect extends MobEffect {
             spawnRandomParticle(victimEntity, spawnWidth, spawnHeight);
         }
 
-        if(Math.abs(timeOfLastDamageTick - victimEntity.level().getGameTime()) < DAMAGE_COOLDOWN)
+        if(Math.abs(victimEntity.level().getGameTime() - timeOfLastDamageTick) < DAMAGE_COOLDOWN)
         {
             return;
         }

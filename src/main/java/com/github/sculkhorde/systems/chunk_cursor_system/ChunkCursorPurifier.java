@@ -1,7 +1,7 @@
 package com.github.sculkhorde.systems.chunk_cursor_system;
 
 import com.github.sculkhorde.core.ModConfig;
-import com.github.sculkhorde.systems.block_infestation_system.BlockInfestationSystem;
+import com.github.sculkhorde.systems.infestation_systems.block_infestation_system.BlockInfestationSystem;
 import com.github.sculkhorde.util.BlockAlgorithms;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;

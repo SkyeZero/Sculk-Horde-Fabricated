@@ -1,6 +1,6 @@
 package com.github.sculkhorde.core;
 
-import com.github.sculkhorde.systems.block_infestation_system.infestation_entries.BlockInfestationTable;
+import com.github.sculkhorde.systems.infestation_systems.block_infestation_system.infestation_entries.BlockInfestationTable;
 import com.github.sculkhorde.common.loot.ModLootModifier;
 import com.github.sculkhorde.common.pools.PoolBlocks;
 import com.github.sculkhorde.systems.*;

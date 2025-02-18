@@ -5,7 +5,7 @@ import com.github.sculkhorde.common.block.SculkAncientNodeBlock;
 import com.github.sculkhorde.common.entity.SculkPhantomEntity;
 import com.github.sculkhorde.common.entity.SculkSporeSpewerEntity;
 import com.github.sculkhorde.common.entity.infection.AncientNodePurificationHandler;
-import com.github.sculkhorde.common.entity.infection.SculkNodeInfectionHandler;
+import com.github.sculkhorde.systems.infestation_systems.node_infestation.NodeBranchingInfestationSystem;
 import com.github.sculkhorde.core.*;
 import com.github.sculkhorde.systems.event_system.Event;
 import com.github.sculkhorde.systems.event_system.events.SpawnPhantomsEvent;
@@ -51,7 +51,7 @@ public class SculkAncientNodeBlockEntity extends BlockEntity implements GameEven
     private long heartBeatDelayMillis = TimeUnit.SECONDS.toMillis(5);
     private long lastHeartBeat = System.currentTimeMillis();
 
-    private SculkNodeInfectionHandler infectionHandler;
+    private NodeBranchingInfestationSystem infectionHandler;
     private AncientNodePurificationHandler purificationHandler;
 
     // Vibration Code
@@ -164,7 +164,7 @@ public class SculkAncientNodeBlockEntity extends BlockEntity implements GameEven
     {
         if(infectionHandler == null)
         {
-            infectionHandler = new SculkNodeInfectionHandler(this, getBlockPos());
+            infectionHandler = new NodeBranchingInfestationSystem(this, getBlockPos());
         }
     }
     private void initializePurificationHandler()
