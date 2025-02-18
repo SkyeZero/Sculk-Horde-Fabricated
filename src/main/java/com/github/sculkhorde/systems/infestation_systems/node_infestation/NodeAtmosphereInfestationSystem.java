@@ -50,7 +50,7 @@ public class NodeAtmosphereInfestationSystem {
         {
             if(BlockAlgorithms.getBlockDistance(player.blockPosition(), parent.getBlockPos()) < currentBlockInfestationRadius)
             {
-                DiseasedAtmosphereEffect.applyToEntity(player, TickUnits.convertSecondsToTicks(15));
+                DiseasedAtmosphereEffect.applyToEntity(player, TickUnits.convertSecondsToTicks(30));
             }
         }
     }
