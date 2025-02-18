@@ -254,6 +254,9 @@ public class BlockInfestationSystem {
         tagInfectableBlocks.addEntry(3, BlockTags.MINEABLE_WITH_PICKAXE, Tiers.IRON, ModBlocks.INFESTED_STURDY_MASS.get(), Blocks.COBBLESTONE);
         tagInfectableBlocks.addEntry(4, BlockTags.MINEABLE_WITH_SHOVEL, Tiers.IRON, ModBlocks.INFESTED_CRUMPLED_MASS.get(), Blocks.COARSE_DIRT);
         tagInfectableBlocks.addEntry(5, BlockTags.MINEABLE_WITH_HOE, Tiers.IRON, ModBlocks.INFESTED_COMPOST_MASS.get(), Blocks.MOSS_BLOCK);
+        tagInfectableBlocks.addEntry(5, BlockTags.MINEABLE_WITH_HOE, Tiers.IRON, ModBlocks.INFESTED_COMPOST_MASS.get(), Blocks.MOSS_BLOCK);
+        tagInfectableBlocks.addEntry(5, BlockTags.WOOL, Tiers.IRON, ModBlocks.INFESTED_COMPOST_MASS.get(), Blocks.MOSS_BLOCK);
+
 
         configInfectableBlocks = new BlockInfestationTable(4, false);
         configInfectableBlocks.addEntry(ModBlocks.INFESTED_STURDY_MASS.get());
