@@ -2,7 +2,6 @@ package com.github.sculkhorde.common.blockentity;
 
 import com.github.sculkhorde.common.structures.procedural.ProceduralStructure;
 import com.github.sculkhorde.core.ModBlockEntities;
-import com.github.sculkhorde.systems.infestation_systems.node_infestation.NodeAtmosphereInfestationSystem;
 import com.github.sculkhorde.util.StructureUtil;
 import com.github.sculkhorde.util.TickUnits;
 import net.minecraft.core.BlockPos;
@@ -26,8 +25,6 @@ public class DevStructureTesterBlockEntity extends BlockEntity
     private int spawnedCursors = 0;
     private int maxSPawned = 1000;
 
-    NodeAtmosphereInfestationSystem system;
-
 
     /**
      * The Constructor that takes in properties
@@ -37,7 +34,7 @@ public class DevStructureTesterBlockEntity extends BlockEntity
     public DevStructureTesterBlockEntity(BlockPos blockPos, BlockState blockState)
     {
         super(ModBlockEntities.DEV_STRUCTURE_TESTER_BLOCK_ENTITY.get(), blockPos, blockState);
-        system = new NodeAtmosphereInfestationSystem(this);
+        //system = new NodeAtmosphereInfestationSystem(this);
     }
 
     /** Accessors **/
@@ -61,7 +58,6 @@ public class DevStructureTesterBlockEntity extends BlockEntity
 
         blockEntity.tickedAt = level.getGameTime();
 
-        blockEntity.system.serverTick();
 
 
         /*

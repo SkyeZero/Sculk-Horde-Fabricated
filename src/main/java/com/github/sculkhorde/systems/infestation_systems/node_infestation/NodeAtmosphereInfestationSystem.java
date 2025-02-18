@@ -1,5 +1,6 @@
 package com.github.sculkhorde.systems.infestation_systems.node_infestation;
 
+import com.github.sculkhorde.common.blockentity.SculkNodeBlockEntity;
 import com.github.sculkhorde.common.effect.DiseasedAtmosphereEffect;
 import com.github.sculkhorde.core.ModConfig;
 import com.github.sculkhorde.core.SculkHorde;
@@ -8,13 +9,11 @@ import com.github.sculkhorde.util.BlockAlgorithms;
 import com.github.sculkhorde.util.TickUnits;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.server.ServerLifecycleHooks;
 
 public class NodeAtmosphereInfestationSystem {
     // The parent tile entity
-    protected BlockEntity parent = null;
-    protected boolean isActive = false;
+    protected SculkNodeBlockEntity parent = null;
     protected long timeOfLastInfestationTick = 0;
     protected long INFESTATION_TICK_COOLDOWN = TickUnits.convertSecondsToTicks(10);
     protected long timeOfLastDiseasedAtmosphereTick = 0;
@@ -23,24 +22,13 @@ public class NodeAtmosphereInfestationSystem {
     protected int currentBlockInfestationRadius = 1;
 
 
-    public NodeAtmosphereInfestationSystem(BlockEntity parent) {
+    public NodeAtmosphereInfestationSystem(SculkNodeBlockEntity parent) {
         this.parent = parent;
-        activate();
     }
 
-
-    public void activate()
-    {
-        isActive = true;
-    }
-
-    public void deactivate()
-    {
-        isActive = false;
-    }
 
     public void serverTick() {
-        if(!isActive || parent.getLevel() == null)
+        if(parent.getLevel() == null)
         {
             return;
         }
