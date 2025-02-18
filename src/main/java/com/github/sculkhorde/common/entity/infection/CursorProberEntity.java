@@ -153,13 +153,13 @@ public class CursorProberEntity extends CursorSurfaceInfectorEntity {
             }
 
             // If there are no non-obstructed neighbors, return
-            if (neighbors.size() == 0) {
+            if (unobstructedNeighbors.size() == 0) {
                 return;
             }
 
             // Find the block that is closest to target in neighbors
-            BlockPos closest = neighbors.get(0);
-            for (BlockPos pos : neighbors)
+            BlockPos closest = unobstructedNeighbors.get(0);
+            for (BlockPos pos : unobstructedNeighbors)
             {
                 if (BlockAlgorithms.getBlockDistance(pos, target) < BlockAlgorithms.getBlockDistance(closest, target)) {
                     closest = pos;
