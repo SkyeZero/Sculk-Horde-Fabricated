@@ -160,7 +160,7 @@ public class SculkNodeBlockEntity extends BlockEntity
         }
 
 
-        if(SculkHorde.gravemind.isEvolutionInMatureState())
+        if(SculkHorde.gravemind.isEvolutionInMatureState() && ModConfig.isExperimentalFeaturesEnabled())
         {
             blockEntity.matureInfestationSystem.serverTick();
             return;

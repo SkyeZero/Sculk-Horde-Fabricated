@@ -5,6 +5,7 @@ import com.github.sculkhorde.common.effect.DiseasedAtmosphereEffect;
 import com.github.sculkhorde.core.ModConfig;
 import com.github.sculkhorde.core.SculkHorde;
 import com.github.sculkhorde.systems.chunk_cursor_system.ChunkCursorInfector;
+import com.github.sculkhorde.systems.gravemind_system.Gravemind;
 import com.github.sculkhorde.util.BlockAlgorithms;
 import com.github.sculkhorde.util.TickUnits;
 import net.minecraft.server.level.ServerLevel;
@@ -15,11 +16,10 @@ public class NodeAtmosphereInfestationSystem {
     // The parent tile entity
     protected SculkNodeBlockEntity parent = null;
     protected long timeOfLastInfestationTick = 0;
-    protected long INFESTATION_TICK_COOLDOWN = TickUnits.convertSecondsToTicks(10);
+    protected long INFESTATION_TICK_COOLDOWN = TickUnits.convertMinutesToTicks(15);
     protected long timeOfLastDiseasedAtmosphereTick = 0;
     protected long DISEASED_ATMOSPHERE_TICK_COOLDOWN = TickUnits.convertSecondsToTicks(10);
-
-    protected int currentBlockInfestationRadius = 1;
+    protected int currentBlockInfestationRadius = 50;
 
 
     public NodeAtmosphereInfestationSystem(SculkNodeBlockEntity parent) {
@@ -62,14 +62,20 @@ public class NodeAtmosphereInfestationSystem {
             return;
         }
 
-        if(Math.abs(parent.getLevel().getGameTime() - timeOfLastInfestationTick) < INFESTATION_TICK_COOLDOWN)
+        if(Math.abs(parent.getLevel().getGameTime() - timeOfLastInfestationTick) < INFESTATION_TICK_COOLDOWN && timeOfLastInfestationTick != 0)
         {
             return;
         }
 
         timeOfLastInfestationTick = parent.getLevel().getGameTime();
         blockInfectionRectangle(currentBlockInfestationRadius);
-        currentBlockInfestationRadius += 10;
+        currentBlockInfestationRadius += 50;
+
+        if(currentBlockInfestationRadius > Gravemind.MINIMUM_DISTANCE_BETWEEN_NODES)
+        {
+            currentBlockInfestationRadius = 50;
+            parent.setActive(false);
+        }
     }
 
     protected int blockInfectionRectangle(int radius) {

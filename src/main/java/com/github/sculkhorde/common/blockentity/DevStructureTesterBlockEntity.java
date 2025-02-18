@@ -22,9 +22,6 @@ public class DevStructureTesterBlockEntity extends BlockEntity
 
     private ProceduralStructure proceduralStructure;
 
-    private int spawnedCursors = 0;
-    private int maxSPawned = 1000;
-
 
     /**
      * The Constructor that takes in properties
