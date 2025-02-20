@@ -51,6 +51,12 @@ public class DiseasedCystsEffect extends MobEffect {
             return;
         }
 
+        if(EntityAlgorithms.isSculkLivingEntity.test(sourceEntity) || SculkHorde.savedData.isHordeDefeated())
+        {
+            // Remove effect
+            sourceEntity.removeEffect(ModMobEffects.SCULK_INFECTION.get());
+        }
+
         // Create AABB bounding box around entity and check if there are any non-sculk entities inside
         AABB boundingBox = sourceEntity.getBoundingBox();
         boundingBox = boundingBox.inflate(10.0D, 10.0D, 10.0D);

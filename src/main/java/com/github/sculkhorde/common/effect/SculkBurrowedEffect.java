@@ -95,7 +95,7 @@ public class SculkBurrowedEffect extends MobEffect {
     public void applyEffectTick(LivingEntity entity, int amplifier) {
         super.applyEffectTick(entity, amplifier);
         if(entity.level().isClientSide()) { return;}
-        if(EntityAlgorithms.isSculkLivingEntity.test(entity))
+        if(EntityAlgorithms.isSculkLivingEntity.test(entity) || SculkHorde.savedData.isHordeDefeated())
         {
             // Remove effect
             entity.removeEffect(ModMobEffects.SCULK_INFECTION.get());
