@@ -2,7 +2,7 @@ package com.github.sculkhorde.common.entity;
 
 import com.github.sculkhorde.common.entity.components.TargetParameters;
 import com.github.sculkhorde.common.entity.goal.*;
-import com.github.sculkhorde.core.ModMobEffects;
+import com.github.sculkhorde.common.entity.projectile.SculkAcidicProjectileEntity;
 import com.github.sculkhorde.core.SculkHorde;
 import com.github.sculkhorde.util.EntityAlgorithms;
 import com.github.sculkhorde.util.SquadHandler;
@@ -32,6 +32,7 @@ import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.ai.navigation.WaterBoundPathNavigation;
+import net.minecraft.world.entity.ai.util.DefaultRandomPos;
 import net.minecraft.world.entity.animal.WaterAnimal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -47,6 +48,7 @@ import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import javax.annotation.Nullable;
+import java.util.EnumSet;
 
 public class SculkGuardianEntity extends WaterAnimal implements GeoEntity, ISculkSmartEntity {
 
@@ -143,10 +145,11 @@ public class SculkGuardianEntity extends WaterAnimal implements GeoEntity, IScul
 
         this.goalSelector.addGoal(0, new DespawnAfterTime(this, TickUnits.convertMinutesToTicks(10)));
         this.goalSelector.addGoal(0, new DespawnWhenIdle(this, TickUnits.convertMinutesToTicks(5)));
-        this.goalSelector.addGoal(1, new ChargeAttackGoal(this));
-        this.goalSelector.addGoal(2, new AttackInfectAndBlindGoal());
-        this.goalSelector.addGoal(3, new SculkSquidRandomSwimmingGoal(this, 1.0D, 10));
-        this.goalSelector.addGoal(3, new RandomLookAroundGoal(this));
+        //this.goalSelector.addGoal(1, new ChargeAttackGoal(this));
+        this.goalSelector.addGoal(2, new SpitAcidBlobAttackGoal());
+        this.goalSelector.addGoal(3, new SculkGuardianCombatNavigator(this, 32, 5));
+        this.goalSelector.addGoal(4, new SculkSquidRandomSwimmingGoal(this, 1.0D, 10));
+        this.goalSelector.addGoal(4, new RandomLookAroundGoal(this));
 
 
         Goal[] targetSelectorPayload = targetSelectorPayload();
@@ -174,6 +177,17 @@ public class SculkGuardianEntity extends WaterAnimal implements GeoEntity, IScul
                         new NearestLivingEntityTargetGoal<>(this, true, true)
                 };
         return goals;
+    }
+
+    public void performRangedAttack(LivingEntity target) {
+        SculkAcidicProjectileEntity acid = new SculkAcidicProjectileEntity(target.level(), this, 1);
+        double d0 = target.getX() - this.getX();
+        double d1 = target.getY(0.3333333333333333D) - acid.getY();
+        double d2 = target.getZ() - this.getZ();
+        double d3 = Math.sqrt(d0 * d0 + d2 * d2);
+        acid.shoot(d0, d1 + d3 * (double)0.2F, d2, 1.6F, (float)(14 - this.level().getDifficulty().getId() * 4));
+        this.playSound(SoundEvents.SKELETON_SHOOT, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
+        this.level().addFreshEntity(acid);
     }
 
     @Override
@@ -354,151 +368,46 @@ public class SculkGuardianEntity extends WaterAnimal implements GeoEntity, IScul
         }
     }
 
-    class ChargeAttackGoal extends Goal
+
+    protected class SpitAcidBlobAttackGoal extends CustomAttackGoal
     {
-        PathfinderMob mob;
-        long lastTimeOfAttack = 0;
-        int ATTACK_COOLDOWN = TickUnits.convertSecondsToTicks(30);
-
-        int CHARGE_DURATION = TickUnits.convertSecondsToTicks(5);
-
-        long attackStartTime = 0;
-
-        public ChargeAttackGoal(PathfinderMob mob) {
-            lastTimeOfAttack = mob.level().getGameTime();
-            this.mob = mob;
-        }
-
-        @Override
-        public boolean canUse()
+        public SpitAcidBlobAttackGoal()
         {
-            if(getTarget() == null)
-            {
-                return false;
-            }
-
-            if(getTarget().distanceTo(mob) <= FOLLOW_RANGE / 6)
-            {
-                return false;
-            }
-
-            if(level().getGameTime() - lastTimeOfAttack < ATTACK_COOLDOWN)
-            {
-                return false;
-            }
-
-            if(!isInWater())
-            {
-                return false;
-            }
-
-            return true;
-        }
-
-        @Override
-        public boolean canContinueToUse()
-        {
-            return level().getGameTime() - attackStartTime < CHARGE_DURATION;
-        }
-
-        @Override
-        public void start() {
-            EntityAlgorithms.applyEffectToTarget(mob, MobEffects.MOVEMENT_SPEED, TickUnits.convertSecondsToTicks(CHARGE_DURATION), 4);
-            lastTimeOfAttack = level().getGameTime();
-            attackStartTime = level().getGameTime();
-            triggerAnim("boost_controller", "boost");
-        }
-
-        @Override
-        public void stop()
-        {
-            mob.removeEffect(MobEffects.MOVEMENT_SPEED);
-        }
-    }
-
-    class AttackInfectAndBlindGoal extends CustomMeleeAttackGoal
-    {
-
-        public final int ATTACK_MOB_STATE = 0;
-        public int attackState = ATTACK_MOB_STATE;
-
-        public AttackInfectAndBlindGoal()
-        {
-            super(SculkGuardianEntity.this, 1.0D, false, 10);
-        }
-
-        @Override
-        public void onTargetHurt(LivingEntity target) {
-
-            if(target.getHealth() < target.getMaxHealth()/2)
-            {
-                EntityAlgorithms.applyEffectToTarget(target, ModMobEffects.SCULK_INFECTION.get(), TickUnits.convertSecondsToTicks(10), 0);
-            }
-
-            if(this.mob instanceof SculkGuardianEntity squid)
-            {
-                EntityAlgorithms.applyEffectToTarget(target, MobEffects.BLINDNESS, TickUnits.convertSecondsToTicks(3), 0);
-                squid.spawnInk();
-            }
-        }
-
-        @Override
-        public boolean canUse()
-        {
-            boolean isTargetValid = ((ISculkSmartEntity)this.mob).getTargetParameters().isEntityValidTarget(this.mob.getTarget(), true);
-            boolean isInWater = isInWater();
-            // If the mob is already targeting something valid, don't bother
-            return isTargetValid && isInWater;
-        }
-
-        @Override
-        public boolean canContinueToUse()
-        {
-            return canUse();
-        }
-
-        protected double getAttackReachSqr(LivingEntity pAttackTarget)
-        {
-            float f = SculkGuardianEntity.this.getBbHeight() - 0.1F;
-            return (double)(f * 2.0F * f * 2.0F + pAttackTarget.getBbWidth());
-        }
-
-        @Override
-        protected int getAttackInterval() {
-            return TickUnits.convertSecondsToTicks(2);
+            super(SculkGuardianEntity.this, 32,  10);
         }
 
         @Override
         protected void triggerAnimation() {
-            ((SculkGuardianEntity)mob).triggerAnim("attack_controller", "attack");
+            //((SculkGuardianEntity)mob).triggerAnim("attack_controller", "attack");
         }
 
-        @Override
-        protected void checkAndPerformAttack(LivingEntity targetMob, double distanceFromTargetIn) {
+        protected void checkAndPerformAttack(LivingEntity targetMob, double distanceFromTargetIn)
+        {
             boolean isTargetNull = targetMob == null;
-            if (isTargetNull)
-            {
+            if (isTargetNull) {
                 return;
             }
-            double attackReach = this.getAttackReachSqr(this.mob);
-            boolean isTooFarFromTarget = distanceFromTargetIn > attackReach;
+            boolean isTooFarFromTarget = distanceFromTargetIn > maxDistanceForAttack;
             boolean canSeeTarget = this.mob.getSensing().hasLineOfSight(targetMob);
-            if (!isTimeToAttack() || isTooFarFromTarget || !canSeeTarget)
-            {
+            if (!isTimeToAttack() || isTooFarFromTarget || !canSeeTarget) {
                 return;
             }
             triggerAnimation();
 
-            if(targetMob.getHealth() < ATTACK_DAMAGE)
+            mob.level().getServer().tell(new net.minecraft.server.TickTask(mob.level().getServer().getTickCount() + ATTACK_ANIMATION_DELAY_TICKS, () ->
             {
-                EntityAlgorithms.applyEffectToTarget(targetMob, ModMobEffects.SCULK_INFECTION.get(), TickUnits.convertSecondsToTicks(30), 0);
-                spawnInk();
-            }
-            else
-            {
-                delayedHurtScheduler.trigger(attackReach);
-            }
 
+                if (mob == null || targetMob == null) {
+                    return;
+                }
+
+                if (mob.isDeadOrDying() || targetMob.isDeadOrDying()) {
+                    return;
+                }
+
+                performRangedAttack(targetMob);
+
+            }));
 
             resetAttackCooldown();
         }
@@ -512,6 +421,76 @@ public class SculkGuardianEntity extends WaterAnimal implements GeoEntity, IScul
         @Nullable
         protected Vec3 getPosition() {
             return BehaviorUtils.getRandomSwimmablePos(this.mob, 10, 7);
+        }
+    }
+
+    public class SculkGuardianCombatNavigator extends Goal {
+        private final SculkGuardianEntity mob;
+        private double wantedX;
+        private double wantedY;
+        private double wantedZ;
+        private final double speedModifier;
+        private final float maxDistance;
+        private final float minDistance;
+
+        public SculkGuardianCombatNavigator(SculkGuardianEntity guardian, float maxDistance, float minDistance) {
+            this.mob = guardian;
+            this.speedModifier = 1;
+            this.maxDistance = maxDistance;
+            this.minDistance = minDistance;
+            this.setFlags(EnumSet.of(Goal.Flag.MOVE));
+        }
+
+        public boolean canUse()
+        {
+            if (getTarget() == null)
+            {
+                return false;
+            }
+            else if (getTarget().distanceTo(this.mob) < this.minDistance)
+            {
+                Vec3 vec3 = DefaultRandomPos.getPosAway(this.mob, 16, 7, getTarget().position());
+                if (vec3 == null)
+                {
+                    return false;
+                }
+                else
+                {
+                    this.wantedX = vec3.x;
+                    this.wantedY = vec3.y;
+                    this.wantedZ = vec3.z;
+                    return true;
+                }
+            }
+            else if (getTarget().distanceTo(this.mob) > this.maxDistance || !mob.getSensing().hasLineOfSight(getTarget()))
+            {
+                Vec3 vec3 = DefaultRandomPos.getPosTowards(this.mob, 16, 7, getTarget().position(), (double)((float)Math.PI / 2F));
+                if (vec3 == null)
+                {
+                    return false;
+                }
+                else
+                {
+                    this.wantedX = vec3.x;
+                    this.wantedY = vec3.y;
+                    this.wantedZ = vec3.z;
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public boolean canContinueToUse() {
+
+            return !this.mob.getNavigation().isDone() && getTarget().isAlive() && getTarget().distanceTo(this.mob) <= this.maxDistance && getTarget().distanceTo(this.mob) >= this.minDistance;
+        }
+
+        public void stop() {
+            setTarget(null);
+        }
+
+        public void start() {
+            this.mob.getNavigation().moveTo(this.wantedX, this.wantedY, this.wantedZ, this.speedModifier);
         }
     }
 
