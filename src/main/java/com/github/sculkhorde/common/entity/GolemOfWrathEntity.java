@@ -155,8 +155,7 @@ public class GolemOfWrathEntity extends PathfinderMob implements GeoEntity, IPur
                         new GroundSlamAttackGoal(),
                         new MeleeAttackGoal(),
                         new GolemOfWrathNavigation(),
-                        //WaterAvoidingRandomWalkingGoal(mob, speedModifier)
-                        new WaterAvoidingRandomStrollGoal(this, 0.7D),
+                        new WaterAvoidingRandomStrollGoal(this, 0.3D),
                 };
         return goals;
     }
@@ -355,7 +354,7 @@ public class GolemOfWrathEntity extends PathfinderMob implements GeoEntity, IPur
 
         public MeleeAttackGoal()
         {
-            super(GolemOfWrathEntity.this, GolemOfWrathEntity.this.getBbWidth() * 2, 10);
+            super(GolemOfWrathEntity.this, GolemOfWrathEntity.this.getBbWidth() * 2, TickUnits.convertSecondsToTicks(1F));
         }
 
         @Override

@@ -26,7 +26,7 @@
 				{
 					"name": "upper_body",
 					"parent": "body",
-					"pivot": [6, 28, 0],
+					"pivot": [0, 28, 0],
 					"cubes": [
 						{"origin": [-20, 28, -11], "size": [40, 28, 24], "uv": [66, 53]}
 					]
@@ -82,7 +82,7 @@
 				{
 					"name": "head",
 					"parent": "upper_body",
-					"pivot": [-2, 5, 0],
+					"pivot": [1, 45, -11],
 					"cubes": [
 						{"origin": [-7, 38, -19], "size": [16, 16, 8], "uv": [107, 11]},
 						{"origin": [-7, 46, -21], "size": [16, 3, 2], "uv": [159, 11]}
