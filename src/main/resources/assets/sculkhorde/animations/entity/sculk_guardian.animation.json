@@ -1,7 +1,10 @@
 {
 	"format_version": "1.8.0",
 	"animations": {
-		"move.swim": {
+		"swim": {
+			"loop": true
+		},
+		"idle": {
 			"loop": true
 		}
 	},

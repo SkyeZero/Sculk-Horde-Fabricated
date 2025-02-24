@@ -147,7 +147,7 @@ public class SculkGuardianEntity extends WaterAnimal implements GeoEntity, IScul
         this.goalSelector.addGoal(0, new DespawnWhenIdle(this, TickUnits.convertMinutesToTicks(5)));
         //this.goalSelector.addGoal(1, new ChargeAttackGoal(this));
         this.goalSelector.addGoal(2, new SpitAcidBlobAttackGoal());
-        this.goalSelector.addGoal(3, new SculkGuardianCombatNavigator(this, 32, 5));
+        this.goalSelector.addGoal(3, new SculkGuardianCombatNavigator(this, 32, 0));
         this.goalSelector.addGoal(4, new SculkSquidRandomSwimmingGoal(this, 1.0D, 10));
         this.goalSelector.addGoal(4, new RandomLookAroundGoal(this));
 
@@ -447,9 +447,12 @@ public class SculkGuardianEntity extends WaterAnimal implements GeoEntity, IScul
             {
                 return false;
             }
-            else if (getTarget().distanceTo(this.mob) < this.minDistance)
+
+            float distanceToTarget = getTarget().distanceTo(this.mob);
+
+            if (distanceToTarget < this.minDistance)
             {
-                Vec3 vec3 = DefaultRandomPos.getPosAway(this.mob, 16, 7, getTarget().position());
+                Vec3 vec3 = DefaultRandomPos.getPosAway(this.mob, (int) this.minDistance + 5, (int) (this.minDistance - distanceToTarget), getTarget().position());
                 if (vec3 == null)
                 {
                     return false;
@@ -462,9 +465,9 @@ public class SculkGuardianEntity extends WaterAnimal implements GeoEntity, IScul
                     return true;
                 }
             }
-            else if (getTarget().distanceTo(this.mob) > this.maxDistance || !mob.getSensing().hasLineOfSight(getTarget()))
+            else if (distanceToTarget > this.maxDistance || !mob.getSensing().hasLineOfSight(getTarget()))
             {
-                Vec3 vec3 = DefaultRandomPos.getPosTowards(this.mob, 16, 7, getTarget().position(), (double)((float)Math.PI / 2F));
+                Vec3 vec3 = DefaultRandomPos.getPosTowards(this.mob, (int) (distanceToTarget - this.maxDistance), 1, getTarget().position(), (double)((float)Math.PI / 2F));
                 if (vec3 == null)
                 {
                     return false;
@@ -482,7 +485,27 @@ public class SculkGuardianEntity extends WaterAnimal implements GeoEntity, IScul
 
         public boolean canContinueToUse() {
 
-            return !this.mob.getNavigation().isDone() && getTarget().isAlive() && getTarget().distanceTo(this.mob) <= this.maxDistance && getTarget().distanceTo(this.mob) >= this.minDistance;
+            if(this.mob.getNavigation().isDone())
+            {
+                return false;
+            }
+
+            if(getTarget() == null || !getTarget().isAlive())
+            {
+                return false;
+            }
+
+            if(getTarget().distanceTo(this.mob) > this.maxDistance)
+            {
+                return false;
+            }
+
+            if(getTarget().distanceTo(this.mob) < this.minDistance)
+            {
+               return false;
+            }
+
+            return true;
         }
 
         public void stop() {
