@@ -9,6 +9,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
@@ -686,6 +687,16 @@ public class BlockAlgorithms {
         return mutable;
     }
 
+    public static BlockPos getGroundBlockPosUnderEntity(Level level, Entity entity)
+    {
+        BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos(entity.getX(), entity.getY(), entity.getZ());
+        while(mutable.getY() > level.getMinBuildHeight() && !isReplaceable(level.getBlockState(mutable)))
+        {
+            mutable.move(Direction.DOWN);
+        }
+        return mutable;
+    }
+
     public static boolean areTheseDimensionsEqual(ResourceKey<Level> dimension1, ResourceKey<Level> dimension2)
     {
         if(dimension1 == null || dimension2 == null)
@@ -730,5 +741,39 @@ public class BlockAlgorithms {
         return false;
     }
 
+
+    public static Optional<BlockPos> findValidSpawnPosition(Level level, BlockPos center, int cubeLength, Predicate<BlockPos> isValidSpawn) {
+        // Calculate the bounds of the cube
+        int halfLength = cubeLength / 2;
+        int minX = center.getX() - halfLength;
+        int minY = center.getY() - halfLength;
+        int minZ = center.getZ() - halfLength;
+        int maxX = center.getX() + halfLength;
+        int maxY = center.getY() + halfLength;
+        int maxZ = center.getZ() + halfLength;
+
+        // Create a mutable block position to avoid creating new objects in the loop
+        BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
+
+        // Iterate through each block position in the cube
+        for (int x = minX; x <= maxX; x++) {
+            for (int y = minY; y <= maxY; y++) {
+                for (int z = minZ; z <= maxZ; z++) {
+                    mutablePos.set(x, y, z);
+
+                    // Check if the block is air
+                    if (BlockAlgorithms.isReplaceable(level.getBlockState(mutablePos))) {
+                        // Check if the position is a valid spawn position
+                        if (isValidSpawn.test(mutablePos)) {
+                            return Optional.of(mutablePos.immutable());
+                        }
+                    }
+                }
+            }
+        }
+
+        // If no valid spawn position is found, return an empty Optional
+        return Optional.empty();
+    }
 
 }

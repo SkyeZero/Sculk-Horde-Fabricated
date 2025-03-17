@@ -212,4 +212,9 @@ public class Gravemind
     {
         return evolution_state == evolution_states.Mature;
     }
+
+    public boolean isEvolutionInImmatureStateOrAbove()
+    {
+        return evolution_state == evolution_states.Immature || evolution_state == evolution_states.Mature;
+    }
 }

@@ -10,6 +10,7 @@ import com.github.sculkhorde.util.ChunkLoading.EntityChunkLoaderHelper;
 import com.github.sculkhorde.util.PlayerProfileHandler;
 import com.github.sculkhorde.util.TickUnits;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
@@ -109,16 +110,61 @@ public class HitSquadEvent extends Event {
         return newPos;
     }
 
-    public final Predicate<BlockPos> isValidSpawnPos = (blockPos) ->
+    public Optional<BlockPos> findValidSpawnPosition(int cubeLength) {
+        // Calculate the bounds of the cube
+        int halfLength = cubeLength / 2;
+        int minX = getEventLocation().getX() - halfLength;
+        int minY = getEventLocation().getY() - halfLength;
+        int minZ = getEventLocation().getZ() - halfLength;
+        int maxX = getEventLocation().getX() + halfLength;
+        int maxY = getEventLocation().getY() + halfLength;
+        int maxZ = getEventLocation().getZ() + halfLength;
+
+        // Create a mutable block position to avoid creating new objects in the loop
+        BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
+
+        // Iterate through each block position in the cube
+        for (int x = minX; x <= maxX; x++)
+        {
+            for (int y = minY; y <= maxY; y++) {
+                for (int z = minZ; z <= maxZ; z++) {
+                    mutablePos.set(x, y, z);
+
+                    // Check if the block is air
+                    if (BlockAlgorithms.isReplaceable(getDimension().getBlockState(mutablePos))) {
+                        // Check if the position is a valid spawn position
+                        if (isValidSpawnPos(mutablePos)) {
+                            return Optional.of(mutablePos.immutable());
+                        }
+                    }
+                }
+            }
+        }
+
+        // If no valid spawn position is found, return an empty Optional
+        return Optional.empty();
+    }
+
+    public boolean isValidSpawnPos(BlockPos.MutableBlockPos pos)
     {
-        if(desiredSpawnPos.isEmpty()) { return false; }
+        if(pos == null) { return false; }
 
-        // If the X and Y cord are less than 50 blocks
-        boolean isXCloseToDesiredSpawn = Math.abs(blockPos.getX() - desiredSpawnPos.get().getX()) < 50;
-        boolean isZCloseToDesiredSpawn = Math.abs(blockPos.getZ() - desiredSpawnPos.get().getZ()) < 50;
-        boolean isPosCloseToDesiredSpawn = isXCloseToDesiredSpawn && isZCloseToDesiredSpawn;
+        if(!BlockAlgorithms.isReplaceable(getDimension().getBlockState(pos)))
+        {
+            return false;
+        }
 
-        return isPosCloseToDesiredSpawn;
+        pos.move(Direction.UP);
+
+        if(!BlockAlgorithms.isReplaceable(getDimension().getBlockState(pos)))
+        {
+            pos.move(Direction.DOWN);
+            return false;
+        }
+
+        pos.move(Direction.DOWN);
+
+        return true;
     };
 
     public final Predicate<BlockPos> isObstructed = (blockPos) ->
@@ -129,6 +175,7 @@ public class HitSquadEvent extends Event {
         return isBlockAir || isBlockNotExposedToAir;
     };
 
+
     protected void initializationTick()
     {
         if(getPlayerIfOnline().isEmpty())
@@ -137,8 +184,10 @@ public class HitSquadEvent extends Event {
         }
 
         Player player = getPlayerIfOnline().get();
-        setEventLocation(player.blockPosition());
+        ModSavedData.NodeEntry entry = SculkHorde.savedData.getClosestNodeEntry((ServerLevel) player.level(), player.blockPosition());
+        setEventLocation(entry.getPosition());
 
+        /*
         if(spawnFinder.isEmpty())
         {
             desiredSpawnPos = Optional.of(getDesiredSpawnLocation(player.blockPosition()));
@@ -148,6 +197,8 @@ public class HitSquadEvent extends Event {
             spawnFinder.get().setObstructionPredicate(isObstructed);
             spawnFinder.get().setMaxDistance(MAX_DISTANCE_FROM_PLAYER);
         }
+
+
 
         // Tick Block Searcher
         spawnFinder.get().tick();
@@ -168,6 +219,31 @@ public class HitSquadEvent extends Event {
             }
             setState(State.FAILURE);
         }
+
+         */
+
+        Optional<BlockPos> potentialSpawnPoint = Optional.empty();
+
+        for(int checkLength = 10; checkLength <= 50 && potentialSpawnPoint.isEmpty(); checkLength += 10)
+        {
+            SculkHorde.LOGGER.info("HitSquadEvent | Checking for Spawn Pos in cube of length " + checkLength);
+            potentialSpawnPoint = findValidSpawnPosition(checkLength);
+        }
+
+        if(potentialSpawnPoint.isPresent())
+        {
+            reaper = SculkSoulReaperEntity.spawnWithDifficulty(player.level(), potentialSpawnPoint.get().getCenter(), getTargetProfile().getDifficultyOfNextHit());
+            reaper.setHitTarget(player);
+            setState(State.PURSUIT);
+            return;
+        }
+
+
+        if(SculkHorde.isDebugMode()) {
+            SculkHorde.LOGGER.info("HitSquadEvent | FAILURE, Could not find good spawn pos.");
+        }
+        setState(State.FAILURE);
+
     }
 
     protected void pursuitTick()

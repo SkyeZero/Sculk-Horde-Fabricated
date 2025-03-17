@@ -15,10 +15,11 @@ import java.util.Optional;
 
 public class HitSquadDispatcherSystem {
 
-    protected static int CHECK_INTERVAL = TickUnits.convertMinutesToTicks(2);
+    protected static int CHECK_INTERVAL = TickUnits.convertSecondsToTicks(30);
     protected long timeOfLastCheckForDispatch = 0;
-    protected static int MIN_NODES_DESTROYED = 2;
-    protected static int MAX_RELATIONSHIP = -100;
+    public static int MIN_NODES_DESTROYED = 2;
+    public static int MAX_RELATIONSHIP = -100;
+    public static int DISTANCE_REQUIRED_FROM_NODE = 100;
 
     public HitSquadDispatcherSystem()
     {
@@ -49,7 +50,7 @@ public class HitSquadDispatcherSystem {
                 continue;
             }
 
-            if(SculkHorde.gravemind.isEvolutionInMatureState())
+            if(!SculkHorde.gravemind.isEvolutionInMatureState())
             {
                 continue;
             }
@@ -59,23 +60,19 @@ public class HitSquadDispatcherSystem {
             boolean isHitCooldownNotOver = !profile.isHitCooldownOver();
 
             ModSavedData.NodeEntry entry = SculkHorde.savedData.getClosestNodeEntry((ServerLevel) player.level(), player.blockPosition());
-            boolean isTooFarFromNode = BlockAlgorithms.getBlockDistanceXZ(player.blockPosition(), entry.getPosition()) > 100;
+            boolean isTooFarFromNode = BlockAlgorithms.getBlockDistanceXZ(player.blockPosition(), entry.getPosition()) > DISTANCE_REQUIRED_FROM_NODE;
 
-             if(isTooFarFromNode || isHitCooldownNotOver || hasGoodRelationshipWithHorde || hasNotDestroyedEnoughNodes)
+            if(isTooFarFromNode || isHitCooldownNotOver || hasGoodRelationshipWithHorde || hasNotDestroyedEnoughNodes)
             {
                 continue;
             }
 
+
             if(target.isEmpty() || profile.getRelationshipToTheHorde() < worstReputationSoFar)
             {
                 target = profile.getPlayer();
+                worstReputationSoFar = profile.getRelationshipToTheHorde();
             }
-        }
-
-        if(SculkHorde.isDebugMode() && target.isPresent())
-        {
-            SculkHorde.LOGGER.info("HitSquadDispatcherSystem | DEBUG MODE ENABLED. " + target.get().getScoreboardName() + " IS BEING TARGETED. ");
-            return target;
         }
 
         return target;
@@ -103,7 +100,7 @@ public class HitSquadDispatcherSystem {
         }
         else if(SculkHorde.isDebugMode())
         {
-            SculkHorde.LOGGER.info("HitSquadDispatcherSystem | No Available Targets :(");
+            SculkHorde.LOGGER.info("HitSquadDispatcherSystem | No Available Targets");
         }
 
         timeOfLastCheckForDispatch = level.getGameTime();

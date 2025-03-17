@@ -35,6 +35,7 @@ public class ModCommands {
                 .then(VesselCommand.register(dispatcher, buildContext))
                 .then(ResetCommand.register(dispatcher, buildContext))
                 .then(SoulReaperCommand.register(dispatcher, buildContext))
+                .then(HitSquadCommand.register(dispatcher, buildContext))
                 .then(DevCommand.register(dispatcher, buildContext));
         dispatcher.register(cmd);
     }
