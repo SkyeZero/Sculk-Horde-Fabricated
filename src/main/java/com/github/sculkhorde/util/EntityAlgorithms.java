@@ -124,7 +124,7 @@ public class EntityAlgorithms {
     }
     public static void doSculkTypeDamageToEntity(LivingEntity aggressor, LivingEntity target, float totalDamage, float guaranteedDamage)
     {
-        if(target.isInvulnerable())
+        if(target.isInvulnerable() || aggressor == null)
         {
             return;
         }
