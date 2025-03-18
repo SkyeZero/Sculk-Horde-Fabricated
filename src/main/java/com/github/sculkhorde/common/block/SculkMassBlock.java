@@ -158,11 +158,11 @@ public class SculkMassBlock extends BaseEntityBlock implements IForgeBlock, Simp
         if(SculkHorde.savedData != null) {SculkHorde.savedData.addSculkAccumulatedMass(totalMassTax);}
         if(SculkHorde.statisticsData != null) {SculkHorde.statisticsData.addTotalMassFromBurrowed(totalMassTax);}
 
-        BlockInfestationSystem.tryToInfestBlock((ServerLevel) world, originPos.below());
-        BlockInfestationSystem.tryToInfestBlock((ServerLevel) world, originPos.below().east());
-        BlockInfestationSystem.tryToInfestBlock((ServerLevel) world, originPos.below().north());
-        BlockInfestationSystem.tryToInfestBlock((ServerLevel) world, originPos.below().south());
-        BlockInfestationSystem.tryToInfestBlock((ServerLevel) world, originPos.below().west());
+        BlockInfestationSystem.tryToInfestBlock((ServerLevel) world, originPos);
+        BlockInfestationSystem.tryToInfestBlock((ServerLevel) world, originPos.east());
+        BlockInfestationSystem.tryToInfestBlock((ServerLevel) world, originPos.north());
+        BlockInfestationSystem.tryToInfestBlock((ServerLevel) world, originPos.south());
+        BlockInfestationSystem.tryToInfestBlock((ServerLevel) world, originPos.west());
     }
 
     /**
