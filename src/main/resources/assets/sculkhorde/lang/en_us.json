@@ -427,5 +427,11 @@
   "tooltip.sculkhorde.diascite_hoe.lore": "§7§oThis hoe is imbued with the anguished souls of the living. Holding it instills a deep sense of unease. The power within grants the unmatched ability to vein mine entire farms in mere moments. It is a formidable instrument in the hands of sinners.",
   "item.sculkhorde.blade_of_purity": "Blade of Purity",
   "tooltip.sculkhorde.blade_of_purity.functionality": "§7§oA sword that upon striking a Sculk Horde mob, will give it the purity effect and purify the surrounding land. This blade has a large sweeping edge to it, making it ideal for hordes of mobs.",
-  "tooltip.sculkhorde.blade_of_purity.lore": "§7§oA sword imbued with the warm and embracing aura of purity. Holding it fills your body with the resolve to restore balance to a corrupted world. All anguished souls will know peace once they meet this blade."
+  "tooltip.sculkhorde.blade_of_purity.lore": "§7§oA sword imbued with the warm and embracing aura of purity. Holding it fills your body with the resolve to restore balance to a corrupted world. All anguished souls will know peace once they meet this blade.",
+  "effect.sculkhorde.diseased_atmosphere": "Diseased Atmosphere",
+  "effect.sculkhorde.diseased_atmosphere.description": "Causes entities to take damage and exhaustion.",
+  "effect.sculkhorde.sculk_fog": "Sculk Fog",
+  "effect.sculkhorde.sculk_fog.description": "Limits your vision.",
+  "effect.sculkhorde.dense": "Dense",
+  "effect.sculkhorde.dense.description": "Increases the gravity effect on players."
 }
