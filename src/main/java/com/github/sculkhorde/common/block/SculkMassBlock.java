@@ -3,9 +3,11 @@ package com.github.sculkhorde.common.block;
 import com.github.sculkhorde.common.blockentity.SculkMassBlockEntity;
 import com.github.sculkhorde.core.ModBlockEntities;
 import com.github.sculkhorde.core.SculkHorde;
+import com.github.sculkhorde.systems.infestation_systems.block_infestation_system.BlockInfestationSystem;
 import com.github.sculkhorde.util.BlockAlgorithms;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -155,6 +157,12 @@ public class SculkMassBlock extends BaseEntityBlock implements IForgeBlock, Simp
         thisTile.setStoredSculkMass(totalRemainingMass);
         if(SculkHorde.savedData != null) {SculkHorde.savedData.addSculkAccumulatedMass(totalMassTax);}
         if(SculkHorde.statisticsData != null) {SculkHorde.statisticsData.addTotalMassFromBurrowed(totalMassTax);}
+
+        BlockInfestationSystem.tryToInfestBlock((ServerLevel) world, originPos.below());
+        BlockInfestationSystem.tryToInfestBlock((ServerLevel) world, originPos.below().east());
+        BlockInfestationSystem.tryToInfestBlock((ServerLevel) world, originPos.below().north());
+        BlockInfestationSystem.tryToInfestBlock((ServerLevel) world, originPos.below().south());
+        BlockInfestationSystem.tryToInfestBlock((ServerLevel) world, originPos.below().west());
     }
 
     /**

@@ -3,7 +3,6 @@ package com.github.sculkhorde.common.blockentity;
 import com.github.sculkhorde.common.advancement.SoulHarvesterTrigger;
 import com.github.sculkhorde.common.block.SoulHarvesterBlock;
 import com.github.sculkhorde.common.entity.InfestationPurifierEntity;
-import com.github.sculkhorde.common.entity.SculkSpitterEntity;
 import com.github.sculkhorde.common.recipe.SoulHarvestingRecipe;
 import com.github.sculkhorde.common.screen.SoulHarvesterMenu;
 import com.github.sculkhorde.core.ModBlockEntities;
@@ -14,7 +13,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -59,7 +57,6 @@ import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import javax.annotation.Nullable;
-
 import java.util.Optional;
 
 import static com.github.sculkhorde.common.block.SoulHarvesterBlock.MAX_HEALTH;
@@ -326,6 +323,7 @@ public class SoulHarvesterBlockEntity extends BlockEntity implements MenuProvide
             livingentity.skipDropExperience();
             this.positionSource.getPosition(ServerLevelIn).ifPresent((positionVec3) -> {
                 this.spawnCoolParticles(ServerLevelIn, BlockPos.containing(positionVec3), this.blockState, ServerLevelIn.getRandom());
+
             });
 
             tryAwardAdvancement(ServerLevelIn, livingentity);
