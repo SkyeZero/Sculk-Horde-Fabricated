@@ -1,14 +1,22 @@
 package com.github.sculkhorde.common.item;
 
+import com.mojang.blaze3d.platform.InputConstants;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.extensions.IForgeItem;
+import org.lwjgl.glfw.GLFW;
+
+import java.util.List;
 
 public class FerrisciteAxeItem extends AxeItem implements IForgeItem, IHealthRepairable {
     protected static float ATTACK_SPEED = 1.0F;
@@ -146,5 +154,22 @@ public class FerrisciteAxeItem extends AxeItem implements IForgeItem, IHealthRep
     @Override
     public void repair(ItemStack stack, int amount) {
         stack.setDamageValue(Math.max(stack.getDamageValue() - amount, 0));
+    }
+
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+        if(InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), GLFW.GLFW_KEY_LEFT_SHIFT))
+        {
+            tooltip.add(Component.translatable("tooltip.sculkhorde.ferriscite_axe.functionality"));
+        }
+        else if(InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), GLFW.GLFW_KEY_LEFT_CONTROL))
+        {
+            tooltip.add(Component.translatable("tooltip.sculkhorde.ferriscite_axe.lore"));
+        }
+        else
+        {
+            tooltip.add(Component.translatable("tooltip.sculkhorde.default"));
+        }
     }
 }

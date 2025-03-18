@@ -3,16 +3,21 @@ package com.github.sculkhorde.common.item;
 import com.github.sculkhorde.systems.cursor_system.CursorSystem;
 import com.github.sculkhorde.systems.cursor_system.ICursor;
 import com.github.sculkhorde.util.TickUnits;
+import com.mojang.blaze3d.platform.InputConstants;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.PickaxeItem;
-import net.minecraft.world.item.Rarity;
-import net.minecraft.world.item.Tiers;
+import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.extensions.IForgeItem;
+import org.lwjgl.glfw.GLFW;
+
+import java.util.List;
 
 public class DiascitePickaxeItem extends PickaxeItem implements IForgeItem, IHealthRepairable {
     protected static float ATTACK_SPEED = 1.0F;
@@ -53,5 +58,21 @@ public class DiascitePickaxeItem extends PickaxeItem implements IForgeItem, IHea
         stack.setDamageValue(Math.max(stack.getDamageValue() - amount, 0));
     }
 
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+        if(InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), GLFW.GLFW_KEY_LEFT_SHIFT))
+        {
+            tooltip.add(Component.translatable("tooltip.sculkhorde.diascite_pickaxe.functionality"));
+        }
+        else if(InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), GLFW.GLFW_KEY_LEFT_CONTROL))
+        {
+            tooltip.add(Component.translatable("tooltip.sculkhorde.diascite_pickaxe.lore"));
+        }
+        else
+        {
+            tooltip.add(Component.translatable("tooltip.sculkhorde.default"));
+        }
+    }
 
 }
