@@ -1,7 +1,7 @@
 {
   "itemGroup.sculkhorde_tab": "Horda de sculk",
 
-  "tooltip.sculkhorde.default": "Mantén [§eSHIFT§r] para mostrar la funcionalidad.\nMantén [§eCTRL§r] para mostrar el lore.",
+  "tooltip.sculkhorde.default": "Mantén [§eSHIFT§r] para mostrar la funcionalidad. Mantén [§eCTRL§r] para mostrar el lore.",
 
   "tooltip.sculkhorde.in_development": "§7§oEste objeto está en desarrollo. No está destinado a ser usado en supervivencia. Solamente es para propósitos de prueba y desarrollo.",
   "item.sculkhorde.dev_wand": "Vara de desarrollador",

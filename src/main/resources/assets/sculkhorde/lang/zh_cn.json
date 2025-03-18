@@ -1,7 +1,7 @@
 {
     "itemGroup.sculkhorde_tab": "幽匿部落",
   
-    "tooltip.sculkhorde.default": "按住 [§eSHIFT§r] 以展示其功能。\n按住 [§eCTRL§r] 以展示其介绍。",
+    "tooltip.sculkhorde.default": "按住 [§eSHIFT§r] 以展示其功能。 按住 [§eCTRL§r] 以展示其介绍。",
   
     "tooltip.sculkhorde.in_development": "§7§o此项目正在开发中。它不能用于生存。它仅用于测试和开发目的。",
     "item.sculkhorde.dev_wand": "开发者用 魔杖",

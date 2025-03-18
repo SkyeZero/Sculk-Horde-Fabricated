@@ -1,7 +1,7 @@
 {
   "itemGroup.sculkhorde_tab": "Sculk Horde",
 
-  "tooltip.sculkhorde.default": "Drücke [§eUMSCHALT§r] zum Anzeigen der Funktionalität.\nDrücke [§eSTRG§r] zum Anzeigen der Überlieferung.",
+  "tooltip.sculkhorde.default": "Drücke [§eUMSCHALT§r] zum Anzeigen der Funktionalität. Drücke [§eSTRG§r] zum Anzeigen der Überlieferung.",
 
   "tooltip.sculkhorde.in_development": "§7§oDieser Gegenstand ist noch in der Entwicklung. Nicht für Überlebenswelten gedacht. Es ist nur für Test- und Entwicklungszwecke gedacht.",
   "item.sculkhorde.dev_wand": "Entwicklungsstab",

@@ -1,7 +1,7 @@
 {
   "itemGroup.sculkhorde_tab": "Sculk Horde",
 
-  "tooltip.sculkhorde.default": "Hold [§eSHIFT§r] to show Functionality.\nHold [§eCTRL§r] to show Lore.",
+  "tooltip.sculkhorde.default": "Hold [§eSHIFT§r] to show Functionality. Hold [§eCTRL§r] to show Lore.",
 
   "tooltip.sculkhorde.in_development": "§7§oThis Item is In Development. It is not meant to be used in survival. It is only meant for testing and development purposes.",
   "item.sculkhorde.dev_wand": "Dev Wand",
