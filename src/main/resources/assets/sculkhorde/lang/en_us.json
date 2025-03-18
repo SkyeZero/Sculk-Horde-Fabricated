@@ -377,6 +377,8 @@
   "sounds.sculkhorde.sculk_ravager_screech": "Sculk Ravager Screeches",
   "sounds.sculkhorde.sculk_ravager_bite": "Sculk Ravager Chomps",
 
+
+  "itemGroup.sculk_horde_tab_experimental": "Sculk Horde Experimental Features",
   "entity.sculkhorde.sculk_vex": "Sculk Vex",
   "entity.sculkhorde.sculk_soul_reaper": "Sculk Soul Reaper",
   "block.sculkhorde.soulite_core_block": "Soulite Core Block",
@@ -422,5 +424,8 @@
   "tooltip.sculkhorde.diascite_shovel.lore": "§7§oThis shovel is imbued with the anguished souls of the living. Holding it instills a deep sense of unease. The power within grants the unmatched ability to vein mine entire deserts in mere moments. It is a formidable instrument in the hands of sinners.",
   "item.sculkhorde.diascite_hoe": "Diascite Hoe",
   "tooltip.sculkhorde.diascite_hoe.functionality": "§7§oA hoe that will seek out and mine other blocks of the same type in the surrounding area. It is repairable by killing non-sculk mobs.",
-  "tooltip.sculkhorde.diascite_hoe.lore": "§7§oThis hoe is imbued with the anguished souls of the living. Holding it instills a deep sense of unease. The power within grants the unmatched ability to vein mine entire farms in mere moments. It is a formidable instrument in the hands of sinners."
+  "tooltip.sculkhorde.diascite_hoe.lore": "§7§oThis hoe is imbued with the anguished souls of the living. Holding it instills a deep sense of unease. The power within grants the unmatched ability to vein mine entire farms in mere moments. It is a formidable instrument in the hands of sinners.",
+  "item.sculkhorde.blade_of_purity": "Blade of Purity",
+  "tooltip.sculkhorde.blade_of_purity.functionality": "§7§oA sword that upon striking a Sculk Horde mob, will give it the purity effect and purify the surrounding land. This blade has a large sweeping edge to it, making it ideal for hordes of mobs.",
+  "tooltip.sculkhorde.blade_of_purity.lore": "§7§oA sword imbued with the warm and embracing aura of purity. Holding it fills your body with the resolve to restore balance to a corrupted world. All anguished souls will know peace once they meet this blade."
 }
