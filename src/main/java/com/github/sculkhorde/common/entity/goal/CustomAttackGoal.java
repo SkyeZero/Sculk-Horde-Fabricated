@@ -7,15 +7,17 @@ import net.minecraft.world.entity.ai.goal.Goal;
 public class CustomAttackGoal extends Goal {
     protected final PathfinderMob mob;
 
-    protected int ticksUntilNextAttack;
+    protected int ticksUntilNextAttackInterval;
     protected final int attackInterval = 60;
     protected long lastCanUseCheck;
-    protected int ATTACK_ANIMATION_DELAY_TICKS;
+    protected int ATTACK_DELAY;
+    protected boolean isAttackInProgress = false;
+    protected int ticksUntilAttackExecution = ATTACK_DELAY;
     protected float maxDistanceForAttack = 0;
 
-    public CustomAttackGoal(PathfinderMob mob, float maxDistanceForAttackIn, int attackAnimationDelayTicksIn) {
+    public CustomAttackGoal(PathfinderMob mob, float maxDistanceForAttackIn, int attackDelay) {
         this.mob = mob;
-        ATTACK_ANIMATION_DELAY_TICKS = attackAnimationDelayTicksIn;
+        ATTACK_DELAY = attackDelay;
         maxDistanceForAttack = maxDistanceForAttackIn;
     }
 
@@ -45,7 +47,7 @@ public class CustomAttackGoal extends Goal {
     }
 
     public void start() {
-        this.ticksUntilNextAttack = 0;
+        this.ticksUntilNextAttackInterval = 0;
     }
 
     public void stop() {
@@ -63,11 +65,20 @@ public class CustomAttackGoal extends Goal {
             return;
         }
 
+        this.ticksUntilNextAttackInterval = Math.max(getTicksUntilNextAttackInterval() - 1, 0);
 
-        double distanceToTarget = this.mob.getPerceivedTargetDistanceSquareForMeleeAttack(target);
-        this.ticksUntilNextAttack = Math.max(getTicksUntilNextAttack() - 1, 0);
-        this.checkAndPerformAttack(target, distanceToTarget);
+        if(!isAttackInProgress)
+        {
+            isAttackInProgress = true;
+            triggerAnimation();
+            return;
+        }
 
+        if(ticksUntilAttackExecution <= 0)
+        {
+            checkAndAttack(target);
+            resetAttackCooldown();
+        }
     }
 
     protected void triggerAnimation() {
@@ -75,46 +86,38 @@ public class CustomAttackGoal extends Goal {
     }
 
 
-    protected void checkAndPerformAttack(LivingEntity targetMob, double distanceFromTargetIn) {
+    protected void checkAndAttack(LivingEntity targetMob) {
         boolean isTargetNull = targetMob == null;
         if (isTargetNull) {
             return;
         }
-        boolean isTooFarFromTarget = distanceFromTargetIn > maxDistanceForAttack;
+
+        if (mob.isDeadOrDying() || targetMob.isDeadOrDying()) {
+            return;
+        }
+
+        boolean isTooFarFromTarget = this.mob.getPerceivedTargetDistanceSquareForMeleeAttack(targetMob) > maxDistanceForAttack;
         boolean canSeeTarget = this.mob.getSensing().hasLineOfSight(targetMob);
         if (!isTimeToAttack() || isTooFarFromTarget || !canSeeTarget) {
             return;
         }
-        triggerAnimation();
 
-        mob.level().getServer().tell(new net.minecraft.server.TickTask(mob.level().getServer().getTickCount() + ATTACK_ANIMATION_DELAY_TICKS, () -> {
-
-            if (mob == null || targetMob == null) {
-                return;
-            }
-
-            if (mob.isDeadOrDying() || targetMob.isDeadOrDying()) {
-                return;
-            }
-
-            mob.doHurtTarget(targetMob);
-            onTargetHurt(targetMob);
-
-        }));
-
-        resetAttackCooldown();
+        mob.doHurtTarget(targetMob);
+        onTargetHurt(targetMob);
     }
 
     protected void resetAttackCooldown() {
-        this.ticksUntilNextAttack = getAttackInterval();
+        ticksUntilNextAttackInterval = getAttackInterval();
+        ticksUntilAttackExecution = ATTACK_DELAY;
+        isAttackInProgress = false;
     }
 
     protected boolean isTimeToAttack() {
-        return this.ticksUntilNextAttack <= 0;
+        return this.ticksUntilNextAttackInterval <= 0;
     }
 
-    protected int getTicksUntilNextAttack() {
-        return this.ticksUntilNextAttack;
+    protected int getTicksUntilNextAttackInterval() {
+        return this.ticksUntilNextAttackInterval;
     }
 
     protected int getAttackInterval() {

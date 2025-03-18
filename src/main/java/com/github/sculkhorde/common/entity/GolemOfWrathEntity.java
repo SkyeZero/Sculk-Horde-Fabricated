@@ -354,7 +354,7 @@ public class GolemOfWrathEntity extends PathfinderMob implements GeoEntity, IPur
 
         public MeleeAttackGoal()
         {
-            super(GolemOfWrathEntity.this, GolemOfWrathEntity.this.getBbWidth() * 2, TickUnits.convertSecondsToTicks(1F));
+            super(GolemOfWrathEntity.this, GolemOfWrathEntity.this.getBbWidth() * 2, TickUnits.convertSecondsToTicks(0.5F));
         }
 
         @Override

@@ -92,22 +92,20 @@ public class SculkCreeperEntity extends Creeper implements ISculkSmartEntity, Ge
 
     public void spawnInfectors()
     {
-        level().getServer().tell(new net.minecraft.server.TickTask(level().getServer().getTickCount() + 1, () -> {
-            int numToSpawn = 15;
-            int spawnRange = 5;
-            for (int i = 0; i < numToSpawn; i++) {
+        int numToSpawn = 15;
+        int spawnRange = 5;
+        for (int i = 0; i < numToSpawn; i++) {
 
-                double x = this.getX() + (this.getRandom().nextDouble() * spawnRange) - spawnRange / 2;
-                double z = this.getZ() + (this.getRandom().nextDouble() * spawnRange) - spawnRange / 2;
-                double y = this.getY() + (this.getRandom().nextDouble() * spawnRange / 2) - spawnRange / 4;
-                BlockPos pos = new BlockPos((int) x, (int) y, (int) z);
+            double x = this.getX() + (this.getRandom().nextDouble() * spawnRange) - spawnRange / 2;
+            double z = this.getZ() + (this.getRandom().nextDouble() * spawnRange) - spawnRange / 2;
+            double y = this.getY() + (this.getRandom().nextDouble() * spawnRange / 2) - spawnRange / 4;
+            BlockPos pos = new BlockPos((int) x, (int) y, (int) z);
 
-                VirtualSurfaceInfestorCursor cursor = CursorSystem.createPerformanceExemptSurfaceInfestorVirtualCursor(level(), pos);
-                cursor.setTickIntervalTicks(0);
-                cursor.setMaxTransformations(10);
-                cursor.setMaxRange(10);
-            }
-        }));
+            VirtualSurfaceInfestorCursor cursor = CursorSystem.createPerformanceExemptSurfaceInfestorVirtualCursor(level(), pos);
+            cursor.setTickIntervalTicks(1);
+            cursor.setMaxTransformations(10);
+            cursor.setMaxRange(10);
+        }
     }
 
     public void infectEntitiesAroundMe()

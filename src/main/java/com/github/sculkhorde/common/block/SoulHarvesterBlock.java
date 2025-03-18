@@ -1,9 +1,9 @@
 package com.github.sculkhorde.common.block;
 
 import com.github.sculkhorde.common.blockentity.SoulHarvesterBlockEntity;
-import com.github.sculkhorde.common.entity.infection.CursorSurfaceInfectorEntity;
 import com.github.sculkhorde.core.ModBlockEntities;
-import com.github.sculkhorde.core.ModBlocks;
+import com.github.sculkhorde.systems.cursor_system.CursorSystem;
+import com.github.sculkhorde.systems.cursor_system.VirtualSurfaceInfestorCursor;
 import com.github.sculkhorde.util.BlockAlgorithms;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.Minecraft;
@@ -22,7 +22,10 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -140,13 +143,10 @@ public class SoulHarvesterBlock extends BaseEntityBlock implements IForgeBlock {
                     ((ServerLevel) pLevel).sendParticles(ParticleTypes.SCULK_SOUL, randomParticlePosition.x, randomParticlePosition.y, randomParticlePosition.z, 2, 0.2D, 0.0D, 0.2D, 0.0D);
                     pLevel.playSound(null, pPos, SoundEvents.SCULK_CATALYST_BLOOM, SoundSource.BLOCKS, 2.0F, 0.6F + pLevel.getRandom().nextFloat() * 0.4F);
 
-                    //Spawn Infector Cursor
-                    CursorSurfaceInfectorEntity cursor = new CursorSurfaceInfectorEntity(pLevel);
-                    cursor.setMaxRange(100);
+                    VirtualSurfaceInfestorCursor cursor = CursorSystem.createPerformanceExemptSurfaceInfestorVirtualCursor(pLevel, groundPosition);
+                    cursor.setTickIntervalTicks(1);
                     cursor.setMaxTransformations(massPerCursor);
-                    cursor.setTickIntervalMilliseconds(100);
-                    cursor.setPos(groundPosition.getX(), groundPosition.getY(), groundPosition.getZ());
-                    pLevel.addFreshEntity(cursor);
+                    cursor.setMaxRange(100);
                 }
             }
         }

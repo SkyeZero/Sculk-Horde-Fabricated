@@ -585,6 +585,9 @@
 						}
 					}
 				}
+			},
+			"timeline": {
+				"0.4": "trigger_attack_melee;"
 			}
 		},
 		"move.run": {
@@ -893,6 +896,9 @@
 						}
 					}
 				}
+			},
+			"timeline": {
+				"0.24": "trigger_attack_spin;"
 			}
 		}
 	},

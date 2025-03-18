@@ -381,7 +381,7 @@ public class SculkGuardianEntity extends WaterAnimal implements GeoEntity, IScul
             //((SculkGuardianEntity)mob).triggerAnim("attack_controller", "attack");
         }
 
-        protected void checkAndPerformAttack(LivingEntity targetMob, double distanceFromTargetIn)
+        protected void checkAndStartAttack(LivingEntity targetMob, double distanceFromTargetIn)
         {
             boolean isTargetNull = targetMob == null;
             if (isTargetNull) {
@@ -394,7 +394,7 @@ public class SculkGuardianEntity extends WaterAnimal implements GeoEntity, IScul
             }
             triggerAnimation();
 
-            mob.level().getServer().tell(new net.minecraft.server.TickTask(mob.level().getServer().getTickCount() + ATTACK_ANIMATION_DELAY_TICKS, () ->
+            mob.level().getServer().tell(new net.minecraft.server.TickTask(mob.level().getServer().getTickCount() + ATTACK_DELAY, () ->
             {
 
                 if (mob == null || targetMob == null) {
