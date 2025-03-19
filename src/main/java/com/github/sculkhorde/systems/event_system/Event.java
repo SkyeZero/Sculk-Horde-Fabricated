@@ -9,10 +9,10 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 
+import java.util.UUID;
+
 public class Event {
-
-
-    protected long eventID;
+    protected UUID eventUUID;
     protected int eventCost;
     protected BlockPos eventLocation;
     protected long EXECUTION_COOLDOWN;
@@ -28,19 +28,14 @@ public class Event {
     public Event(ResourceKey<net.minecraft.world.level.Level> dimension)
     {
         this.dimension = dimension;
-    }
-
-    public static Event createEvent(ResourceKey<net.minecraft.world.level.Level> dimension)
-    {
-        return new Event(dimension);
+        setEventUUID(UUID.randomUUID());
     }
 
 
     // Getters and Setters
-
-    public long getEventID()
+    public UUID getEventUUID()
     {
-        return eventID;
+        return eventUUID;
     }
 
     // Logic
@@ -86,7 +81,7 @@ public class Event {
         if(!Event.class.isAssignableFrom(obj.getClass())) {
             return false;
         }
-        return eventID == ((Event)obj).eventID;
+        return eventUUID == ((Event)obj).eventUUID;
     }
 
     public void setEventLocation(BlockPos eventLocation) {
@@ -97,8 +92,8 @@ public class Event {
         return eventLocation;
     }
 
-    public Event setEventID(long eventID) {
-        this.eventID = eventID;
+    protected Event setEventUUID(UUID eventUUID) {
+        this.eventUUID = this.eventUUID;
         return this;
     }
 
@@ -170,7 +165,18 @@ public class Event {
 
     public void save(CompoundTag tag)
     {
-        tag.putLong("eventID", getEventID());
+        //  This is to handle an edge case:
+        //  Events used to have an ID that was a long, instead of a UUID.
+        //  It's possible that during a version update, if an event in the save data does not have a UUID,
+        //  It would just indefinitely crash.
+        if(getEventUUID() != null)
+        {
+            tag.putUUID("eventID", getEventUUID());
+        }
+        else
+        {
+            tag.putUUID("eventID", UUID.randomUUID());
+        }
         tag.putInt("eventCost", getEventCost());
         tag.putLong("EXECUTION_COOLDOWN", getEXECUTION_COOLDOWN());
         tag.putLong("lastGameTimeOfEventExecution", getLastGameTimeOfEventExecution());
@@ -185,15 +191,18 @@ public class Event {
     {
         ResourceKey<Level> dimensionResourceKey = ResourceKey.create(Registries.DIMENSION, new ResourceLocation(tag.getString("dimension")));
 
-        Event event = Event.createEvent(dimensionResourceKey);
-        event.setEventID(tag.getInt("eventID"));
-        event.setEventCost(tag.getInt("eventCost"));
-        event.setEXECUTION_COOLDOWN(tag.getLong("EXECUTION_COOLDOWN"));
-        event.setLastGameTimeOfEventExecution(tag.getLong("lastGameTimeOfEventExecution"));
-        event.setEventReocurring(tag.getBoolean("isEventReocurring"));
-        event.setEventActive(tag.getBoolean("isEventActive"));
-        event.setToBeRemoved(tag.getBoolean("toBeRemoved"));
-        event.setEventLocation(BlockPos.of(tag.getLong("eventLocation")));
+        // Note:
+        //  createNewEvent covers the edge case where an event does not have a UUID. The method creates one by default.
+        //  See save method above for more context.
+        Event event = new Event(dimensionResourceKey);
+        if(tag.contains("eventID")) { event.setEventUUID(tag.getUUID("eventID")); }
+        if(tag.contains("eventCost")) { event.setEventCost(tag.getInt("eventCost")); }
+        if(tag.contains("EXECUTION_COOLDOWN")) { event.setEXECUTION_COOLDOWN(tag.getLong("EXECUTION_COOLDOWN")); }
+        if(tag.contains("lastGameTimeOfEventExecution")) { event.setLastGameTimeOfEventExecution(tag.getLong("lastGameTimeOfEventExecution")); }
+        if(tag.contains("isEventReocurring")) { event.setEventReocurring(tag.getBoolean("isEventReocurring")); }
+        if(tag.contains("isEventActive")) { event.setEventActive(tag.getBoolean("isEventActive")); }
+        if(tag.contains("toBeRemoved")) { event.setToBeRemoved(tag.getBoolean("toBeRemoved")); }
+        if(tag.contains("eventLocation")) { event.setEventLocation(BlockPos.of(tag.getLong("eventLocation"))); }
         return event;
     }
 }

@@ -5,10 +5,9 @@ import com.github.sculkhorde.common.block.SculkAncientNodeBlock;
 import com.github.sculkhorde.common.entity.SculkPhantomEntity;
 import com.github.sculkhorde.common.entity.SculkSporeSpewerEntity;
 import com.github.sculkhorde.common.entity.infection.AncientNodePurificationHandler;
-import com.github.sculkhorde.systems.infestation_systems.node_infestation.NodeBranchingInfestationSystem;
 import com.github.sculkhorde.core.*;
-import com.github.sculkhorde.systems.event_system.Event;
 import com.github.sculkhorde.systems.event_system.events.SpawnPhantomsEvent;
+import com.github.sculkhorde.systems.infestation_systems.node_infestation.NodeBranchingInfestationSystem;
 import com.github.sculkhorde.util.*;
 import com.github.sculkhorde.util.ChunkLoading.BlockEntityChunkLoaderHelper;
 import com.mojang.serialization.Dynamic;
@@ -36,6 +35,7 @@ import net.minecraft.world.level.material.Fluids;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 
@@ -46,18 +46,23 @@ public class SculkAncientNodeBlockEntity extends BlockEntity implements GameEven
 {
 
 
-    private long tickedAt = System.nanoTime();
+    protected long tickedAt = System.nanoTime();
     public static final int tickIntervalSeconds = 5;
-    private long heartBeatDelayMillis = TimeUnit.SECONDS.toMillis(5);
-    private long lastHeartBeat = System.currentTimeMillis();
+    protected long heartBeatDelayMillis = TimeUnit.SECONDS.toMillis(5);
+    protected long lastHeartBeat = System.currentTimeMillis();
 
-    private NodeBranchingInfestationSystem infectionHandler;
-    private AncientNodePurificationHandler purificationHandler;
+    protected NodeBranchingInfestationSystem infectionHandler;
+    protected AncientNodePurificationHandler purificationHandler;
+
+    // Phantom Event Code
+    public UUID phantomEventUUID;
+    public static final String phantomEventUUIDIdentifier = "phantom_event_uuid";
+
 
     // Vibration Code
-    private final VibrationSystem.User vibrationUser = new SculkAncientNodeBlockEntity.VibrationUser(this);
-    private VibrationSystem.Data vibrationData = new VibrationSystem.Data();
-    private final VibrationSystem.Listener vibrationListener = new VibrationSystem.Listener(this);
+    protected final VibrationSystem.User vibrationUser = new SculkAncientNodeBlockEntity.VibrationUser(this);
+    protected VibrationSystem.Data vibrationData = new VibrationSystem.Data();
+    protected final VibrationSystem.Listener vibrationListener = new VibrationSystem.Listener(this);
 
     public SculkAncientNodeBlockEntity(BlockPos blockPos, BlockState blockState) {
         super(ModBlockEntities.SCULK_ANCIENT_NODE_BLOCK_ENTITY.get(), blockPos, blockState);
@@ -299,10 +304,9 @@ public class SculkAncientNodeBlockEntity extends BlockEntity implements GameEven
 
         long timeElapsed = TimeUnit.SECONDS.convert(System.nanoTime() - blockEntity.tickedAt, TimeUnit.NANOSECONDS);
 
-        if(!SculkHorde.eventSystem.doesEventExist("ancient_node_spawn_phantom".hashCode()))
+        if(blockEntity.phantomEventUUID == null || !SculkHorde.eventSystem.doesEventExist(blockEntity.phantomEventUUID))
         {
-            Event phantomEvent = SpawnPhantomsEvent.createEvent(level.dimension());
-            phantomEvent.setEventID("ancient_node_spawn_phantom".hashCode());
+            SpawnPhantomsEvent phantomEvent = new SpawnPhantomsEvent(blockEntity.getLevel().dimension());
             phantomEvent.setEventLocation(blockPos);
             phantomEvent.setEventReocurring(true);
             phantomEvent.setEXECUTION_COOLDOWN(TickUnits.convertHoursToTicks(1));
@@ -441,6 +445,11 @@ public class SculkAncientNodeBlockEntity extends BlockEntity implements GameEven
             });
         }
 
+        if(nbt.contains(phantomEventUUIDIdentifier))
+        {
+            phantomEventUUID = nbt.getUUID(phantomEventUUIDIdentifier);
+        }
+
     }
 
     protected void saveAdditional(CompoundTag nbt)
@@ -449,6 +458,7 @@ public class SculkAncientNodeBlockEntity extends BlockEntity implements GameEven
         VibrationSystem.Data.CODEC.encodeStart(NbtOps.INSTANCE, this.vibrationData).resultOrPartial(SculkHorde.LOGGER::error).ifPresent((p_222871_) -> {
             nbt.put("listener", p_222871_);
         });
+        nbt.putUUID(phantomEventUUIDIdentifier, phantomEventUUID);
     }
 
     // Vibration System

@@ -47,7 +47,6 @@ public class HitSquadEvent extends Event {
         super(dimension);
         setEventCost(100);
         this.target = target;
-        eventID = target.getMostSignificantBits() & Long.MAX_VALUE;
         setState(State.INITIALIZATION);
     }
 

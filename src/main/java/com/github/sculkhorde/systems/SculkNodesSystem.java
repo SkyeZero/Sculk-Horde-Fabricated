@@ -3,7 +3,6 @@ package com.github.sculkhorde.systems;
 import com.github.sculkhorde.core.ModConfig;
 import com.github.sculkhorde.core.ModSavedData;
 import com.github.sculkhorde.core.SculkHorde;
-import com.github.sculkhorde.systems.event_system.Event;
 import com.github.sculkhorde.systems.event_system.events.SpawnPhantomsEvent;
 import com.github.sculkhorde.util.TickUnits;
 import net.minecraft.server.level.ServerLevel;
@@ -121,8 +120,7 @@ public class SculkNodesSystem {
         nodeWithLongestTimeOfInactivity.setActivationTimeStamp(nodeWithLongestTimeOfInactivity.getDimension().getGameTime());
         SculkHorde.LOGGER.info("Activating Node at: " + nodeWithLongestTimeOfInactivity.getPosition().toString());
 
-        Event phantomEvent = SpawnPhantomsEvent.createEvent(nodeWithLongestTimeOfInactivity.getDimension().dimension());
-        phantomEvent.setEventID(nodeWithLongestTimeOfInactivity.getPosition().asLong());
+        SpawnPhantomsEvent phantomEvent = new SpawnPhantomsEvent(nodeWithLongestTimeOfInactivity.getDimension().dimension());
         phantomEvent.setEventLocation(nodeWithLongestTimeOfInactivity.getPosition());
         SculkHorde.eventSystem.addEvent(phantomEvent);
     }

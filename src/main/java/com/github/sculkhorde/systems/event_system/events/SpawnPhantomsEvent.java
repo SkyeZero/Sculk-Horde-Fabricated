@@ -16,11 +16,6 @@ public class SpawnPhantomsEvent extends Event {
         super(dimension);
     }
 
-    public static Event createEvent(ResourceKey<net.minecraft.world.level.Level> dimension)
-    {
-        return new SpawnPhantomsEvent(dimension);
-    }
-
     private void spawnScoutPhantomsAtTopOfWorld(int amount)
     {
         int spawnRange = 100;

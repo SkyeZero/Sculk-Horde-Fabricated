@@ -6,21 +6,22 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.server.ServerLifecycleHooks;
 
 import java.util.HashMap;
+import java.util.UUID;
 
 public class EventSystem {
 
     //Hash Map of Events using event IDs as keys
-    private HashMap<Long, Event> events;
+    private HashMap<UUID, Event> events;
 
     private long lastGameTimeOfExecution;
     private final long EXECUTION_COOLDOWN_TICKS = TickUnits.convertSecondsToTicks(0.5F);
 
     public EventSystem()
     {
-        events = new HashMap<Long, Event>();
+        events = new HashMap<UUID, Event>();
     }
 
-    public HashMap<Long, Event> getEvents()
+    public HashMap<UUID, Event> getEvents()
     {
         return events;
     }
@@ -32,12 +33,12 @@ public class EventSystem {
         return isHordeActive && (ServerLifecycleHooks.getCurrentServer().overworld().getGameTime() - lastGameTimeOfExecution) > EXECUTION_COOLDOWN_TICKS;
     }
 
-    public Event getEvent(long eventID)
+    public Event getEvent(UUID eventID)
     {
         return events.get(eventID);
     }
 
-    public boolean doesEventExist(long eventID)
+    public boolean doesEventExist(UUID eventID)
     {
         return events.containsKey(eventID);
     }
@@ -45,14 +46,14 @@ public class EventSystem {
     public void addEvent(Event event)
     {
         // If event doesnt already exist
-        if(!events.containsKey(event.getEventID()))
+        if(!events.containsKey(event.getEventUUID()))
         {
-            events.put(event.getEventID(), event);
-            SculkHorde.LOGGER.info("Added event " + event.getClass() + " with ID: " + event.getEventID());
+            events.put(event.getEventUUID(), event);
+            SculkHorde.LOGGER.info("Added event " + event.getClass() + " with ID: " + event.getEventUUID());
         }
     }
 
-    public void removeEvent(long eventID)
+    public void removeEvent(UUID eventID)
     {
         events.remove(eventID);
     }
@@ -70,8 +71,8 @@ public class EventSystem {
         {
             if(event.isToBeRemoved())
             {
-                removeEvent(event.getEventID());
-                SculkHorde.LOGGER.info("Removed event " + event.getClass() + " with ID: " + event.getEventID());
+                removeEvent(event.getEventUUID());
+                SculkHorde.LOGGER.info("Removed event " + event.getClass() + " with ID: " + event.getEventUUID());
 
                 // WE CANNOT CONTINUE, WE NEED TO RETURN AND START OVER SO WE DON'T GET A CONCURRENT MODIFICATION EXCEPTION
                 return;
@@ -84,7 +85,7 @@ public class EventSystem {
             if(!isEventActive && canEventStart)
             {
                 event.start();
-                SculkHorde.LOGGER.info("Starting event " + event.getClass() + " with ID: " + event.getEventID());
+                SculkHorde.LOGGER.info("Starting event " + event.getClass() + " with ID: " + event.getEventUUID());
                 continue;
             }
 
@@ -97,7 +98,7 @@ public class EventSystem {
             if(isEventActive && !canEventContinue)
             {
                 event.end();
-                SculkHorde.LOGGER.info("Ending event " + event.getClass() + " with ID: " + event.getEventID());
+                SculkHorde.LOGGER.info("Ending event " + event.getClass() + " with ID: " + event.getEventUUID());
                 continue;
             }
         }
