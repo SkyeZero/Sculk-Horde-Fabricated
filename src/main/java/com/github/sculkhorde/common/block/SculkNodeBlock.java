@@ -313,6 +313,7 @@ public class SculkNodeBlock extends BaseEntityBlock implements IForgeBlock {
                     {
                         PlayerProfileHandler.getOrCreatePlayerProfile(player).incrementNodesDestroyed();
                         PlayerProfileHandler.getOrCreatePlayerProfile(player).increaseOrDecreaseRelationshipToHorde(-100);
+                        PlayerProfileHandler.getOrCreatePlayerProfile(player).setTimeOfLastHit(0);
                     }
                 }
         );
