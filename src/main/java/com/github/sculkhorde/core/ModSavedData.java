@@ -1586,7 +1586,7 @@ public class ModSavedData extends SavedData {
 
         public boolean isHitCooldownOver()
         {
-            return ServerLifecycleHooks.getCurrentServer().overworld().getGameTime() - getTimeOfLastHit() > TickUnits.convertHoursToTicks(2);
+            return ServerLifecycleHooks.getCurrentServer().overworld().getGameTime() - getTimeOfLastHit() > TickUnits.convertMinutesToTicks(ModConfig.SERVER.sculk_node_spawn_cooldown_minutes.get() * 2);
         }
 
         public int getRelationshipToTheHorde()

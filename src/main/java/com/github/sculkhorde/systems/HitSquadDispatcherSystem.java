@@ -98,10 +98,6 @@ public class HitSquadDispatcherSystem {
             SculkHorde.eventSystem.addEvent(new HitSquadEvent(nextTarget.get().level().dimension(), nextTarget.get().getUUID()));
             PlayerProfileHandler.getOrCreatePlayerProfile(nextTarget.get()).setTimeOfLastHit(level.getGameTime());
         }
-        else if(SculkHorde.isDebugMode())
-        {
-            SculkHorde.LOGGER.info("HitSquadDispatcherSystem | No Available Targets");
-        }
 
         timeOfLastCheckForDispatch = level.getGameTime();
     }

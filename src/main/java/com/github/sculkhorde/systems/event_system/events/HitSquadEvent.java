@@ -18,7 +18,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 
 import java.util.Optional;
-import java.util.Random;
 import java.util.UUID;
 import java.util.function.Predicate;
 
@@ -89,26 +88,6 @@ public class HitSquadEvent extends Event {
         SculkHorde.LOGGER.info("HitSquadEvent | " + "State: " + state.toString());
     }
 
-    /**
-     * Chooses ONLY an X and Y Coordinate for our block searcher to try and reach.
-     * This is NOT the actual spawn location, but getting near it is the goal.
-     * @return The Block Position of the desired spawn Location.
-     */
-    protected BlockPos getDesiredSpawnLocation(BlockPos origin)
-    {
-        Random rng = new Random();
-        float randomAngle = rng.nextFloat(0F, 360F);
-
-        // Calculate the new coordinates
-        double radians = Math.toRadians(randomAngle);
-        int newX = origin.getX() + (int) (MAX_DISTANCE_FROM_PLAYER * Math.cos(radians));
-        int newZ = origin.getZ() + (int) (MAX_DISTANCE_FROM_PLAYER * Math.sin(radians));
-
-        // Create the new BlockPos
-        BlockPos newPos = new BlockPos(newX, 0, newZ);
-        SculkHorde.LOGGER.debug("HitSquadEvent | Desired Spawn Pos: " + newPos.toShortString());
-        return newPos;
-    }
 
     public Optional<BlockPos> findValidSpawnPosition(int cubeLength) {
         // Calculate the bounds of the cube
@@ -186,41 +165,6 @@ public class HitSquadEvent extends Event {
         Player player = getPlayerIfOnline().get();
         ModSavedData.NodeEntry entry = SculkHorde.savedData.getClosestNodeEntry((ServerLevel) player.level(), player.blockPosition());
         setEventLocation(entry.getPosition());
-
-        /*
-        if(spawnFinder.isEmpty())
-        {
-            desiredSpawnPos = Optional.of(getDesiredSpawnLocation(player.blockPosition()));
-            spawnFinder = Optional.of(new HitSquadSpawnFinder((ServerLevel) player.level(), getEventLocation(), desiredSpawnPos.get()));
-            //spawnFinder.get().enableDebugMode();
-            spawnFinder.get().setTargetBlockPredicate(isValidSpawnPos);
-            spawnFinder.get().setObstructionPredicate(isObstructed);
-            spawnFinder.get().setMaxDistance(MAX_DISTANCE_FROM_PLAYER);
-        }
-
-
-
-        // Tick Block Searcher
-        spawnFinder.get().tick();
-
-        // If the block searcher is not finished, return.
-        if(!spawnFinder.get().isFinished()) { return; }
-
-        if(spawnFinder.get().isPathFound())
-        {
-            reaper = SculkSoulReaperEntity.spawnWithDifficulty(player.level(), spawnFinder.get().getFoundBlock().getCenter(), getTargetProfile().getDifficultyOfNextHit());
-            reaper.setHitTarget(player);
-            setState(State.PURSUIT);
-        }
-        else
-        {
-            if(SculkHorde.isDebugMode()) {
-                SculkHorde.LOGGER.info("HitSquadEvent | FAILURE, Could not find good spawn pos.");
-            }
-            setState(State.FAILURE);
-        }
-
-         */
 
         Optional<BlockPos> potentialSpawnPoint = Optional.empty();
 
