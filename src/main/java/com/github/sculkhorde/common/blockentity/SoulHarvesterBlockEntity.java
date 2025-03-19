@@ -9,6 +9,7 @@ import com.github.sculkhorde.core.ModBlockEntities;
 import com.github.sculkhorde.core.ModSounds;
 import com.github.sculkhorde.util.AdvancementUtil;
 import com.github.sculkhorde.util.EntityAlgorithms;
+import com.github.sculkhorde.util.ParticleUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -321,9 +322,15 @@ public class SoulHarvesterBlockEntity extends BlockEntity implements MenuProvide
             blockEntity.increaseHealthHarvested(healthHarvested);
 
             livingentity.skipDropExperience();
-            this.positionSource.getPosition(ServerLevelIn).ifPresent((positionVec3) -> {
+
+            this.positionSource.getPosition(ServerLevelIn).ifPresent((positionVec3) ->
+            {
                 this.spawnCoolParticles(ServerLevelIn, BlockPos.containing(positionVec3), this.blockState, ServerLevelIn.getRandom());
 
+                Vec3 beamPath = blockEntity.getBlockPos().getCenter().add(0, -0.5F, 0).subtract(sourcePosition);
+                Vec3 direction = beamPath.normalize();
+
+                ParticleUtil.spawnParticleBeam(ServerLevelIn, ParticleTypes.SCULK_CHARGE_POP, killedEntitiy.getEyePosition(), direction, (float) beamPath.length(), 0.2F, 5);
             });
 
             tryAwardAdvancement(ServerLevelIn, livingentity);
