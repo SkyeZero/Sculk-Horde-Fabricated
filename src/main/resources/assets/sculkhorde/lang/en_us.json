@@ -441,6 +441,8 @@
   "tooltip.sculkhorde.blade_of_purity.functionality": "§7§oA sword that upon striking a Sculk Horde mob, will give it the purity effect and purify the surrounding land. This blade has a large sweeping edge to it, making it ideal for hordes of mobs.",
   "tooltip.sculkhorde.blade_of_purity.lore": "§7§oA sword imbued with the warm and embracing aura of purity. Holding it fills your body with the resolve to restore balance to a corrupted world. All anguished souls will know peace once they meet this blade.",
   "item.sculkhorde.soul_animator": "Soul Animator",
+  "item.sculkhorde.soul_animator.functionality": "§7§o§kDescription Missing§r.",
+  "item.sculkhorde.soul_animator.lore": "§7§o§kDescription Missing§r.",
   "effect.sculkhorde.diseased_atmosphere": "Diseased Atmosphere",
   "effect.sculkhorde.diseased_atmosphere.description": "Causes entities to take damage and exhaustion.",
   "effect.sculkhorde.sculk_fog": "Sculk Fog",
@@ -448,13 +450,6 @@
   "effect.sculkhorde.dense": "Dense",
   "effect.sculkhorde.dense.description": "Increases the gravity effect on players.",
 
-  "block.sculkhorde.bee_colony_core_block": "Bee Colony Core",
-  "block.sculkhorde.depleted_golem_of_wrath_animator_block": "Depleted Golem of Wrath Animator",
-  "block.sculkhorde.fungal_sculk_block": "Fungal Sculk",
-  "block.sculkhorde.fungal_sculk_stem_block": "Fungal Sculk Stem",
-  "block.sculkhorde.fungal_shroom_core_block": "Fungal Shroom Core",
-  "block.sculkhorde.golem_of_wrath_animator_block": "Golem of Wrath Animator",
-  "block.sculkhorde.soulite_bud_block": "Soulite Bud",
   "block.sculkhorde.tendril_core_block": "Tendril Core",
   "effect.sculkhorde.soul_disruption": "Soul Disruption",
   "effect.sculkhorde.soul_disruption.description": "§1§kDescription Missing§r",
@@ -474,8 +469,5 @@
   "entity.sculkhorde.soul_poison_projectile": "Soul Poison Projectile",
   "entity.sculkhorde.soul_spear_projectile": "Soul Spear Projectile",
   "entity.sculkhorde.soul_spear_summoner_entity": "Soul Spear Summoner Entity",
-  "entity.sculkhorde.zoltraak_attack_entity": "Zoltraak Attack Entity",
-  "item.sculkhorde.soul_animator": "Soul Animator",
-  "item.sculkhorde.soul_animator.functionality": "§7§o§kDescription Missing§r.",
-  "item.sculkhorde.soul_animator.lore": "§7§o§kDescription Missing§r."
+  "entity.sculkhorde.zoltraak_attack_entity": "Zoltraak Attack Entity"
 }
