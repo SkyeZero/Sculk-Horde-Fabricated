@@ -1,16 +1,13 @@
 package com.github.sculkhorde.systems.event_system;
 
 import com.github.sculkhorde.core.SculkHorde;
-import com.github.sculkhorde.systems.event_system.events.HitSquadEvent;
-import com.github.sculkhorde.systems.event_system.events.SpawnPhantomsEvent;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 
+import java.util.Optional;
 import java.util.UUID;
 
 public class Event {
@@ -200,41 +197,14 @@ public class Event {
 
     }
 
-    public static Event load(CompoundTag tag)
-    {
-        Event event;
-        ResourceKey<Level> dimensionResourceKey = ResourceKey.create(Registries.DIMENSION, new ResourceLocation(tag.getString("dimension")));
-        // DEFAULT CASE
-        // Note:
-        //  this constructor covers the edge case where an event does not have a UUID. The method creates one by default.
-        //  See save method above for more context.
-        event = new Event(dimensionResourceKey);
-
-        if(tag.contains("eventType"))
-        {
-            String eventType = tag.getString("eventType");
-
-            if(eventType.equals(HitSquadEvent.class.getName()))
-            {
-                event = new HitSquadEvent(dimensionResourceKey);
-            }
-            else if(eventType.equals(SpawnPhantomsEvent.class.getName()))
-            {
-                event = new SpawnPhantomsEvent(dimensionResourceKey);
-            }
-        }
-
-        if(tag.contains("eventID")) { event.setEventUUID(tag.getUUID("eventID")); }
-        if(tag.contains("eventCost")) { event.setEventCost(tag.getInt("eventCost")); }
-        if(tag.contains("EXECUTION_COOLDOWN")) { event.setEXECUTION_COOLDOWN(tag.getLong("EXECUTION_COOLDOWN")); }
-        if(tag.contains("lastGameTimeOfEventExecution")) { event.setLastGameTimeOfEventExecution(tag.getLong("lastGameTimeOfEventExecution")); }
-        if(tag.contains("isEventReoccurring")) { event.setEventReocurring(tag.getBoolean("isEventReoccurring")); }
-        if(tag.contains("isEventActive")) { event.setEventActive(tag.getBoolean("isEventActive")); }
-        if(tag.contains("toBeRemoved")) { event.setToBeRemoved(tag.getBoolean("toBeRemoved")); }
-        if(tag.contains("eventLocation")) { event.setEventLocation(BlockPos.of(tag.getLong("eventLocation"))); }
-
-        event.loadAdditional(tag);
-
-        return event;
+    public static void loadCommonPropertiesFromTag(Event event, CompoundTag tag) {
+        Optional.of(tag.getUUID("eventID")).ifPresent(event::setEventUUID);
+        Optional.of(tag.getInt("eventCost")).ifPresent(event::setEventCost);
+        Optional.of(tag.getLong("EXECUTION_COOLDOWN")).ifPresent(event::setEXECUTION_COOLDOWN);
+        Optional.of(tag.getLong("lastGameTimeOfEventExecution")).ifPresent(event::setLastGameTimeOfEventExecution);
+        Optional.of(tag.getBoolean("isEventReoccurring")).ifPresent(event::setEventReocurring);
+        Optional.of(tag.getBoolean("isEventActive")).ifPresent(event::setEventActive);
+        Optional.of(tag.getBoolean("toBeRemoved")).ifPresent(event::setToBeRemoved);
+        Optional.of(tag.getLong("eventLocation")).map(BlockPos::of).ifPresent(event::setEventLocation);
     }
 }

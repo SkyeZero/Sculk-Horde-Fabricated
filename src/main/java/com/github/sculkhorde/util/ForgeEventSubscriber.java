@@ -61,18 +61,18 @@ public class ForgeEventSubscriber {
         {
             SculkHorde.statisticsData = new StatisticsData(); // Keep this above "SculkHorde.savedData". Otherwise, stats won't be loaded correctly.
             SculkHorde.savedData = ServerLifecycleHooks.getCurrentServer().overworld().getDataStorage().computeIfAbsent(ModSavedData::load, ModSavedData::new, SculkHorde.SAVE_DATA_ID); //Initialize Saved Data
-            SculkHorde.gravemind = new Gravemind(); //Initialize Gravemind
-            SculkHorde.debugSlimeSystem = new DebugSlimeSystem();
-            SculkHorde.deathAreaInvestigator = new DeathAreaInvestigator(); //Initialize Death Area Investigator
-            SculkHorde.raidHandler = new RaidHandler((ServerLevel) event.getLevel()); //Initialize Raid Handler
-            SculkHorde.sculkNodesSystem = new SculkNodesSystem(); //Initialize Sculk Nodes Handler
-            SculkHorde.entityChunkLoaderHelper = new EntityChunkLoaderHelper(); //Initialize Entity Chunk Loader Helper
-            SculkHorde.blockEntityChunkLoaderHelper = new BlockEntityChunkLoaderHelper(); //Initialize Block Entity Chunk Loader Helper
-            SculkHorde.eventSystem = new EventSystem(); //Initialize Event Handler
-            SculkHorde.beeNestActivitySystem = new BeeNestActivitySystem();
-            SculkHorde.autoPerformanceSystem = new AutoPerformanceSystem();
-            SculkHorde.chunkInfestationSystem = new ChunkInfestationSystem();
-            SculkHorde.cursorSystem = new CursorSystem();
+            if(SculkHorde.gravemind == null) { SculkHorde.gravemind = new Gravemind(); } //Initialize Gravemind
+            if(SculkHorde.debugSlimeSystem == null) { SculkHorde.debugSlimeSystem = new DebugSlimeSystem(); }
+            if(SculkHorde.deathAreaInvestigator == null) { SculkHorde.deathAreaInvestigator = new DeathAreaInvestigator(); } //Initialize Death Area Investigator
+            if(SculkHorde.raidHandler == null) { SculkHorde.raidHandler = new RaidHandler((ServerLevel) event.getLevel());}
+            if(SculkHorde.sculkNodesSystem == null) { SculkHorde.sculkNodesSystem = new SculkNodesSystem(); }
+            if(SculkHorde.entityChunkLoaderHelper == null) { SculkHorde.entityChunkLoaderHelper = new EntityChunkLoaderHelper(); }
+            if(SculkHorde.blockEntityChunkLoaderHelper == null) { SculkHorde.blockEntityChunkLoaderHelper = new BlockEntityChunkLoaderHelper(); }
+            if(SculkHorde.eventSystem == null) { SculkHorde.eventSystem = new EventSystem(); }
+            if(SculkHorde.beeNestActivitySystem == null) { SculkHorde.beeNestActivitySystem = new BeeNestActivitySystem(); }
+            if(SculkHorde.autoPerformanceSystem == null) { SculkHorde.autoPerformanceSystem = new AutoPerformanceSystem(); }
+            if(SculkHorde.chunkInfestationSystem == null) { SculkHorde.chunkInfestationSystem = new ChunkInfestationSystem(); }
+            if(SculkHorde.cursorSystem == null) { SculkHorde.cursorSystem = new CursorSystem(); }
             ModConfig.SERVER.loadItemsInfectionCursorsCanEat();
             ModConfig.SERVER.loadConfiguredInfestableBlocks();
 
