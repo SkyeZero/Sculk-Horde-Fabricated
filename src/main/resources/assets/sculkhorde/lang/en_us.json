@@ -11,8 +11,6 @@
   "tooltip.sculkhorde.warden_beef": "§7§oA forbidden food. A dev item that is used to enable in-development features when eaten.",
   "item.sculkhorde.dev_node_spawner": "Dev Sculk Brain Node Spawner",
   "tooltip.sculkhorde.dev_node_spawner": "§7§oCalls the node spawn procedure at the player's location.",
-  "item.sculkhorde.dev_raid_wand": "Dev Raid Wand",
-  "tooltip.sculkhorde.dev_raid_wand ": "§7§o§kDescription Missing§r.",
 
   "item.sculkhorde.custom_item_projectile": "Item Projectile",
   "tooltip.sculkhorde.custom_item_projectile": "§7§oThis is a dev item to test projectiles. Its the parent class of all projectiles. I decided to add it as an item just for tom foolery",
@@ -92,7 +90,7 @@
   "block.sculkhorde.infested_clay": "Infested Clay",
   "block.sculkhorde.infested_crying_obsidian": "Infested Crying Obsidian",
   "tooltip.sculkhorde.infested_crying_obsidian": "A strange infested block. You can hear the cries of the dead within it. Used to craft Crying Souls.",
-
+  
   "block.sculkhorde.sculk_node": "Sculk Brain Node",
   "tooltip.sculkhorde.sculk_node": "A highly sophisticated neural hub found within the Sculk Horde. It acts as a secondary brain for the Sculk Node, facilitating the intricate control of the local Sculk network.",
   "block.sculkhorde.sculk_dura_matter": "Sculk Dura Matter",
@@ -193,7 +191,7 @@
   "block.sculkhorde.infested_blackstone_brick_stairs": "Infested Polished Blackstone Brick Stairs",
   "block.sculkhorde.infested_blackstone_brick_slab": "Infested Polished Blackstone Brick Slab",
   "block.sculkhorde.infested_blackstone_brick_wall": "Infested Polished Blackstone Brick Wall",
-
+  
   "item.sculkhorde.sculk_spore_spewer_spawn_egg": "Sculk Spore Spewer Spawn Egg",
   "item.sculkhorde.sculk_zombie_spawn_egg": "Sculk Zombie Spawn Egg",
   "item.sculkhorde.sculk_spitter_spawn_egg": "Sculk Spitter Spawn Egg",
@@ -254,7 +252,7 @@
   "effect.sculkhorde.diseased_cysts": "Diseased Cysts",
   "effect.sculkhorde.diseased_cysts.description": "Can damage and infect other entities near the initial victim. It can be cursed using a Purification Flask.",
   "effect.sculkhorde.sculk_vessel": "Sculk Vessel",
-  "effect.sculkhorde.sculk_vessel.description": "§1§kDescription Missing§r",
+  "effect.sculkhorde.sculk_vessel.description": "§1§kDescription missing§r",
   "effect.sculkhorde.corroded": "Corroded",
   "effect.sculkhorde.corroded.description": "Causes the entity to take damage over time. A portion of the damage ignores armor.",
 
@@ -292,7 +290,7 @@
   "item.sculkhorde.coin_of_contribution": "Coin of Contribution",
   "tooltip.sculkhorde.coin_of_contribution": "§7§oA coin representing the immense value you contributed to this mod. Sculk Horde cannot exist without people like you. This is a personal thank you from me. Please enjoy Sculk Horde :)",
 
-  "block.sculkhorde.fleshy_compost_block": "Fleshy Compost Block",
+  "block.sculkhorde.fleshy_compost_block":  "Fleshy Compost Block",
   "sounds.sculkhorde.blind_and_alone_music_disc": "Blind and Alone Music Disc",
   "sounds.sculkhorde.blind_and_alone_music_disc.desc": "Firel - Blind and Alone",
   "item.sculkhorde.blind_and_alone_music_disc": "Blind and Alone Music Disc",
@@ -379,6 +377,7 @@
   "sounds.sculkhorde.sculk_ravager_screech": "Sculk Ravager Screeches",
   "sounds.sculkhorde.sculk_ravager_bite": "Sculk Ravager Chomps",
 
+
   "itemGroup.sculk_horde_tab_experimental": "Sculk Horde Experimental Features",
   "entity.sculkhorde.sculk_vex": "Sculk Vex",
   "entity.sculkhorde.sculk_soul_reaper": "Sculk Soul Reaper",
@@ -441,33 +440,10 @@
   "tooltip.sculkhorde.blade_of_purity.functionality": "§7§oA sword that upon striking a Sculk Horde mob, will give it the purity effect and purify the surrounding land. This blade has a large sweeping edge to it, making it ideal for hordes of mobs.",
   "tooltip.sculkhorde.blade_of_purity.lore": "§7§oA sword imbued with the warm and embracing aura of purity. Holding it fills your body with the resolve to restore balance to a corrupted world. All anguished souls will know peace once they meet this blade.",
   "item.sculkhorde.soul_animator": "Soul Animator",
-  "item.sculkhorde.soul_animator.functionality": "§7§o§kDescription Missing§r.",
-  "item.sculkhorde.soul_animator.lore": "§7§o§kDescription Missing§r.",
   "effect.sculkhorde.diseased_atmosphere": "Diseased Atmosphere",
   "effect.sculkhorde.diseased_atmosphere.description": "Causes entities to take damage and exhaustion.",
   "effect.sculkhorde.sculk_fog": "Sculk Fog",
   "effect.sculkhorde.sculk_fog.description": "Limits your vision.",
   "effect.sculkhorde.dense": "Dense",
-  "effect.sculkhorde.dense.description": "Increases the gravity effect on players.",
-
-  "block.sculkhorde.tendril_core_block": "Tendril Core",
-  "effect.sculkhorde.soul_disruption": "Soul Disruption",
-  "effect.sculkhorde.soul_disruption.description": "§1§kDescription Missing§r",
-  "entity.sculkhorde.chunk_infect_entity": "Chunk Infect Entity",
-  "entity.sculkhorde.elemental_breeze_magic_circle": "Elemental Breeze Magic Circle",
-  "entity.sculkhorde.elemental_fire_magic_circle": "Elemental Fire Magic Circle",
-  "entity.sculkhorde.elemental_ice_magic_circle": "Elemental Ice Magic Circle",
-  "entity.sculkhorde.elemental_poison_magic_circle": "Elemental Poison Magic Circle",
-  "entity.sculkhorde.floor_soul_spears": "Floor Soul Spears",
-  "entity.sculkhorde.golem_of_wrath": "Golem of Wrath",
-  "entity.sculkhorde.living_armor": "Living Armor",
-  "entity.sculkhorde.sculk_guardian": "Sculk Guardian",
-  "entity.sculkhorde.soul_breeze_projectile": "Soul Breeze Projectile",
-  "entity.sculkhorde.soul_fire_projectile": "Soul Fire Projectile",
-  "entity.sculkhorde.soul_fly_swatter_projectile": "Soul Fly Swatter Projectile",
-  "entity.sculkhorde.soul_ice_projectile": "Soul Ice Projectile",
-  "entity.sculkhorde.soul_poison_projectile": "Soul Poison Projectile",
-  "entity.sculkhorde.soul_spear_projectile": "Soul Spear Projectile",
-  "entity.sculkhorde.soul_spear_summoner_entity": "Soul Spear Summoner Entity",
-  "entity.sculkhorde.zoltraak_attack_entity": "Zoltraak Attack Entity"
+  "effect.sculkhorde.dense.description": "Increases the gravity effect on players."
 }
