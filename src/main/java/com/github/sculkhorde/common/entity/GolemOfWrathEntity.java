@@ -18,7 +18,6 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
@@ -227,16 +226,6 @@ public class GolemOfWrathEntity extends PathfinderMob implements GeoEntity, IPur
             this.hurt(damageSources().genericKill(), Integer.MAX_VALUE);
         }
 
-    }
-
-    @Override
-    protected void doPush(Entity pusher) {
-        if(pusher instanceof LivingEntity livingEntity)
-        {
-            if ((EntityAlgorithms.isSculkLivingEntity.test(livingEntity) || EntityAlgorithms.isLivingEntityAllyToSculkHorde(livingEntity)) && this.getRandom().nextInt(20) == 0) {
-                this.setTarget(livingEntity);
-            }
-        }
     }
 
     @Override

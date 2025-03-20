@@ -101,7 +101,7 @@ public class GolemOfWrathAnimatorBlockEntity extends BlockEntity {
         blockEntity.lastTickTime = level.getGameTime();
 
         // If our golem is not spawned yet, spawn him.
-        if(blockEntity.getGolem().isEmpty())
+        if(blockEntity.getGolem().isEmpty() || blockEntity.getGolemAsLivingEntity().isEmpty())
         {
             blockEntity.spawnGolem();
             return;
