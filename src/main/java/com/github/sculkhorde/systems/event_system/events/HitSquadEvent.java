@@ -11,6 +11,7 @@ import com.github.sculkhorde.util.PlayerProfileHandler;
 import com.github.sculkhorde.util.TickUnits;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
@@ -24,9 +25,10 @@ import java.util.function.Predicate;
 public class HitSquadEvent extends Event {
     protected final int MAX_DISTANCE_FROM_PLAYER = 150;
 
-
     protected UUID target;
     protected SculkSoulReaperEntity reaper;
+
+    protected static final String targetUUIDIdentifier = "targetUUID";
 
     protected enum State {
         INITIALIZATION,
@@ -44,10 +46,19 @@ public class HitSquadEvent extends Event {
     protected Optional<BlockPos> desiredSpawnPos = Optional.empty();
 
     public HitSquadEvent(ResourceKey<Level> dimension, UUID target) {
+        this(dimension);
+        this.target = target;
+    }
+
+    public HitSquadEvent(ResourceKey<Level> dimension) {
         super(dimension);
         setEventCost(100);
-        this.target = target;
         setState(State.INITIALIZATION);
+    }
+
+    public Optional<SculkSoulReaperEntity> getReaper()
+    {
+        return Optional.ofNullable(reaper);
     }
 
     public boolean canContinue()
@@ -177,6 +188,7 @@ public class HitSquadEvent extends Event {
         {
             reaper = SculkSoulReaperEntity.spawnWithDifficulty(player.level(), potentialSpawnPoint.get().getCenter(), getTargetProfile().getDifficultyOfNextHit());
             reaper.setHitTarget(player);
+            reaper.setParentEventUUID(getEventUUID());
             setState(State.PURSUIT);
             return;
         }
@@ -289,5 +301,18 @@ public class HitSquadEvent extends Event {
     public Optional<Player> getPlayerIfOnline()
     {
         return getTargetProfile().getPlayer();
+    }
+
+    @Override
+    public void loadAdditional(CompoundTag tag) {
+        if(tag.contains(targetUUIDIdentifier))
+        {
+            target = tag.getUUID(targetUUIDIdentifier);
+        }
+    }
+
+    @Override
+    public void saveAdditional(CompoundTag tag) {
+        tag.putUUID(targetUUIDIdentifier, target);
     }
 }

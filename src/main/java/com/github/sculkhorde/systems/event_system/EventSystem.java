@@ -114,6 +114,7 @@ public class EventSystem {
             CompoundTag eventTag = new CompoundTag();
             event.save(eventTag);
             eventsTag.put(event.getClass().getName(), eventTag);
+            SculkHorde.LOGGER.info("Saved " + event.getClass().getName() + " event.");
         }
         tag.put("events", eventsTag);
         SculkHorde.LOGGER.info("Saved " + SculkHorde.eventSystem.getEvents().size() + " events. Took " + (System.currentTimeMillis() - startTime) + " Milliseconds.");
@@ -132,6 +133,7 @@ public class EventSystem {
             CompoundTag eventTag = eventsTag.getCompound(key);
             Event event = Event.load(eventTag);
             eventSystem.addEvent(event);
+            SculkHorde.LOGGER.info("Loaded " + event.getClass().getName() + " event.");
         }
         SculkHorde.LOGGER.info("Loaded " + eventSystem.getEvents().size() + " events. Took " + (System.currentTimeMillis() - startTime) + " Milliseconds.");
         return eventSystem;

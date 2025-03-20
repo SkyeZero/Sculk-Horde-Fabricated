@@ -1,6 +1,8 @@
 package com.github.sculkhorde.systems.event_system;
 
 import com.github.sculkhorde.core.SculkHorde;
+import com.github.sculkhorde.systems.event_system.events.HitSquadEvent;
+import com.github.sculkhorde.systems.event_system.events.SpawnPhantomsEvent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
@@ -18,19 +20,18 @@ public class Event {
     protected long EXECUTION_COOLDOWN;
     protected long lastGameTimeOfEventExecution;
 
-    protected ResourceKey<net.minecraft.world.level.Level> dimension;
+    protected ResourceKey<Level> dimension;
     protected boolean isEventReocurring = false;
 
     protected boolean isEventActive = false;
     protected boolean toBeRemoved = false;
 
 
-    public Event(ResourceKey<net.minecraft.world.level.Level> dimension)
+    public Event(ResourceKey<Level> dimension)
     {
         this.dimension = dimension;
         setEventUUID(UUID.randomUUID());
     }
-
 
     // Getters and Setters
     public UUID getEventUUID()
@@ -93,7 +94,7 @@ public class Event {
     }
 
     protected Event setEventUUID(UUID eventUUID) {
-        this.eventUUID = this.eventUUID;
+        this.eventUUID = eventUUID;
         return this;
     }
 
@@ -112,7 +113,7 @@ public class Event {
         return this;
     }
 
-    public Event setDimension(ResourceKey<net.minecraft.world.level.Level> dimension) {
+    public Event setDimension(ResourceKey<Level> dimension) {
         this.dimension = dimension;
         return this;
     }
@@ -153,7 +154,7 @@ public class Event {
         return SculkHorde.savedData.level.getServer().getLevel(dimension);
     }
 
-    public boolean isEventReocurring() {
+    public boolean isEventReoccurring() {
         return isEventReocurring;
     }
 
@@ -163,8 +164,15 @@ public class Event {
 
     // Save and Load
 
+    public void saveAdditional(CompoundTag tag)
+    {
+
+    }
+
     public void save(CompoundTag tag)
     {
+        tag.putString("eventType", this.getClass().getName());
+
         //  This is to handle an edge case:
         //  Events used to have an ID that was a long, instead of a UUID.
         //  It's possible that during a version update, if an event in the save data does not have a UUID,
@@ -180,29 +188,53 @@ public class Event {
         tag.putInt("eventCost", getEventCost());
         tag.putLong("EXECUTION_COOLDOWN", getEXECUTION_COOLDOWN());
         tag.putLong("lastGameTimeOfEventExecution", getLastGameTimeOfEventExecution());
-        tag.putBoolean("isEventReocurring", isEventReocurring());
+        tag.putBoolean("isEventReoccurring", isEventReoccurring());
         tag.putBoolean("isEventActive", isEventActive());
         tag.putBoolean("toBeRemoved", isToBeRemoved());
         if(dimension != null) { tag.putString("dimension", dimension.location().toString()); }
         if(eventLocation != null) { tag.putLong("eventLocation", eventLocation.asLong()); }
     }
 
+    public void loadAdditional(CompoundTag tag)
+    {
+
+    }
+
     public static Event load(CompoundTag tag)
     {
+        Event event;
         ResourceKey<Level> dimensionResourceKey = ResourceKey.create(Registries.DIMENSION, new ResourceLocation(tag.getString("dimension")));
-
+        // DEFAULT CASE
         // Note:
-        //  createNewEvent covers the edge case where an event does not have a UUID. The method creates one by default.
+        //  this constructor covers the edge case where an event does not have a UUID. The method creates one by default.
         //  See save method above for more context.
-        Event event = new Event(dimensionResourceKey);
+        event = new Event(dimensionResourceKey);
+
+        if(tag.contains("eventType"))
+        {
+            String eventType = tag.getString("eventType");
+
+            if(eventType.equals(HitSquadEvent.class.getName()))
+            {
+                event = new HitSquadEvent(dimensionResourceKey);
+            }
+            else if(eventType.equals(SpawnPhantomsEvent.class.getName()))
+            {
+                event = new SpawnPhantomsEvent(dimensionResourceKey);
+            }
+        }
+
         if(tag.contains("eventID")) { event.setEventUUID(tag.getUUID("eventID")); }
         if(tag.contains("eventCost")) { event.setEventCost(tag.getInt("eventCost")); }
         if(tag.contains("EXECUTION_COOLDOWN")) { event.setEXECUTION_COOLDOWN(tag.getLong("EXECUTION_COOLDOWN")); }
         if(tag.contains("lastGameTimeOfEventExecution")) { event.setLastGameTimeOfEventExecution(tag.getLong("lastGameTimeOfEventExecution")); }
-        if(tag.contains("isEventReocurring")) { event.setEventReocurring(tag.getBoolean("isEventReocurring")); }
+        if(tag.contains("isEventReoccurring")) { event.setEventReocurring(tag.getBoolean("isEventReoccurring")); }
         if(tag.contains("isEventActive")) { event.setEventActive(tag.getBoolean("isEventActive")); }
         if(tag.contains("toBeRemoved")) { event.setToBeRemoved(tag.getBoolean("toBeRemoved")); }
         if(tag.contains("eventLocation")) { event.setEventLocation(BlockPos.of(tag.getLong("eventLocation"))); }
+
+        event.loadAdditional(tag);
+
         return event;
     }
 }

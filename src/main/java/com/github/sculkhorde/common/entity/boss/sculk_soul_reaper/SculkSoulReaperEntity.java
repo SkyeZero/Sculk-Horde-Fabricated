@@ -5,6 +5,7 @@ import com.github.sculkhorde.common.entity.SculkRavagerEntity;
 import com.github.sculkhorde.common.entity.SculkVindicatorEntity;
 import com.github.sculkhorde.common.entity.SculkWitchEntity;
 import com.github.sculkhorde.common.entity.boss.sculk_soul_reaper.goals.*;
+import com.github.sculkhorde.common.entity.components.TargetParameters;
 import com.github.sculkhorde.common.entity.entity_debugging.GoalDebuggerUtility;
 import com.github.sculkhorde.common.entity.goal.ImprovedRandomStrollGoal;
 import com.github.sculkhorde.common.entity.goal.InvalidateTargetGoal;
@@ -13,13 +14,15 @@ import com.github.sculkhorde.common.entity.goal.TargetAttacker;
 import com.github.sculkhorde.core.ModEntities;
 import com.github.sculkhorde.core.ModMobEffects;
 import com.github.sculkhorde.core.SculkHorde;
+import com.github.sculkhorde.systems.event_system.Event;
+import com.github.sculkhorde.systems.event_system.events.HitSquadEvent;
 import com.github.sculkhorde.util.SquadHandler;
-import com.github.sculkhorde.common.entity.components.TargetParameters;
 import com.github.sculkhorde.util.TickUnits;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.TickTask;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -53,6 +56,7 @@ import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.Optional;
+import java.util.UUID;
 
 public class SculkSoulReaperEntity extends Monster implements GeoEntity, ISculkSmartEntity {
 
@@ -79,11 +83,7 @@ public class SculkSoulReaperEntity extends Monster implements GeoEntity, ISculkS
     //MOVEMENT_SPEED determines how far away this mob can see other mobs
     public static final float MOVEMENT_SPEED = 0.4F;
     protected int mobDifficultyLevel = 1;
-
-    // Controls what types of entities this mob can target
     private final TargetParameters TARGET_PARAMETERS = new TargetParameters(this).enableTargetHostiles().enableTargetInfected().disableBlackListMobs();
-
-    // Timing Variables
     protected ServerBossEvent bossEvent;
 
     // Animation
@@ -94,6 +94,9 @@ public class SculkSoulReaperEntity extends Monster implements GeoEntity, ISculkS
     protected boolean isUsingSpell = false;
 
     protected ReaperAttackSequenceGoal currentAttack;
+
+    public static final String parentEventUUIDIdentifier = "parent_event_uuid";
+    protected UUID parentEventUUID;
 
     /**
      * The Constructor
@@ -112,6 +115,12 @@ public class SculkSoulReaperEntity extends Monster implements GeoEntity, ISculkS
     {
         this(ModEntities.SCULK_SOUL_REAPER.get(), level);
         this.setPos(pos.getX(), pos.getY(), pos.getZ());
+    }
+
+    public SculkSoulReaperEntity(Level level, BlockPos pos, UUID eventUUID)
+    {
+        this(level, pos);
+        parentEventUUID = eventUUID;
     }
 
     public static SculkSoulReaperEntity spawnWithDifficulty(Level level, Vec3 pos, int mobDifficultyLevel)
@@ -172,7 +181,10 @@ public class SculkSoulReaperEntity extends Monster implements GeoEntity, ISculkS
     }
 
     // Accessors and Modifiers
-
+    public void setParentEventUUID(UUID eventUUID)
+    {
+        parentEventUUID = eventUUID;
+    }
     public boolean isIdle() {
         return getTarget() == null;
     }
@@ -421,6 +433,48 @@ public class SculkSoulReaperEntity extends Monster implements GeoEntity, ISculkS
         super.customServerAiStep();
         this.bossEvent.setProgress(this.getHealth() / this.getMaxHealth());
 
+        if(!SculkHorde.eventSystem.doesEventExist(parentEventUUID))
+        {
+            SculkHorde.LOGGER.info("SculkSoulReaperEntity | Despawned myself because parent event does not exist.");
+            despawn();
+        }
+
+        // This is to make sure there arent any duplicate soul reapers in the world.
+        // I know this is nested if statement hell, but I was tired and it works.
+        if(SculkHorde.eventSystem.doesEventExist(parentEventUUID))
+        {
+            Event parentEvent = SculkHorde.eventSystem.getEvent(parentEventUUID);
+
+            if(parentEvent instanceof HitSquadEvent hitSquadEvent)
+            {
+                if(hitSquadEvent.getReaper().isPresent())
+                {
+                    if(!hitSquadEvent.getReaper().get().getUUID().equals(getUUID()))
+                    {
+                        SculkHorde.LOGGER.info("SculkSoulReaperEntity | Despawned myself because parent event already has a reaper. I am not supposed to exist.");
+                        despawn();
+                    }
+                }
+                else
+                {
+                    SculkHorde.LOGGER.info("SculkSoulReaperEntity | Despawned myself because parent event has not yet spawned a reaper. I am not supposed to exist.");
+                    despawn();
+                }
+            }
+            else
+            {
+                SculkHorde.LOGGER.info("SculkSoulReaperEntity | Despawned because parent event was not even a hitsquad event. How did we get here?");
+                despawn();
+            }
+        }
+
+    }
+
+    protected void despawn()
+    {
+        level().getServer().tell(new TickTask(level().getServer().getTickCount() + 1, () -> {
+            discard();
+        }));
     }
 
     protected ServerBossEvent createBossEvent() {
@@ -450,12 +504,20 @@ public class SculkSoulReaperEntity extends Monster implements GeoEntity, ISculkS
     {
         super.addAdditionalSaveData(nbt);
         nbt.putInt("difficulty", getMobDifficultyLevel());
+        if(parentEventUUID != null)
+        {
+            nbt.putUUID(parentEventUUIDIdentifier, parentEventUUID);
+        }
     }
 
     public void readAdditionalSaveData(CompoundTag nbt)
     {
         super.readAdditionalSaveData(nbt);
         setMobDifficultyLevel(nbt.getInt("difficulty"));
+        if(nbt.contains(parentEventUUIDIdentifier))
+        {
+            parentEventUUID = nbt.getUUID(parentEventUUIDIdentifier);
+        }
     }
 
     @Override
@@ -538,8 +600,6 @@ public class SculkSoulReaperEntity extends Monster implements GeoEntity, ISculkS
 
 
     //#### Debug Function ####
-
-
     @Override
     protected InteractionResult mobInteract(Player player, InteractionHand hand) {
 
