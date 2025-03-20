@@ -3,6 +3,8 @@ package com.github.sculkhorde.common.block;
 import com.github.sculkhorde.core.ModBlocks;
 import com.github.sculkhorde.core.ModItems;
 import com.github.sculkhorde.util.ParticleUtil;
+import com.mojang.blaze3d.platform.InputConstants;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -20,6 +22,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.extensions.IForgeBlock;
+import org.lwjgl.glfw.GLFW;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -71,7 +74,18 @@ public class DepletedGolemOfWrathAnimatorBlock extends Block implements IForgeBl
     public void appendHoverText(ItemStack stack, @Nullable BlockGetter iBlockReader, List<Component> tooltip, TooltipFlag flagIn) {
 
         super.appendHoverText(stack, iBlockReader, tooltip, flagIn); //Not sure why we need this
-        tooltip.add(Component.translatable("tooltip.sculkhorde.depleted_golem_of_wrath_animator_block")); //Text that displays if holding shift
+        if(InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), GLFW.GLFW_KEY_LEFT_SHIFT))
+        {
+            tooltip.add(Component.translatable("tooltip.sculkhorde.depleted_golem_of_wrath_animator_block.functionality"));
+        }
+        else if(InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), GLFW.GLFW_KEY_LEFT_CONTROL))
+        {
+            tooltip.add(Component.translatable("tooltip.sculkhorde.depleted_golem_of_wrath_animator_block.lore"));
+        }
+        else
+        {
+            tooltip.add(Component.translatable("tooltip.sculkhorde.default"));
+        }
     }
 
     /// #### Function ####
