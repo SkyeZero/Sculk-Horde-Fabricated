@@ -3,7 +3,7 @@ package com.github.sculkhorde.common.block;
 import com.github.sculkhorde.common.blockentity.SculkBeeNestBlockEntity;
 import com.github.sculkhorde.core.ModBlockEntities;
 import com.github.sculkhorde.core.ModBlocks;
-import com.github.sculkhorde.core.SculkHorde;
+import com.github.sculkhorde.core.ModSavedData;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -112,9 +112,9 @@ public class SculkBeeNestBlock extends BaseEntityBlock implements ISpecialStruct
         super.onPlace(state, level, pos, oldState, isMoving);
 
         //If world isn't client side and saved data exists, add this node to memory
-        if(!level.isClientSide() && SculkHorde.savedData != null)
+        if(!level.isClientSide() && ModSavedData.getSaveData() != null)
         {
-            SculkHorde.savedData.addBeeNestToMemory((ServerLevel) level, pos);
+            ModSavedData.getSaveData().addBeeNestToMemory((ServerLevel) level, pos);
         }
     }
 

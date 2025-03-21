@@ -95,7 +95,7 @@ public class RaidData {
 
     public void setDimension(ResourceKey<Level> dimension) {
         this.dimension = dimension;
-        SculkHorde.savedData.setDirty();
+        
     }
 
     public void getFoundTargetsFromBlockSearcher(ArrayList<BlockPos> foundTargets)
@@ -145,7 +145,7 @@ public class RaidData {
      */
     public void reset()
     {
-        if(areaOfInterestEntry != null) { SculkHorde.savedData.removeAreaOfInterestFromMemory(areaOfInterestEntry.getPosition()); }
+        if(areaOfInterestEntry != null) { ModSavedData.getSaveData().removeAreaOfInterestFromMemory(areaOfInterestEntry.getPosition()); }
         areaOfInterestEntry = null;
         if(getRaidLocation() != null)
         {
@@ -166,7 +166,7 @@ public class RaidData {
         setScoutEnderman(null);
         setTimeElapsedScouting(0);
         setCurrentRaidRadius(MINIMUM_RAID_RADIUS);
-        SculkHorde.savedData.setDirty();
+        
         dimension = null;
         if(bossEvent != null ) {bossEvent.removeAllPlayers();}
         bossEvent = null;
@@ -176,20 +176,20 @@ public class RaidData {
     public void startRaidArtificially(ServerLevel level, BlockPos raidLocationIn)
     {
 
-        if(SculkHorde.savedData.getSculkAccumulatedMass() < ModConfig.SERVER.gravemind_mass_goal_for_immature_stage.get() + 1000)
+        if(ModSavedData.getSaveData().getSculkAccumulatedMass() < ModConfig.SERVER.gravemind_mass_goal_for_immature_stage.get() + 1000)
         {
-            SculkHorde.savedData.setSculkAccumulatedMass(ModConfig.SERVER.gravemind_mass_goal_for_immature_stage.get() + 1000);
+            ModSavedData.getSaveData().setSculkAccumulatedMass(ModConfig.SERVER.gravemind_mass_goal_for_immature_stage.get() + 1000);
             SculkHorde.gravemind.calulateCurrentState();
-            SculkHorde.LOGGER.info("Artificially Starting Raid. Mass is now: " + SculkHorde.savedData.getSculkAccumulatedMass());
+            SculkHorde.LOGGER.info("Artificially Starting Raid. Mass is now: " + ModSavedData.getSaveData().getSculkAccumulatedMass());
             SculkHorde.LOGGER.info("Artificially Starting Raid. Gravemind is now in state: " + SculkHorde.gravemind.getEvolutionState());
         }
         removeNoRaidZoneAtBlockPos(level, raidLocationIn);
-        Optional<ModSavedData.AreaOfInterestEntry> possibleAreaOfInterestEntry = SculkHorde.savedData.addAreaOfInterestToMemory(level, raidLocationIn);
+        Optional<ModSavedData.AreaOfInterestEntry> possibleAreaOfInterestEntry = ModSavedData.getSaveData().addAreaOfInterestToMemory(level, raidLocationIn);
         if(possibleAreaOfInterestEntry.isPresent())
         {
             setAreaOfInterestEntry(possibleAreaOfInterestEntry.get());
             setRaidState(RaidHandler.RaidState.INVESTIGATING_LOCATION);
-            SculkHorde.savedData.setTicksSinceLastRaid(TickUnits.convertMinutesToTicks(ModConfig.SERVER.sculk_raid_global_cooldown_between_raids_minutes.get()));
+            ModSavedData.getSaveData().setTicksSinceLastRaid(TickUnits.convertMinutesToTicks(ModConfig.SERVER.sculk_raid_global_cooldown_between_raids_minutes.get()));
         }
         else
         {
@@ -199,7 +199,7 @@ public class RaidData {
 
     public void removeNoRaidZoneAtBlockPos(ServerLevel level, BlockPos pos)
     {
-        SculkHorde.savedData.getNoRaidZoneEntries().removeIf(entry -> entry.isBlockPosInRadius(level, pos));
+        ModSavedData.getSaveData().getNoRaidZoneEntries().removeIf(entry -> entry.isBlockPosInRadius(level, pos));
     }
 
     public int getTicksSpentTryingToChunkLoad()
@@ -210,13 +210,13 @@ public class RaidData {
     public void incrementTicksSpentTryingToChunkLoad()
     {
         ticksSpentTryingToChunkLoad++;
-        SculkHorde.savedData.setDirty();
+        
     }
 
     public void resetTicksSpentTryingToChunkLoad()
     {
         ticksSpentTryingToChunkLoad = 0;
-        SculkHorde.savedData.setDirty();
+        
     }
 
     public int getMAX_WAVE_DURATION() {
@@ -225,7 +225,7 @@ public class RaidData {
 
     public void setMAX_WAVE_DURATION(int MAX_WAVE_DURATION) {
         this.MAX_WAVE_DURATION = MAX_WAVE_DURATION;
-        SculkHorde.savedData.setDirty();
+        
     }
 
     public int getWaveDuration() {
@@ -234,12 +234,12 @@ public class RaidData {
 
     public void setWaveDuration(int waveDuration) {
         this.waveDuration = waveDuration;
-        SculkHorde.savedData.setDirty();
+        
     }
 
     public void incrementWaveDuration() {
         waveDuration++;
-        SculkHorde.savedData.setDirty();
+        
     }
 
     public int getTimeElapsedScouting() {
@@ -248,12 +248,12 @@ public class RaidData {
 
     public void incrementTimeElapsedScouting() {
         timeElapsedScouting++;
-        SculkHorde.savedData.setDirty();
+        
     }
 
     public void setTimeElapsedScouting(int timeElapsedScouting) {
         this.timeElapsedScouting = timeElapsedScouting;
-        SculkHorde.savedData.setDirty();
+        
     }
 
     public BlockPos getSpawnLocation() {
@@ -262,7 +262,7 @@ public class RaidData {
 
     public void setSpawnLocation(BlockPos spawnLocation) {
         this.spawnLocation = spawnLocation;
-        SculkHorde.savedData.setDirty();
+        
     }
 
     public BlockPos getRaidLocation() {
@@ -271,7 +271,7 @@ public class RaidData {
 
     public void setRaidLocation(BlockPos raidLocation) {
         this.raidLocation = raidLocation;
-        SculkHorde.savedData.setDirty();
+        
     }
 
     public Vec3 getObjectiveLocationVec3()
@@ -285,7 +285,7 @@ public class RaidData {
 
     public void setObjectiveLocation(BlockPos objectiveLocation) {
         this.objectiveLocation = objectiveLocation;
-        SculkHorde.savedData.setDirty();
+        
     }
 
     /**
@@ -350,7 +350,7 @@ public class RaidData {
 
     public void setObjectiveLocationAtStartOfWave(BlockPos objectiveLocationAtStartOfWave) {
         this.objectiveLocationAtStartOfWave = objectiveLocationAtStartOfWave;
-        SculkHorde.savedData.setDirty();
+        
     }
 
     public BlockPos getRaidCenter() {
@@ -359,7 +359,7 @@ public class RaidData {
 
     public void setRaidCenter(BlockPos raidCenter) {
         this.raidCenter = raidCenter;
-        SculkHorde.savedData.setDirty();
+        
     }
 
     public int getMINIMUM_RAID_RADIUS() {
@@ -372,7 +372,7 @@ public class RaidData {
 
     public void setCurrentRaidRadius(int currentRaidRadius) {
         this.currentRaidRadius = currentRaidRadius;
-        SculkHorde.savedData.setDirty();
+        
     }
 
     public int getMAXIMUM_RAID_RADIUS() {
@@ -385,7 +385,7 @@ public class RaidData {
 
     public void setWaveParticipants(ArrayList<ISculkSmartEntity> waveParticipants) {
         this.waveParticipants = waveParticipants;
-        SculkHorde.savedData.setDirty();
+        
     }
 
     /**
@@ -402,7 +402,7 @@ public class RaidData {
 
     public void setRaidState(RaidHandler.RaidState raidState) {
         this.raidState = raidState;
-        SculkHorde.savedData.setDirty();
+        //
         SculkHorde.LOGGER.debug("RaidHandler | Raid State is now: " + raidState.name() + ".");
     }
 
@@ -413,7 +413,7 @@ public class RaidData {
     public void setFailure(RaidHandler.failureType failure) {
         setRaidState(RaidHandler.RaidState.FAILED);
         this.failure = failure;
-        SculkHorde.savedData.setDirty();
+        
     }
 
     public SculkEndermanEntity getScoutEnderman() {
@@ -422,7 +422,7 @@ public class RaidData {
 
     public void setScoutEnderman(SculkEndermanEntity scoutEnderman) {
         this.scoutEnderman = scoutEnderman;
-        SculkHorde.savedData.setDirty();
+        
     }
 
     public ServerBossEvent getBossEvent() {
@@ -431,7 +431,7 @@ public class RaidData {
 
     public void setBossEvent(ServerBossEvent bossEvent) {
         this.bossEvent = bossEvent;
-        SculkHorde.savedData.setDirty();
+        
     }
 
     public EntityFactoryEntry.StrategicValues[] getCurrentWavePattern() {
@@ -440,7 +440,7 @@ public class RaidData {
 
     public void setCurrentWavePattern(EntityFactoryEntry.StrategicValues[] currentWavePattern) {
         this.currentWavePattern = currentWavePattern;
-        SculkHorde.savedData.setDirty();
+        
     }
 
     public int getMaxWaves() {
@@ -449,7 +449,7 @@ public class RaidData {
 
     public void setMaxWaves(int maxWaves) {
         this.maxWaves = maxWaves;
-        SculkHorde.savedData.setDirty();
+        
     }
 
     public int getCurrentWave() {
@@ -458,13 +458,13 @@ public class RaidData {
 
     public void setCurrentWave(int currentWave) {
         this.currentWave = currentWave;
-        SculkHorde.savedData.setDirty();
+        
     }
 
     public void incrementCurrentWave()
     {
         currentWave++;
-        SculkHorde.savedData.setDirty();
+        
     }
 
     /**
@@ -501,12 +501,12 @@ public class RaidData {
                 setRemainingWaveParticipants(getRemainingWaveParticipants() + 1);
             }
         }
-        SculkHorde.savedData.setDirty();
+        
     }
 
     public void setRemainingWaveParticipants(int remainingWaveParticipants) {
         this.remainingWaveParticipants = remainingWaveParticipants;
-        SculkHorde.savedData.setDirty();
+        
     }
 
     /**
@@ -528,7 +528,7 @@ public class RaidData {
             }
         }
         waveParticipants.clear();
-        SculkHorde.savedData.setDirty();
+        
     }
 
     public ModSavedData.AreaOfInterestEntry getAreaOfInterestEntry() {
@@ -537,7 +537,7 @@ public class RaidData {
 
     public void setAreaOfInterestEntry(ModSavedData.AreaOfInterestEntry areaOfInterestEntry) {
         this.areaOfInterestEntry = areaOfInterestEntry;
-        SculkHorde.savedData.setDirty();
+        
     }
 
     public Optional<BlockSearcher> getBlockSearcher() {
@@ -546,7 +546,7 @@ public class RaidData {
 
     public void setBlockSearcher(BlockSearcher blockSearcher) {
         this.blockSearcher = blockSearcher;
-        SculkHorde.savedData.setDirty();
+        
     }
 
     /**
@@ -726,7 +726,7 @@ public class RaidData {
         for (Tag t : waveParticipantsTag) {
             if (t instanceof IntArrayTag) {
                 UUID uuid = NbtUtils.loadUUID((IntArrayTag) t);
-                Entity entity = SculkHorde.savedData.level.getEntity(uuid);
+                Entity entity = ServerLifecycleHooks.getCurrentServer().getLevel(dimensionResourceKey).getEntity(uuid);
                 if (entity instanceof ISculkSmartEntity) {
                     RaidHandler.raidData.getWaveParticipants().add((ISculkSmartEntity) entity);
                     ((ISculkSmartEntity) entity).setParticipatingInRaid(true);
@@ -737,7 +737,7 @@ public class RaidData {
         // Enderman Scouting
         if (tag.hasUUID("scoutEnderman")) {
             UUID uuid = tag.getUUID("scoutEnderman");
-            Entity entity = SculkHorde.savedData.level.getEntity(uuid);
+            Entity entity = ServerLifecycleHooks.getCurrentServer().getLevel(dimensionResourceKey).getEntity(uuid);
             if (entity instanceof SculkEndermanEntity) {
                 RaidHandler.raidData.setScoutEnderman((SculkEndermanEntity) entity);
             }

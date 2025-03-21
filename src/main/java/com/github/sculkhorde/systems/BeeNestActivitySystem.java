@@ -39,7 +39,7 @@ public class BeeNestActivitySystem {
 
     public void serverTick()
     {
-        if(!isActive() || SculkHorde.savedData == null) { return; }
+        if(!isActive() || ModSavedData.getSaveData() == null) { return; }
 
         // Cooldown Check
         if(Math.abs(ServerLifecycleHooks.getCurrentServer().overworld().getGameTime() - timeOfLastTick) < DELAY_BETWEEN_TICKS)
@@ -48,7 +48,7 @@ public class BeeNestActivitySystem {
         }
 
 
-        List<ModSavedData.BeeNestEntry> beeNestsList = SculkHorde.savedData.getBeeNestEntries();
+        List<ModSavedData.BeeNestEntry> beeNestsList = ModSavedData.getSaveData().getBeeNestEntries();
         if (beeNestsList.isEmpty()) {
             return;
         }
@@ -114,7 +114,7 @@ public class BeeNestActivitySystem {
     {
         SculkHorde.LOGGER.debug("BeeNestActivitySystem | Enabling All Hives");
 
-        for(ModSavedData.BeeNestEntry entry : SculkHorde.savedData.getBeeNestEntries())
+        for(ModSavedData.BeeNestEntry entry : ModSavedData.getSaveData().getBeeNestEntries())
         {
             entry.enableOccupantsExiting();
         }

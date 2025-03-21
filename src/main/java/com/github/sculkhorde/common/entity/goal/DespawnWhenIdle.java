@@ -1,12 +1,11 @@
 package com.github.sculkhorde.common.entity.goal;
 
 import com.github.sculkhorde.common.entity.ISculkSmartEntity;
+import com.github.sculkhorde.core.ModSavedData;
 import com.github.sculkhorde.core.SculkHorde;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.Goal;
-
-import java.util.concurrent.TimeUnit;
 
 public class DespawnWhenIdle extends Goal {
 
@@ -43,8 +42,8 @@ public class DespawnWhenIdle extends Goal {
     public void start()
     {
         ((Mob)mob).remove(Entity.RemovalReason.DISCARDED);
-        if(SculkHorde.savedData != null) { 
-        	SculkHorde.savedData.addSculkAccumulatedMass((int) ((Mob) mob).getHealth());
+        if(ModSavedData.getSaveData() != null) {
+        	ModSavedData.getSaveData().addSculkAccumulatedMass((int) ((Mob) mob).getHealth());
             SculkHorde.statisticsData.addTotalMassFromDespawns((int) ((Mob) mob).getHealth());
         }
     }

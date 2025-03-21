@@ -1,7 +1,7 @@
 package com.github.sculkhorde.systems.chunk_cursor_system;
 
-import com.github.sculkhorde.core.ModConfig;
 import com.github.sculkhorde.core.ModMobEffects;
+import com.github.sculkhorde.core.ModSavedData;
 import com.github.sculkhorde.core.SculkHorde;
 import com.github.sculkhorde.systems.infestation_systems.block_infestation_system.BlockInfestationSystem;
 import com.github.sculkhorde.util.BlockAlgorithms;
@@ -14,10 +14,6 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.block.ComposterBlock;
-import net.minecraft.world.phys.AABB;
-
-import java.util.List;
 
 public class ChunkCursorInfector extends ChunkCursorBase<ChunkCursorInfector> {
 
@@ -89,7 +85,7 @@ public class ChunkCursorInfector extends ChunkCursorBase<ChunkCursorInfector> {
     @Override
     protected void consumeItem(ItemEntity item) {
         int massToAdd = item.getItem().getCount();
-        SculkHorde.savedData.addSculkAccumulatedMass(massToAdd);
+        ModSavedData.getSaveData().addSculkAccumulatedMass(massToAdd);
         SculkHorde.statisticsData.addTotalMassFromInfestedCursorItemEating(massToAdd);
 
         super.consumeItem(item);

@@ -1,6 +1,7 @@
 package com.github.sculkhorde.systems.infestation_systems.node_infestation;
 
 import com.github.sculkhorde.core.ModConfig;
+import com.github.sculkhorde.core.ModSavedData;
 import com.github.sculkhorde.core.SculkHorde;
 import com.github.sculkhorde.util.BlockAlgorithms;
 import com.github.sculkhorde.util.TickUnits;
@@ -96,7 +97,7 @@ public class NodeBranchingInfestationSystem {
             return false;
         }
 
-        if(!SculkHorde.savedData.isHordeActive()) {
+        if(!ModSavedData.getSaveData().isHordeActive()) {
             timeRemainingUntilNextActivationCheck = CHECK_FOR_ACTIVATION_INTERVAL;
             return false;
         }

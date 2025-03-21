@@ -3,6 +3,7 @@ package com.github.sculkhorde.systems.gravemind_system.entity_factory;
 import com.github.sculkhorde.common.entity.*;
 import com.github.sculkhorde.core.ModConfig;
 import com.github.sculkhorde.core.ModEntities;
+import com.github.sculkhorde.core.ModSavedData;
 import com.github.sculkhorde.core.SculkHorde;
 import com.github.sculkhorde.systems.gravemind_system.Gravemind;
 import net.minecraft.core.BlockPos;
@@ -258,9 +259,9 @@ public class EntityFactory {
         if(DEBUG_THIS) System.out.println("Reinforcement Request Recieved.");
         //Only continue if Sculk Mass > 0, the entries list is not empty, and if we have a budget
 
-        if(SculkHorde.savedData == null) { return; }
+        if(ModSavedData.getSaveData() == null) { return; }
 
-        if(SculkHorde.savedData.getSculkAccumulatedMass() <= 0)
+        if(ModSavedData.getSaveData().getSculkAccumulatedMass() <= 0)
         {
             return;
         }
@@ -325,7 +326,7 @@ public class EntityFactory {
             ((ServerLevel)world).playSound((Player)null, context.positions[i], SoundEvents.SCULK_CATALYST_BLOOM, SoundSource.BLOCKS, 2.0F, 0.6F + 1.0F);
             if (!noCost)
             {
-                SculkHorde.savedData.subtractSculkAccumulatedMass(mob.getCost());
+                ModSavedData.getSaveData().subtractSculkAccumulatedMass(mob.getCost());
             }
         }
     }
@@ -338,9 +339,9 @@ public class EntityFactory {
      */
     public void requestReinforcementSculkMass(Level world, BlockPos pos, ReinforcementRequest context)
     {
-        if(SculkHorde.savedData == null) { return; }
+        if(ModSavedData.getSaveData() == null) { return; }
 
-        if(SculkHorde.savedData.getSculkAccumulatedMass() <= 0)
+        if(ModSavedData.getSaveData().getSculkAccumulatedMass() <= 0)
         {
             return;
         }

@@ -74,18 +74,18 @@ public class Gravemind
         //This is how much mass is needed to go from immature to mature
         int MASS_GOAL_FOR_MATURE = ModConfig.SERVER.gravemind_mass_goal_for_mature_stage.get();
 
-        if(SculkHorde.savedData.getSculkAccumulatedMass() >= MASS_GOAL_FOR_MATURE)
+        if(ModSavedData.getSaveData().getSculkAccumulatedMass() >= MASS_GOAL_FOR_MATURE)
         {
             evolution_state = evolution_states.Mature;
             sculk_node_limit = 8;
         }
-        else if(SculkHorde.savedData.getSculkAccumulatedMass() >= MASS_GOAL_FOR_IMMATURE)
+        else if(ModSavedData.getSaveData().getSculkAccumulatedMass() >= MASS_GOAL_FOR_IMMATURE)
         {
             evolution_state = evolution_states.Immature;
             sculk_node_limit = 4;
-            if(SculkHorde.savedData.isHordeUnactivated())
+            if(ModSavedData.getSaveData().isHordeUnactivated())
             {
-                SculkHorde.savedData.setHordeState(ModSavedData.HordeState.ACTIVE);
+                ModSavedData.getSaveData().setHordeState(ModSavedData.HordeState.ACTIVE);
             }
         }
 
@@ -95,12 +95,12 @@ public class Gravemind
     {
         if(evolution_state == evolution_states.Undeveloped)
         {
-            SculkHorde.savedData.setSculkAccumulatedMass(ModConfig.SERVER.gravemind_mass_goal_for_immature_stage.get());
+            ModSavedData.getSaveData().setSculkAccumulatedMass(ModConfig.SERVER.gravemind_mass_goal_for_immature_stage.get());
             calulateCurrentState();
         }
         else if(evolution_state == evolution_states.Immature)
         {
-            SculkHorde.savedData.setSculkAccumulatedMass(ModConfig.SERVER.gravemind_mass_goal_for_mature_stage.get());
+            ModSavedData.getSaveData().setSculkAccumulatedMass(ModConfig.SERVER.gravemind_mass_goal_for_mature_stage.get());
             calulateCurrentState();
         }
     }
@@ -109,11 +109,11 @@ public class Gravemind
     {
         if(evolution_state == evolution_states.Immature)
         {
-            SculkHorde.savedData.setSculkAccumulatedMass(ModConfig.SERVER.gravemind_mass_goal_for_immature_stage.get()/2);
+            ModSavedData.getSaveData().setSculkAccumulatedMass(ModConfig.SERVER.gravemind_mass_goal_for_immature_stage.get()/2);
         }
         else if(evolution_state == evolution_states.Mature)
         {
-            SculkHorde.savedData.setSculkAccumulatedMass(ModConfig.SERVER.gravemind_mass_goal_for_mature_stage.get()/2);
+            ModSavedData.getSaveData().setSculkAccumulatedMass(ModConfig.SERVER.gravemind_mass_goal_for_mature_stage.get()/2);
 
         }
         calulateCurrentState();
@@ -121,7 +121,7 @@ public class Gravemind
 
     public void resetGravemindState()
     {
-        SculkHorde.savedData.setSculkAccumulatedMass(0);
+        ModSavedData.getSaveData().setSculkAccumulatedMass(0);
         calulateCurrentState();
     }
 
@@ -133,8 +133,8 @@ public class Gravemind
 
         boolean isSenderDeveloper = context.sender == ReinforcementRequest.senderType.Developer;
         boolean isSenderSculkMassBlock = context.sender == ReinforcementRequest.senderType.SculkMass;
-        boolean isThereNoMass = SculkHorde.savedData.getSculkAccumulatedMass() <= 0;
-        boolean isHordeDefeated = SculkHorde.savedData.isHordeDefeated();
+        boolean isThereNoMass = ModSavedData.getSaveData().getSculkAccumulatedMass() <= 0;
+        boolean isHordeDefeated = ModSavedData.getSaveData().isHordeDefeated();
 
         //Auto approve is this reinforcement is requested by a developer or sculk mass
         if(isSenderDeveloper || isSenderSculkMassBlock)
@@ -150,12 +150,12 @@ public class Gravemind
         boolean isSenderTypeSummoner = context.sender == ReinforcementRequest.senderType.Summoner;
         boolean isSenderTypeMassBlock = context.sender == ReinforcementRequest.senderType.SculkMass;
         boolean isThereAtLeastOneSpawnPoint = context.positions.length > 0;
-        boolean isThereSculkNodesInExistence = !SculkHorde.savedData.getNodeEntries().isEmpty();
+        boolean isThereSculkNodesInExistence = !ModSavedData.getSaveData().getNodeEntries().isEmpty();
 
         if( (isSenderTypeSummoner || isSenderTypeMassBlock) && isThereAtLeastOneSpawnPoint && isThereSculkNodesInExistence)
         {
-            BlockPos nodeBlockPos = SculkHorde.savedData.getClosestNodeEntry(context.dimension, context.positions[0]).getPosition();
-            Optional<SculkNodeBlockEntity> nodeBlockEntity = SculkHorde.savedData.level.getBlockEntity(nodeBlockPos, ModBlockEntities.SCULK_NODE_BLOCK_ENTITY.get());
+            BlockPos nodeBlockPos = ModSavedData.getSaveData().getClosestNodeEntry(context.dimension, context.positions[0]).getPosition();
+            Optional<SculkNodeBlockEntity> nodeBlockEntity = context.dimension.getBlockEntity(nodeBlockPos, ModBlockEntities.SCULK_NODE_BLOCK_ENTITY.get());
             if(nodeBlockEntity.isPresent())
             {
                 if(SculkHorde.populationHandler.isPopulationAtMax())

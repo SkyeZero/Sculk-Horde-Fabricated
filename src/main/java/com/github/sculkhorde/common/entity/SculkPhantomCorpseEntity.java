@@ -234,7 +234,7 @@ public class SculkPhantomCorpseEntity extends Monster implements GeoEntity, IScu
         boolean isBlockInfestationEnabled = ModConfig.SERVER.block_infestation_enabled.get();
         // The reason we do this instead of just checking if the horde is active is because sometimes people will spawn these
         // without activating the horde.
-        boolean isTheHordeNotDefeated = !SculkHorde.savedData.isHordeDefeated();
+        boolean isTheHordeNotDefeated = !ModSavedData.getSaveData().isHordeDefeated();
         boolean canSpawnCursor = passRandomChance && isCursorNullOrDead && isBlockInfestationEnabled && isTheHordeNotDefeated;
 
         if (canSpawnCursor && !SculkHorde.cursorSystem.isCursorPopulationAtMax()) {
@@ -420,7 +420,7 @@ public class SculkPhantomCorpseEntity extends Monster implements GeoEntity, IScu
     /* DO NOT USE THIS FOR ANYTHING, CAUSES DESYNC
     @Override
     public void onRemovedFromWorld() {
-        SculkHorde.savedData.addSculkAccumulatedMass((int) this.getHealth());
+        ModSavedData.getSaveData().addSculkAccumulatedMass((int) this.getHealth());
         super.onRemovedFromWorld();
     }
     */

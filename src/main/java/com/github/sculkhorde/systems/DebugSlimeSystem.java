@@ -1,6 +1,5 @@
 package com.github.sculkhorde.systems;
 
-import com.github.sculkhorde.core.SculkHorde;
 import com.github.sculkhorde.util.TickUnits;
 import com.google.common.base.Predicates;
 import net.minecraft.ChatFormatting;
@@ -14,6 +13,7 @@ import net.minecraft.world.entity.monster.Slime;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.scores.PlayerTeam;
 import net.minecraft.world.scores.Scoreboard;
+import net.minecraftforge.server.ServerLifecycleHooks;
 
 import java.util.ArrayList;
 
@@ -49,7 +49,7 @@ public class DebugSlimeSystem {
     }
 
     protected PlayerTeam createTeamIfAbsent(String teamID, Component teamDisplayName) {
-        Scoreboard scoreboard = SculkHorde.savedData.level.getServer().getScoreboard();
+        Scoreboard scoreboard = ServerLifecycleHooks.getCurrentServer().getScoreboard();
         if (scoreboard.getPlayerTeam(teamID) != null)
         {
             return scoreboard.getPlayerTeam(teamID);
@@ -76,7 +76,7 @@ public class DebugSlimeSystem {
 
     public void serverTick()
     {
-       if(Math.abs(SculkHorde.savedData.level.getGameTime() - timeOfLastSlimeDeletion) < SLIME_DELETION_INTERVAL)
+       if(Math.abs(ServerLifecycleHooks.getCurrentServer().overworld().getGameTime() - timeOfLastSlimeDeletion) < SLIME_DELETION_INTERVAL)
        {
            return;
        }
@@ -87,7 +87,7 @@ public class DebugSlimeSystem {
             slime.setYRot(0);
         }
 
-       timeOfLastSlimeDeletion = SculkHorde.savedData.level.getGameTime();
+       timeOfLastSlimeDeletion = ServerLifecycleHooks.getCurrentServer().overworld().getGameTime();
 
        for(Slime slime : debugSlimes)
        {
@@ -122,7 +122,7 @@ public class DebugSlimeSystem {
     }
 
     private void joinTeam(PlayerTeam team, LivingEntity entity) {
-        Scoreboard scoreboard = SculkHorde.savedData.level.getServer().getScoreboard();
+        Scoreboard scoreboard = ServerLifecycleHooks.getCurrentServer().getScoreboard();
 
         scoreboard.addPlayerToTeam(entity.getStringUUID(), team);
     }

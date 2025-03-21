@@ -1,12 +1,11 @@
 package com.github.sculkhorde.common.entity;
 
 import com.github.sculkhorde.common.blockentity.SculkNodeBlockEntity;
+import com.github.sculkhorde.common.entity.components.TargetParameters;
 import com.github.sculkhorde.core.ModBlockEntities;
 import com.github.sculkhorde.core.ModSavedData;
-import com.github.sculkhorde.core.SculkHorde;
 import com.github.sculkhorde.systems.raid_system.RaidHandler;
 import com.github.sculkhorde.util.SquadHandler;
-import com.github.sculkhorde.common.entity.components.TargetParameters;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Mob;
@@ -20,7 +19,7 @@ public interface ISculkSmartEntity {
     }
 
     default ModSavedData.NodeEntry getClosestNode() {
-        return SculkHorde.savedData.getClosestNodeEntry((ServerLevel) ((Mob) this).level(), ((Mob) this).blockPosition());
+        return ModSavedData.getSaveData().getClosestNodeEntry((ServerLevel) ((Mob) this).level(), ((Mob) this).blockPosition());
     }
 
     default BlockPos getClosestNodePosition() {

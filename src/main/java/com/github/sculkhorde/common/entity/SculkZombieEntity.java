@@ -235,7 +235,7 @@ public class SculkZombieEntity extends Monster implements GeoEntity, ISculkSmart
     /* DO NOT USE THIS FOR ANYTHING, CAUSES DESYNC
     @Override
     public void onRemovedFromWorld() {
-        SculkHorde.savedData.addSculkAccumulatedMass((int) this.getHealth());
+        ModSavedData.getSaveData().addSculkAccumulatedMass((int) this.getHealth());
         super.onRemovedFromWorld();
     }
     */

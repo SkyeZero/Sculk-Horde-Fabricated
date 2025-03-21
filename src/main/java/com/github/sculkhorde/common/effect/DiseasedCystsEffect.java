@@ -1,6 +1,7 @@
 package com.github.sculkhorde.common.effect;
 
 import com.github.sculkhorde.core.ModMobEffects;
+import com.github.sculkhorde.core.ModSavedData;
 import com.github.sculkhorde.core.SculkHorde;
 import com.github.sculkhorde.util.EntityAlgorithms;
 import com.github.sculkhorde.util.TickUnits;
@@ -51,7 +52,7 @@ public class DiseasedCystsEffect extends MobEffect {
             return;
         }
 
-        if(EntityAlgorithms.isSculkLivingEntity.test(sourceEntity) || SculkHorde.savedData.isHordeDefeated())
+        if(EntityAlgorithms.isSculkLivingEntity.test(sourceEntity) || ModSavedData.getSaveData().isHordeDefeated())
         {
             // Remove effect
             sourceEntity.removeEffect(ModMobEffects.SCULK_INFECTION.get());
@@ -85,7 +86,7 @@ public class DiseasedCystsEffect extends MobEffect {
                 }
                 float damage = (victim.getMaxHealth() * 0.1F);
                 victim.hurt(victim.damageSources().magic(), damage);
-                SculkHorde.savedData.addSculkAccumulatedMass((int) damage);
+                ModSavedData.getSaveData().addSculkAccumulatedMass((int) damage);
                 SculkHorde.statisticsData.addTotalMassFromDiseasedCysts((int) damage);
 
             }

@@ -1,6 +1,7 @@
 package com.github.sculkhorde.systems.cursor_system;
 
 import com.github.sculkhorde.core.ModConfig;
+import com.github.sculkhorde.core.ModSavedData;
 import com.github.sculkhorde.core.SculkHorde;
 import com.github.sculkhorde.systems.DebugSlimeSystem;
 import com.github.sculkhorde.util.BlockAlgorithms;
@@ -331,7 +332,7 @@ public class VirtualCursor implements ICursor{
             }
             entity.discard();
             int massToAdd = ((ItemEntity)entity).getItem().getCount();
-            SculkHorde.savedData.addSculkAccumulatedMass(massToAdd);
+            ModSavedData.getSaveData().addSculkAccumulatedMass(massToAdd);
             SculkHorde.statisticsData.addTotalMassFromInfestedCursorItemEating(massToAdd);
         }
     }

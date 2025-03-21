@@ -31,7 +31,6 @@ import net.minecraftforge.common.extensions.IForgeBlock;
 import javax.annotation.Nullable;
 import java.util.concurrent.TimeUnit;
 
-import static com.github.sculkhorde.core.SculkHorde.savedData;
 
 
 /**
@@ -94,10 +93,10 @@ public class SculkAncientNodeBlock extends BaseEntityBlock implements IForgeBloc
         boolean IsHordeRevivalItem = playerIn.getMainHandItem().is(ModItems.HEART_OF_THE_HORDE.get());
 
 
-        if(IsHordeCureItem && !savedData.isHordeDefeated() && !ModConfig.SERVER.disable_defeating_sculk_horde.get())
+        if(IsHordeCureItem && !ModSavedData.getSaveData().isHordeDefeated() && !ModConfig.SERVER.disable_defeating_sculk_horde.get())
         {
-            savedData.setHordeState(ModSavedData.HordeState.DEFEATED);
-            savedData.setSculkAccumulatedMass(0);
+            ModSavedData.getSaveData().setHordeState(ModSavedData.HordeState.DEFEATED);
+            ModSavedData.getSaveData().setSculkAccumulatedMass(0);
             level.players().forEach(player -> player.displayClientMessage(Component.literal("The Ancient Sculk Node has been Defeated!"), true));
             level.players().forEach(player -> level.playSound(null, player.blockPosition(), SoundEvents.ENDER_DRAGON_DEATH, SoundSource.HOSTILE, 1.0F, 1.0F));
 
@@ -122,9 +121,9 @@ public class SculkAncientNodeBlock extends BaseEntityBlock implements IForgeBloc
             return InteractionResult.CONSUME;
         }
 
-        if(IsHordeRevivalItem && !savedData.isHordeActive())
+        if(IsHordeRevivalItem && !ModSavedData.getSaveData().isHordeActive())
         {
-            savedData.setHordeState(ModSavedData.HordeState.ACTIVE);
+            ModSavedData.getSaveData().setHordeState(ModSavedData.HordeState.ACTIVE);
             setDefeated((ServerLevel) playerIn.level(), blockState, pos, false);
             playerIn.getMainHandItem().grow(-1);
             return InteractionResult.CONSUME;

@@ -3,6 +3,7 @@ package com.github.sculkhorde.systems;
 import com.github.sculkhorde.common.entity.ISculkSmartEntity;
 import com.github.sculkhorde.common.entity.SculkBeeHarvesterEntity;
 import com.github.sculkhorde.common.entity.SculkPhantomCorpseEntity;
+import com.github.sculkhorde.core.ModSavedData;
 import com.github.sculkhorde.core.SculkHorde;
 import com.github.sculkhorde.util.EntityAlgorithms;
 import com.github.sculkhorde.util.TickUnits;
@@ -96,7 +97,7 @@ public class SculkPopulationSystem {
             if(entity.isIdle() && (!entity.isParticipatingInRaid() && !SculkHorde.raidHandler.isRaidInactive()))
             {
                 ((LivingEntity) entity).discard();
-                SculkHorde.savedData.addSculkAccumulatedMass((int) ((LivingEntity) entity).getHealth());
+                ModSavedData.getSaveData().addSculkAccumulatedMass((int) ((LivingEntity) entity).getHealth());
                 SculkHorde.statisticsData.addTotalMassFromDespawns((int) ((LivingEntity) entity).getHealth());
             }
         }

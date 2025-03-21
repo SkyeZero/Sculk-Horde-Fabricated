@@ -1,7 +1,7 @@
 package com.github.sculkhorde.systems.infestation_systems.node_infestation;
 
 import com.github.sculkhorde.common.entity.infection.CursorProberEntity;
-import com.github.sculkhorde.core.SculkHorde;
+import com.github.sculkhorde.core.ModSavedData;
 import com.github.sculkhorde.systems.cursor_system.CursorSystem;
 import com.github.sculkhorde.systems.cursor_system.VirtualSurfaceInfestorCursor;
 import net.minecraft.core.BlockPos;
@@ -128,9 +128,8 @@ public class InfectionTree {
         {
             return;
         }
-        if(SculkHorde.savedData == null) { return; }
 
-        if(SculkHorde.savedData.getSculkAccumulatedMass() <= 0)
+        if(ModSavedData.getSaveData().getSculkAccumulatedMass() <= 0)
         {
             return;
         }

@@ -1,6 +1,7 @@
 package com.github.sculkhorde.systems.gravemind_system.entity_factory;
 
 import com.github.sculkhorde.core.ModConfig;
+import com.github.sculkhorde.core.ModSavedData;
 import com.github.sculkhorde.core.SculkHorde;
 import com.github.sculkhorde.systems.gravemind_system.Gravemind;
 import net.minecraft.core.BlockPos;
@@ -124,7 +125,7 @@ public class EntityFactoryEntry {
 
     public boolean isEntryAppropriateMinimalCheck()
     {
-        if(getCost() > SculkHorde.savedData.getSculkAccumulatedMass())
+        if(getCost() > ModSavedData.getSaveData().getSculkAccumulatedMass())
         {
             return false;
         }
@@ -196,7 +197,7 @@ public class EntityFactoryEntry {
         }
 
         boolean isOverBudget = getCost() > context.budget && context.budget != -1;
-        boolean doesHordeNotHaveEnoughMass = getCost() >= SculkHorde.savedData.getSculkAccumulatedMass();
+        boolean doesHordeNotHaveEnoughMass = getCost() >= ModSavedData.getSaveData().getSculkAccumulatedMass();
         boolean isSenderExplicitlyDenied = isSenderExplicitlyDenied(context.sender);
         boolean isEvolutionStateNotMet = !SculkHorde.gravemind.isEvolutionStateEqualOrLessThanCurrent(minEvolutionRequired);
         boolean doesEntityNotContainNeededStrategicValues = !doesEntityContainNeededStrategicValues(context.approvedStrategicValues);
@@ -242,7 +243,7 @@ public class EntityFactoryEntry {
      */
     public Mob spawnEntity(ServerLevel level, BlockPos pos)
     {
-        SculkHorde.savedData.subtractSculkAccumulatedMass(getCost());
+        ModSavedData.getSaveData().subtractSculkAccumulatedMass(getCost());
         SculkHorde.statisticsData.incrementTotalUnitsSpawned();
         return getEntity().spawn(level, pos, MobSpawnType.EVENT);
     }

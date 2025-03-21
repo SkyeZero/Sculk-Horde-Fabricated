@@ -1,6 +1,7 @@
 package com.github.sculkhorde.common.command;
 
 import com.github.sculkhorde.common.block.SculkNodeBlock;
+import com.github.sculkhorde.core.ModSavedData;
 import com.github.sculkhorde.core.SculkHorde;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
@@ -24,19 +25,19 @@ public class NodesStatusCommand implements Command<CommandSourceStack> {
     public int run(CommandContext<CommandSourceStack> context)
     {
         context.getSource().sendSuccess(()->Component.literal(
-                "Sculk Nodes Present: " + SculkHorde.savedData.getNodeEntries().size()
+                "Sculk Nodes Present: " + ModSavedData.getSaveData().getNodeEntries().size()
                         + "\n"
-                        + " Are there too many nodes? " + (SculkHorde.savedData.getNodeEntries().size() >= SculkHorde.gravemind.sculk_node_limit)
+                        + " Are there too many nodes? " + (ModSavedData.getSaveData().getNodeEntries().size() >= SculkHorde.gravemind.sculk_node_limit)
                         + "\n"
-                        + "Is Node Cooldown Over: " + SculkHorde.savedData.isNodeSpawnCooldownOver()
+                        + "Is Node Cooldown Over: " + ModSavedData.getSaveData().isNodeSpawnCooldownOver()
                         + "\n"
-                        + "Minutes Remaining on Cooldown: " + SculkHorde.savedData.getMinutesRemainingUntilNodeSpawn()
+                        + "Minutes Remaining on Cooldown: " + ModSavedData.getSaveData().getMinutesRemainingUntilNodeSpawn()
                         + "\n"
                         + "Mass Needed for Node Spawn: " + (SculkNodeBlock.SPAWN_NODE_COST + SculkNodeBlock.SPAWN_NODE_BUFFER)
                         + "\n"
-                        + "Is Enough Mass Present for Node Spawn: " + (SculkHorde.savedData.getSculkAccumulatedMass() >= SculkNodeBlock.SPAWN_NODE_COST + SculkNodeBlock.SPAWN_NODE_BUFFER)
+                        + "Is Enough Mass Present for Node Spawn: " + (ModSavedData.getSaveData().getSculkAccumulatedMass() >= SculkNodeBlock.SPAWN_NODE_COST + SculkNodeBlock.SPAWN_NODE_BUFFER)
                         + "\n"
-                        + "Is the Horde Defeated: " + SculkHorde.savedData.isHordeDefeated()
+                        + "Is the Horde Defeated: " + ModSavedData.getSaveData().isHordeDefeated()
                 ), false);
         return 0;
     }

@@ -580,7 +580,7 @@ public class SculkBeeHarvesterEntity extends Monster implements GeoEntity, Flyin
     /* DO NOT USE THIS FOR ANYTHING, CAUSES DESYNC
     @Override
     public void onRemovedFromWorld() {
-        SculkHorde.savedData.addSculkAccumulatedMass((int) this.getHealth());
+        ModSavedData.getSaveData().addSculkAccumulatedMass((int) this.getHealth());
         super.onRemovedFromWorld();
     }
     */

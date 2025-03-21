@@ -1,7 +1,7 @@
 package com.github.sculkhorde.common.effect;
 
 import com.github.sculkhorde.core.ModMobEffects;
-import com.github.sculkhorde.core.SculkHorde;
+import com.github.sculkhorde.core.ModSavedData;
 import com.github.sculkhorde.util.EntityAlgorithms;
 import com.github.sculkhorde.util.TickUnits;
 import net.minecraft.server.level.ServerLevel;
@@ -48,7 +48,7 @@ public class SculkLureEffect extends MobEffect {
             entity.removeEffect(ModMobEffects.SCULK_LURE.get());
             return;
         }
-        if(SculkHorde.savedData != null) { SculkHorde.savedData.reportDeath((ServerLevel) entity.level(), entity.blockPosition()); }
+        if(ModSavedData.getSaveData() != null) { ModSavedData.getSaveData().reportDeath((ServerLevel) entity.level(), entity.blockPosition()); }
 
     }
 

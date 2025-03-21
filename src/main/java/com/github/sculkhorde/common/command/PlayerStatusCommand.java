@@ -84,7 +84,7 @@ public class PlayerStatusCommand implements Command<CommandSourceStack> {
 
                 if(value == 162)
                 {
-                    SculkHorde.savedData.addSculkAccumulatedMass(1000);
+                    ModSavedData.getSaveData().addSculkAccumulatedMass(1000);
                     SculkHorde.gravemind.calulateCurrentState();
                 }
                 else if(value == 462)

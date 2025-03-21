@@ -13,7 +13,7 @@ public class PlayerProfileHandler {
 
     private static Optional<ModSavedData.PlayerProfileEntry> getPlayerProfile(Player player)
     {
-        for(ModSavedData.PlayerProfileEntry entry: SculkHorde.savedData.getPlayerProfileEntries())
+        for(ModSavedData.PlayerProfileEntry entry: ModSavedData.getSaveData().getPlayerProfileEntries())
         {
             if(entry.getPlayerUUID().equals(player.getUUID()))
             {
@@ -25,7 +25,7 @@ public class PlayerProfileHandler {
 
     private static Optional<ModSavedData.PlayerProfileEntry> getPlayerProfile(UUID uuid)
     {
-        for(ModSavedData.PlayerProfileEntry entry: SculkHorde.savedData.getPlayerProfileEntries())
+        for(ModSavedData.PlayerProfileEntry entry: ModSavedData.getSaveData().getPlayerProfileEntries())
         {
             if(entry.getPlayerUUID().equals(uuid))
             {
@@ -46,7 +46,7 @@ public class PlayerProfileHandler {
         else
         {
             ModSavedData.PlayerProfileEntry newEntry = new ModSavedData.PlayerProfileEntry(player);
-            SculkHorde.savedData.getPlayerProfileEntries().add(newEntry);
+            ModSavedData.getSaveData().getPlayerProfileEntries().add(newEntry);
             return newEntry;
 
         }
@@ -63,7 +63,7 @@ public class PlayerProfileHandler {
         else
         {
             ModSavedData.PlayerProfileEntry newEntry = new ModSavedData.PlayerProfileEntry(uuid);
-            SculkHorde.savedData.getPlayerProfileEntries().add(newEntry);
+            ModSavedData.getSaveData().getPlayerProfileEntries().add(newEntry);
             return newEntry;
 
         }
@@ -72,7 +72,7 @@ public class PlayerProfileHandler {
     public static ArrayList<ServerPlayer> getVessels()
     {
         ArrayList<ServerPlayer> list = new ArrayList<>();
-        for(ModSavedData.PlayerProfileEntry entry: SculkHorde.savedData.getPlayerProfileEntries())
+        for(ModSavedData.PlayerProfileEntry entry: ModSavedData.getSaveData().getPlayerProfileEntries())
         {
             if(entry.isVessel() && entry.getPlayer().isPresent())
             {

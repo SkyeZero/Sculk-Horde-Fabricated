@@ -41,7 +41,7 @@ public class HitSquadCommand implements Command<CommandSourceStack> {
     protected static int sendHitSquad(CommandSourceStack context, Collection<ServerPlayer> players)
     {
 
-        if(SculkHorde.savedData.getNodeEntries().isEmpty())
+        if(ModSavedData.getSaveData().getNodeEntries().isEmpty())
         {
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append("FAILURE, No nodes currently exist.");

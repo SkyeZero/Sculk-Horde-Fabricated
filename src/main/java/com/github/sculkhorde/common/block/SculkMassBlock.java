@@ -2,6 +2,7 @@ package com.github.sculkhorde.common.block;
 
 import com.github.sculkhorde.common.blockentity.SculkMassBlockEntity;
 import com.github.sculkhorde.core.ModBlockEntities;
+import com.github.sculkhorde.core.ModSavedData;
 import com.github.sculkhorde.core.SculkHorde;
 import com.github.sculkhorde.systems.infestation_systems.block_infestation_system.BlockInfestationSystem;
 import com.github.sculkhorde.util.BlockAlgorithms;
@@ -140,7 +141,7 @@ public class SculkMassBlock extends BaseEntityBlock implements IForgeBlock, Simp
         // If we cannot place it here
         if(!BlockAlgorithms.isWeakBlock(world.getBlockState(placementPos)))
         {
-            if(SculkHorde.savedData != null) {SculkHorde.savedData.addSculkAccumulatedMass(totalMassPreTax);}
+            if(ModSavedData.getSaveData() != null) {ModSavedData.getSaveData().addSculkAccumulatedMass(totalMassPreTax);}
             if(SculkHorde.statisticsData != null) {SculkHorde.statisticsData.addTotalMassFromBurrowed(totalMassPreTax);}
             return;
         }
@@ -155,7 +156,7 @@ public class SculkMassBlock extends BaseEntityBlock implements IForgeBlock, Simp
 
         //Pay Mass Tax to the Sculk Hoard
         thisTile.setStoredSculkMass(totalRemainingMass);
-        if(SculkHorde.savedData != null) {SculkHorde.savedData.addSculkAccumulatedMass(totalMassTax);}
+        if(ModSavedData.getSaveData() != null) {ModSavedData.getSaveData().addSculkAccumulatedMass(totalMassTax);}
         if(SculkHorde.statisticsData != null) {SculkHorde.statisticsData.addTotalMassFromBurrowed(totalMassTax);}
 
         BlockInfestationSystem.tryToInfestBlock((ServerLevel) world, originPos);

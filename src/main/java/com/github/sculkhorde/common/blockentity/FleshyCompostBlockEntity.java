@@ -1,6 +1,7 @@
 package com.github.sculkhorde.common.blockentity;
 
 import com.github.sculkhorde.core.ModBlockEntities;
+import com.github.sculkhorde.core.ModSavedData;
 import com.github.sculkhorde.core.SculkHorde;
 import com.github.sculkhorde.util.TickUnits;
 import net.minecraft.core.BlockPos;
@@ -87,7 +88,7 @@ public class FleshyCompostBlockEntity extends BlockEntity {
         int massTribute = Math.min(5, blockEntity.getStoredSculkMass());
 
 
-        SculkHorde.savedData.addSculkAccumulatedMass(massTribute);
+        ModSavedData.getSaveData().addSculkAccumulatedMass(massTribute);
         SculkHorde.statisticsData.addTotalMassFromFleshyCompost(massTribute);
         blockEntity.setStoredSculkMass(blockEntity.getStoredSculkMass() - massTribute);
         ((ServerLevel)level).sendParticles(ParticleTypes.SCULK_SOUL, blockPos.getX() + 0.5D, blockPos.getY() + 1.15D, blockPos.getZ() + 0.5D, 2, 0.2D, 0.0D, 0.2D, 0.0D);

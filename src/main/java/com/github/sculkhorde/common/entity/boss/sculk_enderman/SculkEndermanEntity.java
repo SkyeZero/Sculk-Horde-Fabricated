@@ -647,7 +647,7 @@ public class SculkEndermanEntity extends Monster implements GeoEntity, ISculkSma
     /* DO NOT USE THIS FOR ANYTHING, CAUSES DESYNC
     @Override
     public void onRemovedFromWorld() {
-        SculkHorde.savedData.addSculkAccumulatedMass((int) this.getHealth());
+        ModSavedData.getSaveData().addSculkAccumulatedMass((int) this.getHealth());
         super.onRemovedFromWorld();
     }
     */

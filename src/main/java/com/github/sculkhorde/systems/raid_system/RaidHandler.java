@@ -78,11 +78,11 @@ public class RaidHandler {
     public boolean canRaidStart()
     {
         boolean areRaidsDisabled = !ModConfig.SERVER.sculk_raid_enabled.get();
-        boolean isTheHordeDefeated = SculkHorde.savedData.isHordeDefeated();
-        boolean isRaidCooldownNotOver = !SculkHorde.savedData.isRaidCooldownOver();
+        boolean isTheHordeDefeated = ModSavedData.getSaveData().isHordeDefeated();
+        boolean isRaidCooldownNotOver = !ModSavedData.getSaveData().isRaidCooldownOver();
         boolean isTheGravemindInUndevelopedState = gravemind.getEvolutionState() == Gravemind.evolution_states.Undeveloped;
-        boolean areThereNoAreasOfInterest = SculkHorde.savedData.getAreasOfInterestEntries().isEmpty();
-        boolean areThereNoAreasOfInterestNotInNoRaidZone = SculkHorde.savedData.getAreaOfInterestEntryNotInNoRaidZone().isEmpty();
+        boolean areThereNoAreasOfInterest = ModSavedData.getSaveData().getAreasOfInterestEntries().isEmpty();
+        boolean areThereNoAreasOfInterestNotInNoRaidZone = ModSavedData.getSaveData().getAreaOfInterestEntryNotInNoRaidZone().isEmpty();
         boolean areThereNoPlayersOnServer = ServerLifecycleHooks.getCurrentServer().getPlayerCount() <= 0;
 
         if(areRaidsDisabled || isTheHordeDefeated || isRaidCooldownNotOver || isTheGravemindInUndevelopedState || areThereNoAreasOfInterest || areThereNoAreasOfInterestNotInNoRaidZone || areThereNoPlayersOnServer)
@@ -259,7 +259,7 @@ public class RaidHandler {
 
     private void inactiveRaidTick()
     {
-        SculkHorde.savedData.incrementTicksSinceLastRaid();
+        ModSavedData.getSaveData().incrementTicksSinceLastRaid();
         if(canRaidStart())
         {
             raidData.setRaidState(RaidState.INVESTIGATING_LOCATION);
@@ -270,7 +270,7 @@ public class RaidHandler {
     {
         if(raidData.getAreaOfInterestEntry() == null)
         {
-            Optional<ModSavedData.AreaOfInterestEntry> possibleEntry = SculkHorde.savedData.getAreaOfInterestEntryNotInNoRaidZone();
+            Optional<ModSavedData.AreaOfInterestEntry> possibleEntry = ModSavedData.getSaveData().getAreaOfInterestEntryNotInNoRaidZone();
             if(possibleEntry.isEmpty())
             {
                 raidData.setFailure(failureType.FAILED_INITIALIZATION);
@@ -468,7 +468,7 @@ public class RaidHandler {
      */
     private void initializingRaidTick()
     {
-        SculkHorde.savedData.setTicksSinceLastRaid(0);
+        ModSavedData.getSaveData().setTicksSinceLastRaid(0);
 
         if(raidData.getBlockSearcher().isEmpty())
         {
@@ -681,7 +681,7 @@ public class RaidHandler {
 
     private void completeRaidTick()
     {
-        SculkHorde.savedData.addNoRaidZoneToMemory(raidData.getDimension(), raidData.getRaidLocation());
+        ModSavedData.getSaveData().addNoRaidZoneToMemory(raidData.getDimension(), raidData.getRaidLocation());
         SculkHorde.LOGGER.info("RaidHandler | Raid Complete.");
         announceToPlayersInRange(Component.literal("The Sculk Horde's raid was successful!"), raidData.getCurrentRaidRadius() * 8);
         // Summon Sculk Spore Spewer
@@ -723,7 +723,7 @@ public class RaidHandler {
 
         if(raidData.getRaidLocation() != null && raidData.getRaidLocation() != BlockPos.ZERO && raidData.getRaidLocation() != null)
         {
-            SculkHorde.savedData.addNoRaidZoneToMemory(raidData.getDimension(), raidData.getRaidLocation());
+            ModSavedData.getSaveData().addNoRaidZoneToMemory(raidData.getDimension(), raidData.getRaidLocation());
         }
 
         raidData.reset();

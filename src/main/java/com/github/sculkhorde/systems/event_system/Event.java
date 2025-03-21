@@ -1,11 +1,12 @@
 package com.github.sculkhorde.systems.event_system;
 
-import com.github.sculkhorde.core.SculkHorde;
+import com.github.sculkhorde.core.ModSavedData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.server.ServerLifecycleHooks;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -51,7 +52,7 @@ public class Event {
 
     public void start()
     {
-        SculkHorde.savedData.subtractSculkAccumulatedMass(eventCost);
+        ModSavedData.getSaveData().subtractSculkAccumulatedMass(eventCost);
         setEventActive(true);
     }
 
@@ -148,7 +149,7 @@ public class Event {
 
     public ServerLevel getDimension()
     {
-        return SculkHorde.savedData.level.getServer().getLevel(dimension);
+        return ServerLifecycleHooks.getCurrentServer().getLevel(dimension);
     }
 
     public boolean isEventReoccurring() {

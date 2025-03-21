@@ -1,5 +1,6 @@
 package com.github.sculkhorde.common.command;
 
+import com.github.sculkhorde.core.ModSavedData;
 import com.github.sculkhorde.core.SculkHorde;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
@@ -47,21 +48,21 @@ public class MassCommand implements Command<CommandSourceStack> {
         switch (operation) {
             case "add" -> {
                 value = Math.abs(IntegerArgumentType.getInteger(context, "amount"));
-                SculkHorde.savedData.addSculkAccumulatedMass(value);
+                ModSavedData.getSaveData().addSculkAccumulatedMass(value);
                 SculkHorde.gravemind.calulateCurrentState();
             }
             case "subtract" -> {
                 value = Math.abs(IntegerArgumentType.getInteger(context, "amount"));
-                SculkHorde.savedData.subtractSculkAccumulatedMass(value);
+                ModSavedData.getSaveData().subtractSculkAccumulatedMass(value);
                 SculkHorde.gravemind.calulateCurrentState();
             }
             case "set" -> {
                 value = Math.abs(IntegerArgumentType.getInteger(context, "amount"));
-                SculkHorde.savedData.setSculkAccumulatedMass(value);
+                ModSavedData.getSaveData().setSculkAccumulatedMass(value);
                 SculkHorde.gravemind.calulateCurrentState();
             }
         }
-        context.getSource().sendSuccess(()->Component.literal("Sculk Mass is Now: " + SculkHorde.savedData.getSculkAccumulatedMass()), false);
+        context.getSource().sendSuccess(()->Component.literal("Sculk Mass is Now: " + ModSavedData.getSaveData().getSculkAccumulatedMass()), false);
         return 0;
     }
 }

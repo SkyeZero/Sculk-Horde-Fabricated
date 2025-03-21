@@ -1,9 +1,6 @@
 package com.github.sculkhorde.common.entity.infection;
 
-import com.github.sculkhorde.core.ModBlocks;
-import com.github.sculkhorde.core.ModConfig;
-import com.github.sculkhorde.core.ModEntities;
-import com.github.sculkhorde.core.SculkHorde;
+import com.github.sculkhorde.core.*;
 import com.github.sculkhorde.util.BlockAlgorithms;
 import com.github.sculkhorde.systems.infestation_systems.block_infestation_system.BlockInfestationSystem;
 import net.minecraft.core.BlockPos;
@@ -83,7 +80,7 @@ public class CursorSurfaceInfectorEntity extends CursorEntity{
         {
             return true;
         }
-        else if(SculkHorde.savedData.isHordeDefeated())
+        else if(ModSavedData.getSaveData().isHordeDefeated())
         {
             return true;
         }

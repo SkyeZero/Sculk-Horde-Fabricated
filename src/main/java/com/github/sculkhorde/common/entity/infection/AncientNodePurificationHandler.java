@@ -1,6 +1,7 @@
 package com.github.sculkhorde.common.entity.infection;
 
 import com.github.sculkhorde.core.ModConfig;
+import com.github.sculkhorde.core.ModSavedData;
 import com.github.sculkhorde.core.SculkHorde;
 import com.github.sculkhorde.util.BlockAlgorithms;
 import com.github.sculkhorde.util.TickUnits;
@@ -96,7 +97,7 @@ public class AncientNodePurificationHandler {
             return false;
         }
 
-        if(!SculkHorde.savedData.isHordeDefeated()) {
+        if(!ModSavedData.getSaveData().isHordeDefeated()) {
             timeRemainingUntilNextDefeatCheck = CHECK_FOR_DEFEAT_INTERVAL;
             return false;
         }

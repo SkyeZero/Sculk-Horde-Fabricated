@@ -3,7 +3,7 @@ package com.github.sculkhorde.systems.cursor_system;
 import com.github.sculkhorde.common.entity.infection.CursorSurfacePurifierEntity;
 import com.github.sculkhorde.core.ModBlocks;
 import com.github.sculkhorde.core.ModConfig;
-import com.github.sculkhorde.core.SculkHorde;
+import com.github.sculkhorde.core.ModSavedData;
 import com.github.sculkhorde.systems.infestation_systems.block_infestation_system.BlockInfestationSystem;
 import com.github.sculkhorde.util.BlockAlgorithms;
 import com.github.sculkhorde.util.EntityAlgorithms;
@@ -78,7 +78,7 @@ public class VirtualSurfaceInfestorCursor extends VirtualCursor{
         {
             return true;
         }
-        else if(SculkHorde.savedData.isHordeDefeated())
+        else if(ModSavedData.getSaveData().isHordeDefeated())
         {
             return true;
         }

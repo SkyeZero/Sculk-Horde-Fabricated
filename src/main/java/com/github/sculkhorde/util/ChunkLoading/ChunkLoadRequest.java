@@ -1,10 +1,10 @@
 package com.github.sculkhorde.util.ChunkLoading;
 
-import com.github.sculkhorde.core.SculkHorde;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.server.ServerLifecycleHooks;
 
 import java.util.Objects;
 
@@ -35,7 +35,7 @@ public abstract class ChunkLoadRequest {
 
     public ServerLevel getDimension()
     {
-        return SculkHorde.savedData.level.getServer().getLevel(dimension);
+        return ServerLifecycleHooks.getCurrentServer().getLevel(dimension);
     }
 
     public String getRequestID() {

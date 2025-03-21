@@ -37,7 +37,6 @@ public class SculkHorde {
     private static boolean DEBUG_MODE = false;
     public static EntityFactory entityFactory = new EntityFactory();
     public static Gravemind gravemind;
-    public static ModSavedData savedData;
     public static DebugSlimeSystem debugSlimeSystem;
     public static final Logger LOGGER = LogUtils.getLogger();
     public static BlockInfestationTable explicitInfectableBlocks;
@@ -96,7 +95,6 @@ public class SculkHorde {
 
     public static void setDebugMode(boolean debugMode) {
         DEBUG_MODE = debugMode;
-        savedData.setDirty();
     }
 
 }

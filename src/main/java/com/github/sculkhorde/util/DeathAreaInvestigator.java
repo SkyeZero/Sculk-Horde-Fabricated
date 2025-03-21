@@ -57,7 +57,7 @@ public class DeathAreaInvestigator {
         {
             ticksSinceLastSearch = 0;
             //SculkHorde.LOGGER.info("It has been enough time since last death area check. Will see if there is a valid death area.");
-            if(SculkHorde.savedData != null) {searchEntry = SculkHorde.savedData.getDeathAreaWithHighestDeaths();}
+            if(ModSavedData.getSaveData() != null) {searchEntry = ModSavedData.getSaveData().getDeathAreaWithHighestDeaths();}
 
             if(searchEntry.isPresent())
             {
@@ -104,7 +104,7 @@ public class DeathAreaInvestigator {
             //Send message to all players
             SculkHorde.LOGGER.info("DeathAreaInvestigator | Located Important Blocks at " + searchEntry.get().getPosition() + " in dimension " + searchEntry.get().getDimension());
             // Add to Area of Interest Memory
-            if(SculkHorde.savedData != null) {SculkHorde.savedData.addAreaOfInterestToMemory(searchEntry.get().getDimension(), searchEntry.get().getPosition());}
+            if(ModSavedData.getSaveData() != null) {ModSavedData.getSaveData().addAreaOfInterestToMemory(searchEntry.get().getDimension(), searchEntry.get().getPosition());}
         }
         else if(blockSearcher.isFinished && !blockSearcher.isSuccessful)
         {
@@ -117,7 +117,7 @@ public class DeathAreaInvestigator {
     public void finishedTick()
     {
         SculkHorde.LOGGER.info("DeathAreaInvestigator | Finished");
-        if(SculkHorde.savedData != null) { SculkHorde.savedData.removeDeathAreaFromMemory(searchEntry.get().getPosition()); }
+        if(ModSavedData.getSaveData() != null) { ModSavedData.getSaveData().removeDeathAreaFromMemory(searchEntry.get().getPosition()); }
         ticksSinceLastSearch = 0;
         setState(State.IDLE);
         blockSearcher = null;

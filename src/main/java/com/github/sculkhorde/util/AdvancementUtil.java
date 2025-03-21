@@ -1,6 +1,7 @@
 package com.github.sculkhorde.util;
 
 import com.github.sculkhorde.common.advancement.*;
+import com.github.sculkhorde.core.ModSavedData;
 import com.github.sculkhorde.core.SculkHorde;
 import com.github.sculkhorde.systems.gravemind_system.Gravemind;
 import net.minecraft.advancements.Advancement;
@@ -52,24 +53,24 @@ public final class AdvancementUtil {
         // If Immature, give all players advancement
         if(SculkHorde.gravemind.getEvolutionState().ordinal() >= Gravemind.evolution_states.Immature.ordinal())
         {
-            AdvancementUtil.giveAdvancementToAllPlayers(SculkHorde.savedData.level, GravemindEvolveImmatureTrigger.INSTANCE);
+            AdvancementUtil.giveAdvancementToAllPlayers(level, GravemindEvolveImmatureTrigger.INSTANCE);
         }
 
         // If Immature, give all players advancement
         if(SculkHorde.gravemind.getEvolutionState().ordinal() >= Gravemind.evolution_states.Mature.ordinal())
         {
-            AdvancementUtil.giveAdvancementToAllPlayers(SculkHorde.savedData.level, GravemindEvolveMatureTrigger.INSTANCE);
+            AdvancementUtil.giveAdvancementToAllPlayers(level, GravemindEvolveMatureTrigger.INSTANCE);
         }
 
         // If Immature, give all players advancement
-        if(SculkHorde.savedData.isHordeDefeated())
+        if(ModSavedData.getSaveData().isHordeDefeated())
         {
-            AdvancementUtil.giveAdvancementToAllPlayers(SculkHorde.savedData.level, SculkHordeDefeatTrigger.INSTANCE);
+            AdvancementUtil.giveAdvancementToAllPlayers(level, SculkHordeDefeatTrigger.INSTANCE);
         }
 
-        if(SculkHorde.savedData.getNodeEntries().size() > 0)
+        if(!ModSavedData.getSaveData().getNodeEntries().isEmpty())
         {
-            AdvancementUtil.giveAdvancementToAllPlayers(SculkHorde.savedData.level, SculkNodeSpawnTrigger.INSTANCE);
+            AdvancementUtil.giveAdvancementToAllPlayers(level, SculkNodeSpawnTrigger.INSTANCE);
         }
 
     }

@@ -203,19 +203,19 @@ public class SculkAncientNodeBlockEntity extends BlockEntity implements GameEven
         {
             tickClient(level, blockPos, blockState, blockEntity);
         }
-        else if(SculkHorde.savedData.isHordeUnactivated() && ModConfig.SERVER.trigger_ancient_node_automatically.get())
+        else if(ModSavedData.getSaveData().isHordeUnactivated() && ModConfig.SERVER.trigger_ancient_node_automatically.get())
         {
             tickTriggerAutomatically(level, blockPos, blockState, blockEntity);
         }
-        else if(SculkHorde.savedData.isHordeDefeated())
+        else if(ModSavedData.getSaveData().isHordeDefeated())
         {
             tickDefeated(level, blockPos, blockState, blockEntity);
         }
-        else if(SculkHorde.savedData.isHordeUnactivated() && !ModConfig.SERVER.trigger_ancient_node_automatically.get())
+        else if(ModSavedData.getSaveData().isHordeUnactivated() && !ModConfig.SERVER.trigger_ancient_node_automatically.get())
         {
             tickUnactivated(level, blockPos, blockState, blockEntity);
         }
-        else if(SculkHorde.savedData.isHordeActive())
+        else if(ModSavedData.getSaveData().isHordeActive())
         {
             tickActive(level, blockPos, blockState, blockEntity);
         }
@@ -386,16 +386,16 @@ public class SculkAncientNodeBlockEntity extends BlockEntity implements GameEven
 
     public static void tryInitializeHorde(Level level, BlockPos blockPos, BlockState blockState, SculkAncientNodeBlockEntity blockEntity)
     {
-        if(!SculkHorde.savedData.isHordeUnactivated()) { return; }
+        if(!ModSavedData.getSaveData().isHordeUnactivated()) { return; }
 
         int MAX_SPAWNED_SPORE_SPEWERS = 10;
 
-        SculkHorde.savedData.setHordeState(ModSavedData.HordeState.ACTIVE);
+        ModSavedData.getSaveData().setHordeState(ModSavedData.HordeState.ACTIVE);
 
         // If the horde has no mass, give it some
-        if(SculkHorde.savedData.getSculkAccumulatedMass() <= 0)
+        if(ModSavedData.getSaveData().getSculkAccumulatedMass() <= 0)
         {
-            SculkHorde.savedData.addSculkAccumulatedMass(1000);
+            ModSavedData.getSaveData().addSculkAccumulatedMass(1000);
             SculkHorde.statisticsData.addTotalMassFromNodes(1000);
         }
 

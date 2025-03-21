@@ -1,5 +1,6 @@
 package com.github.sculkhorde.common.command;
 
+import com.github.sculkhorde.core.ModSavedData;
 import com.github.sculkhorde.core.SculkHorde;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
@@ -23,23 +24,23 @@ public class StatusAllCommand implements Command<CommandSourceStack> {
     public int run(CommandContext<CommandSourceStack> context)
     {
         context.getSource().sendSuccess(()->Component.literal(
-                "Horde State: " + SculkHorde.savedData.getHordeState().toString()
+                "Horde State: " + ModSavedData.getSaveData().getHordeState().toString()
                         + "\n"
                         + "Gravemind State: " + SculkHorde.gravemind.getEvolutionState().toString()
                         + "\n"
-                        + "Sculk Mass Accumulated: " + SculkHorde.savedData.getSculkAccumulatedMass()
+                        + "Sculk Mass Accumulated: " + ModSavedData.getSaveData().getSculkAccumulatedMass()
                         + "\n"
-                        + "Sculk Nodes Present: " + SculkHorde.savedData.getNodeEntries().size()
+                        + "Sculk Nodes Present: " + ModSavedData.getSaveData().getNodeEntries().size()
                         + "\n"
-                        + "Nests Count: " + SculkHorde.savedData.getBeeNestEntries().size()
+                        + "Nests Count: " + ModSavedData.getSaveData().getBeeNestEntries().size()
                         + "\n"
-                        + "Mob Types Considered Hostile Count: " + SculkHorde.savedData.getHostileEntries().size()
+                        + "Mob Types Considered Hostile Count: " + ModSavedData.getSaveData().getHostileEntries().size()
                         + "\n"
-                        + "Death Area Reports Count: " + SculkHorde.savedData.getDeathAreaEntries().size()
+                        + "Death Area Reports Count: " + ModSavedData.getSaveData().getDeathAreaEntries().size()
                         + "\n"
-                        + "Areas of Interest Count: " + SculkHorde.savedData.getAreasOfInterestEntries().size()
+                        + "Areas of Interest Count: " + ModSavedData.getSaveData().getAreasOfInterestEntries().size()
                         + "\n"
-                        + "No Raid Zone Entries Count: " + SculkHorde.savedData.getNoRaidZoneEntries().size()
+                        + "No Raid Zone Entries Count: " + ModSavedData.getSaveData().getNoRaidZoneEntries().size()
                         + "\n"
                         + "Entity Chunk Load Requests: " + SculkHorde.entityChunkLoaderHelper.getEntityChunkLoadRequests().size()
                         + "\n"

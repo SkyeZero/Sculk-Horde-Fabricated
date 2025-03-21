@@ -3,7 +3,7 @@ package com.github.sculkhorde.common.block;
 import com.github.sculkhorde.common.blockentity.FleshyCompostBlockEntity;
 import com.github.sculkhorde.core.ModBlockEntities;
 import com.github.sculkhorde.core.ModBlocks;
-import com.github.sculkhorde.core.SculkHorde;
+import com.github.sculkhorde.core.ModSavedData;
 import com.github.sculkhorde.util.BlockAlgorithms;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -120,7 +120,7 @@ public class FleshyCompostBlock extends BaseEntityBlock implements IForgeBlock, 
         }
         else
         {
-            SculkHorde.savedData.addSculkAccumulatedMass((int) livingEntity.getMaxHealth());
+            ModSavedData.getSaveData().addSculkAccumulatedMass((int) livingEntity.getMaxHealth());
         }
     }
 

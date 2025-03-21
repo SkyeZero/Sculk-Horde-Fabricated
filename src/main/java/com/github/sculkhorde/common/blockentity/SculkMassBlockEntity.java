@@ -2,6 +2,7 @@ package com.github.sculkhorde.common.blockentity;
 
 import com.github.sculkhorde.core.ModBlockEntities;
 import com.github.sculkhorde.core.ModConfig;
+import com.github.sculkhorde.core.ModSavedData;
 import com.github.sculkhorde.core.SculkHorde;
 import com.github.sculkhorde.systems.cursor_system.CursorSystem;
 import com.github.sculkhorde.systems.cursor_system.VirtualSurfaceInfestorCursor;
@@ -135,7 +136,7 @@ public class SculkMassBlockEntity extends BlockEntity {
 
         if(SculkHorde.populationHandler.isPopulationAtMax())
         {
-            SculkHorde.savedData.addSculkAccumulatedMass(blockEntity.getStoredSculkMass());
+            ModSavedData.getSaveData().addSculkAccumulatedMass(blockEntity.getStoredSculkMass());
             blockEntity.setStoredSculkMass(0);
             return;
         }
@@ -149,7 +150,7 @@ public class SculkMassBlockEntity extends BlockEntity {
         // Do not spawn infectors if infection not enabled.
         if(!ModConfig.SERVER.block_infestation_enabled.get() || SculkHorde.cursorSystem.isCursorPopulationAtMax())
         {
-            SculkHorde.savedData.addSculkAccumulatedMass(blockEntity.getStoredSculkMass());
+            ModSavedData.getSaveData().addSculkAccumulatedMass(blockEntity.getStoredSculkMass());
             level.setBlockAndUpdate(blockPos, Blocks.AIR.defaultBlockState());
             return;
         }

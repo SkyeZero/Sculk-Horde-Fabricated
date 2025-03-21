@@ -83,7 +83,7 @@ public class EyeOfPurityItem extends Item implements IForgeItem {
         }
 
         ServerLevel serverlevel = (ServerLevel)levelIn;
-        ModSavedData.NodeEntry node = SculkHorde.savedData.getClosestNodeEntry(serverlevel, playerIn.blockPosition());
+        ModSavedData.NodeEntry node = ModSavedData.getSaveData().getClosestNodeEntry(serverlevel, playerIn.blockPosition());
         if (node == null)
         {
             playerIn.playSound(SoundEvents.BEACON_DEACTIVATE);

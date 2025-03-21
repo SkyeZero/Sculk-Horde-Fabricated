@@ -34,7 +34,7 @@ public class ResetCommand implements Command<CommandSourceStack> {
             return 0;
         }
         SculkHorde.gravemind.resetGravemindState();
-        SculkHorde.savedData.setHordeState(ModSavedData.HordeState.UNACTIVATED);
+        ModSavedData.getSaveData().setHordeState(ModSavedData.HordeState.UNACTIVATED);
 
         return 1;
     }

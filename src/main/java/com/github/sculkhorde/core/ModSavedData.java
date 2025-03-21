@@ -2,11 +2,11 @@ package com.github.sculkhorde.core;
 
 import com.github.sculkhorde.common.block.SculkBeeNestBlock;
 import com.github.sculkhorde.common.blockentity.SculkNodeBlockEntity;
+import com.github.sculkhorde.misc.StatisticsData;
+import com.github.sculkhorde.systems.event_system.EventSystem;
 import com.github.sculkhorde.systems.gravemind_system.Gravemind;
 import com.github.sculkhorde.systems.raid_system.RaidData;
 import com.github.sculkhorde.systems.raid_system.RaidHandler;
-import com.github.sculkhorde.systems.event_system.EventSystem;
-import com.github.sculkhorde.misc.StatisticsData;
 import com.github.sculkhorde.util.BlockAlgorithms;
 import com.github.sculkhorde.util.ChunkLoading.BlockEntityChunkLoaderHelper;
 import com.github.sculkhorde.util.ChunkLoading.EntityChunkLoaderHelper;
@@ -22,7 +22,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraftforge.server.ServerLifecycleHooks;
 import org.jetbrains.annotations.NotNull;
@@ -41,15 +40,19 @@ public class ModSavedData extends SavedData {
     // identifier for debugmode
     private static final String debugModeIdentifier = "debugMode";
 
-    //The world
-    public final ServerLevel level;
-
     public static enum HordeState {
         UNACTIVATED,
         ACTIVE,
         DEFEATED
     }
     HordeState hordeState = HordeState.UNACTIVATED;
+
+    public static ModSavedData getSaveData()
+    {
+        ModSavedData data = ServerLifecycleHooks.getCurrentServer().overworld().getDataStorage().computeIfAbsent(ModSavedData::load, ModSavedData::new, SculkHorde.SAVE_DATA_ID);
+        data.setDirty();
+        return data;
+    }
 
     public boolean isHordeUnactivated() {
         return hordeState == HordeState.UNACTIVATED;
@@ -75,7 +78,6 @@ public class ModSavedData extends SavedData {
     private final ArrayList<NodeEntry> nodeEntries = new ArrayList<>();
     private final ArrayList<BeeNestEntry> beeNestEntries = new ArrayList<>();
     private final Map<String, HostileEntry> hostileEntries = new HashMap<>();
-    private final ArrayList<PriorityBlockEntry> priorityBlockEntries = new ArrayList<>();
     private final ArrayList<DeathAreaEntry> deathAreaEntries = new ArrayList<>();
     private final ArrayList<AreaOfInterestEntry> areasOfInterestEntries = new ArrayList<>();
     private final ArrayList<NoRaidZoneEntry> noRaidZoneEntries = new ArrayList<>();
@@ -93,18 +95,8 @@ public class ModSavedData extends SavedData {
      */
     public ModSavedData()
     {
-        level = ServerLifecycleHooks.getCurrentServer().overworld();
-    }
 
-    /**
-     * Get the memory object that stores all the data
-     * @return The GravemindMemory
-     */
-    private static @NotNull ModSavedData getGravemindMemory()
-    {
-        return SculkHorde.savedData;
     }
-
 
     /**
      * This method gets called every time the world loads data from memory.
@@ -116,54 +108,49 @@ public class ModSavedData extends SavedData {
 
         CompoundTag gravemindData = nbt.getCompound("gravemindData");
 
-        SculkHorde.savedData = new ModSavedData();
+        ModSavedData savedData = new ModSavedData();
 
-        SculkHorde.savedData.getNodeEntries().clear();
-        SculkHorde.savedData.getBeeNestEntries().clear();
-        SculkHorde.savedData.getHostileEntries().clear();
-        SculkHorde.savedData.getPriorityBlockEntries().clear();
-        SculkHorde.savedData.getDeathAreaEntries().clear();
-        SculkHorde.savedData.getAreasOfInterestEntries().clear();
+        savedData.getNodeEntries().clear();
+        savedData.getBeeNestEntries().clear();
+        savedData.getHostileEntries().clear();
+        savedData.getDeathAreaEntries().clear();
+        savedData.getAreasOfInterestEntries().clear();
 
-        SculkHorde.savedData.setHordeState(HordeState.values()[nbt.getInt("hordeState")]);
-        SculkHorde.savedData.setSculkAccumulatedMass(nbt.getInt(sculkAccumulatedMassIdentifier));
-        SculkHorde.savedData.setNoNodeSpawningTicksElapsed(nbt.getInt(ticksSinceSculkNodeDestructionIdentifier));
+        savedData.setHordeState(HordeState.values()[nbt.getInt("hordeState")]);
+        savedData.setSculkAccumulatedMass(nbt.getInt(sculkAccumulatedMassIdentifier));
+        savedData.setNoNodeSpawningTicksElapsed(nbt.getInt(ticksSinceSculkNodeDestructionIdentifier));
 
-        SculkHorde.savedData.setTicksSinceLastRaid(nbt.getInt(ticksSinceLastRaidIdentifier));
+        savedData.setTicksSinceLastRaid(nbt.getInt(ticksSinceLastRaidIdentifier));
 
         SculkHorde.setDebugMode(nbt.getBoolean(debugModeIdentifier));
 
         for (int i = 0; gravemindData.contains("node_entry" + i); i++) {
-            SculkHorde.savedData.getNodeEntries().add(NodeEntry.serialize(gravemindData.getCompound("node_entry" + i)));
+            savedData.getNodeEntries().add(NodeEntry.serialize(gravemindData.getCompound("node_entry" + i)));
         }
 
         for (int i = 0; gravemindData.contains("bee_nest_entry" + i); i++) {
-            SculkHorde.savedData.getBeeNestEntries().add(BeeNestEntry.serialize(gravemindData.getCompound("bee_nest_entry" + i)));
+            savedData.getBeeNestEntries().add(BeeNestEntry.serialize(gravemindData.getCompound("bee_nest_entry" + i)));
         }
 
         for (int i = 0; gravemindData.contains("hostile_entry" + i); i++) {
             HostileEntry hostileEntry = HostileEntry.serialize(gravemindData.getCompound("hostile_entry" + i));
-            SculkHorde.savedData.getHostileEntries().putIfAbsent(hostileEntry.identifier, hostileEntry);
-        }
-
-        for (int i = 0; gravemindData.contains("priority_block_entry" + i); i++) {
-            SculkHorde.savedData.getPriorityBlockEntries().add(PriorityBlockEntry.serialize(gravemindData.getCompound("priority_block_entry" + i)));
+            savedData.getHostileEntries().putIfAbsent(hostileEntry.identifier, hostileEntry);
         }
 
         for (int i = 0; gravemindData.contains("death_area_entry" + i); i++) {
-            SculkHorde.savedData.getDeathAreaEntries().add(DeathAreaEntry.serialize(gravemindData.getCompound("death_area_entry" + i)));
+            savedData.getDeathAreaEntries().add(DeathAreaEntry.serialize(gravemindData.getCompound("death_area_entry" + i)));
         }
 
         for (int i = 0; gravemindData.contains("area_of_interest_entry" + i); i++) {
-            SculkHorde.savedData.getAreasOfInterestEntries().add(AreaOfInterestEntry.serialize(gravemindData.getCompound("area_of_interest_entry" + i)));
+            savedData.getAreasOfInterestEntries().add(AreaOfInterestEntry.serialize(gravemindData.getCompound("area_of_interest_entry" + i)));
         }
 
         for(int i = 0; gravemindData.contains("no_raid_zone_entry" + i); i++) {
-            SculkHorde.savedData.getNoRaidZoneEntries().add(NoRaidZoneEntry.serialize(gravemindData.getCompound("no_raid_zone_entry" + i)));
+            savedData.getNoRaidZoneEntries().add(NoRaidZoneEntry.serialize(gravemindData.getCompound("no_raid_zone_entry" + i)));
         }
 
         for(int i = 0; gravemindData.contains("player_profile_entry" + i); i++) {
-            SculkHorde.savedData.getPlayerProfileEntries().add(PlayerProfileEntry.serialize(gravemindData.getCompound("player_profile_entry" + i)));
+            savedData.getPlayerProfileEntries().add(PlayerProfileEntry.serialize(gravemindData.getCompound("player_profile_entry" + i)));
         }
 
         if(RaidHandler.raidData == null)
@@ -182,7 +169,7 @@ public class ModSavedData extends SavedData {
         EntityChunkLoaderHelper.load(nbt);
         EventSystem.load(nbt);
 
-        return getGravemindMemory();
+        return savedData;
 
     }
 
@@ -218,10 +205,6 @@ public class ModSavedData extends SavedData {
         for (Map.Entry<String, HostileEntry> entry : getHostileEntries().entrySet()) {
             gravemindData.put("hostile_entry" + hostileIndex, entry.getValue().deserialize());
             hostileIndex++;
-        }
-
-        for (ListIterator<PriorityBlockEntry> iterator = getPriorityBlockEntries().listIterator(); iterator.hasNext(); ) {
-            gravemindData.put("priority_block_entry" + iterator.nextIndex(), iterator.next().deserialize());
         }
 
         for (ListIterator<DeathAreaEntry> iterator = getDeathAreaEntries().listIterator(); iterator.hasNext(); ) {
@@ -320,7 +303,7 @@ public class ModSavedData extends SavedData {
     public int getSculkAccumulatedMass() {
         setDirty();
 
-        if(SculkHorde.savedData.isHordeDefeated())
+        if(getSaveData().isHordeDefeated())
         {
             return 0;
         }
@@ -371,10 +354,6 @@ public class ModSavedData extends SavedData {
 
     public Map<String, HostileEntry> getHostileEntries() {
         return hostileEntries;
-    }
-
-    public ArrayList<PriorityBlockEntry> getPriorityBlockEntries() {
-        return priorityBlockEntries;
     }
 
     public ArrayList<DeathAreaEntry> getDeathAreaEntries() {
@@ -428,49 +407,6 @@ public class ModSavedData extends SavedData {
             getHostileEntries().putIfAbsent(identifier, new HostileEntry(identifier));
             setDirty();
         }
-    }
-
-    public void addPriorityBlockToMemory(BlockPos positionIn) {
-
-        // If the list is null, dont even try
-        if (getPriorityBlockEntries() == null)
-        {
-            return;
-        }
-
-        // If the block is already in the list, dont add it again
-        for (PriorityBlockEntry entry : getPriorityBlockEntries())
-        {
-            if (entry.position == positionIn)
-            {
-                return;
-            }
-        }
-
-        int priority;
-
-        // Determine the priority of the block
-        if(level.getBlockState(positionIn).is(ModBlocks.BlockTags.SCULK_RAID_TARGET_HIGH_PRIORITY))
-        {
-            priority = 2;
-        }
-        else if(level.getBlockState(positionIn).is(ModBlocks.BlockTags.SCULK_RAID_TARGET_MEDIUM_PRIORITY))
-        {
-            priority = 1;
-        }
-        else if (level.getBlockState(positionIn).is(ModBlocks.BlockTags.SCULK_RAID_TARGET_LOW_PRIORITY))
-        {
-            priority = 0;
-        }
-        else
-        {
-            SculkHorde.LOGGER.warn("Attempted to add a block to the priority list that was not a priority block");
-            return;
-        }
-
-        getPriorityBlockEntries().add(new PriorityBlockEntry(positionIn, priority));
-        setDirty();
-
     }
 
     public void addDeathAreaToMemory(ServerLevel dimension, BlockPos positionIn)
@@ -542,7 +478,7 @@ public class ModSavedData extends SavedData {
         }
 
         SculkHorde.LOGGER.info("Adding No Raid Zone at " + positionIn + " in " + dimension.dimension() + " to memory");
-        getNoRaidZoneEntries().add(new NoRaidZoneEntry(dimension, positionIn, 1000, level.getGameTime(), TickUnits.convertMinutesToTicks(ModConfig.SERVER.sculk_raid_no_raid_zone_duration_minutes.get())));
+        getNoRaidZoneEntries().add(new NoRaidZoneEntry(dimension, positionIn, 1000, ServerLifecycleHooks.getCurrentServer().overworld().getGameTime(), TickUnits.convertMinutesToTicks(ModConfig.SERVER.sculk_raid_no_raid_zone_duration_minutes.get())));
         setDirty();
     }
 
@@ -687,7 +623,7 @@ public class ModSavedData extends SavedData {
         Iterator<NoRaidZoneEntry> iterator = getNoRaidZoneEntries().iterator();
         while (iterator.hasNext()) {
             NoRaidZoneEntry entry = iterator.next();
-            if (entry.isExpired(level.getGameTime())) {
+            if (entry.isExpired(ServerLifecycleHooks.getCurrentServer().overworld().getGameTime())) {
                 SculkHorde.LOGGER.info("No Raid Zone Entry at " + entry.position + " has expired. Removing from memory.");
                 iterator.remove();
                 setDirty();
@@ -834,73 +770,6 @@ public class ModSavedData extends SavedData {
         addDeathAreaToMemory(level, deathPosition);
     }
 
-    public static class PriorityBlockEntry
-    {
-        private final BlockPos position;
-        private final int priority;
-
-        public PriorityBlockEntry(BlockPos positionIn, int priorityIn)
-        {
-            position = positionIn;
-            priority = priorityIn;
-        }
-
-        public BlockPos getPosition()
-        {
-            return position;
-        }
-
-        public int getPriority()
-        {
-            return priority;
-        }
-
-        public boolean isEntryValid(ServerLevel level)
-        {
-            BlockState blockState = level.getBlockState(position);
-
-            if (blockState.is(ModBlocks.BlockTags.SCULK_RAID_TARGET_HIGH_PRIORITY) && priority == 2)
-            {
-                return true;
-            }
-            else if (blockState.is(ModBlocks.BlockTags.SCULK_RAID_TARGET_MEDIUM_PRIORITY) && priority == 1)
-            {
-                return true;
-            }
-            else if (blockState.is(ModBlocks.BlockTags.SCULK_RAID_TARGET_LOW_PRIORITY) && priority == 0)
-            {
-                return true;
-            }
-
-            return false;
-
-        }
-
-
-        /**
-         * Making nbt to be stored in memory
-         * @return The nbt with our data
-         */
-        public CompoundTag deserialize()
-        {
-            CompoundTag nbt = new CompoundTag();
-            nbt.putLong("position", position.asLong());
-            nbt.putLong("priority", priority);
-            return nbt;
-        }
-
-        /**
-         * Extracting our data from the nbt.
-         * @return The nbt with our data
-         */
-        public static PriorityBlockEntry serialize(CompoundTag nbt)
-        {
-            return new PriorityBlockEntry(BlockPos.of(nbt.getLong("position")), nbt.getInt("priority"));
-        }
-
-
-    }
-
     /**
      * This class is a representation of the actual
      * Sculk Nodes in the world that the horde has access
@@ -922,8 +791,6 @@ public class ModSavedData extends SavedData {
         public NodeEntry(ServerLevel level, BlockPos positionIn)
         {
             position = positionIn;
-            lastTimeWasActive = SculkHorde.savedData.level.getGameTime();
-
             this.dimension = level.dimension();
         }
 
@@ -934,13 +801,11 @@ public class ModSavedData extends SavedData {
         public NodeEntry(ResourceKey<Level> dimensionResource, BlockPos positionIn)
         {
             position = positionIn;
-            lastTimeWasActive = SculkHorde.savedData.level.getGameTime();
-
             this.dimension = dimensionResource;
         }
         public ServerLevel getDimension()
         {
-            return SculkHorde.savedData.level.getServer().getLevel(dimension);
+            return ServerLifecycleHooks.getCurrentServer().getLevel(dimension);
         }
 
         public BlockPos getPosition()
@@ -1078,7 +943,7 @@ public class ModSavedData extends SavedData {
 
         public ServerLevel getDimension()
         {
-            return SculkHorde.savedData.level.getServer().getLevel(dimension);
+            return ServerLifecycleHooks.getCurrentServer().overworld().getServer().getLevel(dimension);
         }
 
         public BlockPos getPosition() { return position; }
@@ -1139,7 +1004,7 @@ public class ModSavedData extends SavedData {
         public Optional<NodeEntry> getClosestNode(BlockPos pos)
         {
             Optional<NodeEntry> closestEntry = Optional.empty();
-            for(NodeEntry entry : getGravemindMemory().getNodeEntries())
+            for(NodeEntry entry : getSaveData().getNodeEntries())
             {
                 // If we are not in the same dimension
                 if(!entry.dimension.equals(dimension))
@@ -1168,10 +1033,10 @@ public class ModSavedData extends SavedData {
         public void setParentNodeToClosest()
         {
             //Make sure nodeEntries isn't null and nodeEntries isn't empty
-            if(getGravemindMemory().getNodeEntries() != null && !getGravemindMemory().getNodeEntries().isEmpty())
+            if(getSaveData().getNodeEntries() != null && !getSaveData().getNodeEntries().isEmpty())
             {
                 Optional<NodeEntry> closestEntry = Optional.empty();
-                for(NodeEntry entry : getGravemindMemory().getNodeEntries())
+                for(NodeEntry entry : getSaveData().getNodeEntries())
                 {
                     // If we are not in the same dimension
                     if(!entry.dimension.equals(dimension))
@@ -1293,7 +1158,7 @@ public class ModSavedData extends SavedData {
 
         public ServerLevel getDimension()
         {
-            return SculkHorde.savedData.level.getServer().getLevel(dimension);
+            return ServerLifecycleHooks.getCurrentServer().overworld().getServer().getLevel(dimension);
         }
 
         public void setDeathCount(int deathCountIn)
@@ -1374,12 +1239,12 @@ public class ModSavedData extends SavedData {
 
         public ServerLevel getDimension()
         {
-            return SculkHorde.savedData.level.getServer().getLevel(dimension);
+            return ServerLifecycleHooks.getCurrentServer().overworld().getServer().getLevel(dimension);
         }
 
         public boolean isInNoRaidZone()
         {
-            for(NoRaidZoneEntry entry : SculkHorde.savedData.getNoRaidZoneEntries())
+            for(NoRaidZoneEntry entry : getSaveData().getNoRaidZoneEntries())
             {
                 if(entry.isBlockPosInRadius(entry.getDimension(), getPosition()))
                 {
@@ -1449,7 +1314,7 @@ public class ModSavedData extends SavedData {
 
         public ServerLevel getDimension()
         {
-            return SculkHorde.savedData.level.getServer().getLevel(dimension);
+            return ServerLifecycleHooks.getCurrentServer().overworld().getServer().getLevel(dimension);
         }
 
         public BlockPos getPosition()

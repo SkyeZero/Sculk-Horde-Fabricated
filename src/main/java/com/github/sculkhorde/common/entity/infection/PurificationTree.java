@@ -1,6 +1,6 @@
 package com.github.sculkhorde.common.entity.infection;
 
-import com.github.sculkhorde.core.SculkHorde;
+import com.github.sculkhorde.core.ModSavedData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -114,7 +114,7 @@ public class PurificationTree {
         {
             return;
         }
-        if(SculkHorde.savedData == null) { return; }
+        if(ModSavedData.getSaveData() == null) { return; }
 
 
         // If the probe has failed too many times, change state to complete

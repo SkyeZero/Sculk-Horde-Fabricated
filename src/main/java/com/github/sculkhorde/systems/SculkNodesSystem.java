@@ -6,6 +6,7 @@ import com.github.sculkhorde.core.SculkHorde;
 import com.github.sculkhorde.systems.event_system.events.SpawnPhantomsEvent;
 import com.github.sculkhorde.util.TickUnits;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraftforge.server.ServerLifecycleHooks;
 
 import java.util.ArrayList;
 
@@ -29,15 +30,11 @@ public class SculkNodesSystem {
     }
 
     protected ServerLevel getLevel() {
-        return getSavedData().level;
-    }
-
-    protected ModSavedData getSavedData() {
-        return SculkHorde.savedData;
+        return ServerLifecycleHooks.getCurrentServer().overworld();
     }
 
     protected ArrayList<ModSavedData.NodeEntry> getNodes() {
-        return getSavedData().getNodeEntries();
+        return ModSavedData.getSaveData().getNodeEntries();
     }
 
     protected ModSavedData.NodeEntry getNodeWithLongestTimeOfInactivity()
@@ -150,11 +147,11 @@ public class SculkNodesSystem {
     public void tick()
     {
         boolean isSculkNodeHandlerNotActive = !isActive();
-        boolean isSaveDataNull = getSavedData() == null;
+        boolean isSaveDataNull = ModSavedData.getSaveData() == null;
         long timeElapsedSinceLastTick = getLevel().getGameTime() - lastTimeSinceTick;
         boolean isCooldownStillActive = timeElapsedSinceLastTick < TICK_COOLDOWN;
         boolean areThereNoNodes = getNodes().isEmpty();
-        boolean isHordeDeactivated = !getSavedData().isHordeActive();
+        boolean isHordeDeactivated = !ModSavedData.getSaveData().isHordeActive();
 
         if(isHordeDeactivated || isSculkNodeHandlerNotActive || isSaveDataNull || areThereNoNodes || isCooldownStillActive)
         {

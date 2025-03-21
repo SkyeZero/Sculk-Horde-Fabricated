@@ -173,7 +173,7 @@ public class HitSquadEvent extends Event {
         }
 
         Player player = getPlayerIfOnline().get();
-        ModSavedData.NodeEntry entry = SculkHorde.savedData.getClosestNodeEntry((ServerLevel) player.level(), player.blockPosition());
+        ModSavedData.NodeEntry entry = ModSavedData.getSaveData().getClosestNodeEntry((ServerLevel) player.level(), player.blockPosition());
         setEventLocation(entry.getPosition());
 
         Optional<BlockPos> potentialSpawnPoint = Optional.empty();

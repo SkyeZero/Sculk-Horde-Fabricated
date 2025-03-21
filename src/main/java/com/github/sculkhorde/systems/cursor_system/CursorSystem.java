@@ -1,6 +1,7 @@
 package com.github.sculkhorde.systems.cursor_system;
 
 import com.github.sculkhorde.common.entity.infection.CursorEntity;
+import com.github.sculkhorde.core.ModSavedData;
 import com.github.sculkhorde.core.SculkHorde;
 import com.github.sculkhorde.util.BlockAlgorithms;
 import com.github.sculkhorde.util.TickUnits;
@@ -173,7 +174,7 @@ public class CursorSystem {
             cursorAtIndex.tick();
         }
 
-        if(SculkHorde.savedData.isHordeDefeated())
+        if(ModSavedData.getSaveData().isHordeDefeated())
         {
             return;
         }

@@ -5,10 +5,7 @@ import com.github.sculkhorde.common.entity.ISculkSmartEntity;
 import com.github.sculkhorde.common.entity.InfestationPurifierEntity;
 import com.github.sculkhorde.common.entity.SculkBeeHarvesterEntity;
 import com.github.sculkhorde.common.entity.goal.CustomMeleeAttackGoal;
-import com.github.sculkhorde.core.ModConfig;
-import com.github.sculkhorde.core.ModEntities;
-import com.github.sculkhorde.core.ModMobEffects;
-import com.github.sculkhorde.core.SculkHorde;
+import com.github.sculkhorde.core.*;
 import com.github.sculkhorde.misc.ModColaborationHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -301,7 +298,7 @@ public class EntityAlgorithms {
      */
     public static boolean isLivingEntityHostile(LivingEntity entity)
     {
-        return SculkHorde.savedData.getHostileEntries().get(entity.getType().toString()) != null;
+        return ModSavedData.getSaveData().getHostileEntries().get(entity.getType().toString()) != null;
     }
 
     public static boolean isLivingEntitySwimmer(LivingEntity entity)

@@ -6,6 +6,7 @@ import com.github.sculkhorde.common.entity.SculkBeeInfectorEntity;
 import com.github.sculkhorde.common.structures.procedural.SculkBeeNestProceduralStructure;
 import com.github.sculkhorde.core.ModBlockEntities;
 import com.github.sculkhorde.core.ModConfig;
+import com.github.sculkhorde.core.ModSavedData;
 import com.github.sculkhorde.core.SculkHorde;
 import com.github.sculkhorde.systems.cursor_system.CursorSystem;
 import com.github.sculkhorde.systems.cursor_system.VirtualSurfaceInfestorCursor;
@@ -284,7 +285,7 @@ public class SculkBeeNestBlockEntity extends BlockEntity
                 this.level.gameEvent(GameEvent.BLOCK_CHANGE, blockpos, GameEvent.Context.of(entity, this.getBlockState()));
 
                 //Give Sculk Horde Mass
-                if(SculkHorde.savedData != null) { SculkHorde.savedData.addSculkAccumulatedMass(5); }
+                if(ModSavedData.getSaveData() != null) { ModSavedData.getSaveData().addSculkAccumulatedMass(5); }
                 if(SculkHorde.statisticsData != null) { SculkHorde.statisticsData.addTotalMassFromBees(5); }
 
 

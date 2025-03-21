@@ -45,7 +45,7 @@ public class HitSquadDispatcherSystem {
                 continue;
             }
 
-            if(SculkHorde.savedData.getNodeEntries().isEmpty())
+            if(ModSavedData.getSaveData().getNodeEntries().isEmpty())
             {
                 continue;
             }
@@ -59,7 +59,7 @@ public class HitSquadDispatcherSystem {
             boolean hasGoodRelationshipWithHorde = profile.getRelationshipToTheHorde() > MAX_RELATIONSHIP;
             boolean isHitCooldownNotOver = !profile.isHitCooldownOver();
 
-            ModSavedData.NodeEntry entry = SculkHorde.savedData.getClosestNodeEntry((ServerLevel) player.level(), player.blockPosition());
+            ModSavedData.NodeEntry entry = ModSavedData.getSaveData().getClosestNodeEntry((ServerLevel) player.level(), player.blockPosition());
             boolean isTooFarFromNode = BlockAlgorithms.getBlockDistanceXZ(player.blockPosition(), entry.getPosition()) > DISTANCE_REQUIRED_FROM_NODE;
 
             if(isTooFarFromNode || isHitCooldownNotOver || hasGoodRelationshipWithHorde || hasNotDestroyedEnoughNodes)

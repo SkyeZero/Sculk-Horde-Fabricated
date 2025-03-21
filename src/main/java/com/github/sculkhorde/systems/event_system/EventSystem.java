@@ -1,5 +1,6 @@
 package com.github.sculkhorde.systems.event_system;
 
+import com.github.sculkhorde.core.ModSavedData;
 import com.github.sculkhorde.core.SculkHorde;
 import com.github.sculkhorde.systems.event_system.events.HitSquadEvent;
 import com.github.sculkhorde.systems.event_system.events.SpawnPhantomsEvent;
@@ -37,7 +38,7 @@ public class EventSystem {
 
     public boolean canExecute()
     {
-        boolean isHordeActive = SculkHorde.savedData.isHordeActive();
+        boolean isHordeActive = ModSavedData.getSaveData().isHordeActive();
         // Check overworld time
         return isHordeActive && (ServerLifecycleHooks.getCurrentServer().overworld().getGameTime() - lastGameTimeOfExecution) > EXECUTION_COOLDOWN_TICKS;
     }

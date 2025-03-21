@@ -1,5 +1,6 @@
 package com.github.sculkhorde.common.command;
 
+import com.github.sculkhorde.core.ModSavedData;
 import com.github.sculkhorde.core.SculkHorde;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
@@ -23,13 +24,13 @@ public class StatusCommand implements Command<CommandSourceStack> {
     public int run(CommandContext<CommandSourceStack> context)
     {
         context.getSource().sendSuccess(()->Component.literal(
-                "Horde State: " + SculkHorde.savedData.getHordeState().toString()
+                "Horde State: " + ModSavedData.getSaveData().getHordeState().toString()
                         + "\n"
                         + "Gravemind State: " + SculkHorde.gravemind.getEvolutionState().toString()
                         + "\n"
-                        + "Sculk Mass Accumulated: " + SculkHorde.savedData.getSculkAccumulatedMass()
+                        + "Sculk Mass Accumulated: " + ModSavedData.getSaveData().getSculkAccumulatedMass()
                         + "\n"
-                        + "Sculk Nodes Present: " + SculkHorde.savedData.getNodeEntries().size()
+                        + "Sculk Nodes Present: " + ModSavedData.getSaveData().getNodeEntries().size()
                         + "\n"
                         + "Performance Mode: " + SculkHorde.autoPerformanceSystem.getPerformanceMode().toString()
                 ), false);

@@ -59,8 +59,7 @@ public class ForgeEventSubscriber {
         //Initalize Gravemind
         if(!event.getLevel().isClientSide() && event.getLevel().equals(ServerLifecycleHooks.getCurrentServer().overworld()))
         {
-            SculkHorde.statisticsData = new StatisticsData(); // Keep this above "SculkHorde.savedData". Otherwise, stats won't be loaded correctly.
-            SculkHorde.savedData = ServerLifecycleHooks.getCurrentServer().overworld().getDataStorage().computeIfAbsent(ModSavedData::load, ModSavedData::new, SculkHorde.SAVE_DATA_ID); //Initialize Saved Data
+            if(SculkHorde.statisticsData == null) { SculkHorde.statisticsData = new StatisticsData(); }// Keep this above "ModSavedData.getSaveData()". Otherwise, stats won't be loaded correctly.
             if(SculkHorde.gravemind == null) { SculkHorde.gravemind = new Gravemind(); } //Initialize Gravemind
             if(SculkHorde.debugSlimeSystem == null) { SculkHorde.debugSlimeSystem = new DebugSlimeSystem(); }
             if(SculkHorde.deathAreaInvestigator == null) { SculkHorde.deathAreaInvestigator = new DeathAreaInvestigator(); } //Initialize Death Area Investigator
@@ -113,7 +112,7 @@ public class ForgeEventSubscriber {
 
         // Run this stuff every tick
 
-        SculkHorde.savedData.incrementNoNodeSpawningTicksElapsed();
+        ModSavedData.getSaveData().incrementNoNodeSpawningTicksElapsed();
 
         SculkHorde.raidHandler.raidTick(); // Tick the raid handler
         SculkHorde.deathAreaInvestigator.tick();
@@ -142,17 +141,17 @@ public class ForgeEventSubscriber {
         SculkHorde.beeNestActivitySystem.activate();
 
         //Verification Processes to ensure our data is accurate
-        SculkHorde.savedData.validateNodeEntries();
-        SculkHorde.savedData.validateBeeNestEntries();
-        SculkHorde.savedData.validateNoRaidZoneEntries();
-        SculkHorde.savedData.validateAreasOfInterest();
+        ModSavedData.getSaveData().validateNodeEntries();
+        ModSavedData.getSaveData().validateBeeNestEntries();
+        ModSavedData.getSaveData().validateNoRaidZoneEntries();
+        ModSavedData.getSaveData().validateAreasOfInterest();
 
         //Calculate Current State
         SculkHorde.gravemind.calulateCurrentState(); //Have the gravemind update it's state if necessary
 
         //Check How much Mass Was Generated over this period
-        if(SculkHorde.isDebugMode()) System.out.println("Accumulated Mass Since Last Check: " + (SculkHorde.savedData.getSculkAccumulatedMass() - sculkMassCheck));
-        sculkMassCheck = SculkHorde.savedData.getSculkAccumulatedMass();
+        if(SculkHorde.isDebugMode()) System.out.println("Accumulated Mass Since Last Check: " + (ModSavedData.getSaveData().getSculkAccumulatedMass() - sculkMassCheck));
+        sculkMassCheck = ModSavedData.getSaveData().getSculkAccumulatedMass();
 
     }
 
@@ -166,8 +165,8 @@ public class ForgeEventSubscriber {
 
         if(EntityAlgorithms.isSculkLivingEntity.test(event.getEntity()))
         {
-            SculkHorde.savedData.reportDeath((ServerLevel) event.getEntity().level(), event.getEntity().blockPosition());
-            SculkHorde.savedData.addHostileToMemory(event.getEntity().getLastHurtByMob());
+            ModSavedData.getSaveData().reportDeath((ServerLevel) event.getEntity().level(), event.getEntity().blockPosition());
+            ModSavedData.getSaveData().addHostileToMemory(event.getEntity().getLastHurtByMob());
             SculkHorde.statisticsData.incrementTotalUnitDeaths();
             SculkHorde.statisticsData.addTotalMassRemovedFromHorde((int) event.getEntity().getMaxHealth());
             return;
@@ -230,7 +229,7 @@ public class ForgeEventSubscriber {
 
         if(EntityAlgorithms.isSculkLivingEntity.test(targetEntity) && damageSourceEntity instanceof LivingEntity)
         {
-            SculkHorde.savedData.addHostileToMemory((LivingEntity) damageSourceEntity);
+            ModSavedData.getSaveData().addHostileToMemory((LivingEntity) damageSourceEntity);
         }
 
 

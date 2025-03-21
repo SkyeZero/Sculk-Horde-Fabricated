@@ -1,6 +1,7 @@
 package com.github.sculkhorde.common.entity.infection;
 
 import com.github.sculkhorde.core.ModConfig;
+import com.github.sculkhorde.core.ModSavedData;
 import com.github.sculkhorde.core.SculkHorde;
 import com.github.sculkhorde.util.BlockAlgorithms;
 import com.github.sculkhorde.util.EntityAlgorithms;
@@ -109,7 +110,7 @@ public abstract class CursorEntity extends Entity
      */
     protected boolean isObstructed(BlockState state, BlockPos pos)
     {
-        if(SculkHorde.savedData.getSculkAccumulatedMass() <= 0)
+        if(ModSavedData.getSaveData().getSculkAccumulatedMass() <= 0)
         {
             return false;
         }
@@ -311,7 +312,7 @@ public abstract class CursorEntity extends Entity
                 }
                 entity.discard();
                 int massToAdd = ((ItemEntity)entity).getItem().getCount();
-                SculkHorde.savedData.addSculkAccumulatedMass(massToAdd);
+                ModSavedData.getSaveData().addSculkAccumulatedMass(massToAdd);
                 SculkHorde.statisticsData.addTotalMassFromInfestedCursorItemEating(massToAdd);
             }
         }
