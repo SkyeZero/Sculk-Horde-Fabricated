@@ -70,6 +70,7 @@ public class CursorSystem {
      */
     public void tickCursors()
     {
+        cursors.clean(); // Clean the list before we start ticking cursors
         ArrayList<CursorEntity> listOfCursors = cursors.getList();
 
         for(int i = 0; i < SculkHorde.autoPerformanceSystem.getCursorsToTickPerTick(); i++)
@@ -165,19 +166,27 @@ public class CursorSystem {
         return virtualCursors.list.size();
     }
 
-    public void tickVirtualCursors()
+    public void tickPerformanceExemptCursors()
     {
+        performanceExemptCursors.clean(); // Clean the list before we start ticking cursors
+
+
         // Tick All Performance Exempt Cursors, regardless of performance mode
         ArrayList<ICursor> listOfPerformanceExemptCursors = performanceExemptCursors.getList();
         for(ICursor cursorAtIndex : listOfPerformanceExemptCursors)
         {
             cursorAtIndex.tick();
         }
+    }
 
+    public void tickVirtualCursors()
+    {
         if(ModSavedData.getSaveData().isHordeDefeated())
         {
             return;
         }
+
+        virtualCursors.clean(); // Clean the list before we start ticking cursors
 
         // Tick Virtual Cursors
         ArrayList<ICursor> listOfCursors = virtualCursors.getList();
@@ -246,17 +255,16 @@ public class CursorSystem {
             return;
         }
 
+        tickPerformanceExemptCursors();
+
         if(!isPerformanceModeThresholdReached())
         {
             setManualControlOfTickingEnabled(false);
 
             // Virtual Cursors
-            performanceExemptCursors.clean(); // Clean the list before we start ticking cursors
-            virtualCursors.clean(); // Clean the list before we start ticking cursors
             tickVirtualCursors();
 
             // Entity Cursors
-            cursors.clean(); // Clean the list before we start ticking cursors
             tickCursors();
 
             return;

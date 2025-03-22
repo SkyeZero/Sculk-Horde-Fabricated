@@ -4,6 +4,7 @@ import com.github.sculkhorde.common.entity.infection.CursorProberEntity;
 import com.github.sculkhorde.core.SculkHorde;
 import com.github.sculkhorde.systems.cursor_system.CursorSystem;
 import com.github.sculkhorde.systems.cursor_system.VirtualSurfaceInfestorCursor;
+import com.github.sculkhorde.util.TickUnits;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -103,11 +104,13 @@ public class DevInfectionTree {
 
     /**
      * Creates a new infection cursor
-     * @param maxInfections The maximum number of infections the cursor can perform
+     * @param maxRange The maximum number of infections the cursor can perform
      */
-    public void createInfectionCursor(int maxInfections) {
+    public void createInfectionCursor(int maxRange, int maxTransformations) {
         cursorInfection = CursorSystem.createPerformanceExemptSurfaceInfestorVirtualCursor(world, infectedTargetPosition);
-        cursorInfection.setMaxRange(maxInfections);
+        cursorInfection.setMaxRange(maxRange);
+        cursorInfection.setMaxTransformations(maxTransformations);
+        cursorInfection.setMaxLifeTimeTicks(TickUnits.convertMinutesToTicks(1));
         cursorInfection.setTickIntervalTicks(0);
     }
 
@@ -186,7 +189,7 @@ public class DevInfectionTree {
             // If the infection cursor is null, create a new one
             if(cursorInfection == null)
             {
-                createInfectionCursor(currentInfectRange);
+                createInfectionCursor(currentInfectRange, 1000);
                 SculkHorde.LOGGER.info("Creating Infection Cursor.");
                 return;
             }
