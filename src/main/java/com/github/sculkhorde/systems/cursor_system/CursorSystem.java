@@ -241,6 +241,8 @@ public class CursorSystem {
          */
         if(Math.abs(ServerLifecycleHooks.getCurrentServer().overworld().getGameTime() - timeOfServerStartup) < INITIAL_WAIT_TIME_AFTER_SERVER_STARTUP)
         {
+            performanceExemptCursors.clean();
+            virtualCursors.clean();
             return;
         }
 
