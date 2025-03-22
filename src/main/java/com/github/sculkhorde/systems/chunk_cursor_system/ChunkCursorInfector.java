@@ -1,16 +1,12 @@
 package com.github.sculkhorde.systems.chunk_cursor_system;
 
-import com.github.sculkhorde.core.ModMobEffects;
 import com.github.sculkhorde.core.ModSavedData;
 import com.github.sculkhorde.core.SculkHorde;
 import com.github.sculkhorde.systems.infestation_systems.block_infestation_system.BlockInfestationSystem;
 import com.github.sculkhorde.util.BlockAlgorithms;
-import com.github.sculkhorde.util.TickUnits;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -74,11 +70,11 @@ public class ChunkCursorInfector extends ChunkCursorBase<ChunkCursorInfector> {
             y = Math.max(y, 0);
             y = Math.min(y, 319);
 
-            MobEffectInstance darkness = new MobEffectInstance(MobEffects.DARKNESS, TickUnits.convertSecondsToTicks(10), y, false, false);
-            player.addEffect(darkness);
+            //MobEffectInstance darkness = new MobEffectInstance(MobEffects.DARKNESS, TickUnits.convertSecondsToTicks(10), y, false, false);
+            //player.addEffect(darkness);
 
-            MobEffectInstance fog = new MobEffectInstance(ModMobEffects.SCULK_FOG.get(), TickUnits.convertSecondsToTicks(10), y, false, false);
-            player.addEffect(fog);
+            //MobEffectInstance fog = new MobEffectInstance(ModMobEffects.SCULK_FOG.get(), TickUnits.convertSecondsToTicks(10), y, false, false);
+            //player.addEffect(fog);
         }
     }
 

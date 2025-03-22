@@ -7,6 +7,7 @@ import com.github.sculkhorde.core.SculkHorde;
 import com.github.sculkhorde.systems.chunk_cursor_system.ChunkCursorInfector;
 import com.github.sculkhorde.systems.gravemind_system.Gravemind;
 import com.github.sculkhorde.util.BlockAlgorithms;
+import com.github.sculkhorde.util.EntityAlgorithms;
 import com.github.sculkhorde.util.TickUnits;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
@@ -48,6 +49,11 @@ public class NodeAtmosphereInfestationSystem {
 
         for(Player player: ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayers())
         {
+            if(EntityAlgorithms.isLivingEntityExplicitDenyTarget(player))
+            {
+                return;
+            }
+
             if(BlockAlgorithms.getBlockDistance(player.blockPosition(), parent.getBlockPos()) < currentBlockInfestationRadius)
             {
                 DiseasedAtmosphereEffect.applyToEntity(player, TickUnits.convertSecondsToTicks(30));
