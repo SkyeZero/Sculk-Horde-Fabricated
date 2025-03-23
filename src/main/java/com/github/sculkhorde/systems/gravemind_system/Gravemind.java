@@ -46,7 +46,7 @@ public class Gravemind
     private static long time_save_point = 0; //Used to track time passage.
     private static int sculkMassCheck = 0;
 
-    protected static final long INITIAL_WAIT_TIME_AFTER_SERVER_STARTUP = TickUnits.convertSecondsToTicks(10);
+    protected static final long INITIAL_WAIT_TIME_AFTER_SERVER_STARTUP = TickUnits.convertSecondsToTicks(30);
     public long ticksSinceStartUp = 0;
 
     /**

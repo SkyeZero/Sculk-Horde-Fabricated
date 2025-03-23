@@ -115,8 +115,11 @@ public class ModSavedData extends SavedData {
      * 2. Data won't be properly reset between world loads if you try to remedy this with individual null checks.<br>
      * 3. If data not properly reset between world loads, the {@link CursorSystem} will cause the world to get stuck at 100% loading.<br><br>
      * In conclusion, it is better to initialize systems first, then load their data.
+     * <br><br>
+     * Additionally, on a new world load, it seems that {@link ModSavedData#load(CompoundTag)} doesn't get called.
+     * I'll need to initialize systems on world load anyway.
      */
-    protected static void initializeSystems()
+    public static void initializeSystems()
     {
         SculkHorde.LOGGER.info("ModSavedData | Initializing All Systems.");
 
@@ -190,6 +193,13 @@ public class ModSavedData extends SavedData {
         SculkHorde.cursorSystem = new CursorSystem();
         SculkHorde.LOGGER.info("ModSavedData | Initialized CursorSystem Successfully.");
 
+        SculkHorde.LOGGER.info("ModSavedData | Loading raidData.");
+        RaidHandler.raidData = new RaidData();
+        SculkHorde.LOGGER.info("ModSavedData | Loaded raidData Successfully.");
+
+        SculkHorde.LOGGER.info("ModSavedData | Loading statisticsData.");
+        SculkHorde.statisticsData = new StatisticsData();
+        SculkHorde.LOGGER.info("ModSavedData | Loaded statisticsData Successfully.");
 
         SculkHorde.LOGGER.info("ModSavedData | Loading list of items cursors can eat.");
         ModConfig.SERVER.loadItemsInfectionCursorsCanEat();

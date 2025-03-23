@@ -1,5 +1,6 @@
 package com.github.sculkhorde.systems.infestation_systems.block_infestation_system;
 
+import com.github.sculkhorde.systems.gravemind_system.Gravemind;
 import com.github.sculkhorde.systems.infestation_systems.block_infestation_system.infestation_entries.BlockInfestationTable;
 import com.github.sculkhorde.common.block.SculkNodeBlock;
 import com.github.sculkhorde.common.blockentity.SculkBeeNestBlockEntity;
@@ -308,7 +309,7 @@ public class BlockInfestationSystem {
 
     public static void tryToInfestBlock(ServerLevel world, BlockPos targetPos)
     {
-        if(!ModConfig.SERVER.block_infestation_enabled.get())
+        if(!ModConfig.SERVER.block_infestation_enabled.get() || !Gravemind.isGravemindActive())
         {
             return;
         }
@@ -357,6 +358,11 @@ public class BlockInfestationSystem {
 
     public static boolean tryToCureBlock(ServerLevel world, BlockPos targetPos)
     {
+        if(!Gravemind.isGravemindActive())
+        {
+            return false;
+        }
+
         boolean wasAbleToCureBlock = false;
         BlockState getNormalVariant = null;
 

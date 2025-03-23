@@ -41,7 +41,10 @@ public class ForgeEventSubscriber {
     @SubscribeEvent
     public static void onWorldLoad(LevelEvent.Load event)
     {
-
+        if(SculkHorde.gravemind == null)
+        {
+            ModSavedData.initializeSystems();
+        }
     }
 
     /**

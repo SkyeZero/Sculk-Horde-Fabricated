@@ -628,6 +628,7 @@ public class RaidData {
 
     // Save the variables to a CompoundTag
     public static void save(CompoundTag tag) {
+
         // Timing Variables
         tag.putInt("raidState", raidStateToInt(RaidHandler.raidData.getRaidState()));
         tag.putInt("waveDuration", RaidHandler.raidData.getWaveDuration());
