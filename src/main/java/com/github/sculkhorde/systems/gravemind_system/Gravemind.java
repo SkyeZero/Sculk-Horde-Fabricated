@@ -8,8 +8,10 @@ import com.github.sculkhorde.core.ModSavedData;
 import com.github.sculkhorde.core.SculkHorde;
 import com.github.sculkhorde.systems.gravemind_system.entity_factory.EntityFactory;
 import com.github.sculkhorde.systems.gravemind_system.entity_factory.ReinforcementRequest;
+import com.github.sculkhorde.util.ChunkLoading.BlockEntityChunkLoaderHelper;
 import com.github.sculkhorde.util.TickUnits;
 import net.minecraft.core.BlockPos;
+import net.minecraftforge.server.ServerLifecycleHooks;
 
 import java.util.*;
 
@@ -41,6 +43,12 @@ public class Gravemind
 
     public static int TICKS_BETWEEN_NODE_SPAWNS = TickUnits.convertMinutesToTicks(ModConfig.SERVER.sculk_node_spawn_cooldown_minutes.get());
 
+    private static long time_save_point = 0; //Used to track time passage.
+    private static int sculkMassCheck = 0;
+
+    protected static final long INITIAL_WAIT_TIME_AFTER_SERVER_STARTUP = TickUnits.convertSecondsToTicks(10);
+    public long ticksSinceStartUp = 0;
+
     /**
      * Default Constructor <br>
      * Called in ForgeEventSubscriber.java in world load event. <br>
@@ -52,14 +60,31 @@ public class Gravemind
         entityFactory = SculkHorde.entityFactory;
     }
 
-    public evolution_states getEvolutionState()
-    {
-        return evolution_state;
-    }
+
 
 
 
     // Accessors
+
+    public static boolean isGravemindActive()
+    {
+        if(SculkHorde.gravemind == null)
+        {
+            return false;
+        }
+
+        return SculkHorde.gravemind.isWaitTimeOver();
+    }
+
+    public boolean isWaitTimeOver()
+    {
+        return ticksSinceStartUp >= INITIAL_WAIT_TIME_AFTER_SERVER_STARTUP;
+    }
+
+    public evolution_states getEvolutionState()
+    {
+        return evolution_state;
+    }
 
     /**
      * Used to figure out what state the gravemind is in. Called periodically. <br>
@@ -215,5 +240,71 @@ public class Gravemind
     public boolean isEvolutionInImmatureStateOrAbove()
     {
         return evolution_state == evolution_states.Immature || evolution_state == evolution_states.Mature;
+    }
+
+    // EVENTS
+
+    public void serverTick()
+    {
+        /*  The reason we wait a minute after the server starts is due to a weird issue I experienced when developing the
+            virtual cursor system. For some reason, the game will randomly stall upon generating a world at around 99%.
+            Pausing this system for a minute seems to have resolved this issue.
+         */
+        if(!isGravemindActive())
+        {
+            ticksSinceStartUp += 1;
+            return;
+        }
+
+        // Run this stuff every tick
+
+        ModSavedData.getSaveData().incrementNoNodeSpawningTicksElapsed();
+
+        SculkHorde.raidHandler.raidTick(); // Tick the raid handler
+        SculkHorde.deathAreaInvestigator.tick();
+        SculkHorde.sculkNodesSystem.tick();
+        SculkHorde.eventSystem.serverTick();
+        SculkHorde.cursorSystem.serverTick();
+        SculkHorde.populationHandler.serverTick();
+        SculkHorde.blockEntityChunkLoaderHelper.processBlockChunkLoadRequests();
+        SculkHorde.entityChunkLoaderHelper.processEntityChunkLoadRequests();
+        SculkHorde.beeNestActivitySystem.serverTick();
+        SculkHorde.chunkInfestationSystem.serverTick();
+        SculkHorde.debugSlimeSystem.serverTick();
+
+        if(ModConfig.isExperimentalFeaturesEnabled())
+        {
+            SculkHorde.hitSquadDispatcherSystem.serverTick();
+        }
+
+        // Only run stuff below every 5 minutes
+        if (ServerLifecycleHooks.getCurrentServer().overworld().getGameTime() - time_save_point < TickUnits.convertMinutesToTicks(5))
+        {
+            return;
+        }
+
+        time_save_point = ServerLifecycleHooks.getCurrentServer().overworld().getGameTime();//Set to current time so we can recalculate time passage
+        SculkHorde.beeNestActivitySystem.activate();
+
+        // Check if chunk 0,0 is loaded. If not, load it.
+        if(!ServerLifecycleHooks.getCurrentServer().overworld().getChunkSource().hasChunk(0,0))
+        {
+            SculkHorde.LOGGER.info("onWorldLoad | Loading Chunk Area at Spawn.");
+            BlockEntityChunkLoaderHelper.getChunkLoaderHelper().createChunkLoadRequestSquare((ServerLifecycleHooks.getCurrentServer().overworld()), BlockPos.ZERO, 5, 0, TickUnits.convertMinutesToTicks(10));
+            SculkHorde.LOGGER.info("onWorldLoad | Loaded Chunk Area at Spawn.");
+        }
+
+        //Verification Processes to ensure our data is accurate
+        ModSavedData.getSaveData().validateNodeEntries();
+        ModSavedData.getSaveData().validateBeeNestEntries();
+        ModSavedData.getSaveData().validateNoRaidZoneEntries();
+        ModSavedData.getSaveData().validateAreasOfInterest();
+
+        //Calculate Current State
+        SculkHorde.gravemind.calulateCurrentState(); //Have the gravemind update it's state if necessary
+
+        //Check How much Mass Was Generated over this period
+        if(SculkHorde.isDebugMode()) System.out.println("Accumulated Mass Since Last Check: " + (ModSavedData.getSaveData().getSculkAccumulatedMass() - sculkMassCheck));
+        sculkMassCheck = ModSavedData.getSaveData().getSculkAccumulatedMass();
     }
 }

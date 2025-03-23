@@ -114,7 +114,6 @@ dependencies {
 	// Apply Mixin AP
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 	implementation fg.deobf("curse.maven:jei-238222:5101366")
-	implementation fg.deobf("curse.maven:spore-678295:4764840")
 	implementation fg.deobf("curse.maven:spark-361579:4738952")
 	implementation fg.deobf("curse.maven:crash-utilities-371813:4716086")
 	implementation fg.deobf("curse.maven:deeperdarker-659011:5698212")

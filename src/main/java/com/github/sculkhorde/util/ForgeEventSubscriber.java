@@ -4,8 +4,6 @@ import com.github.sculkhorde.common.advancement.ContributeTrigger;
 import com.github.sculkhorde.common.block.FleshyCompostBlock;
 import com.github.sculkhorde.common.effect.SculkBurrowedEffect;
 import com.github.sculkhorde.core.*;
-import com.github.sculkhorde.util.ChunkLoading.BlockEntityChunkLoaderHelper;
-import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -32,8 +30,6 @@ import java.util.function.Predicate;
 @Mod.EventBusSubscriber(modid = SculkHorde.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ForgeEventSubscriber {
 
-    private static long time_save_point = 0; //Used to track time passage.
-    private static int sculkMassCheck = 0;
 
 
     /**
@@ -60,58 +56,7 @@ public class ForgeEventSubscriber {
         {
             return;
         }
-
-        // Run this stuff every tick
-
-        ModSavedData.getSaveData().incrementNoNodeSpawningTicksElapsed();
-
-        SculkHorde.raidHandler.raidTick(); // Tick the raid handler
-        SculkHorde.deathAreaInvestigator.tick();
-        SculkHorde.sculkNodesSystem.tick();
-        SculkHorde.eventSystem.serverTick();
-        SculkHorde.cursorSystem.serverTick();
-        SculkHorde.populationHandler.serverTick();
-        SculkHorde.blockEntityChunkLoaderHelper.processBlockChunkLoadRequests();
-        SculkHorde.entityChunkLoaderHelper.processEntityChunkLoadRequests();
-        SculkHorde.beeNestActivitySystem.serverTick();
-        SculkHorde.chunkInfestationSystem.serverTick();
-        SculkHorde.debugSlimeSystem.serverTick();
-
-        if(ModConfig.isExperimentalFeaturesEnabled())
-        {
-            SculkHorde.hitSquadDispatcherSystem.serverTick();
-        }
-
-        // Only run stuff below every 5 minutes
-        if (event.level.getGameTime() - time_save_point < TickUnits.convertMinutesToTicks(5))
-        {
-            return;
-        }
-
-        time_save_point = event.level.getGameTime();//Set to current time so we can recalculate time passage
-        SculkHorde.beeNestActivitySystem.activate();
-
-        // Check if chunk 0,0 is loaded. If not, load it.
-        if(!ServerLifecycleHooks.getCurrentServer().overworld().getChunkSource().hasChunk(0,0))
-        {
-            SculkHorde.LOGGER.info("onWorldLoad | Loading Chunk Area at Spawn.");
-            BlockEntityChunkLoaderHelper.getChunkLoaderHelper().createChunkLoadRequestSquare((ServerLifecycleHooks.getCurrentServer().overworld()), BlockPos.ZERO, 5, 0, TickUnits.convertMinutesToTicks(10));
-            SculkHorde.LOGGER.info("onWorldLoad | Loaded Chunk Area at Spawn.");
-        }
-
-        //Verification Processes to ensure our data is accurate
-        ModSavedData.getSaveData().validateNodeEntries();
-        ModSavedData.getSaveData().validateBeeNestEntries();
-        ModSavedData.getSaveData().validateNoRaidZoneEntries();
-        ModSavedData.getSaveData().validateAreasOfInterest();
-
-        //Calculate Current State
-        SculkHorde.gravemind.calulateCurrentState(); //Have the gravemind update it's state if necessary
-
-        //Check How much Mass Was Generated over this period
-        if(SculkHorde.isDebugMode()) System.out.println("Accumulated Mass Since Last Check: " + (ModSavedData.getSaveData().getSculkAccumulatedMass() - sculkMassCheck));
-        sculkMassCheck = ModSavedData.getSaveData().getSculkAccumulatedMass();
-
+        SculkHorde.gravemind.serverTick();
     }
 
     @SubscribeEvent

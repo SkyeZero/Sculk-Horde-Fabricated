@@ -4,7 +4,6 @@ import com.github.sculkhorde.common.entity.infection.CursorEntity;
 import com.github.sculkhorde.core.ModSavedData;
 import com.github.sculkhorde.core.SculkHorde;
 import com.github.sculkhorde.util.BlockAlgorithms;
-import com.github.sculkhorde.util.TickUnits;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
@@ -19,9 +18,6 @@ import java.util.UUID;
 public class CursorSystem {
 
     // Virtual Cursors Variables ---------------------------------------------------------------------------------------
-
-    protected static final long INITIAL_WAIT_TIME_AFTER_SERVER_STARTUP = TickUnits.convertMinutesToTicks(1);
-    public long ticksSinceStartUp = 0;
 
     SortedVirtualCursorList performanceExemptCursors = new SortedVirtualCursorList();
     SortedVirtualCursorList virtualCursors = new SortedVirtualCursorList();
@@ -238,17 +234,6 @@ public class CursorSystem {
      */
     public void serverTick()
     {
-        /*  The reason we wait a minute after the server starts is due to a weird issue I experienced when developing the
-            virtual cursor system. For some reason, the game will randomly stall upon generating a world at around 99%.
-            Pausing this system for a minute seems to have resolved this issue.
-         */
-        if(ticksSinceStartUp < INITIAL_WAIT_TIME_AFTER_SERVER_STARTUP)
-        {
-            performanceExemptCursors.clean();
-            virtualCursors.clean();
-            ticksSinceStartUp += 1;
-            return;
-        }
 
         tickPerformanceExemptCursors();
 

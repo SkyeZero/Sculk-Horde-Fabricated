@@ -10,6 +10,7 @@ import com.github.sculkhorde.core.ModSavedData;
 import com.github.sculkhorde.core.SculkHorde;
 import com.github.sculkhorde.systems.cursor_system.CursorSystem;
 import com.github.sculkhorde.systems.cursor_system.VirtualSurfaceInfestorCursor;
+import com.github.sculkhorde.systems.gravemind_system.Gravemind;
 import com.github.sculkhorde.util.TickUnits;
 import com.google.common.collect.Lists;
 import net.minecraft.core.BlockPos;
@@ -130,6 +131,10 @@ public class SculkBeeNestBlockEntity extends BlockEntity
 
         blockEntity.lastGameTimeOfTick = level.getGameTime();
 
+        if(!Gravemind.isGravemindActive())
+        {
+            return;
+        }
 
         tickOccupants(level, blockPos, blockState, blockEntity.stored, blockEntity.savedFlowerPos);
         if (!blockEntity.stored.isEmpty() && level.getRandom().nextDouble() < 0.005D)

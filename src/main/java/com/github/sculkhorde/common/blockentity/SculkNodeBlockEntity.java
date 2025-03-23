@@ -2,6 +2,7 @@ package com.github.sculkhorde.common.blockentity;
 
 import com.github.sculkhorde.common.block.SculkNodeBlock;
 import com.github.sculkhorde.core.SculkHorde;
+import com.github.sculkhorde.systems.gravemind_system.Gravemind;
 import com.github.sculkhorde.systems.infestation_systems.node_infestation.NodeAtmosphereInfestationSystem;
 import com.github.sculkhorde.systems.infestation_systems.node_infestation.NodeBranchingInfestationSystem;
 import com.github.sculkhorde.common.structures.procedural.SculkNodeProceduralStructure;
@@ -98,6 +99,11 @@ public class SculkNodeBlockEntity extends BlockEntity
             return;
         }
 
+        if(!Gravemind.isGravemindActive())
+        {
+            return;
+        }
+
         InfestationHandlerTick(blockEntity);
 
         long timeElapsed = TimeUnit.SECONDS.convert(System.nanoTime() - blockEntity.tickedAt, TimeUnit.NANOSECONDS);
@@ -159,13 +165,11 @@ public class SculkNodeBlockEntity extends BlockEntity
             return;
         }
 
-
         if(SculkHorde.gravemind.isEvolutionInMatureState() && ModConfig.isExperimentalFeaturesEnabled())
         {
             blockEntity.matureInfestationSystem.serverTick();
             return;
         }
-
 
         // Initialize the infection handler
         if(blockEntity.branchingInfestationHandler == null)

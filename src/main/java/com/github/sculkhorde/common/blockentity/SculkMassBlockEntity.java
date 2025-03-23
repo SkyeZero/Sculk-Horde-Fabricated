@@ -6,6 +6,7 @@ import com.github.sculkhorde.core.ModSavedData;
 import com.github.sculkhorde.core.SculkHorde;
 import com.github.sculkhorde.systems.cursor_system.CursorSystem;
 import com.github.sculkhorde.systems.cursor_system.VirtualSurfaceInfestorCursor;
+import com.github.sculkhorde.systems.gravemind_system.Gravemind;
 import com.github.sculkhorde.systems.gravemind_system.entity_factory.EntityFactory;
 import com.github.sculkhorde.systems.gravemind_system.entity_factory.EntityFactoryEntry;
 import com.github.sculkhorde.systems.gravemind_system.entity_factory.ReinforcementRequest;
@@ -127,6 +128,11 @@ public class SculkMassBlockEntity extends BlockEntity {
         }
 
         blockEntity.lastTickTime = level.getGameTime();
+
+        if(!Gravemind.isGravemindActive())
+        {
+            return;
+        }
 
         if(blockEntity.getStoredSculkMass() <= 0)
         {

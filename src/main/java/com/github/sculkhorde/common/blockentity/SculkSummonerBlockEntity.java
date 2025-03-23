@@ -4,6 +4,7 @@ import com.github.sculkhorde.common.block.SculkSummonerBlock;
 import com.github.sculkhorde.core.ModBlockEntities;
 import com.github.sculkhorde.core.ModBlocks;
 import com.github.sculkhorde.core.SculkHorde;
+import com.github.sculkhorde.systems.gravemind_system.Gravemind;
 import com.github.sculkhorde.systems.gravemind_system.entity_factory.EntityFactoryEntry;
 import com.github.sculkhorde.systems.gravemind_system.entity_factory.ReinforcementRequest;
 import com.github.sculkhorde.systems.infestation_systems.block_infestation_system.BlockInfestationSystem;
@@ -146,12 +147,7 @@ public class SculkSummonerBlockEntity extends BlockEntity implements GameEventLi
                         blockEntity.searchArea,
                         blockEntity.infectableTargetParameters.isPossibleNewTargetValid);
 
-        if(!blockEntity.possibleAggressorTargets.isEmpty() || !blockEntity.possibleLivingEntityTargets.isEmpty())
-        {
-            return true;
-        }
-
-        return false;
+        return !blockEntity.possibleAggressorTargets.isEmpty() || !blockEntity.possibleLivingEntityTargets.isEmpty();
 
     }
 
@@ -160,7 +156,7 @@ public class SculkSummonerBlockEntity extends BlockEntity implements GameEventLi
         boolean isSummonerWaterLogged = getBlockState().getValue(BlockStateProperties.WATERLOGGED);
 
         ((ServerLevel)level).sendParticles(ParticleTypes.SCULK_SOUL, this.getBlockPos().getX() + 0.5D, this.getBlockPos().getY() + 1.15D, this.getBlockPos().getZ() + 0.5D, 2, 0.2D, 0.0D, 0.2D, 0.0D);
-        ((ServerLevel)level).playSound(null, this.getBlockPos(), SoundEvents.SCULK_CATALYST_BLOOM, SoundSource.BLOCKS, 2.0F, 0.6F + 1.0F);
+        level.playSound(null, this.getBlockPos(), SoundEvents.SCULK_CATALYST_BLOOM, SoundSource.BLOCKS, 2.0F, 0.6F + 1.0F);
         //Choose spawn positions
         ArrayList<BlockPos> possibleSpawnPositions = this.getSpawnPositionsInCube((ServerLevel) level, this.getBlockPos(), 5, this.MAX_SPAWNED_ENTITIES, isSummonerWaterLogged);
 
@@ -369,7 +365,7 @@ public class SculkSummonerBlockEntity extends BlockEntity implements GameEventLi
     {
         private static final int LISTENER_RADIUS = 24;
         private final PositionSource positionSource = new BlockPositionSource(SculkSummonerBlockEntity.this.worldPosition);
-        private SculkSummonerBlockEntity summoner;
+        private final SculkSummonerBlockEntity summoner;
 
         public VibrationUser(SculkSummonerBlockEntity summoner) {
             this.summoner = summoner;
@@ -389,7 +385,13 @@ public class SculkSummonerBlockEntity extends BlockEntity implements GameEventLi
         }
 
         public boolean canReceiveVibration(ServerLevel level, BlockPos pos, GameEvent event, GameEvent.Context context) {
-                return !isBlockStateVibrationCooldownTrue() && !SculkHorde.populationHandler.isPopulationAtMax();
+
+            if(!Gravemind.isGravemindActive())
+            {
+                return false;
+            }
+
+            return !isBlockStateVibrationCooldownTrue() && !SculkHorde.populationHandler.isPopulationAtMax();
         }
 
         public void onReceiveVibration(ServerLevel level, BlockPos blockPos, GameEvent gameEvent, @Nullable Entity entity, @Nullable Entity entity1, float power)
