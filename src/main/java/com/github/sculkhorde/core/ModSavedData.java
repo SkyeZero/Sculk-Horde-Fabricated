@@ -30,6 +30,7 @@ import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.SavedData;
+import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.server.ServerLifecycleHooks;
 import org.jetbrains.annotations.NotNull;
 
@@ -105,6 +106,16 @@ public class ModSavedData extends SavedData {
 
     }
 
+    /**
+     * Note: We initialize systems in {@link ModSavedData#load(CompoundTag)}
+     * instead of {@link com.github.sculkhorde.util.ForgeEventSubscriber#onWorldLoad(LevelEvent.Load)} because
+     * it fires after {@link ModSavedData#load(CompoundTag)} which causes the following side effects.
+     * <br><br>
+     * 1. Data will be loaded into systems, then wiped out by {@link com.github.sculkhorde.util.ForgeEventSubscriber#onWorldLoad(LevelEvent.Load)}<br>
+     * 2. Data won't be properly reset between world loads if you try to remedy this with individual null checks.<br>
+     * 3. If data not properly reset between world loads, the {@link CursorSystem} will cause the world to get stuck at 100% loading.<br><br>
+     * In conclusion, it is better to initialize systems first, then load their data.
+     */
     protected static void initializeSystems()
     {
         SculkHorde.LOGGER.info("onWorldLoad | Initializing All Systems.");
