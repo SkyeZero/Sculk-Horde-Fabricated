@@ -118,98 +118,98 @@ public class ModSavedData extends SavedData {
      */
     protected static void initializeSystems()
     {
-        SculkHorde.LOGGER.info("onWorldLoad | Initializing All Systems.");
+        SculkHorde.LOGGER.info("ModSavedData | Initializing All Systems.");
 
-        SculkHorde.LOGGER.info("onWorldLoad | Initializing Gravemind.");
+        SculkHorde.LOGGER.info("ModSavedData | Initializing Gravemind.");
         SculkHorde.gravemind = new Gravemind();
-        SculkHorde.LOGGER.info("onWorldLoad | Initialized Gravemind Successfully.");
+        SculkHorde.LOGGER.info("ModSavedData | Initialized Gravemind Successfully.");
 
 
 
-        SculkHorde.LOGGER.info("onWorldLoad | Initializing debugSlimeSystem.");
+        SculkHorde.LOGGER.info("ModSavedData | Initializing debugSlimeSystem.");
         SculkHorde.debugSlimeSystem = new DebugSlimeSystem();
-        SculkHorde.LOGGER.info("onWorldLoad | Initialized debugSlimeSystem Successfully.");
+        SculkHorde.LOGGER.info("ModSavedData | Initialized debugSlimeSystem Successfully.");
 
 
 
-        SculkHorde.LOGGER.info("onWorldLoad | Initializing deathAreaInvestigator.");
+        SculkHorde.LOGGER.info("ModSavedData | Initializing deathAreaInvestigator.");
         SculkHorde.deathAreaInvestigator = new DeathAreaInvestigator();
-        SculkHorde.LOGGER.info("onWorldLoad | Initialized deathAreaInvestigator.");
+        SculkHorde.LOGGER.info("ModSavedData | Initialized deathAreaInvestigator.");
 
 
 
-        SculkHorde.LOGGER.info("onWorldLoad | Initializing raidHandler.");
+        SculkHorde.LOGGER.info("ModSavedData | Initializing raidHandler.");
         SculkHorde.raidHandler = new RaidHandler();
-        SculkHorde.LOGGER.info("onWorldLoad | Initialized raidHandler Successfully.");
+        SculkHorde.LOGGER.info("ModSavedData | Initialized raidHandler Successfully.");
 
 
 
-        SculkHorde.LOGGER.info("onWorldLoad | Initializing sculkNodesSystem.");
+        SculkHorde.LOGGER.info("ModSavedData | Initializing sculkNodesSystem.");
         SculkHorde.sculkNodesSystem = new SculkNodesSystem();
-        SculkHorde.LOGGER.info("onWorldLoad | Initialized sculkNodesSystem Successfully.");
+        SculkHorde.LOGGER.info("ModSavedData | Initialized sculkNodesSystem Successfully.");
 
 
 
-        SculkHorde.LOGGER.info("onWorldLoad | Initializing entityChunkLoaderHelper.");
+        SculkHorde.LOGGER.info("ModSavedData | Initializing entityChunkLoaderHelper.");
         SculkHorde.entityChunkLoaderHelper = new EntityChunkLoaderHelper();
-        SculkHorde.LOGGER.info("onWorldLoad | Initialized entityChunkLoaderHelper Successfully.");
+        SculkHorde.LOGGER.info("ModSavedData | Initialized entityChunkLoaderHelper Successfully.");
 
 
 
-        SculkHorde.LOGGER.info("onWorldLoad | Initializing blockEntityChunkLoaderHelper.");
+        SculkHorde.LOGGER.info("ModSavedData | Initializing blockEntityChunkLoaderHelper.");
         SculkHorde.blockEntityChunkLoaderHelper = new BlockEntityChunkLoaderHelper();
-        SculkHorde.LOGGER.info("onWorldLoad | Initialized blockEntityChunkLoaderHelper Successfully.");
+        SculkHorde.LOGGER.info("ModSavedData | Initialized blockEntityChunkLoaderHelper Successfully.");
 
 
 
-        SculkHorde.LOGGER.info("onWorldLoad | Initializing eventSystem.");
+        SculkHorde.LOGGER.info("ModSavedData | Initializing eventSystem.");
         SculkHorde.eventSystem = new EventSystem();
-        SculkHorde.LOGGER.info("onWorldLoad | Initialized eventSystem Successfully.");
+        SculkHorde.LOGGER.info("ModSavedData | Initialized eventSystem Successfully.");
 
 
 
-        SculkHorde.LOGGER.info("onWorldLoad | Initializing beeNestActivitySystem.");
+        SculkHorde.LOGGER.info("ModSavedData | Initializing beeNestActivitySystem.");
         SculkHorde.beeNestActivitySystem = new BeeNestActivitySystem();
-        SculkHorde.LOGGER.info("onWorldLoad | Initialized beeNestActivitySystem Successfully.");
+        SculkHorde.LOGGER.info("ModSavedData | Initialized beeNestActivitySystem Successfully.");
 
 
 
-        SculkHorde.LOGGER.info("onWorldLoad | Initializing autoPerformanceSystem.");
+        SculkHorde.LOGGER.info("ModSavedData | Initializing autoPerformanceSystem.");
         SculkHorde.autoPerformanceSystem = new AutoPerformanceSystem();
-        SculkHorde.LOGGER.info("onWorldLoad | Initialized autoPerformanceSystem Successfully.");
+        SculkHorde.LOGGER.info("ModSavedData | Initialized autoPerformanceSystem Successfully.");
 
 
 
-        SculkHorde.LOGGER.info("onWorldLoad | Initializing chunkInfestationSystem.");
+        SculkHorde.LOGGER.info("ModSavedData | Initializing chunkInfestationSystem.");
         SculkHorde.chunkInfestationSystem = new ChunkInfestationSystem();
-        SculkHorde.LOGGER.info("onWorldLoad | Initialized chunkInfestationSystem Successfully.");
+        SculkHorde.LOGGER.info("ModSavedData | Initialized chunkInfestationSystem Successfully.");
 
 
 
-        SculkHorde.LOGGER.info("onWorldLoad | Initializing CursorSystem.");
+        SculkHorde.LOGGER.info("ModSavedData | Initializing CursorSystem.");
         SculkHorde.cursorSystem = new CursorSystem();
-        SculkHorde.LOGGER.info("onWorldLoad | Initialized CursorSystem Successfully.");
+        SculkHorde.LOGGER.info("ModSavedData | Initialized CursorSystem Successfully.");
 
 
-        SculkHorde.LOGGER.info("onWorldLoad | Loading list of items cursors can eat.");
+        SculkHorde.LOGGER.info("ModSavedData | Loading list of items cursors can eat.");
         ModConfig.SERVER.loadItemsInfectionCursorsCanEat();
-        SculkHorde.LOGGER.info("onWorldLoad | Loaded list of items cursors can eat Successfully.");
-        SculkHorde.LOGGER.info("onWorldLoad | Loading list of configured infestable blocks.");
+        SculkHorde.LOGGER.info("ModSavedData | Loaded list of items cursors can eat Successfully.");
+        SculkHorde.LOGGER.info("ModSavedData | Loading list of configured infestable blocks.");
         ModConfig.SERVER.loadConfiguredInfestableBlocks();
-        SculkHorde.LOGGER.info("onWorldLoad | Loaded list of configured infestable blocks Successfully.");
+        SculkHorde.LOGGER.info("ModSavedData | Loaded list of configured infestable blocks Successfully.");
 
         if(ModConfig.SERVER.purification_speed_multiplier.get() <= 0)
         {
             ModConfig.SERVER.purification_speed_multiplier.set(1.0);
-            SculkHorde.LOGGER.info("onWorldLoad | Detected configured purification speed below 0. Resetting to 1.0");
+            SculkHorde.LOGGER.info("ModSavedData | Detected configured purification speed below 0. Resetting to 1.0");
         }
 
         if(ModConfig.SERVER.infection_speed_multiplier.get() <= 0)
         {
             ModConfig.SERVER.infection_speed_multiplier.set(1.0);
-            SculkHorde.LOGGER.info("onWorldLoad | Detected configured infestation speed below 0. Resetting to 1.0");
+            SculkHorde.LOGGER.info("ModSavedData | Detected configured infestation speed below 0. Resetting to 1.0");
         }
-        SculkHorde.LOGGER.info("onWorldLoad | Initialed All Systems Successfully.");
+        SculkHorde.LOGGER.info("ModSavedData | Initialed All Systems Successfully.");
     }
 
     /**
