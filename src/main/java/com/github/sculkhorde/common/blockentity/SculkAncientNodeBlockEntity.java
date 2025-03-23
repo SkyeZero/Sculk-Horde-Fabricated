@@ -2,7 +2,6 @@ package com.github.sculkhorde.common.blockentity;
 
 import com.github.sculkhorde.common.advancement.SculkHordeStartTrigger;
 import com.github.sculkhorde.common.block.SculkAncientNodeBlock;
-import com.github.sculkhorde.common.entity.SculkPhantomEntity;
 import com.github.sculkhorde.common.entity.SculkSporeSpewerEntity;
 import com.github.sculkhorde.common.entity.infection.AncientNodePurificationHandler;
 import com.github.sculkhorde.core.*;
@@ -310,6 +309,7 @@ public class SculkAncientNodeBlockEntity extends BlockEntity implements GameEven
             phantomEvent.setEventLocation(blockPos);
             phantomEvent.setEventReocurring(true);
             phantomEvent.setEXECUTION_COOLDOWN(TickUnits.convertHoursToTicks(1));
+            blockEntity.phantomEventUUID = phantomEvent.getEventUUID();
             SculkHorde.eventSystem.addEvent(phantomEvent);
         }
 
@@ -361,24 +361,6 @@ public class SculkAncientNodeBlockEntity extends BlockEntity implements GameEven
                 );
     }
 
-    private static void spawnSculkPhantomsAtTopOfWorld(SculkAncientNodeBlockEntity blockEntity, int amount)
-    {
-        ServerLevel level = (ServerLevel) blockEntity.level;
-        int spawnRange = 100;
-        int minimumSpawnRange = 50;
-        Random rng = new Random();
-        for(int i = 0; i < amount; i++)
-        {
-            int x = minimumSpawnRange + rng.nextInt(spawnRange) - (spawnRange/2);
-            int z = minimumSpawnRange + rng.nextInt(spawnRange) - (spawnRange/2);
-            int y = level.getMaxBuildHeight();
-            BlockPos spawnPosition = new BlockPos(blockEntity.getBlockPos().getX() + x, y, blockEntity.getBlockPos().getZ() + z);
-
-            SculkPhantomEntity.spawnPhantom(level, spawnPosition, true);
-
-        }
-    }
-
     public static void announceToAllPlayers(ServerLevel level, Component message)
     {
         level.players().forEach((player) -> player.displayClientMessage(message, false));
@@ -428,10 +410,6 @@ public class SculkAncientNodeBlockEntity extends BlockEntity implements GameEven
         }
 
         level.players().forEach((player) -> level.playSound(null, player.blockPosition(), ModSounds.HORDE_START_SOUND.get(), SoundSource.AMBIENT, 1.0F, 1.0F));
-
-		if (ModConfig.SERVER.should_ancient_node_spawn_phantoms.get()) {
-        	spawnSculkPhantomsAtTopOfWorld(blockEntity, 10);
-        }
     }
 
     // Data
@@ -458,7 +436,11 @@ public class SculkAncientNodeBlockEntity extends BlockEntity implements GameEven
         VibrationSystem.Data.CODEC.encodeStart(NbtOps.INSTANCE, this.vibrationData).resultOrPartial(SculkHorde.LOGGER::error).ifPresent((p_222871_) -> {
             nbt.put("listener", p_222871_);
         });
-        nbt.putUUID(phantomEventUUIDIdentifier, phantomEventUUID);
+
+        if(phantomEventUUID != null)
+        {
+            nbt.putUUID(phantomEventUUIDIdentifier, phantomEventUUID);
+        }
     }
 
     // Vibration System

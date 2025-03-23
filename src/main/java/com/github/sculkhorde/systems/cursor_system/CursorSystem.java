@@ -11,7 +11,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.server.ServerLifecycleHooks;
 
 import java.util.ArrayList;
 import java.util.Optional;
@@ -21,8 +20,8 @@ public class CursorSystem {
 
     // Virtual Cursors Variables ---------------------------------------------------------------------------------------
 
-    long INITIAL_WAIT_TIME_AFTER_SERVER_STARTUP = TickUnits.convertMinutesToTicks(1);
-    long timeOfServerStartup = 0;
+    protected static final long INITIAL_WAIT_TIME_AFTER_SERVER_STARTUP = TickUnits.convertMinutesToTicks(1);
+    public long ticksSinceStartUp = 0;
 
     SortedVirtualCursorList performanceExemptCursors = new SortedVirtualCursorList();
     SortedVirtualCursorList virtualCursors = new SortedVirtualCursorList();
@@ -143,6 +142,7 @@ public class CursorSystem {
     {
         VirtualSurfaceInfestorCursor cursor = new VirtualSurfaceInfestorCursor(level);
         cursor.moveTo(pos.getX(), pos.getY(), pos.getZ());
+        cursor.setImmuneFromPerformanceSystem(true);
         SculkHorde.cursorSystem.addPerformanceExemptVirtualCursor(cursor);
         return cursor;
     }
@@ -238,20 +238,15 @@ public class CursorSystem {
      */
     public void serverTick()
     {
-        if(timeOfServerStartup == 0)
-        {
-            timeOfServerStartup = ServerLifecycleHooks.getCurrentServer().overworld().getGameTime();
-            return;
-        }
-
         /*  The reason we wait a minute after the server starts is due to a weird issue I experienced when developing the
             virtual cursor system. For some reason, the game will randomly stall upon generating a world at around 99%.
             Pausing this system for a minute seems to have resolved this issue.
          */
-        if(Math.abs(ServerLifecycleHooks.getCurrentServer().overworld().getGameTime() - timeOfServerStartup) < INITIAL_WAIT_TIME_AFTER_SERVER_STARTUP)
+        if(ticksSinceStartUp < INITIAL_WAIT_TIME_AFTER_SERVER_STARTUP)
         {
             performanceExemptCursors.clean();
             virtualCursors.clean();
+            ticksSinceStartUp += 1;
             return;
         }
 

@@ -49,6 +49,10 @@ public final class AdvancementUtil {
 
     public static void advancementHandlingTick(ServerLevel level)
     {
+        if(SculkHorde.gravemind == null)
+        {
+            return;
+        }
 
         // If Immature, give all players advancement
         if(SculkHorde.gravemind.getEvolutionState().ordinal() >= Gravemind.evolution_states.Immature.ordinal())

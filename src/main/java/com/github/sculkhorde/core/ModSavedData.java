@@ -3,6 +3,12 @@ package com.github.sculkhorde.core;
 import com.github.sculkhorde.common.block.SculkBeeNestBlock;
 import com.github.sculkhorde.common.blockentity.SculkNodeBlockEntity;
 import com.github.sculkhorde.misc.StatisticsData;
+import com.github.sculkhorde.systems.AutoPerformanceSystem;
+import com.github.sculkhorde.systems.BeeNestActivitySystem;
+import com.github.sculkhorde.systems.DebugSlimeSystem;
+import com.github.sculkhorde.systems.SculkNodesSystem;
+import com.github.sculkhorde.systems.chunk_cursor_system.ChunkInfestationSystem;
+import com.github.sculkhorde.systems.cursor_system.CursorSystem;
 import com.github.sculkhorde.systems.event_system.EventSystem;
 import com.github.sculkhorde.systems.gravemind_system.Gravemind;
 import com.github.sculkhorde.systems.raid_system.RaidData;
@@ -10,6 +16,7 @@ import com.github.sculkhorde.systems.raid_system.RaidHandler;
 import com.github.sculkhorde.util.BlockAlgorithms;
 import com.github.sculkhorde.util.ChunkLoading.BlockEntityChunkLoaderHelper;
 import com.github.sculkhorde.util.ChunkLoading.EntityChunkLoaderHelper;
+import com.github.sculkhorde.util.DeathAreaInvestigator;
 import com.github.sculkhorde.util.EntityAlgorithms;
 import com.github.sculkhorde.util.TickUnits;
 import net.minecraft.core.BlockPos;
@@ -98,6 +105,102 @@ public class ModSavedData extends SavedData {
 
     }
 
+    protected static void initializeSystems()
+    {
+        SculkHorde.LOGGER.info("onWorldLoad | Initializing All Systems.");
+
+        SculkHorde.LOGGER.info("onWorldLoad | Initializing Gravemind.");
+        SculkHorde.gravemind = new Gravemind();
+        SculkHorde.LOGGER.info("onWorldLoad | Initialized Gravemind Successfully.");
+
+
+
+        SculkHorde.LOGGER.info("onWorldLoad | Initializing debugSlimeSystem.");
+        SculkHorde.debugSlimeSystem = new DebugSlimeSystem();
+        SculkHorde.LOGGER.info("onWorldLoad | Initialized debugSlimeSystem Successfully.");
+
+
+
+        SculkHorde.LOGGER.info("onWorldLoad | Initializing deathAreaInvestigator.");
+        SculkHorde.deathAreaInvestigator = new DeathAreaInvestigator();
+        SculkHorde.LOGGER.info("onWorldLoad | Initialized deathAreaInvestigator.");
+
+
+
+        SculkHorde.LOGGER.info("onWorldLoad | Initializing raidHandler.");
+        SculkHorde.raidHandler = new RaidHandler();
+        SculkHorde.LOGGER.info("onWorldLoad | Initialized raidHandler Successfully.");
+
+
+
+        SculkHorde.LOGGER.info("onWorldLoad | Initializing sculkNodesSystem.");
+        SculkHorde.sculkNodesSystem = new SculkNodesSystem();
+        SculkHorde.LOGGER.info("onWorldLoad | Initialized sculkNodesSystem Successfully.");
+
+
+
+        SculkHorde.LOGGER.info("onWorldLoad | Initializing entityChunkLoaderHelper.");
+        SculkHorde.entityChunkLoaderHelper = new EntityChunkLoaderHelper();
+        SculkHorde.LOGGER.info("onWorldLoad | Initialized entityChunkLoaderHelper Successfully.");
+
+
+
+        SculkHorde.LOGGER.info("onWorldLoad | Initializing blockEntityChunkLoaderHelper.");
+        SculkHorde.blockEntityChunkLoaderHelper = new BlockEntityChunkLoaderHelper();
+        SculkHorde.LOGGER.info("onWorldLoad | Initialized blockEntityChunkLoaderHelper Successfully.");
+
+
+
+        SculkHorde.LOGGER.info("onWorldLoad | Initializing eventSystem.");
+        SculkHorde.eventSystem = new EventSystem();
+        SculkHorde.LOGGER.info("onWorldLoad | Initialized eventSystem Successfully.");
+
+
+
+        SculkHorde.LOGGER.info("onWorldLoad | Initializing beeNestActivitySystem.");
+        SculkHorde.beeNestActivitySystem = new BeeNestActivitySystem();
+        SculkHorde.LOGGER.info("onWorldLoad | Initialized beeNestActivitySystem Successfully.");
+
+
+
+        SculkHorde.LOGGER.info("onWorldLoad | Initializing autoPerformanceSystem.");
+        SculkHorde.autoPerformanceSystem = new AutoPerformanceSystem();
+        SculkHorde.LOGGER.info("onWorldLoad | Initialized autoPerformanceSystem Successfully.");
+
+
+
+        SculkHorde.LOGGER.info("onWorldLoad | Initializing chunkInfestationSystem.");
+        SculkHorde.chunkInfestationSystem = new ChunkInfestationSystem();
+        SculkHorde.LOGGER.info("onWorldLoad | Initialized chunkInfestationSystem Successfully.");
+
+
+
+        SculkHorde.LOGGER.info("onWorldLoad | Initializing CursorSystem.");
+        SculkHorde.cursorSystem = new CursorSystem();
+        SculkHorde.LOGGER.info("onWorldLoad | Initialized CursorSystem Successfully.");
+
+
+        SculkHorde.LOGGER.info("onWorldLoad | Loading list of items cursors can eat.");
+        ModConfig.SERVER.loadItemsInfectionCursorsCanEat();
+        SculkHorde.LOGGER.info("onWorldLoad | Loaded list of items cursors can eat Successfully.");
+        SculkHorde.LOGGER.info("onWorldLoad | Loading list of configured infestable blocks.");
+        ModConfig.SERVER.loadConfiguredInfestableBlocks();
+        SculkHorde.LOGGER.info("onWorldLoad | Loaded list of configured infestable blocks Successfully.");
+
+        if(ModConfig.SERVER.purification_speed_multiplier.get() <= 0)
+        {
+            ModConfig.SERVER.purification_speed_multiplier.set(1.0);
+            SculkHorde.LOGGER.info("onWorldLoad | Detected configured purification speed below 0. Resetting to 1.0");
+        }
+
+        if(ModConfig.SERVER.infection_speed_multiplier.get() <= 0)
+        {
+            ModConfig.SERVER.infection_speed_multiplier.set(1.0);
+            SculkHorde.LOGGER.info("onWorldLoad | Detected configured infestation speed below 0. Resetting to 1.0");
+        }
+        SculkHorde.LOGGER.info("onWorldLoad | Initialed All Systems Successfully.");
+    }
+
     /**
      * This method gets called every time the world loads data from memory.
      * We extract data from the memory and store it in variables.
@@ -105,6 +208,8 @@ public class ModSavedData extends SavedData {
      * @param nbt The memory where data is stored
      */
     public static ModSavedData load(CompoundTag nbt) {
+
+        initializeSystems();
 
         CompoundTag gravemindData = nbt.getCompound("gravemindData");
 
@@ -117,57 +222,88 @@ public class ModSavedData extends SavedData {
         savedData.getAreasOfInterestEntries().clear();
 
         savedData.setHordeState(HordeState.values()[nbt.getInt("hordeState")]);
+        SculkHorde.LOGGER.info("ModSavedData | Loaded Horde State.");
         savedData.setSculkAccumulatedMass(nbt.getInt(sculkAccumulatedMassIdentifier));
+        SculkHorde.LOGGER.info("ModSavedData | Loaded Accumulated Mass.");
         savedData.setNoNodeSpawningTicksElapsed(nbt.getInt(ticksSinceSculkNodeDestructionIdentifier));
+        SculkHorde.LOGGER.info("ModSavedData | Loaded No Node Spawning Ticks Elapsed.");
 
         savedData.setTicksSinceLastRaid(nbt.getInt(ticksSinceLastRaidIdentifier));
+        SculkHorde.LOGGER.info("ModSavedData | Loaded Ticks SInce Last Raid.");
 
         SculkHorde.setDebugMode(nbt.getBoolean(debugModeIdentifier));
+        SculkHorde.LOGGER.info("ModSavedData | Loaded Debug Mode State.");
 
+        SculkHorde.LOGGER.info("ModSavedData | Loading Node Entries.");
         for (int i = 0; gravemindData.contains("node_entry" + i); i++) {
             savedData.getNodeEntries().add(NodeEntry.serialize(gravemindData.getCompound("node_entry" + i)));
         }
+        SculkHorde.LOGGER.info("ModSavedData | Loaded Node Entries Successfully.");
 
+        SculkHorde.LOGGER.info("ModSavedData | Loading BeeNest Entries.");
         for (int i = 0; gravemindData.contains("bee_nest_entry" + i); i++) {
             savedData.getBeeNestEntries().add(BeeNestEntry.serialize(gravemindData.getCompound("bee_nest_entry" + i)));
         }
+        SculkHorde.LOGGER.info("ModSavedData | Loaded BeeNest Entries Successfully.");
 
+        SculkHorde.LOGGER.info("ModSavedData | Loading Hostile Entries.");
         for (int i = 0; gravemindData.contains("hostile_entry" + i); i++) {
             HostileEntry hostileEntry = HostileEntry.serialize(gravemindData.getCompound("hostile_entry" + i));
             savedData.getHostileEntries().putIfAbsent(hostileEntry.identifier, hostileEntry);
         }
+        SculkHorde.LOGGER.info("ModSavedData | Loaded Hostile Entries Successfully.");
 
+        SculkHorde.LOGGER.info("ModSavedData | Loading Death Area Entries.");
         for (int i = 0; gravemindData.contains("death_area_entry" + i); i++) {
             savedData.getDeathAreaEntries().add(DeathAreaEntry.serialize(gravemindData.getCompound("death_area_entry" + i)));
         }
+        SculkHorde.LOGGER.info("ModSavedData | Loaded Death Area Entries Successfully.");
 
+        SculkHorde.LOGGER.info("ModSavedData | Loading AreaOfInterest Entries.");
         for (int i = 0; gravemindData.contains("area_of_interest_entry" + i); i++) {
             savedData.getAreasOfInterestEntries().add(AreaOfInterestEntry.serialize(gravemindData.getCompound("area_of_interest_entry" + i)));
         }
+        SculkHorde.LOGGER.info("ModSavedData | Loaded AreaOfInterest Entries Successfully.");
 
+        SculkHorde.LOGGER.info("ModSavedData | Loading NoRaidZone Entries.");
         for(int i = 0; gravemindData.contains("no_raid_zone_entry" + i); i++) {
             savedData.getNoRaidZoneEntries().add(NoRaidZoneEntry.serialize(gravemindData.getCompound("no_raid_zone_entry" + i)));
         }
+        SculkHorde.LOGGER.info("ModSavedData | Loaded NoRaidZone Entries Successfully.");
 
+        SculkHorde.LOGGER.info("ModSavedData | Loading PlayerProfile Entries.");
         for(int i = 0; gravemindData.contains("player_profile_entry" + i); i++) {
             savedData.getPlayerProfileEntries().add(PlayerProfileEntry.serialize(gravemindData.getCompound("player_profile_entry" + i)));
         }
+        SculkHorde.LOGGER.info("ModSavedData | Loaded PlayerProfile Entries Successfully.");
 
+        SculkHorde.LOGGER.info("ModSavedData | Loading raidData.");
         if(RaidHandler.raidData == null)
         {
             RaidHandler.raidData = new RaidData();
         }
+        RaidData.load(nbt);
+        SculkHorde.LOGGER.info("ModSavedData | Loaded raidData Successfully.");
 
+        SculkHorde.LOGGER.info("ModSavedData | Loading statisticsData.");
         if(SculkHorde.statisticsData == null)
         {
             SculkHorde.statisticsData = new StatisticsData();
         }
-
         StatisticsData.load(nbt);
-        RaidData.load(nbt);
+        SculkHorde.LOGGER.info("ModSavedData | Loaded statisticsData Successfully.");
+
+        SculkHorde.LOGGER.info("ModSavedData | Loading BlockEntityChunkLoaderHelper Data.");
         BlockEntityChunkLoaderHelper.load(nbt);
+        SculkHorde.LOGGER.info("ModSavedData | Loaded BlockEntityChunkLoaderHelper Data Successfully.");
+
+        SculkHorde.LOGGER.info("ModSavedData | Loading EntityChunkLoaderHelper Data.");
         EntityChunkLoaderHelper.load(nbt);
+        SculkHorde.LOGGER.info("ModSavedData | Loaded BlockEntityChunkLoaderHelper Data Successfully.");
+
+        SculkHorde.LOGGER.info("ModSavedData | Loading EventSystem Data.");
         EventSystem.load(nbt);
+        SculkHorde.LOGGER.info("ModSavedData | Loaded EventSystem Data Successfully.");
 
         return savedData;
 

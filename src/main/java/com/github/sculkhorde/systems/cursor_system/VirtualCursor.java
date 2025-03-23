@@ -78,6 +78,8 @@ public class VirtualCursor implements ICursor{
     protected int PARTICLE_SPAWN_COOLDOWN = TickUnits.convertSecondsToTicks(2);
     protected int ticksSinceLastParticleSpawn = PARTICLE_SPAWN_COOLDOWN;
 
+    protected boolean isImmuneFromPerformanceSystem = false;
+
 
     public VirtualCursor(Level level) {
         this.level = level;
@@ -144,6 +146,8 @@ public class VirtualCursor implements ICursor{
     {
         this.state = state;
     }
+
+    public void setImmuneFromPerformanceSystem(boolean value) { isImmuneFromPerformanceSystem = value; }
 
 
     /**
@@ -501,7 +505,8 @@ public class VirtualCursor implements ICursor{
 
         if(debugSlime.blockPosition() != getBlockPosition())
         {
-            debugSlime.setPos(getBlockPosition().getCenter().x,
+            // Was Set Pos
+            debugSlime.moveTo(getBlockPosition().getCenter().x,
                     getBlockPosition().getCenter().y,
                     getBlockPosition().getCenter().z);
         }
@@ -535,14 +540,13 @@ public class VirtualCursor implements ICursor{
     protected void chanceToThanosSnapThisCursor()
     {
         if(getLevel().isClientSide()) { return; }
+        if(isImmuneFromPerformanceSystem) { return; }
+        if(!SculkHorde.autoPerformanceSystem.isThanosSnappingCursors()) { return; }
 
-        if(SculkHorde.autoPerformanceSystem.isThanosSnappingCursors())
+        ServerLevel serverLevel = (ServerLevel) getLevel();
+        if(serverLevel.random.nextBoolean())
         {
-            ServerLevel serverLevel = (ServerLevel) getLevel();
-            if(serverLevel.random.nextBoolean())
-            {
-                setMaxTransformations(0);
-            }
+            setMaxTransformations(0);
         }
     }
 }

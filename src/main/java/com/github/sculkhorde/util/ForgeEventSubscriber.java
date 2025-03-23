@@ -4,19 +4,6 @@ import com.github.sculkhorde.common.advancement.ContributeTrigger;
 import com.github.sculkhorde.common.block.FleshyCompostBlock;
 import com.github.sculkhorde.common.effect.SculkBurrowedEffect;
 import com.github.sculkhorde.core.*;
-import com.github.sculkhorde.misc.StatisticsData;
-import com.github.sculkhorde.systems.AutoPerformanceSystem;
-import com.github.sculkhorde.systems.BeeNestActivitySystem;
-import com.github.sculkhorde.systems.DebugSlimeSystem;
-import com.github.sculkhorde.systems.SculkNodesSystem;
-import com.github.sculkhorde.systems.chunk_cursor_system.ChunkInfestationSystem;
-import com.github.sculkhorde.systems.cursor_system.CursorSystem;
-import com.github.sculkhorde.systems.event_system.EventSystem;
-import com.github.sculkhorde.systems.gravemind_system.Gravemind;
-import com.github.sculkhorde.systems.raid_system.RaidHandler;
-import com.github.sculkhorde.util.ChunkLoading.BlockEntityChunkLoaderHelper;
-import com.github.sculkhorde.util.ChunkLoading.EntityChunkLoaderHelper;
-import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -57,23 +44,98 @@ public class ForgeEventSubscriber {
     public static void onWorldLoad(LevelEvent.Load event)
     {
         //Initalize Gravemind
+
+        // Check if chunk 0,0 is loaded. If not, load it.
+        if(!event.getLevel().getChunkSource().hasChunk(0,0))
+        {
+            SculkHorde.LOGGER.info("onWorldLoad | Loading Chunk Area at Spawn.");
+            //BlockEntityChunkLoaderHelper.getChunkLoaderHelper().createChunkLoadRequestSquare(((ServerLevel)event.getLevel()), BlockPos.ZERO, 5, 0, TickUnits.convertMinutesToTicks(10));
+            SculkHorde.LOGGER.info("onWorldLoad | Loaded Chunk Area at Spawn.");
+        }
+
+        /*
         if(!event.getLevel().isClientSide() && event.getLevel().equals(ServerLifecycleHooks.getCurrentServer().overworld()))
         {
-            if(SculkHorde.statisticsData == null) { SculkHorde.statisticsData = new StatisticsData(); }// Keep this above "ModSavedData.getSaveData()". Otherwise, stats won't be loaded correctly.
-            if(SculkHorde.gravemind == null) { SculkHorde.gravemind = new Gravemind(); } //Initialize Gravemind
-            if(SculkHorde.debugSlimeSystem == null) { SculkHorde.debugSlimeSystem = new DebugSlimeSystem(); }
-            if(SculkHorde.deathAreaInvestigator == null) { SculkHorde.deathAreaInvestigator = new DeathAreaInvestigator(); } //Initialize Death Area Investigator
-            if(SculkHorde.raidHandler == null) { SculkHorde.raidHandler = new RaidHandler((ServerLevel) event.getLevel());}
-            if(SculkHorde.sculkNodesSystem == null) { SculkHorde.sculkNodesSystem = new SculkNodesSystem(); }
-            if(SculkHorde.entityChunkLoaderHelper == null) { SculkHorde.entityChunkLoaderHelper = new EntityChunkLoaderHelper(); }
-            if(SculkHorde.blockEntityChunkLoaderHelper == null) { SculkHorde.blockEntityChunkLoaderHelper = new BlockEntityChunkLoaderHelper(); }
-            if(SculkHorde.eventSystem == null) { SculkHorde.eventSystem = new EventSystem(); }
-            if(SculkHorde.beeNestActivitySystem == null) { SculkHorde.beeNestActivitySystem = new BeeNestActivitySystem(); }
-            if(SculkHorde.autoPerformanceSystem == null) { SculkHorde.autoPerformanceSystem = new AutoPerformanceSystem(); }
-            if(SculkHorde.chunkInfestationSystem == null) { SculkHorde.chunkInfestationSystem = new ChunkInfestationSystem(); }
-            if(SculkHorde.cursorSystem == null) { SculkHorde.cursorSystem = new CursorSystem(); }
+            SculkHorde.LOGGER.info("onWorldLoad | Initializing All Systems.");
+
+            if(SculkHorde.gravemind == null) {
+                SculkHorde.LOGGER.info("onWorldLoad | Initializing Gravemind.");
+                SculkHorde.gravemind = new Gravemind();
+                SculkHorde.LOGGER.info("onWorldLoad | Initialized Gravemind Successfully.");
+            }
+
+            if(SculkHorde.debugSlimeSystem == null) {
+                SculkHorde.LOGGER.info("onWorldLoad | Initializing debugSlimeSystem.");
+                SculkHorde.debugSlimeSystem = new DebugSlimeSystem();
+                SculkHorde.LOGGER.info("onWorldLoad | Initialized debugSlimeSystem Successfully.");
+            }
+
+            if(SculkHorde.deathAreaInvestigator == null) {
+                SculkHorde.LOGGER.info("onWorldLoad | Initializing deathAreaInvestigator.");
+                SculkHorde.deathAreaInvestigator = new DeathAreaInvestigator();
+                SculkHorde.LOGGER.info("onWorldLoad | Initialized deathAreaInvestigator.");
+            }
+
+            if(SculkHorde.raidHandler == null) {
+                SculkHorde.LOGGER.info("onWorldLoad | Initializing raidHandler.");
+                SculkHorde.raidHandler = new RaidHandler((ServerLevel) event.getLevel());
+                SculkHorde.LOGGER.info("onWorldLoad | Initialized raidHandler Successfully.");
+            }
+
+            if(SculkHorde.sculkNodesSystem == null) {
+                SculkHorde.LOGGER.info("onWorldLoad | Initializing sculkNodesSystem.");
+                SculkHorde.sculkNodesSystem = new SculkNodesSystem();
+                SculkHorde.LOGGER.info("onWorldLoad | Initialized sculkNodesSystem Successfully.");
+            }
+
+            if(SculkHorde.entityChunkLoaderHelper == null) {
+                SculkHorde.LOGGER.info("onWorldLoad | Initializing entityChunkLoaderHelper.");
+                SculkHorde.entityChunkLoaderHelper = new EntityChunkLoaderHelper();
+                SculkHorde.LOGGER.info("onWorldLoad | Initialized entityChunkLoaderHelper Successfully.");
+            }
+
+            if(SculkHorde.blockEntityChunkLoaderHelper == null) {
+                SculkHorde.LOGGER.info("onWorldLoad | Initializing blockEntityChunkLoaderHelper.");
+                SculkHorde.blockEntityChunkLoaderHelper = new BlockEntityChunkLoaderHelper();
+                SculkHorde.LOGGER.info("onWorldLoad | Initialized blockEntityChunkLoaderHelper Successfully.");
+            }
+
+            if(SculkHorde.eventSystem == null) {
+                SculkHorde.LOGGER.info("onWorldLoad | Initializing eventSystem.");
+                SculkHorde.eventSystem = new EventSystem();
+                SculkHorde.LOGGER.info("onWorldLoad | Initialized eventSystem Successfully.");
+            }
+
+            if(SculkHorde.beeNestActivitySystem == null) {
+                SculkHorde.LOGGER.info("onWorldLoad | Initializing beeNestActivitySystem.");
+                SculkHorde.beeNestActivitySystem = new BeeNestActivitySystem();
+                SculkHorde.LOGGER.info("onWorldLoad | Initialized beeNestActivitySystem Successfully.");
+            }
+
+            if(SculkHorde.autoPerformanceSystem == null) {
+                SculkHorde.LOGGER.info("onWorldLoad | Initializing autoPerformanceSystem.");
+                SculkHorde.autoPerformanceSystem = new AutoPerformanceSystem();
+                SculkHorde.LOGGER.info("onWorldLoad | Initialized autoPerformanceSystem Successfully.");
+            }
+
+            if(SculkHorde.chunkInfestationSystem == null) {
+                SculkHorde.LOGGER.info("onWorldLoad | Initializing chunkInfestationSystem.");
+                SculkHorde.chunkInfestationSystem = new ChunkInfestationSystem();
+                SculkHorde.LOGGER.info("onWorldLoad | Initialized chunkInfestationSystem Successfully.");
+            }
+
+            if(SculkHorde.cursorSystem == null) {
+                SculkHorde.LOGGER.info("onWorldLoad | Initializing CursorSystem.");
+                SculkHorde.cursorSystem = new CursorSystem();
+                SculkHorde.LOGGER.info("onWorldLoad | Initialized CursorSystem Successfully.");
+            }
+
+            SculkHorde.LOGGER.info("onWorldLoad | Loading list of items cursors can eat.");
             ModConfig.SERVER.loadItemsInfectionCursorsCanEat();
+            SculkHorde.LOGGER.info("onWorldLoad | Loaded list of items cursors can eat Successfully.");
+            SculkHorde.LOGGER.info("onWorldLoad | Loading list of configured infestable blocks.");
             ModConfig.SERVER.loadConfiguredInfestableBlocks();
+            SculkHorde.LOGGER.info("onWorldLoad | Loaded list of configured infestable blocks Successfully.");
 
             time_save_point = 0; //Used to track time passage.
             sculkMassCheck = 0; //Used to track changes in sculk mass
@@ -81,20 +143,26 @@ public class ForgeEventSubscriber {
             // Check if chunk 0,0 is loaded. If not, load it.
             if(!event.getLevel().getChunkSource().hasChunk(0,0))
             {
+                SculkHorde.LOGGER.info("onWorldLoad | Loading Chunk Area at Spawn.");
                 BlockEntityChunkLoaderHelper.getChunkLoaderHelper().createChunkLoadRequestSquare(((ServerLevel)event.getLevel()), BlockPos.ZERO, 5, 0, TickUnits.convertMinutesToTicks(10));
+                SculkHorde.LOGGER.info("onWorldLoad | Loaded Chunk Area at Spawn.");
             }
 
             if(ModConfig.SERVER.purification_speed_multiplier.get() <= 0)
             {
                 ModConfig.SERVER.purification_speed_multiplier.set(1.0);
+                SculkHorde.LOGGER.info("onWorldLoad | Detected configured purification speed below 0. Resetting to 1.0");
             }
 
             if(ModConfig.SERVER.infection_speed_multiplier.get() <= 0)
             {
                 ModConfig.SERVER.infection_speed_multiplier.set(1.0);
+                SculkHorde.LOGGER.info("onWorldLoad | Detected configured infestation speed below 0. Resetting to 1.0");
             }
-
+            SculkHorde.LOGGER.info("onWorldLoad | Initialed All Systems Successfully.");
         }
+
+         */
     }
 
     /**
@@ -293,7 +361,10 @@ public class ForgeEventSubscriber {
     public static void onServerTick(TickEvent.ServerTickEvent event)
     {
         if (event.phase == TickEvent.Phase.START) {
-            SculkHorde.autoPerformanceSystem.onServerTick();
+            if(SculkHorde.autoPerformanceSystem != null)
+            {
+                SculkHorde.autoPerformanceSystem.onServerTick();
+            }
         }
     }
 

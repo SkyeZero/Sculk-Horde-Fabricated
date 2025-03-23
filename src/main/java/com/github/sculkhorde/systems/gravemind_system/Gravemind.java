@@ -50,7 +50,6 @@ public class Gravemind
     {
         evolution_state = evolution_states.Undeveloped;
         entityFactory = SculkHorde.entityFactory;
-        calulateCurrentState();
     }
 
     public evolution_states getEvolutionState()

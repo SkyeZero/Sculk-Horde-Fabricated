@@ -67,10 +67,9 @@ public class RaidHandler {
         FAILED_TO_LOAD_CHUNKS
     }
 
-    public RaidHandler(ServerLevel levelIn)
+    public RaidHandler()
     {
         if(raidData == null) { raidData = new RaidData(); }
-        raidData.setDimension(levelIn.dimension());
     }
 
     // Getters and Setters
