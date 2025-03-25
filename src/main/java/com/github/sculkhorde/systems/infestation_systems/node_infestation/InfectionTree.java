@@ -94,16 +94,17 @@ public class InfectionTree {
      * @param maxDistance The maximum distance the cursor can travel
      */
     public void createProbeCursor(int maxDistance) {
-        Optional<VirtualProberInfestorCursor> possibleCursor = Optional.empty();
+        BlockPos spawnPos = infectedTargetPosition == null ? root.getBlockPos() : infectedTargetPosition;
 
+        Optional<VirtualProberInfestorCursor> possibleCursor = Optional.empty();
         if(isPerformanceExempt)
         {
-            possibleCursor = Optional.of(CursorSystem.createPerformanceExemptProberVirtualCursor(world, infectedTargetPosition));
+            possibleCursor = Optional.of(CursorSystem.createPerformanceExemptProberVirtualCursor(world, spawnPos));
 
         }
         else
         {
-            possibleCursor = CursorSystem.createProberVirtualCursor(world, infectedTargetPosition);
+            possibleCursor = CursorSystem.createProberVirtualCursor(world, spawnPos);
         }
 
         if(possibleCursor.isEmpty())
@@ -123,16 +124,17 @@ public class InfectionTree {
      * @param maxInfections The maximum number of infections the cursor can perform
      */
     public void createInfectionCursor(int maxInfections) {
+        BlockPos spawnPos = infectedTargetPosition == null ? root.getBlockPos() : infectedTargetPosition;
         Optional<VirtualSurfaceInfestorCursor> possibleCursor = Optional.empty();
 
         if(isPerformanceExempt)
         {
-            possibleCursor = Optional.of(CursorSystem.createPerformanceExemptSurfaceInfestorVirtualCursor(world, infectedTargetPosition));
+            possibleCursor = Optional.of(CursorSystem.createPerformanceExemptSurfaceInfestorVirtualCursor(world, spawnPos));
 
         }
         else
         {
-            possibleCursor = CursorSystem.createSurfaceInfestorVirtualCursor(world, infectedTargetPosition);
+            possibleCursor = CursorSystem.createSurfaceInfestorVirtualCursor(world, spawnPos);
         }
 
         if(possibleCursor.isEmpty())
@@ -281,7 +283,7 @@ public class InfectionTree {
             this.blockPos = blockPos;
         }
 
-        public Object getBlockPos() {
+        public BlockPos getBlockPos() {
             return blockPos;
         }
 
