@@ -168,7 +168,7 @@ public class SculkAncientNodeBlockEntity extends BlockEntity implements GameEven
     {
         if(infectionHandler == null)
         {
-            infectionHandler = new NodeBranchingInfestationSystem(this, getBlockPos());
+            infectionHandler = new NodeBranchingInfestationSystem(this, getBlockPos(), true);
         }
     }
     private void initializePurificationHandler()
@@ -184,7 +184,7 @@ public class SculkAncientNodeBlockEntity extends BlockEntity implements GameEven
         level.players().forEach((player) -> {
             if(player.blockPosition().closerThan(blockPos, distance) && !player.isCreative() && !player.isInvulnerable() && !player.isSpectator() && !PlayerProfileHandler.isPlayerVessel(player))
             {
-                EntityAlgorithms.applyEffectToTarget(player, MobEffects.DARKNESS, TickUnits.convertMinutesToTicks(1), 0);
+                EntityAlgorithms.applyEffectToTarget(player, MobEffects.DARKNESS, TickUnits.convertHoursToTicks(1), 0);
             }
         });
     }
@@ -308,7 +308,7 @@ public class SculkAncientNodeBlockEntity extends BlockEntity implements GameEven
             SpawnPhantomsEvent phantomEvent = new SpawnPhantomsEvent(blockEntity.getLevel().dimension());
             phantomEvent.setEventLocation(blockPos);
             phantomEvent.setEventReocurring(true);
-            phantomEvent.setEXECUTION_COOLDOWN(TickUnits.convertHoursToTicks(1));
+            phantomEvent.setEXECUTION_COOLDOWN(TickUnits.convertMinutesToTicks(1));
             blockEntity.phantomEventUUID = phantomEvent.getEventUUID();
             SculkHorde.eventSystem.addEvent(phantomEvent);
         }

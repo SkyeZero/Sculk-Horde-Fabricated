@@ -83,7 +83,7 @@ public class SculkNodeBlockEntity extends BlockEntity
     {
         if(branchingInfestationHandler == null)
         {
-            branchingInfestationHandler = new NodeBranchingInfestationSystem(this, getBlockPos());
+            branchingInfestationHandler = new NodeBranchingInfestationSystem(this, getBlockPos(), false);
             branchingInfestationHandler.spawnOnSurface = false;
         }
     }

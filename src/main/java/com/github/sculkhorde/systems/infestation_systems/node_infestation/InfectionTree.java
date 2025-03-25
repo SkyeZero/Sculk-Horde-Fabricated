@@ -1,8 +1,8 @@
 package com.github.sculkhorde.systems.infestation_systems.node_infestation;
 
-import com.github.sculkhorde.common.entity.infection.CursorProberEntity;
 import com.github.sculkhorde.core.ModSavedData;
 import com.github.sculkhorde.systems.cursor_system.CursorSystem;
+import com.github.sculkhorde.systems.cursor_system.VirtualProberInfestorCursor;
 import com.github.sculkhorde.systems.cursor_system.VirtualSurfaceInfestorCursor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -11,43 +11,46 @@ import net.minecraft.server.level.ServerLevel;
 import java.util.Optional;
 
 public class InfectionTree {
-    private TreeNode root;
-    private boolean Active = false;
-    private final Direction direction;
-    private CursorProberEntity cursorProbe;
-    private VirtualSurfaceInfestorCursor cursorInfection;
-    private final ServerLevel world;
-    private state currentState = state.IDLE;
-    private enum state {
+    protected TreeNode root;
+    protected boolean Active = false;
+    protected final Direction direction;
+    protected VirtualProberInfestorCursor cursorProbe;
+    protected VirtualSurfaceInfestorCursor cursorInfection;
+    protected final ServerLevel world;
+    protected state currentState = state.IDLE;
+    protected enum state {
         IDLE,
         PROBING,
         INFECTION,
         COMPLETE
     }
 
-    private BlockPos potentialNodePosition = null;
-    private int failedProbeAttempts = 0;
-    private final int MAX_FAILED_PROBE_ATTEMPTS = 2;
-    private int currentProbeRange = 10;
-    private final int MAX_PROBE_RANGE = 5000;
-    private final int MIN_PROBE_RANGE = 10;
-    private final int PROBE_RANGE_INCREMENT = 50;
-    private final int MAX_INFECTOR_RANGE = 100;
-    private final int MIN_INFECTOR_RANGE = 10;
-    private final int MAX_INFECTOR_RANGE_INCREMENT = 10;
+    protected BlockPos potentialNodePosition = null;
+    protected int failedProbeAttempts = 0;
+    protected final int MAX_FAILED_PROBE_ATTEMPTS = 2;
+    protected int currentProbeRange = 10;
+    protected final int MAX_PROBE_RANGE = 5000;
+    protected final int MIN_PROBE_RANGE = 10;
+    protected final int PROBE_RANGE_INCREMENT = 50;
+    protected final int MAX_INFECTOR_RANGE = 100;
+    protected final int MIN_INFECTOR_RANGE = 10;
+    protected final int MAX_INFECTOR_RANGE_INCREMENT = 10;
 
-    private BlockPos infectedTargetPosition = null;
-    private int failedInfectionAttempts = 0;
-    private final int MAX_FAILED_INFECTION_ATTEMPTS = 10;
+    protected BlockPos infectedTargetPosition = null;
+    protected int failedInfectionAttempts = 0;
+    protected final int MAX_FAILED_INFECTION_ATTEMPTS = 10;
+
+    protected boolean isPerformanceExempt = false;
 
     /**
      * Creates a new binary tree with the given value.
      */
-    public InfectionTree(ServerLevel world, Direction direction, BlockPos rootPos)
+    public InfectionTree(ServerLevel world, Direction direction, BlockPos rootPos, boolean isPerformanceExempt)
     {
         this.root = new TreeNode(rootPos);
         this.direction = direction;
         this.world = world;
+        this.isPerformanceExempt = isPerformanceExempt;
     }
 
     // Getters and Setters
@@ -91,12 +94,28 @@ public class InfectionTree {
      * @param maxDistance The maximum distance the cursor can travel
      */
     public void createProbeCursor(int maxDistance) {
-        cursorProbe = new CursorProberEntity(world);
+        Optional<VirtualProberInfestorCursor> possibleCursor = Optional.empty();
+
+        if(isPerformanceExempt)
+        {
+            possibleCursor = Optional.of(CursorSystem.createPerformanceExemptProberVirtualCursor(world, infectedTargetPosition));
+
+        }
+        else
+        {
+            possibleCursor = CursorSystem.createProberVirtualCursor(world, infectedTargetPosition);
+        }
+
+        if(possibleCursor.isEmpty())
+        {
+            return;
+        }
+
+        cursorProbe = possibleCursor.get();
+        cursorProbe.moveTo(this.root.blockPos.getX(), this.root.blockPos.getY(), this.root.blockPos.getZ());
         cursorProbe.setMaxRange(maxDistance);
-        cursorProbe.setPreferedDirection(direction);
-        cursorProbe.setPos(this.root.blockPos.getX(), this.root.blockPos.getY(), this.root.blockPos.getZ());
+        //cursorProbe.setPreferedDirection(direction);
         cursorProbe.setMaxTransformations(1);
-        this.world.addFreshEntity(cursorProbe);
     }
 
     /**
@@ -104,7 +123,17 @@ public class InfectionTree {
      * @param maxInfections The maximum number of infections the cursor can perform
      */
     public void createInfectionCursor(int maxInfections) {
-        Optional<VirtualSurfaceInfestorCursor> possibleCursor = CursorSystem.createSurfaceInfestorVirtualCursor(world, infectedTargetPosition);
+        Optional<VirtualSurfaceInfestorCursor> possibleCursor = Optional.empty();
+
+        if(isPerformanceExempt)
+        {
+            possibleCursor = Optional.of(CursorSystem.createPerformanceExemptSurfaceInfestorVirtualCursor(world, infectedTargetPosition));
+
+        }
+        else
+        {
+            possibleCursor = CursorSystem.createSurfaceInfestorVirtualCursor(world, infectedTargetPosition);
+        }
 
         if(possibleCursor.isEmpty())
         {
@@ -164,15 +193,15 @@ public class InfectionTree {
                 return;
             }
             // If the probe is still active, wait for it to finish
-            else if(cursorProbe.isAlive())
+            else if(!cursorProbe.isFinished())
             {
                 return;
             }
 
             // If the probe is successful, record the findings
-            if(cursorProbe.currentTransformations > 0)
+            if(cursorProbe.isSuccessful())
             {
-                potentialNodePosition = cursorProbe.blockPosition();
+                potentialNodePosition = cursorProbe.getBlockPosition();
                 failedProbeAttempts = 0;
                 cursorProbe = null;
                 // Change State to Infection Mode
@@ -197,13 +226,13 @@ public class InfectionTree {
                 return;
             }
             // If the infection cursor is still active, wait for it to finish
-            else if(!cursorInfection.isSetToBeDeleted())
+            else if(!cursorInfection.isFinished())
             {
                 return;
             }
 
             // If the infection is successful, record the findings
-            if(cursorInfection.isSuccessfullyFinished())
+            if(cursorInfection.isSuccessful())
             {
                 failedInfectionAttempts = 0;
                 cursorInfection = null;
@@ -244,9 +273,9 @@ public class InfectionTree {
      * A node in a binary tree.
      */
     public class TreeNode {
-        private BlockPos blockPos;
-        private TreeNode left;
-        private TreeNode right;
+        protected BlockPos blockPos;
+        protected TreeNode left;
+        protected TreeNode right;
 
         public TreeNode(BlockPos blockPos) {
             this.blockPos = blockPos;

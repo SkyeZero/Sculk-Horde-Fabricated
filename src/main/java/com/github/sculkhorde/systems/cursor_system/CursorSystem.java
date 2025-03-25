@@ -143,6 +143,29 @@ public class CursorSystem {
         return cursor;
     }
 
+    public static VirtualProberInfestorCursor createPerformanceExemptProberVirtualCursor(Level level, BlockPos pos)
+    {
+        VirtualProberInfestorCursor cursor = new VirtualProberInfestorCursor(level);
+        cursor.moveTo(pos.getX(), pos.getY(), pos.getZ());
+        cursor.setImmuneFromPerformanceSystem(true);
+        SculkHorde.cursorSystem.addPerformanceExemptVirtualCursor(cursor);
+        return cursor;
+    }
+
+    public static Optional<VirtualProberInfestorCursor> createProberVirtualCursor(Level level, BlockPos pos)
+    {
+        if(SculkHorde.cursorSystem.isCursorPopulationAtMax())
+        {
+            return Optional.empty();
+        }
+
+        VirtualProberInfestorCursor cursor = new VirtualProberInfestorCursor(level);
+        cursor.moveTo(pos.getX(), pos.getY(), pos.getZ());
+        cursor.setImmuneFromPerformanceSystem(true);
+        SculkHorde.cursorSystem.addPerformanceExemptVirtualCursor(cursor);
+        return Optional.of(cursor);
+    }
+
     public void addPerformanceExemptVirtualCursor(ICursor entity)
     {
         if(performanceExemptCursors.getIndexOfCursor(entity).isEmpty())

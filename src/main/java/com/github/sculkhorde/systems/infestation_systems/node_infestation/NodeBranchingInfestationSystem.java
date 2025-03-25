@@ -13,50 +13,53 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 public class NodeBranchingInfestationSystem {
 
     // The parent tile entity
-    private BlockEntity parent = null;
-    private ServerLevel world = null;
-    private BlockPos origin = null;
+    protected BlockEntity parent = null;
+    protected ServerLevel world = null;
+    protected BlockPos origin = null;
 
     public boolean spawnOnSurface = true;
 
-    private final int CHECK_FOR_ACTIVATION_INTERVAL = TickUnits.convertMinutesToTicks(1);
-    private int timeRemainingUntilNextActivationCheck = CHECK_FOR_ACTIVATION_INTERVAL;
+    protected final int CHECK_FOR_ACTIVATION_INTERVAL = TickUnits.convertMinutesToTicks(1);
+    protected int timeRemainingUntilNextActivationCheck = CHECK_FOR_ACTIVATION_INTERVAL;
+    
+    protected boolean isPerformanceExempt = false;
 
-    private boolean isActive = false;
+    protected boolean isActive = false;
 
     // The infection trees
-    private InfectionTree northInfectionTree;
-    private InfectionTree southInfectionTree;
-    private InfectionTree eastInfectionTree;
-    private InfectionTree westInfectionTree;
-    private InfectionTree upInfectionTree;
-    private InfectionTree downInfectionTree;
+    protected InfectionTree northInfectionTree;
+    protected InfectionTree southInfectionTree;
+    protected InfectionTree eastInfectionTree;
+    protected InfectionTree westInfectionTree;
+    protected InfectionTree upInfectionTree;
+    protected InfectionTree downInfectionTree;
 
     protected int lastTimeSinceTick = 0;
     protected int TICK_COOLDOWN = TickUnits.convertSecondsToTicks(1);
 
 
-    public NodeBranchingInfestationSystem(BlockEntity parent, BlockPos origin) {
+    public NodeBranchingInfestationSystem(BlockEntity parent, BlockPos origin, boolean isPerformanceExempt) {
         this.parent = parent;
         this.world = (ServerLevel) parent.getLevel();
         this.origin = origin;
+        this.isPerformanceExempt = isPerformanceExempt;
 
-        northInfectionTree = new InfectionTree(world, Direction.NORTH, origin);
+        northInfectionTree = new InfectionTree(world, Direction.NORTH, origin, isPerformanceExempt);
         northInfectionTree.activate();
 
-        southInfectionTree = new InfectionTree(world, Direction.SOUTH, origin);
+        southInfectionTree = new InfectionTree(world, Direction.SOUTH, origin, isPerformanceExempt);
         southInfectionTree.activate();
 
-        eastInfectionTree = new InfectionTree(world, Direction.EAST, origin);
+        eastInfectionTree = new InfectionTree(world, Direction.EAST, origin, isPerformanceExempt);
         eastInfectionTree.activate();
 
-        westInfectionTree = new InfectionTree(world, Direction.WEST, origin);
+        westInfectionTree = new InfectionTree(world, Direction.WEST, origin, isPerformanceExempt);
         westInfectionTree.activate();
 
-        upInfectionTree = new InfectionTree(world, Direction.UP, origin);
+        upInfectionTree = new InfectionTree(world, Direction.UP, origin, isPerformanceExempt);
         upInfectionTree.activate();
 
-        downInfectionTree = new InfectionTree(world, Direction.DOWN, origin);
+        downInfectionTree = new InfectionTree(world, Direction.DOWN, origin, isPerformanceExempt);
         downInfectionTree.activate();
 
     }

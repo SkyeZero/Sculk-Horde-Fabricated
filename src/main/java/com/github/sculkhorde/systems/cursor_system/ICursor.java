@@ -12,7 +12,7 @@ public interface ICursor {
     {
         return UUID.randomUUID();
     }
-    boolean isSuccessfullyFinished();
+    boolean isFinished();
     void setToBeDeleted();
     boolean isSetToBeDeleted();
     void moveTo(double x, double y, double z);

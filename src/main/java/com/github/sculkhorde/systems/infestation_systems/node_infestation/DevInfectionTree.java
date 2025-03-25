@@ -200,7 +200,7 @@ public class DevInfectionTree {
             }
 
             // If the infection is successful, record the findings
-            if(cursorInfection.isSuccessfullyFinished())
+            if(cursorInfection.isFinished())
             {
                 failedInfectionAttempts = 0;
                 cursorInfection = null;

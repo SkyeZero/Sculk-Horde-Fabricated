@@ -92,7 +92,7 @@ public class VirtualCursor implements ICursor{
     }
 
     @Override
-    public boolean isSuccessfullyFinished()
+    public boolean isFinished()
     {
         return state == State.FINISHED;
     }
@@ -148,6 +148,16 @@ public class VirtualCursor implements ICursor{
     }
 
     public void setImmuneFromPerformanceSystem(boolean value) { isImmuneFromPerformanceSystem = value; }
+
+    public int getRemainingTransformations()
+    {
+        return currentTransformations;
+    }
+
+    public boolean isSuccessful()
+    {
+        return isSuccessful;
+    }
 
 
     /**
