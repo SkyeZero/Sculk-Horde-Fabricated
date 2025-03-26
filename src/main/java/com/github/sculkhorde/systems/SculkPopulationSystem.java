@@ -3,6 +3,7 @@ package com.github.sculkhorde.systems;
 import com.github.sculkhorde.common.entity.ISculkSmartEntity;
 import com.github.sculkhorde.common.entity.SculkBeeHarvesterEntity;
 import com.github.sculkhorde.common.entity.SculkPhantomCorpseEntity;
+import com.github.sculkhorde.common.entity.SculkPhantomEntity;
 import com.github.sculkhorde.core.ModSavedData;
 import com.github.sculkhorde.core.SculkHorde;
 import com.github.sculkhorde.util.EntityAlgorithms;
@@ -18,8 +19,10 @@ public class SculkPopulationSystem {
 
     Collection<ISculkSmartEntity> population = new ArrayList<>();
 
-    private long lastTimeOfPopulationRecount = 0;
-    private int populationRecountInterval = TickUnits.convertSecondsToTicks(30);
+    protected int scoutingPhantomsPopulation = 0;
+
+    protected long lastTimeOfPopulationRecount = 0;
+    protected int populationRecountInterval = TickUnits.convertSecondsToTicks(30);
 
     public SculkPopulationSystem()
     {
@@ -55,9 +58,25 @@ public class SculkPopulationSystem {
         return population.size() >= getMaxPopulation();
     }
 
+    public int getScoutingPhantomsPopulation()
+    {
+        return scoutingPhantomsPopulation;
+    }
+
+    public int getMaxScoutingPhantomsPopulation()
+    {
+        return 30;
+    }
+
+    public boolean isScoutingPhantomPopulationAtMax()
+    {
+        return getScoutingPhantomsPopulation() >= getMaxScoutingPhantomsPopulation();
+    }
+
     public void updatePopulationCollection()
     {
         population.clear();
+        scoutingPhantomsPopulation = 0;
 
         ServerLifecycleHooks.getCurrentServer().getAllLevels().forEach( level -> {
             Iterable<Entity> listOfEntities = level.getEntities().getAll();
@@ -77,6 +96,14 @@ public class SculkPopulationSystem {
                 if(entity instanceof SculkBeeHarvesterEntity || entity instanceof SculkPhantomCorpseEntity)
                 {
                     continue;
+                }
+
+                if(entity instanceof SculkPhantomEntity phantom)
+                {
+                    if(phantom.isScouter())
+                    {
+                        scoutingPhantomsPopulation += 1;
+                    }
                 }
 
                 population.add((ISculkSmartEntity) entity);

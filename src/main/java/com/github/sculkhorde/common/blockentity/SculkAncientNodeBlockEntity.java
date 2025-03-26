@@ -308,7 +308,7 @@ public class SculkAncientNodeBlockEntity extends BlockEntity implements GameEven
             SpawnPhantomsEvent phantomEvent = new SpawnPhantomsEvent(blockEntity.getLevel().dimension());
             phantomEvent.setEventLocation(blockPos);
             phantomEvent.setEventReocurring(true);
-            phantomEvent.setEXECUTION_COOLDOWN(TickUnits.convertMinutesToTicks(1));
+            phantomEvent.setEXECUTION_COOLDOWN(TickUnits.convertHoursToTicks(1));
             blockEntity.phantomEventUUID = phantomEvent.getEventUUID();
             SculkHorde.eventSystem.addEvent(phantomEvent);
         }

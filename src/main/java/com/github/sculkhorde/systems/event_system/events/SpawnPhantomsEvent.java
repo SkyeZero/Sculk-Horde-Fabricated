@@ -3,6 +3,7 @@ package com.github.sculkhorde.systems.event_system.events;
 
 import com.github.sculkhorde.common.entity.SculkPhantomEntity;
 import com.github.sculkhorde.core.ModConfig;
+import com.github.sculkhorde.core.SculkHorde;
 import com.github.sculkhorde.systems.event_system.Event;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
@@ -30,6 +31,17 @@ public class SpawnPhantomsEvent extends Event {
 
             SculkPhantomEntity.spawnPhantom(getDimension(), spawnPosition, true);
         }
+    }
+
+    @Override
+    public boolean canStart() {
+
+        if(SculkHorde.populationHandler.isScoutingPhantomPopulationAtMax())
+        {
+            return false;
+        }
+
+        return super.canStart();
     }
 
     @Override
