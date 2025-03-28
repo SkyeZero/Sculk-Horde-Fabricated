@@ -1,0 +1,18 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"test": {
+			"loop": true
+		},
+		"move.walk": {
+			"loop": true
+		},
+		"move.run": {
+			"loop": true
+		},
+		"misc.idle": {
+			"loop": true
+		}
+	},
+	"geckolib_format_version": 2
+}

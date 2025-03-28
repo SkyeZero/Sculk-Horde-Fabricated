@@ -210,6 +210,7 @@ public class ModCreativeModeTab {
                 event.accept(ModItems.SCULK_SQUID_SPAWN_EGG.get());
                 event.accept(ModItems.SCULK_PUFFERFISH_SPAWN_EGG.get());
                 event.accept(ModItems.SCULK_GUARDIAN_SPAWN_EGG.get());
+                event.accept(ModItems.SCULK_BROOD_HATCHER_SPAWN_EGG.get());
 
                 event.accept(ModItems.FERRISCITE.get());
                 event.accept(ModItems.FERRISCITE_PICKAXE.get());

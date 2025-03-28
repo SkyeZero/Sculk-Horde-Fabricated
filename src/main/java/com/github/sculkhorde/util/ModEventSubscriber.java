@@ -76,6 +76,7 @@ public class ModEventSubscriber {
         event.put(ModEntities.LIVING_ARMOR.get(), LivingArmorEntity.createAttributes().build());
         event.put(ModEntities.GOLEM_OF_WRATH.get(), GolemOfWrathEntity.createAttributes().build());
         event.put(ModEntities.SCULK_GUARDIAN.get(), SculkGuardianEntity.createAttributes().build());
+        event.put(ModEntities.SCULK_BROOD_HATCHER.get(), SculkBroodHatcherEntity.createAttributes().build());
     }
 }
 

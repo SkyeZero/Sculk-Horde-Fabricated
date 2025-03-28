@@ -67,8 +67,8 @@ public class ModEntities {
     public static final RegistryObject<EntityType<SculkSoulReaperEntity>> SCULK_SOUL_REAPER = registerMob("sculk_soul_reaper", SculkSoulReaperEntity::new, 0.9f, 1.9f, 0x000000, 0x000000);
     public static final RegistryObject<EntityType<SculkVexEntity>> SCULK_VEX = registerMob("sculk_vex", SculkVexEntity::new, 0.8f, 0.8f, 0x000000, 0x000000);
     public static final RegistryObject<EntityType<GolemOfWrathEntity>> GOLEM_OF_WRATH = registerMob("golem_of_wrath", GolemOfWrathEntity::new, 3f, 3f, 0x000000, 0x000000);
-
     public static final RegistryObject<EntityType<SculkGuardianEntity>> SCULK_GUARDIAN = registerMob("sculk_guardian", SculkGuardianEntity::new, 1f, 1f, 0x000000, 0x000000);
+    public static final RegistryObject<EntityType<SculkBroodHatcherEntity>> SCULK_BROOD_HATCHER = registerMob("sculk_brood_hatcher", SculkBroodHatcherEntity::new, 3f, 3f, 0x000000, 0x000000);
 
 
     public static final RegistryObject<EntityType<CursorProberEntity>> CURSOR_PROBER = ENTITY_TYPES.register("cursor_prober", () -> EntityType.Builder.<CursorProberEntity>of(CursorProberEntity::new, MobCategory.MISC).sized(1f, 1f).clientTrackingRange(4).updateInterval(10).build("cursor_prober"));
