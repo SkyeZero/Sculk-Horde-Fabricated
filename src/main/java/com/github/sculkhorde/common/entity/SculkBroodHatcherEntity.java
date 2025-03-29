@@ -35,8 +35,8 @@ public class SculkBroodHatcherEntity extends Monster implements GeoEntity, IScul
      * Edited {@link com.github.sculkhorde.core.ModEntities}<br>
      * Edited {@link com.github.sculkhorde.util.ModEventSubscriber}<br>
      * Edited {@link com.github.sculkhorde.client.ClientModEventSubscriber}<br>
-     * Added client/model/entity/ SculkZombieModel.java<br>
-     * Added client/renderer/entity/ SculkZombieRenderer.java
+     * Added {@link com.github.sculkhorde.client.model.enitity.SculkBroodHatcherModel}<br>
+     * Added {@link com.github.sculkhorde.client.renderer.entity.SculkBroodHatcherRenderer}
      */
 
     //The Health

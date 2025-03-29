@@ -20,7 +20,7 @@ import net.minecraftforge.event.entity.living.MobEffectEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SculkBurrowedEffect extends MobEffect {
+public class SculkBurrowedEffect extends MobEffect implements IPotionExpireEffect{
 
     public static int spawnInterval = 20;
     public static int liquidColor = 338997;
@@ -46,7 +46,8 @@ public class SculkBurrowedEffect extends MobEffect {
         this(effectType, liquidColor);
     }
 
-    public static void onPotionExpire(MobEffectEvent.Expired event)
+
+    public void onPotionExpire(MobEffectEvent.Expired event)
     {
         if(event.getEntity().level().isClientSide()) { return;}
 

@@ -2,7 +2,7 @@ package com.github.sculkhorde.util;
 
 import com.github.sculkhorde.common.advancement.ContributeTrigger;
 import com.github.sculkhorde.common.block.FleshyCompostBlock;
-import com.github.sculkhorde.common.effect.SculkBurrowedEffect;
+import com.github.sculkhorde.common.effect.IPotionExpireEffect;
 import com.github.sculkhorde.core.*;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -117,11 +117,10 @@ public class ForgeEventSubscriber {
             return;
         }
 
-        if(effectInstance.getEffect() == ModMobEffects.SCULK_INFECTION.get())
+        if(effectInstance.getEffect() instanceof IPotionExpireEffect iPotionExpireEffect)
         {
-            SculkBurrowedEffect.onPotionExpire(event);
+            iPotionExpireEffect.onPotionExpire(event);
         }
-
     }
 
     @SubscribeEvent
