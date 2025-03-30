@@ -51,7 +51,7 @@ public class ImprovedRandomStrollGoal extends Goal{
 
     public boolean canUse()
     {
-        if (this.mob.isVehicle() || ((ISculkSmartEntity)mob).isParticipatingInRaid())
+        if (this.mob.isVehicle() || ((ISculkSmartEntity)mob).isParticipatingInRaid() ||  mob.getTarget() != null)
         {
             return false;
         }

@@ -2,6 +2,7 @@ package com.github.sculkhorde.common.entity;
 
 import com.github.sculkhorde.common.entity.components.TargetParameters;
 import com.github.sculkhorde.common.entity.goal.*;
+import com.github.sculkhorde.core.ModMobEffects;
 import com.github.sculkhorde.core.ModSounds;
 import com.github.sculkhorde.util.SquadHandler;
 import com.github.sculkhorde.util.TickUnits;
@@ -9,18 +10,19 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.*;
-import net.minecraft.world.entity.animal.Pig;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.OpenDoorGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.constant.DefaultAnimations;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
@@ -44,7 +46,7 @@ public class SculkBroodHatcherEntity extends Monster implements GeoEntity, IScul
     //The armor of the mob
     public static final float ARMOR = 4F;
     //ATTACK_DAMAGE determines How much damage it's melee attacks do
-    public static final float ATTACK_DAMAGE = 3F;
+    public static final float ATTACK_DAMAGE = 5F;
     //ATTACK_KNOCKBACK determines the knockback a mob will take
     public static final float ATTACK_KNOCKBACK = 1F;
     //FOLLOW_RANGE determines how far away this mob can see and chase enemies
@@ -53,7 +55,7 @@ public class SculkBroodHatcherEntity extends Monster implements GeoEntity, IScul
     public static final float MOVEMENT_SPEED = 0.35F;
 
     // Controls what types of entities this mob can target
-    private TargetParameters TARGET_PARAMETERS = new TargetParameters(this).enableTargetHostiles().enableTargetInfected().enableMustReachTarget();
+    private TargetParameters TARGET_PARAMETERS = new TargetParameters(this).enableTargetPassives().enableTargetHostiles().enableMustReachTarget();
     private SquadHandler squad = new SquadHandler(this);
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
@@ -144,8 +146,8 @@ public class SculkBroodHatcherEntity extends Monster implements GeoEntity, IScul
     {
         Goal[] goals =
                 {
-                        new DespawnAfterTime(this, TickUnits.convertMinutesToTicks(5)),
-                        new DespawnWhenIdle(this, TickUnits.convertMinutesToTicks(2)),
+                        new DespawnAfterTime(this, TickUnits.convertMinutesToTicks(15)),
+                        new DespawnWhenIdle(this, TickUnits.convertMinutesToTicks(10)),
                         //SwimGoal(mob)
                         new FloatGoal(this),
                         new SquadHandlingGoal(this),
@@ -153,14 +155,8 @@ public class SculkBroodHatcherEntity extends Monster implements GeoEntity, IScul
                         new AttackGoal(),
                         new FollowSquadLeader(this),
                         new PathFindToRaidLocation<>(this),
-                        //MoveTowardsTargetGoal(mob, speedModifier, within) THIS IS FOR NON-ATTACKING GOALS
-                        new MoveTowardsTargetGoal(this, 0.8F, 20F),
                         //WaterAvoidingRandomWalkingGoal(mob, speedModifier)
                         new ImprovedRandomStrollGoal(this, 1.0D).setToAvoidWater(true),
-                        //LookAtGoal(mob, targetType, lookDistance)
-                        new LookAtPlayerGoal(this, Pig.class, 8.0F),
-                        //LookRandomlyGoal(mob)
-                        new RandomLookAroundGoal(this),
                         new OpenDoorGoal(this, true)
                 };
         return goals;
@@ -196,9 +192,9 @@ public class SculkBroodHatcherEntity extends Monster implements GeoEntity, IScul
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
         controllers.add(
-                DefaultAnimations.genericWalkIdleController(this),
-                ATTACK_ANIMATION_CONTROLLER,
-                DefaultAnimations.genericLivingController(this)
+                //DefaultAnimations.genericWalkIdleController(this),
+                //ATTACK_ANIMATION_CONTROLLER,
+                //DefaultAnimations.genericLivingController(this)
         );
     }
     @Override
@@ -271,7 +267,13 @@ public class SculkBroodHatcherEntity extends Monster implements GeoEntity, IScul
 
         @Override
         protected void triggerAnimation() {
-            ((SculkBroodHatcherEntity)mob).triggerAnim("attack_controller", "attack");
+            //((SculkBroodHatcherEntity)mob).triggerAnim("attack_controller", "attack");
+        }
+
+        @Override
+        public void onTargetHurt(LivingEntity target) {
+            super.onTargetHurt(target);
+            target.addEffect(new MobEffectInstance(ModMobEffects.NEUROTOXIN_STAGE1.get(), TickUnits.convertMinutesToTicks(2), 0), this.mob);
         }
     }
 }

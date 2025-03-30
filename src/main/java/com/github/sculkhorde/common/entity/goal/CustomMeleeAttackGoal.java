@@ -1,7 +1,7 @@
 package com.github.sculkhorde.common.entity.goal;
 
 import com.github.sculkhorde.util.EntityAlgorithms;
-import net.minecraft.world.entity.EntitySelector;
+import com.github.sculkhorde.util.TickUnits;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -48,38 +48,40 @@ public class CustomMeleeAttackGoal extends Goal{
         if (i - this.lastCanUseCheck < COOLDOWN_BETWEEN_CAN_USE_CHECKS)
         {
             return false;
-        } else
+        }
+
+        this.lastCanUseCheck = i;
+        LivingEntity target = this.mob.getTarget();
+        if (target == null)
         {
-            this.lastCanUseCheck = i;
-            LivingEntity livingentity = this.mob.getTarget();
-            if (livingentity == null)
-            {
-                return false;
-            }
-            else if (!livingentity.isAlive())
-            {
-                return false;
-            }
-            else
-            {
-                if (canPenalize)
-                {
-                    if (--this.ticksUntilNextPathRecalculation <= 0) {
-                        this.path = this.mob.getNavigation().createPath(livingentity, 0);
-                        this.ticksUntilNextPathRecalculation = 4 + this.mob.getRandom().nextInt(7);
-                        return this.path != null;
-                    } else {
-                        return true;
-                    }
-                }
-                this.path = this.mob.getNavigation().createPath(livingentity, 0);
-                if (this.path != null) {
-                    return true;
-                } else {
-                    return this.getAttackReachSqr(livingentity) >= this.mob.distanceToSqr(livingentity.getX(), livingentity.getY(), livingentity.getZ());
-                }
+            return false;
+        }
+        if (!target.isAlive())
+        {
+            return false;
+        }
+
+        /*
+        if (canPenalize)
+        {
+            if (--this.ticksUntilNextPathRecalculation <= 0) {
+                this.path = this.mob.getNavigation().createPath(target, 0);
+                this.ticksUntilNextPathRecalculation = 4 + this.mob.getRandom().nextInt(7);
+                return this.path != null;
+            } else {
+                return true;
             }
         }
+
+         */
+        this.path = this.mob.getNavigation().createPath(target, 1);
+        if (this.path != null) {
+            return true;
+        } else {
+            //return this.getAttackReachSqr(target) >= this.mob.distanceToSqr(target.getX(), target.getY(), target.getZ());
+            return false;
+        }
+
     }
 
     public boolean canContinueToUse()
@@ -99,7 +101,14 @@ public class CustomMeleeAttackGoal extends Goal{
     }
 
     public void start() {
-        this.mob.getNavigation().moveTo(this.path, this.speedModifier);
+        //this.mob.getNavigation().moveTo(this.path, this.speedModifier);
+
+        if(mob.getTarget() == null)
+        {
+            return;
+        }
+
+        this.mob.getNavigation().moveTo(mob.getTarget(), 1);
         this.mob.setAggressive(true);
         this.ticksUntilNextPathRecalculation = 0;
         this.ticksUntilNextAttack = 0;
@@ -107,9 +116,13 @@ public class CustomMeleeAttackGoal extends Goal{
 
     public void stop() {
         LivingEntity livingentity = this.mob.getTarget();
+
+        /*
         if (!EntitySelector.NO_CREATIVE_OR_SPECTATOR.test(livingentity)) {
             this.mob.setTarget((LivingEntity)null);
         }
+
+         */
 
         this.mob.setAggressive(false);
         this.mob.getNavigation().stop();
@@ -131,19 +144,43 @@ public class CustomMeleeAttackGoal extends Goal{
 
         this.mob.getLookControl().setLookAt(target, 30.0F, 30.0F);
 
-        double perceivedTargetDistanceSquareForMeleeAttack = this.mob.getPerceivedTargetDistanceSquareForMeleeAttack(target);
+        double distanceFromTarget = EntityAlgorithms.getDistanceBetweenEntities(mob, target);
 
         this.ticksUntilNextAttack = Math.max(getTicksUntilNextAttack()- 1, 0);
 
-        this.checkAndPerformAttack(target, perceivedTargetDistanceSquareForMeleeAttack);
+        this.checkAndPerformAttack(target, distanceFromTarget);
 
-        float distanceToTarget = this.mob.distanceTo(target);
-        if (distanceToTarget <= getMinimumDistanceToTarget())
+        if (distanceFromTarget <= getMinimumDistanceToTarget())
         {
             this.mob.getNavigation().stop();
             return;
         }
 
+        ticksUntilNextPathRecalculation -= 1;
+
+        if(ticksUntilNextPathRecalculation <= 0)
+        {
+            this.mob.getNavigation().moveTo(target, 1);
+
+            if(distanceFromTarget < 5)
+            {
+                ticksUntilNextPathRecalculation = TickUnits.convertSecondsToTicks(0.5F);
+            }
+            else if(distanceFromTarget < 10)
+            {
+                ticksUntilNextPathRecalculation = TickUnits.convertSecondsToTicks(1);
+            }
+            else if(distanceFromTarget < 20)
+            {
+                ticksUntilNextPathRecalculation = TickUnits.convertSecondsToTicks(2);
+            }
+            else
+            {
+                ticksUntilNextPathRecalculation = TickUnits.convertSecondsToTicks(3);
+            }
+        }
+
+        /*
         this.ticksUntilNextPathRecalculation = Math.max(this.ticksUntilNextPathRecalculation - 1, 0);
         boolean canSeeTarget = this.mob.getSensing().hasLineOfSight(target);
         boolean canRecalculatePath = this.ticksUntilNextPathRecalculation <= 0;
@@ -184,14 +221,11 @@ public class CustomMeleeAttackGoal extends Goal{
                 this.ticksUntilNextPathRecalculation += 5;
             }
 
-            boolean cantReachTarget = !this.mob.getNavigation().moveTo(target, this.speedModifier);
-            if (cantReachTarget)
-            {
-                this.ticksUntilNextPathRecalculation += 15;
-            }
 
             this.ticksUntilNextPathRecalculation = this.adjustedTickDelay(this.ticksUntilNextPathRecalculation);
         }
+
+         */
 
     }
 

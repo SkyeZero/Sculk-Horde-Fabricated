@@ -1,5 +1,8 @@
 package com.github.sculkhorde.util;
 
+import com.github.sculkhorde.common.effect.NeurotoxinStage1Effect;
+import com.github.sculkhorde.common.effect.NeurotoxinStage2Effect;
+import com.github.sculkhorde.common.effect.NeurotoxinStage3Effect;
 import com.github.sculkhorde.common.effect.SculkBurrowedEffect;
 import com.github.sculkhorde.common.entity.ISculkSmartEntity;
 import com.github.sculkhorde.common.entity.InfestationPurifierEntity;
@@ -35,6 +38,11 @@ import java.util.Optional;
 import java.util.function.Predicate;
 
 public class EntityAlgorithms {
+
+    public static float getDistanceBetweenEntities(Entity one, Entity two)
+    {
+        return (float) Math.sqrt(Math.pow(one.getX() - two.getX(), 2.0F) + Math.pow(one.getY() - two.getY(), 2.0F) + Math.pow(one.getZ() - two.getZ(), 2.0F));
+    }
 
     public static boolean isValidSpawnPosForEntity(LivingEntity entity, BlockPos pos)
     {
@@ -168,12 +176,23 @@ public class EntityAlgorithms {
         {
             return false;
         }
-		
+
 		boolean isEntityImmune = !entity.canBeAffected(new MobEffectInstance(debuff, 5, 0));
         boolean isEntityInvulnerable = entity.isInvulnerable();
         boolean isEntityAttackable = entity.isAttackable();
         boolean doesEntityHaveDebuffAlready = entity.hasEffect(debuff);
         if(isEntityImmune || isEntityInvulnerable || !isEntityAttackable || doesEntityHaveDebuffAlready)
+        {
+            return false;
+        }
+
+        boolean doesHaveNeurotoxinEffect = entity.hasEffect(ModMobEffects.NEUROTOXIN_STAGE1.get()) ||
+                entity.hasEffect(ModMobEffects.NEUROTOXIN_STAGE2.get()) ||
+                entity.hasEffect(ModMobEffects.NEUROTOXIN_STAGE3.get());
+
+        boolean isApplyingNeurotoxinEffect = debuff instanceof NeurotoxinStage1Effect || debuff instanceof NeurotoxinStage2Effect || debuff instanceof NeurotoxinStage3Effect;
+
+        if(doesHaveNeurotoxinEffect && isApplyingNeurotoxinEffect)
         {
             return false;
         }
@@ -287,7 +306,11 @@ public class EntityAlgorithms {
      */
     public static boolean isLivingEntityInfected(LivingEntity e)
     {
-        return e.hasEffect(ModMobEffects.SCULK_INFECTION.get());
+        return e.hasEffect(ModMobEffects.SCULK_INFECTION.get()) ||
+                e.hasEffect(ModMobEffects.DISEASED_CYSTS.get()) ||
+                e.hasEffect(ModMobEffects.NEUROTOXIN_STAGE1.get()) ||
+                e.hasEffect(ModMobEffects.NEUROTOXIN_STAGE2.get()) ||
+                e.hasEffect(ModMobEffects.NEUROTOXIN_STAGE3.get());
     }
 
 
