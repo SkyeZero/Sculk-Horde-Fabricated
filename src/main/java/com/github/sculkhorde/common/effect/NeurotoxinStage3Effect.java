@@ -3,17 +3,20 @@ package com.github.sculkhorde.common.effect;
 import com.github.sculkhorde.core.ModBlocks;
 import com.github.sculkhorde.util.EntityAlgorithms;
 import com.github.sculkhorde.util.TickUnits;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.entity.living.MobEffectEvent;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 
 public class NeurotoxinStage3Effect extends MobEffect implements IPotionExpireEffect{
 
@@ -31,6 +34,10 @@ public class NeurotoxinStage3Effect extends MobEffect implements IPotionExpireEf
      */
     protected NeurotoxinStage3Effect(MobEffectCategory effectType, int liquidColor) {
         super(effectType, liquidColor);
+        addAttributeModifier(Attributes.ATTACK_DAMAGE, -0.8F, AttributeModifier.Operation.MULTIPLY_BASE);
+        addAttributeModifier(Attributes.MAX_HEALTH, -0.5F, AttributeModifier.Operation.MULTIPLY_BASE);
+        addAttributeModifier(Attributes.ATTACK_KNOCKBACK, -1F, AttributeModifier.Operation.MULTIPLY_BASE);
+        addAttributeModifier(Attributes.ATTACK_SPEED, -0.5F, AttributeModifier.Operation.MULTIPLY_BASE);
     }
 
     /**
@@ -49,21 +56,10 @@ public class NeurotoxinStage3Effect extends MobEffect implements IPotionExpireEf
             return;
         }
 
-        if(sourceEntity.hasEffect(MobEffects.WEAKNESS) &&
-                sourceEntity.hasEffect(MobEffects.MOVEMENT_SLOWDOWN) &&
-                sourceEntity.hasEffect(MobEffects.DIG_SLOWDOWN) &&
-                sourceEntity.hasEffect(MobEffects.POISON) &&
-                sourceEntity.hasEffect(MobEffects.HUNGER)
-        )
+        if(sourceEntity instanceof ServerPlayer player)
         {
-            return;
+            player.causeFoodExhaustion(10F);
         }
-
-        sourceEntity.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, TickUnits.convertMinutesToTicks(1), 0));
-        sourceEntity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, TickUnits.convertMinutesToTicks(1), 0));
-        sourceEntity.addEffect(new MobEffectInstance(MobEffects.DIG_SLOWDOWN, TickUnits.convertMinutesToTicks(1), 0));
-        sourceEntity.addEffect(new MobEffectInstance(MobEffects.POISON, TickUnits.convertMinutesToTicks(1), 0));
-        sourceEntity.addEffect(new MobEffectInstance(MobEffects.HUNGER, TickUnits.convertMinutesToTicks(1), 0));
 
     }
 
@@ -107,6 +103,10 @@ public class NeurotoxinStage3Effect extends MobEffect implements IPotionExpireEf
     public List<ItemStack> getCurativeItems() {
         ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
         return ret;
+    }
+
+    public MobEffect addAttributeModifier(Attribute attribute, double value, AttributeModifier.Operation operation) {
+        return addAttributeModifier(attribute, UUID.randomUUID().toString(), value, operation);
     }
 
 }

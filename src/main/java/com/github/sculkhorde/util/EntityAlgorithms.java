@@ -39,6 +39,8 @@ import java.util.function.Predicate;
 
 public class EntityAlgorithms {
 
+
+
     public static float getDistanceBetweenEntities(Entity one, Entity two)
     {
         return (float) Math.sqrt(Math.pow(one.getX() - two.getX(), 2.0F) + Math.pow(one.getY() - two.getY(), 2.0F) + Math.pow(one.getZ() - two.getZ(), 2.0F));

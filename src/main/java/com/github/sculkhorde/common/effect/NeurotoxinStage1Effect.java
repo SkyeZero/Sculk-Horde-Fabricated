@@ -4,11 +4,14 @@ import com.github.sculkhorde.core.ModMobEffects;
 import com.github.sculkhorde.util.ColorUtil;
 import com.github.sculkhorde.util.EntityAlgorithms;
 import com.github.sculkhorde.util.TickUnits;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.entity.living.MobEffectEvent;
 
@@ -23,10 +26,6 @@ public class NeurotoxinStage1Effect extends MobEffect implements IPotionExpireEf
     public static MobEffectCategory effectType = MobEffectCategory.HARMFUL;
     public long COOLDOWN = TickUnits.convertSecondsToTicks(1);
     public long cooldownTicksRemaining = COOLDOWN;
-    private static final UUID SPEED_MODIFIER_BABY_UUID = UUID.fromString("B9766B59-9566-4402-BC1F-2EE2A276D836");
-    public static final UUID SPEED_MODIFIER_ID = UUID.fromString("2deaf4fc-1673-4c5b-ac4f-25e37e08760f");
-    private static final UUID ATTACK_SPEED_MODIFIER_ID = UUID.fromString("FA233E1C-4180-4865-B01B-BCCE9785ACA3");
-    public static final UUID ATTACK_DAMAGE_MODIFIER_ID = UUID.fromString("CB3F55D3-645C-4F38-A497-9C13A33DB5CF");
 
     protected Random random = new Random();
 
@@ -38,6 +37,7 @@ public class NeurotoxinStage1Effect extends MobEffect implements IPotionExpireEf
      */
     protected NeurotoxinStage1Effect(MobEffectCategory effectType, int liquidColor) {
         super(effectType, liquidColor);
+        addAttributeModifier(Attributes.ATTACK_DAMAGE, -0.2F, AttributeModifier.Operation.MULTIPLY_BASE);
     }
 
     /**
@@ -56,26 +56,17 @@ public class NeurotoxinStage1Effect extends MobEffect implements IPotionExpireEf
             return;
         }
 
-        /*
-        Attribute DAMAGE_ATTRIBUTE = Attributes.ATTACK_DAMAGE;
-
-        if(sourceEntity.getAttributes().hasAttribute(DAMAGE_ATTRIBUTE))
+        if(sourceEntity instanceof ServerPlayer player)
         {
-            AttributeInstance attributeinstance = sourceEntity.getAttribute(DAMAGE_ATTRIBUTE);
-
-            sourceEntity.getAttribute(DAMAGE_ATTRIBUTE).addTransientModifier(new AttributeModifier(ATTACK_DAMAGE_MODIFIER_ID, ));
+            player.causeFoodExhaustion(4F);
         }
-
-         */
-
-        if(sourceEntity.hasEffect(MobEffects.WEAKNESS))
-        {
-            return;
-        }
-
-        sourceEntity.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, TickUnits.convertMinutesToTicks(1), 0));
 
     }
+
+    public MobEffect addAttributeModifier(Attribute attribute, double value, AttributeModifier.Operation operation) {
+        return addAttributeModifier(attribute, UUID.randomUUID().toString(), value, operation);
+    }
+
 
     @Override
     public void onPotionExpire(MobEffectEvent.Expired event)
@@ -89,7 +80,7 @@ public class NeurotoxinStage1Effect extends MobEffect implements IPotionExpireEf
             return;
         }
 
-        entity.addEffect(new MobEffectInstance(ModMobEffects.NEUROTOXIN_STAGE2.get(), TickUnits.convertMinutesToTicks(5), 0));
+        entity.addEffect(new MobEffectInstance(ModMobEffects.NEUROTOXIN_STAGE2.get(), TickUnits.convertMinutesToTicks(2), 0));
     }
 
 
