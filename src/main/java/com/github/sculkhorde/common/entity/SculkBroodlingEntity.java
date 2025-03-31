@@ -10,6 +10,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -29,7 +30,7 @@ import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
-public class SculkBroodHatcherEntity extends Monster implements GeoEntity, ISculkSmartEntity {
+public class SculkBroodlingEntity extends Monster implements GeoEntity, ISculkSmartEntity {
 
     /**
      * In order to create a mob, the following java files were created/edited.<br>
@@ -41,15 +42,15 @@ public class SculkBroodHatcherEntity extends Monster implements GeoEntity, IScul
      */
 
     //The Health
-    public static final float MAX_HEALTH = 20F;
+    public static final float MAX_HEALTH = 10F;
     //The armor of the mob
-    public static final float ARMOR = 6F;
+    public static final float ARMOR = 0F;
     //ATTACK_DAMAGE determines How much damage it's melee attacks do
     public static final float ATTACK_DAMAGE = 4F;
     //ATTACK_KNOCKBACK determines the knockback a mob will take
     public static final float ATTACK_KNOCKBACK = 1F;
     //FOLLOW_RANGE determines how far away this mob can see and chase enemies
-    public static final float FOLLOW_RANGE = 32F;
+    public static final float FOLLOW_RANGE = 16F;
     //MOVEMENT_SPEED determines how far away this mob can see other mobs
     public static final float MOVEMENT_SPEED = 0.35F;
 
@@ -63,7 +64,7 @@ public class SculkBroodHatcherEntity extends Monster implements GeoEntity, IScul
      * @param type The Mob Type
      * @param worldIn The world to initialize this mob in
      */
-    public SculkBroodHatcherEntity(EntityType<? extends SculkBroodHatcherEntity> type, Level worldIn) {
+    public SculkBroodlingEntity(EntityType<? extends SculkBroodlingEntity> type, Level worldIn) {
         super(type, worldIn);
         this.setPathfindingMalus(BlockPathTypes.UNPASSABLE_RAIL, 0.0F);
     }
@@ -201,6 +202,8 @@ public class SculkBroodHatcherEntity extends Monster implements GeoEntity, IScul
         return this.cache;
     }
 
+
+
     protected SoundEvent getAmbientSound() {
         return SoundEvents.SPIDER_AMBIENT;
     }
@@ -235,7 +238,7 @@ public class SculkBroodHatcherEntity extends Monster implements GeoEntity, IScul
 
         public AttackGoal()
         {
-            super(SculkBroodHatcherEntity.this, 1.0D, true, 10);
+            super(SculkBroodlingEntity.this, 1.0D, true, 10);
         }
 
         @Override
@@ -270,7 +273,8 @@ public class SculkBroodHatcherEntity extends Monster implements GeoEntity, IScul
         @Override
         public void onTargetHurt(LivingEntity target) {
             super.onTargetHurt(target);
-            target.addEffect(new MobEffectInstance(ModMobEffects.NEUROTOXIN_STAGE1.get(), TickUnits.convertMinutesToTicks(2), 0), this.mob);
+            target.addEffect(new MobEffectInstance(ModMobEffects.SCULK_INFECTION.get(), TickUnits.convertSecondsToTicks(30), 0), this.mob);
+            target.addEffect(new MobEffectInstance(MobEffects.POISON, TickUnits.convertMinutesToTicks(2), 0), this.mob);
         }
     }
 }

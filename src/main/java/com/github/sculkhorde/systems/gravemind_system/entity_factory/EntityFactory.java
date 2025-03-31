@@ -54,7 +54,7 @@ public class EntityFactory {
 
     public static void initialize()
     {
-        //Add entries to the entity factory (please add them in order of cost, I don't want to sort)
+        //Add entries to the entity factory
         EntityFactoryEntry[] entries = {
                 new EntityFactoryEntry(ModEntities.SCULK_SPORE_SPEWER.get())
                         .setMinEvolutionRequired(Gravemind.evolution_states.Immature)
@@ -178,6 +178,23 @@ public class EntityFactory {
                         .addStrategicValues(
                         EntityFactoryEntry.StrategicValues.Support,
                         EntityFactoryEntry.StrategicValues.Combat,
+                        EntityFactoryEntry.StrategicValues.Melee,
+                        EntityFactoryEntry.StrategicValues.EffectiveOnGround),
+
+                new EntityFactoryEntry(ModEntities.SCULK_BROOD_HATCHER.get())
+                        .setMinEvolutionRequired(Gravemind.evolution_states.Mature)
+                        .setCost((int) SculkBroodHatcherEntity.MAX_HEALTH)
+                        .setLimit(1)
+                        .addStrategicValues(
+                        EntityFactoryEntry.StrategicValues.Infector,
+                        EntityFactoryEntry.StrategicValues.Melee,
+                        EntityFactoryEntry.StrategicValues.EffectiveOnGround),
+
+                new EntityFactoryEntry(ModEntities.SCULK_BROODLING.get())
+                        .setMinEvolutionRequired(Gravemind.evolution_states.Mature)
+                        .setCost((int) SculkBroodlingEntity.MAX_HEALTH)
+                        .addStrategicValues(
+                        EntityFactoryEntry.StrategicValues.Infector,
                         EntityFactoryEntry.StrategicValues.Melee,
                         EntityFactoryEntry.StrategicValues.EffectiveOnGround),
         };
