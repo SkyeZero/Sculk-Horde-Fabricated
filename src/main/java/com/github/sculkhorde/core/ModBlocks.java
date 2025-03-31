@@ -1011,6 +1011,9 @@ public class ModBlocks {
 	public static final RegistryObject<BroodNestBlock> BROOD_NEST_BLOCK =
 			registerBlock("brood_nest_block", BroodNestBlock::new);
 
+	public static final RegistryObject<BroodNestCoreBlock> BROOD_NEST_CORE_BLOCK =
+			registerBlock("brood_nest_core_block", BroodNestCoreBlock::new);
+
 	static {
 		datagen(INFESTED_STONE_BRICKS);
 		datagen(INFESTED_MOSSY_STONE_BRICKS, "infested_stone_bricks");

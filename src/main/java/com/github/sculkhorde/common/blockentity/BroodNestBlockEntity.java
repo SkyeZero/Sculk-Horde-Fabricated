@@ -5,6 +5,7 @@ import com.github.sculkhorde.core.ModBlockEntities;
 import com.github.sculkhorde.core.SculkHorde;
 import com.github.sculkhorde.systems.gravemind_system.Gravemind;
 import com.github.sculkhorde.systems.infestation_systems.block_infestation_system.BlockInfestationSystem;
+import com.github.sculkhorde.util.EntityAlgorithms;
 import com.github.sculkhorde.util.TickUnits;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -107,9 +108,12 @@ public class BroodNestBlockEntity extends BlockEntity {
         }
 
         // Spawn Spiders
+        if(EntityAlgorithms.getNonSculkEntitiesAtBlockPos((ServerLevel) level, blockPos, 16).isEmpty())
+        {
+            return;
+        }
 
         blockEntity.spawnBroodlings(3);
-
     }
 
     public void spawnBroodlings(int amount)

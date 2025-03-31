@@ -98,6 +98,10 @@ public class ModBlockEntities {
             BLOCK_ENTITIES.register("brood_nest_block_entity", () -> BlockEntityType.Builder.of(
                     BroodNestBlockEntity::new, ModBlocks.BROOD_NEST_BLOCK.get()).build(null));
 
+    public static RegistryObject<BlockEntityType<BroodNestCoreBlockEntity>> BROOD_NEST_CORE_BLOCK_ENTITY =
+            BLOCK_ENTITIES.register("brood_nest_core_block_entity", () -> BlockEntityType.Builder.of(
+                    BroodNestCoreBlockEntity::new, ModBlocks.BROOD_NEST_CORE_BLOCK.get()).build(null));
+
     public static void register(IEventBus eventBus) {
         BLOCK_ENTITIES.register(eventBus);
     }
