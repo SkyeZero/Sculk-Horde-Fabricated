@@ -76,6 +76,10 @@ public class NeurotoxinStage3Effect extends MobEffect implements IPotionExpireEf
         }
 
         entity.level().setBlockAndUpdate(entity.blockPosition(), ModBlocks.BEE_COLONY_CORE_BLOCK.get().defaultBlockState());
+        if(!EntityAlgorithms.isLivingEntityExplicitDenyTarget(entity))
+        {
+            entity.hurt(entity.damageSources().magic(), Integer.MAX_VALUE);
+        }
     }
 
     /**
