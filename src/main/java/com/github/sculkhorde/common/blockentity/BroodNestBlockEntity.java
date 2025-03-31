@@ -10,6 +10,7 @@ import com.github.sculkhorde.util.TickUnits;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -21,6 +22,9 @@ import java.util.Random;
 public class BroodNestBlockEntity extends BlockEntity {
     protected long lastTickTime = 0;
     protected int tickInterval = TickUnits.convertSecondsToTicks(15);
+
+    public ArrayList<LivingEntity> spawnedEntities = new ArrayList<>();
+    public final int MAX_ENTITIES = 6;
 
 
     /**
@@ -107,6 +111,11 @@ public class BroodNestBlockEntity extends BlockEntity {
             return;
         }
 
+        if(blockEntity.spawnedEntities.size() >= blockEntity.MAX_ENTITIES)
+        {
+            return;
+        }
+
         // Spawn Spiders
         if(EntityAlgorithms.getNonSculkEntitiesAtBlockPos((ServerLevel) level, blockPos, 16).isEmpty())
         {
@@ -124,8 +133,14 @@ public class BroodNestBlockEntity extends BlockEntity {
 
         for(BlockPos pos : spawnPos)
         {
+            if(spawnedEntities.size() >= MAX_ENTITIES)
+            {
+                break;
+            }
+
             SculkBroodlingEntity broodling = new SculkBroodlingEntity(level, pos);
             level.addFreshEntity(broodling);
+            spawnedEntities.add(broodling);
         }
     }
 

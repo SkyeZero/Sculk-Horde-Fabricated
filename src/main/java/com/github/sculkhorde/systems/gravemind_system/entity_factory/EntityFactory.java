@@ -71,7 +71,6 @@ public class EntityFactory {
                         .addStrategicValues(
                         EntityFactoryEntry.StrategicValues.Infector,
                         EntityFactoryEntry.StrategicValues.Melee,
-                        EntityFactoryEntry.StrategicValues.EffectiveOnGround,
                         EntityFactoryEntry.StrategicValues.EffectiveInSkies),
 
                 new EntityFactoryEntry(ModEntities.SCULK_RAVAGER.get())

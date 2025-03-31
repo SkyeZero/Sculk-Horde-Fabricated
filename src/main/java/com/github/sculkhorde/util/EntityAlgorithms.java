@@ -675,7 +675,7 @@ public class EntityAlgorithms {
         List<LivingEntity> livingEntitiesInRange = level.getEntitiesOfClass(LivingEntity.class, boundingBox, new Predicate<LivingEntity>() {
             @Override
             public boolean test(LivingEntity livingEntity) {
-                return !EntityAlgorithms.isSculkLivingEntity.test(livingEntity);
+                return !EntityAlgorithms.isLivingEntityExplicitDenyTarget(livingEntity);
             }
         });
         return livingEntitiesInRange;
