@@ -205,6 +205,7 @@ public class ModCreativeModeTab {
                 event.accept(ModBlocks.TENDRIL_CORE_BLOCK.get());
                 event.accept(ModBlocks.DISEASED_KELP_BLOCK.get());
                 event.accept(ModBlocks.TENDRILS.get());
+                event.accept(ModBlocks.BROOD_NEST_BLOCK.get());
 
                 event.accept(ModItems.SCULK_SALMON_SPAWN_EGG.get());
                 event.accept(ModItems.SCULK_SQUID_SPAWN_EGG.get());

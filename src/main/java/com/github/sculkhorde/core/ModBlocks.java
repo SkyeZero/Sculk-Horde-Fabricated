@@ -1008,6 +1008,9 @@ public class ModBlocks {
 	public static final RegistryObject<BeeColonyCoreBlock> BEE_COLONY_CORE_BLOCK =
 			registerBlock("bee_colony_core_block", BeeColonyCoreBlock::new);
 
+	public static final RegistryObject<BroodNestBlock> BROOD_NEST_BLOCK =
+			registerBlock("brood_nest_block", BroodNestBlock::new);
+
 	static {
 		datagen(INFESTED_STONE_BRICKS);
 		datagen(INFESTED_MOSSY_STONE_BRICKS, "infested_stone_bricks");

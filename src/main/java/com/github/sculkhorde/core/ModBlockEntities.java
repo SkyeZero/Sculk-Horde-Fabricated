@@ -94,6 +94,10 @@ public class ModBlockEntities {
             BLOCK_ENTITIES.register("bee_colony_core_block_entity", () -> BlockEntityType.Builder.of(
                     BeeColonyCoreBlockEntity::new, ModBlocks.BEE_COLONY_CORE_BLOCK.get()).build(null));
 
+    public static RegistryObject<BlockEntityType<BroodNestBlockEntity>> BROOD_NEST_BLOCK_ENTITY =
+            BLOCK_ENTITIES.register("brood_nest_block_entity", () -> BlockEntityType.Builder.of(
+                    BroodNestBlockEntity::new, ModBlocks.BROOD_NEST_BLOCK.get()).build(null));
+
     public static void register(IEventBus eventBus) {
         BLOCK_ENTITIES.register(eventBus);
     }

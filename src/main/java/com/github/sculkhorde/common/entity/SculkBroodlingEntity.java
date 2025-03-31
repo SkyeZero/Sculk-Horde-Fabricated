@@ -2,6 +2,7 @@ package com.github.sculkhorde.common.entity;
 
 import com.github.sculkhorde.common.entity.components.TargetParameters;
 import com.github.sculkhorde.common.entity.goal.*;
+import com.github.sculkhorde.core.ModEntities;
 import com.github.sculkhorde.core.ModMobEffects;
 import com.github.sculkhorde.util.SquadHandler;
 import com.github.sculkhorde.util.TickUnits;
@@ -68,6 +69,13 @@ public class SculkBroodlingEntity extends Monster implements GeoEntity, ISculkSm
         super(type, worldIn);
         this.setPathfindingMalus(BlockPathTypes.UNPASSABLE_RAIL, 0.0F);
     }
+
+    public SculkBroodlingEntity(Level level, BlockPos pos)
+    {
+        this(ModEntities.SCULK_BROODLING.get(), level);
+        moveTo(pos.getCenter());
+    }
+
     /**
      * Determines & registers the attributes of the mob.
      * @return The Attributes
