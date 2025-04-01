@@ -67,10 +67,12 @@ public class EntityFactory {
                         .setMinEvolutionRequired(Gravemind.evolution_states.Mature)
                         .setCost((int) SculkPhantomEntity.MAX_HEALTH)
                         .setLimit(1)
+                        .setChanceToSpawn(0.1F)
                         .setExplicitlyDeniedSenders(ReinforcementRequest.senderType.SculkMass, ReinforcementRequest.senderType.Raid)
                         .addStrategicValues(
                         EntityFactoryEntry.StrategicValues.Infector,
                         EntityFactoryEntry.StrategicValues.Melee,
+                        EntityFactoryEntry.StrategicValues.EffectiveOnGround,
                         EntityFactoryEntry.StrategicValues.EffectiveInSkies),
 
                 new EntityFactoryEntry(ModEntities.SCULK_RAVAGER.get())
