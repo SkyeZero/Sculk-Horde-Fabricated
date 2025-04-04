@@ -34,7 +34,7 @@ public class BlockAlgorithms {
 
         if(reason.equals(PlaceBlockReason.Cursor) && !SculkHorde.gravemind.isWaitTimeOver())
         {
-            SculkHorde.LOGGER.error("placeBlock | Attempted to Modify Level blocks before World is Ready:" +
+            SculkHorde.LOGGER.warn("Sculk Horde | placeBlock | Attempted to Modify Level blocks before World is Ready:" +
                     "\n" + blockState.toString() + " at " + pos.toShortString() + " in " + level.dimension().toString()
             );
 
