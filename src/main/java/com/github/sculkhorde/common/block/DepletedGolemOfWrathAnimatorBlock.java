@@ -2,6 +2,7 @@ package com.github.sculkhorde.common.block;
 
 import com.github.sculkhorde.core.ModBlocks;
 import com.github.sculkhorde.core.ModItems;
+import com.github.sculkhorde.util.BlockAlgorithms;
 import com.github.sculkhorde.util.ParticleUtil;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.Minecraft;
@@ -108,7 +109,7 @@ public class DepletedGolemOfWrathAnimatorBlock extends Block implements IForgeBl
             playerIn.getMainHandItem().grow(-1);
 
             // Convert Back into normal version
-            level.setBlockAndUpdate(pos, ModBlocks.GOLEM_OF_WRATH_ANIMATOR_BLOCK.get().defaultBlockState());
+            BlockAlgorithms.setBlockMisc(level, pos, ModBlocks.GOLEM_OF_WRATH_ANIMATOR_BLOCK.get().defaultBlockState());
 
             return InteractionResult.CONSUME;
         }

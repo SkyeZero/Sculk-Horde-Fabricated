@@ -386,18 +386,18 @@ public class BlockInfestationSystem {
         }
 
         // Convert Block
-        world.setBlockAndUpdate(targetPos, getNormalVariant);
+        BlockAlgorithms.setBlockCursor(world, targetPos, getNormalVariant);
 
         if(shouldBeRemovedFromAboveBlock.test(world.getBlockState(targetPos.above())))
         {
-            world.setBlockAndUpdate(targetPos.above(), Blocks.AIR.defaultBlockState());
+            BlockAlgorithms.setBlockCursor(world, targetPos.above(), Blocks.AIR.defaultBlockState());
         }
 
         boolean canCuredBlockSustatinPlant = world.getBlockState(targetPos).canSustainPlant(world, targetPos, Direction.UP, (IPlantable) Blocks.POPPY);
         Random rand = new Random();
         if(rand.nextBoolean() && canCuredBlockSustatinPlant && world.getBlockState(targetPos.above()).isAir())
         {
-            world.setBlockAndUpdate(targetPos.above(), Blocks.GRASS.defaultBlockState());
+            BlockAlgorithms.setBlockCursor(world, targetPos.above(), Blocks.GRASS.defaultBlockState());
         }
 
         return true;
@@ -509,7 +509,7 @@ public class BlockInfestationSystem {
         //Given random chance and the target location can see the sky, create a sculk hive
         if(new Random().nextInt(4000) <= 1 && blockIsAirOrSnow(world.getBlockState(targetPos)) && blockIsAirOrSnow(world.getBlockState(targetPos.above())) && blockIsAirOrSnow(world.getBlockState(targetPos.above().above())))
         {
-            world.setBlockAndUpdate(targetPos, ModBlocks.SCULK_BEE_NEST_BLOCK.get().defaultBlockState());
+            BlockAlgorithms.setBlockCursor(world, targetPos, ModBlocks.SCULK_BEE_NEST_BLOCK.get().defaultBlockState());
             SculkBeeNestBlockEntity nest = (SculkBeeNestBlockEntity) world.getBlockEntity(targetPos);
 
             //Add bees
@@ -538,7 +538,7 @@ public class BlockInfestationSystem {
             int height = world.random.nextInt(25);
             for(int i = 0; i < height && !world.getBlockState(targetPos.above(i + 1)).getFluidState().isEmpty(); i++)
             {
-                world.setBlockAndUpdate(targetPos.above(i), ModBlocks.DISEASED_KELP_BLOCK.get().defaultBlockState());
+                BlockAlgorithms.setBlockCursor(world, targetPos.above(i), ModBlocks.DISEASED_KELP_BLOCK.get().defaultBlockState());
             }
         }
 
@@ -613,7 +613,7 @@ public class BlockInfestationSystem {
 
         if(thereIsAValidPlacement)
         {
-            level.setBlockAndUpdate(pos, newBlockState);
+            BlockAlgorithms.setBlockCursor(level, pos, newBlockState);
         }
     }
 }

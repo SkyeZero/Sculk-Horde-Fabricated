@@ -1,6 +1,7 @@
 package com.github.sculkhorde.common.block;
 
 import com.github.sculkhorde.core.ModBlocks;
+import com.github.sculkhorde.util.BlockAlgorithms;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -89,32 +90,35 @@ public class BuddingSouliteBlock extends HalfTransparentBlock implements IForgeB
         BlockPos down = pos.below();
         if(level.getBlockState(north).canBeReplaced())
         {
-            level.setBlockAndUpdate(north, ModBlocks.SOULITE_BUD_BLOCK.get().defaultBlockState().setValue(SouliteClusterBlock.FACING, Direction.NORTH));
+            //level.setBlockAndUpdate(north, ModBlocks.SOULITE_BUD_BLOCK.get().defaultBlockState().setValue(SouliteClusterBlock.FACING, Direction.NORTH));
+            BlockAlgorithms.setBlockStructure(level, north, ModBlocks.SOULITE_BUD_BLOCK.get().defaultBlockState().setValue(SouliteClusterBlock.FACING, Direction.NORTH));
         }
 
         if(level.getBlockState(east).canBeReplaced())
         {
-            level.setBlockAndUpdate(east, ModBlocks.SOULITE_BUD_BLOCK.get().defaultBlockState().setValue(SouliteClusterBlock.FACING, Direction.EAST));
+            //level.setBlockAndUpdate(east, ModBlocks.SOULITE_BUD_BLOCK.get().defaultBlockState().setValue(SouliteClusterBlock.FACING, Direction.EAST));
+            BlockAlgorithms.setBlockStructure(level, east, ModBlocks.SOULITE_BUD_BLOCK.get().defaultBlockState().setValue(SouliteClusterBlock.FACING, Direction.EAST));
         }
 
         if(level.getBlockState(south).canBeReplaced())
         {
-            level.setBlockAndUpdate(south, ModBlocks.SOULITE_BUD_BLOCK.get().defaultBlockState().setValue(SouliteClusterBlock.FACING, Direction.SOUTH));
+            //level.setBlockAndUpdate(south, ModBlocks.SOULITE_BUD_BLOCK.get().defaultBlockState().setValue(SouliteClusterBlock.FACING, Direction.SOUTH));
+            BlockAlgorithms.setBlockStructure(level, south, ModBlocks.SOULITE_BUD_BLOCK.get().defaultBlockState().setValue(SouliteClusterBlock.FACING, Direction.SOUTH));
         }
 
         if(level.getBlockState(west).canBeReplaced())
         {
-            level.setBlockAndUpdate(west, ModBlocks.SOULITE_BUD_BLOCK.get().defaultBlockState().setValue(SouliteClusterBlock.FACING, Direction.WEST));
+            BlockAlgorithms.setBlockStructure(level, west, ModBlocks.SOULITE_BUD_BLOCK.get().defaultBlockState().setValue(SouliteClusterBlock.FACING, Direction.WEST));
         }
 
         if(level.getBlockState(up).canBeReplaced())
         {
-            level.setBlockAndUpdate(up, ModBlocks.SOULITE_BUD_BLOCK.get().defaultBlockState().setValue(SouliteClusterBlock.FACING, Direction.UP));
+            BlockAlgorithms.setBlockStructure(level, up, ModBlocks.SOULITE_BUD_BLOCK.get().defaultBlockState().setValue(SouliteClusterBlock.FACING, Direction.UP));
         }
 
         if(level.getBlockState(down).canBeReplaced())
         {
-            level.setBlockAndUpdate(down, ModBlocks.SOULITE_BUD_BLOCK.get().defaultBlockState().setValue(SouliteClusterBlock.FACING, Direction.DOWN));
+            BlockAlgorithms.setBlockStructure(level, down, ModBlocks.SOULITE_BUD_BLOCK.get().defaultBlockState().setValue(SouliteClusterBlock.FACING, Direction.DOWN));
         }
     }
 
@@ -122,7 +126,7 @@ public class BuddingSouliteBlock extends HalfTransparentBlock implements IForgeB
     public void randomTick(BlockState blockState, ServerLevel level, BlockPos pos, RandomSource random) {
         super.randomTick(blockState, level, pos, random);
 
-        level.setBlockAndUpdate(pos, ModBlocks.SOULITE_BLOCK.get().defaultBlockState());
+        BlockAlgorithms.setBlockStructure(level, pos, ModBlocks.SOULITE_BLOCK.get().defaultBlockState());
         spawnSouliteClusters(level, pos);
     }
 }

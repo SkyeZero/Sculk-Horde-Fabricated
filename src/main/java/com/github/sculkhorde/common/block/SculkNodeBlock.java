@@ -191,7 +191,7 @@ public class SculkNodeBlock extends BaseEntityBlock implements IForgeBlock {
     public static void PlaceNode(ServerLevel level, BlockPos blockPos)
     {
         BlockPos newOrigin = new BlockPos(blockPos.getX(), blockPos.getY(), blockPos.getZ());
-        level.setBlockAndUpdate(newOrigin, ModBlocks.SCULK_NODE_BLOCK.get().defaultBlockState());
+        BlockAlgorithms.setBlockStructure(level, newOrigin, ModBlocks.SCULK_NODE_BLOCK.get().defaultBlockState());
         ModSavedData.getSaveData().addNodeToMemory(level, newOrigin);
         ModSavedData.getSaveData().resetNoNodeSpawningTicksElapsed();
         EntityType.LIGHTNING_BOLT.spawn(level, newOrigin, MobSpawnType.SPAWNER);

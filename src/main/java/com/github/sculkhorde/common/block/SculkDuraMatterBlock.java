@@ -1,5 +1,6 @@
 package com.github.sculkhorde.common.block;
 
+import com.github.sculkhorde.util.BlockAlgorithms;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
@@ -97,13 +98,13 @@ public class SculkDuraMatterBlock extends Block implements IForgeBlock {
 
     public void setDecaying(Level pLevel, BlockState pState, BlockPos pPos)
     {
-        pLevel.setBlockAndUpdate(pPos, pState.setValue(DECAYING, true));
+        BlockAlgorithms.setBlockStructure(pLevel, pPos, pState.setValue(DECAYING, true));
     }
 
     @Override
     public void randomTick(BlockState blockState, ServerLevel level, BlockPos pos, RandomSource randomSource) {
         if (isDecaying(blockState) && !level.isClientSide) {
-            level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
+            BlockAlgorithms.setBlockStructure(level, pos, Blocks.AIR.defaultBlockState());
         }
     }
 }

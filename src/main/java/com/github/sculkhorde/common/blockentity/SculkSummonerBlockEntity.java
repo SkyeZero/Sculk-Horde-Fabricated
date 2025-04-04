@@ -8,6 +8,7 @@ import com.github.sculkhorde.systems.gravemind_system.Gravemind;
 import com.github.sculkhorde.systems.gravemind_system.entity_factory.EntityFactoryEntry;
 import com.github.sculkhorde.systems.gravemind_system.entity_factory.ReinforcementRequest;
 import com.github.sculkhorde.systems.infestation_systems.block_infestation_system.BlockInfestationSystem;
+import com.github.sculkhorde.util.BlockAlgorithms;
 import com.github.sculkhorde.util.EntityAlgorithms;
 import com.github.sculkhorde.common.entity.components.TargetParameters;
 import com.github.sculkhorde.util.TickUnits;
@@ -93,7 +94,7 @@ public class SculkSummonerBlockEntity extends BlockEntity implements GameEventLi
     private void setVibrationCooldown(boolean value)
     {
         assert level != null;
-        level.setBlockAndUpdate(worldPosition, getBlockState().setValue(SculkSummonerBlock.VIBRATION_COOLDOWN, value));
+        BlockAlgorithms.setBlockMisc(level, worldPosition, getBlockState().setValue(SculkSummonerBlock.VIBRATION_COOLDOWN, value));
     }
 
     /** ~~~~~~~~ Modifiers ~~~~~~~~  **/

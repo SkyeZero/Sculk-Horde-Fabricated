@@ -24,6 +24,43 @@ import java.util.function.Predicate;
 
 public class BlockAlgorithms {
 
+    public static enum PlaceBlockReason {
+        Cursor,
+        Structure,
+        Misc,
+    }
+    public static void setBlock(PlaceBlockReason reason, Level level, BlockPos pos, BlockState blockState)
+    {
+
+        if(reason.equals(PlaceBlockReason.Cursor) && !SculkHorde.gravemind.isWaitTimeOver())
+        {
+            SculkHorde.LOGGER.error("placeBlock | Attempted to Modify Level blocks before World is Ready:" +
+                    "\n" + blockState.toString() + " at " + pos.toShortString() + " in " + level.dimension().toString()
+            );
+
+        }
+
+        level.setBlockAndUpdate(pos, blockState);
+    }
+
+    public static void setBlockCursor(Level level, BlockPos pos, BlockState blockState)
+    {
+        setBlock(PlaceBlockReason.Cursor, level, pos, blockState);
+    }
+
+    public static void setBlockStructure(Level level, BlockPos pos, BlockState blockState)
+    {
+
+        setBlock(PlaceBlockReason.Structure, level, pos, blockState);
+    }
+
+    public static void setBlockMisc(Level level, BlockPos pos, BlockState blockState)
+    {
+
+        setBlock(PlaceBlockReason.Misc, level, pos, blockState);
+    }
+
+
     public static boolean cantBeDestroyedByStructures(Level level, BlockPos pos)
     {
         return !isDestroyableByStructures(level, pos);
@@ -541,14 +578,14 @@ public class BlockAlgorithms {
         if(canBlockBeWaterLogged && fluidStateAtTargetPos.getType() == Fluids.WATER && blockState.canSurvive(world, targetPos))
         {
             blockState.setValue(BlockStateProperties.WATERLOGGED, true); // This line doesn't work to set water logged
-            world.setBlockAndUpdate(targetPos, blockState);
-            world.setBlockAndUpdate(targetPos, world.getBlockState(targetPos).setValue(BlockStateProperties.WATERLOGGED, true)); // This one does though
+            BlockAlgorithms.setBlockCursor(world, targetPos, blockState);
+            BlockAlgorithms.setBlockCursor(world, targetPos, world.getBlockState(targetPos).setValue(BlockStateProperties.WATERLOGGED, true)); // This one does though
         }
 
         //If block below target is valid and the target can be replaced by water and target is not waterloggable
         else if(belowBlockState.isFaceSturdy(world, blockBelow, Direction.UP) && blockState.canSurvive(world, targetPos) && (world.getBlockState(targetPos).isAir() || world.getBlockState(targetPos).is(Blocks.SNOW)))
         {
-            world.setBlockAndUpdate(targetPos, blockState);
+            BlockAlgorithms.setBlockCursor(world, targetPos, blockState);
         }
 
     }

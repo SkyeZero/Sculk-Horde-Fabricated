@@ -10,6 +10,7 @@ import com.github.sculkhorde.systems.gravemind_system.Gravemind;
 import com.github.sculkhorde.systems.gravemind_system.entity_factory.EntityFactory;
 import com.github.sculkhorde.systems.gravemind_system.entity_factory.EntityFactoryEntry;
 import com.github.sculkhorde.systems.gravemind_system.entity_factory.ReinforcementRequest;
+import com.github.sculkhorde.util.BlockAlgorithms;
 import com.github.sculkhorde.util.TickUnits;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -157,7 +158,7 @@ public class SculkMassBlockEntity extends BlockEntity {
         if(!ModConfig.SERVER.block_infestation_enabled.get() || SculkHorde.cursorSystem.isCursorPopulationAtMax())
         {
             ModSavedData.getSaveData().addSculkAccumulatedMass(blockEntity.getStoredSculkMass());
-            level.setBlockAndUpdate(blockPos, Blocks.AIR.defaultBlockState());
+            BlockAlgorithms.setBlockMisc(level, blockPos, Blocks.AIR.defaultBlockState());
             return;
         }
 
@@ -171,7 +172,7 @@ public class SculkMassBlockEntity extends BlockEntity {
             cursor.get().setMaxTransformations(blockEntity.getStoredSculkMass() * 100);
             cursor.get().setMaxRange(blockEntity.getStoredSculkMass() * 10);
         }
-        level.setBlockAndUpdate(blockPos, Blocks.AIR.defaultBlockState());
+        BlockAlgorithms.setBlockMisc(level, blockPos, Blocks.AIR.defaultBlockState());
 
     }
 }

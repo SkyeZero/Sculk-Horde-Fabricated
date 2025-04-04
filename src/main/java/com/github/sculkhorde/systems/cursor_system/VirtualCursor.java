@@ -200,7 +200,7 @@ public class VirtualCursor implements ICursor{
      */
     protected void transformBlock(BlockPos pos)
     {
-        getLevel().setBlockAndUpdate(pos, Blocks.DIAMOND_BLOCK.defaultBlockState());
+        BlockAlgorithms.setBlockCursor(level, pos, Blocks.DIAMOND_BLOCK.defaultBlockState());
     }
 
     protected void spawnParticleEffects()

@@ -179,7 +179,7 @@ public class SculkNodeCaveProceduralStructure extends ProceduralStructure
                  * Flags can be OR-ed
                  */
                 // We use 3 because we want to flag 1 and 2
-                world.setBlockAndUpdate(targetPos, plannedBlock);
+                BlockAlgorithms.setBlockStructure(world, targetPos, plannedBlock);
             }
         }
     }

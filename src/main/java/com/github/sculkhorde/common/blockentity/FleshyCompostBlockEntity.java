@@ -3,6 +3,7 @@ package com.github.sculkhorde.common.blockentity;
 import com.github.sculkhorde.core.ModBlockEntities;
 import com.github.sculkhorde.core.ModSavedData;
 import com.github.sculkhorde.core.SculkHorde;
+import com.github.sculkhorde.util.BlockAlgorithms;
 import com.github.sculkhorde.util.TickUnits;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -96,7 +97,8 @@ public class FleshyCompostBlockEntity extends BlockEntity {
 
         if(blockEntity.getStoredSculkMass() <= 0)
         {
-            level.setBlockAndUpdate(blockPos, Blocks.AIR.defaultBlockState());
+            //level.setBlockAndUpdate(blockPos, Blocks.AIR.defaultBlockState());
+            BlockAlgorithms.setBlockMisc(level, blockPos, Blocks.AIR.defaultBlockState());
         }
 
     }

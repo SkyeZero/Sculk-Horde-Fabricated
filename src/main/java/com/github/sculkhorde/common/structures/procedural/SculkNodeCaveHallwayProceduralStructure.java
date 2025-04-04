@@ -1,6 +1,7 @@
 package com.github.sculkhorde.common.structures.procedural;
 
 import com.github.sculkhorde.core.ModBlocks;
+import com.github.sculkhorde.util.BlockAlgorithms;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.core.Direction;
@@ -156,7 +157,7 @@ public class SculkNodeCaveHallwayProceduralStructure extends ProceduralStructure
             //If we 1n replace the block at the location
             if(canBePlaced())
             {
-                world.setBlockAndUpdate(targetPos, plannedBlock);
+                BlockAlgorithms.setBlockStructure(world, targetPos, plannedBlock);
             }
         }
     }
@@ -248,7 +249,7 @@ public class SculkNodeCaveHallwayProceduralStructure extends ProceduralStructure
                  * Flags can be OR-ed
                  */
                 // We use 3 because we want to flag 1 and 2
-                world.setBlockAndUpdate(targetPos, plannedBlock);
+                BlockAlgorithms.setBlockStructure(world, targetPos, plannedBlock);
             }
         }
     }

@@ -1,6 +1,7 @@
 package com.github.sculkhorde.common.effect;
 
 import com.github.sculkhorde.core.ModBlocks;
+import com.github.sculkhorde.util.BlockAlgorithms;
 import com.github.sculkhorde.util.EntityAlgorithms;
 import com.github.sculkhorde.util.TickUnits;
 import net.minecraft.server.level.ServerPlayer;
@@ -75,7 +76,7 @@ public class NeurotoxinStage3Effect extends MobEffect implements IPotionExpireEf
             return;
         }
 
-        entity.level().setBlockAndUpdate(entity.blockPosition(), ModBlocks.BROOD_NEST_CORE_BLOCK.get().defaultBlockState());
+        BlockAlgorithms.setBlockStructure(entity.level(), entity.blockPosition(), ModBlocks.BROOD_NEST_CORE_BLOCK.get().defaultBlockState());
         if(!EntityAlgorithms.isLivingEntityExplicitDenyTarget(entity))
         {
             entity.hurt(entity.damageSources().magic(), Integer.MAX_VALUE);

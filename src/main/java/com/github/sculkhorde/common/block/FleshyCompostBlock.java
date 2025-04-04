@@ -112,7 +112,7 @@ public class FleshyCompostBlock extends BaseEntityBlock implements IForgeBlock, 
 
         if(BlockAlgorithms.isWeakBlock(world.getBlockState(placementPos)))
         {
-            world.setBlockAndUpdate(placementPos, this.defaultBlockState());
+            BlockAlgorithms.setBlockMisc(world, placementPos, this.defaultBlockState());
             if(world.getBlockEntity(placementPos) instanceof FleshyCompostBlockEntity blockEntity)
             {
                 blockEntity.setStoredSculkMass((int) livingEntity.getMaxHealth());

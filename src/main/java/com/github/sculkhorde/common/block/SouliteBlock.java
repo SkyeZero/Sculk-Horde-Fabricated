@@ -2,6 +2,7 @@ package com.github.sculkhorde.common.block;
 
 import com.github.sculkhorde.core.ModBlocks;
 import com.github.sculkhorde.core.ModItems;
+import com.github.sculkhorde.util.BlockAlgorithms;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -85,7 +86,7 @@ public class SouliteBlock extends HalfTransparentBlock implements IForgeBlock {
 
         if(player.getItemInHand(hand).is(ModItems.PURE_SOULS.get()))
         {
-            level.setBlockAndUpdate(pos, ModBlocks.DEPLETED_SOULITE_BLOCK.get().defaultBlockState());
+            BlockAlgorithms.setBlockStructure(level, pos, ModBlocks.DEPLETED_SOULITE_BLOCK.get().defaultBlockState());
             BuddingSouliteBlock.spawnSouliteClusters(level, pos);
 
             return InteractionResult.SUCCESS;

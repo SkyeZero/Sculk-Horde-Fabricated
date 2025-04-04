@@ -252,7 +252,7 @@ public class GolemOfWrathEntity extends PathfinderMob implements GeoEntity, IPur
     public void convertBoundBlockToDepleted() {
         if(isBoundBlockPresent())
         {
-            level().setBlockAndUpdate(getBoundBlockPos().get(), getDepletedBoundBlockState());
+            BlockAlgorithms.setBlockMisc(level(), getBoundBlockPos().get(), getDepletedBoundBlockState());
         }
     }
 

@@ -2,6 +2,7 @@ package com.github.sculkhorde.common.blockentity;
 
 import com.github.sculkhorde.core.ModBlockEntities;
 import com.github.sculkhorde.core.ModBlocks;
+import com.github.sculkhorde.util.BlockAlgorithms;
 import com.github.sculkhorde.util.StructureUtil;
 import com.github.sculkhorde.util.TickUnits;
 import net.minecraft.core.BlockPos;
@@ -111,7 +112,7 @@ public class StructureCoreBlockEntity extends BlockEntity
 
         if(blockEntity.structurePlacer.isFinished() && blockEntity.getBlockToConvertToAfterBuilding() != null)
         {
-            level.setBlockAndUpdate(blockPos, blockEntity.getBlockToConvertToAfterBuilding());
+            BlockAlgorithms.setBlockStructure(level, blockPos, blockEntity.getBlockToConvertToAfterBuilding());
             return;
         }
 

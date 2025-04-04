@@ -11,6 +11,7 @@ import com.github.sculkhorde.core.SculkHorde;
 import com.github.sculkhorde.systems.cursor_system.CursorSystem;
 import com.github.sculkhorde.systems.cursor_system.VirtualSurfaceInfestorCursor;
 import com.github.sculkhorde.systems.gravemind_system.Gravemind;
+import com.github.sculkhorde.util.BlockAlgorithms;
 import com.github.sculkhorde.util.TickUnits;
 import com.google.common.collect.Lists;
 import net.minecraft.core.BlockPos;
@@ -378,7 +379,7 @@ public class SculkBeeNestBlockEntity extends BlockEntity
                         --j;
                     }
 
-                    level.setBlockAndUpdate(blockPos, blockState.setValue(BeehiveBlock.HONEY_LEVEL, Integer.valueOf(i + j)));
+                    BlockAlgorithms.setBlockStructure(level, blockPos, blockState.setValue(BeehiveBlock.HONEY_LEVEL, Integer.valueOf(i + j)));
                 }
             }
 

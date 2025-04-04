@@ -164,7 +164,7 @@ public class BlockInfestationTable{
             return false;
         }
 
-        world.setBlockAndUpdate(targetPos, newBlock);
+        BlockAlgorithms.setBlockCursor(world, targetPos, newBlock);
         world.playSound(null, targetPos, SoundEvents.SCULK_CATALYST_BLOOM, SoundSource.BLOCKS, 2.0F, 0.6F + world.getRandom().nextFloat() * 0.4F);
 
         if(newBlock.getBlock() instanceof ITagInfestedBlock tagInfestedBlock)

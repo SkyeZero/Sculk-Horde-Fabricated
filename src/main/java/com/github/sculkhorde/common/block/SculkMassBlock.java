@@ -148,7 +148,7 @@ public class SculkMassBlock extends BaseEntityBlock implements IForgeBlock, Simp
 
         // If we can place it here
 
-        world.setBlockAndUpdate(placementPos, this.defaultBlockState());
+        BlockAlgorithms.setBlockMisc(world, placementPos, this.defaultBlockState());
         thisTile = getTileEntity(world, placementPos);
 
         if(!(thisTile instanceof SculkMassBlockEntity)) { return; }

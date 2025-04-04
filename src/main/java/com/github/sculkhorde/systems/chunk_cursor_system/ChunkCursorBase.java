@@ -13,7 +13,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ComposterBlock;
 import net.minecraft.world.level.chunk.LevelChunk;
-import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.AABB;
 
 import java.util.ArrayList;
@@ -288,7 +287,7 @@ public class ChunkCursorBase<T extends ChunkCursorBase<T>> {
     // Change Blocks ---------------------------------------------------------------------------------------------------
     protected void changeBlock(ServerLevel serverLevel, BlockPos pos) {}
     protected void consumeBlock(ServerLevel serverLevel, BlockPos pos) {
-        serverLevel.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
+        BlockAlgorithms.setBlockCursor(serverLevel, pos, Blocks.AIR.defaultBlockState());
     }
 
 

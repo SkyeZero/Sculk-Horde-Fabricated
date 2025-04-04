@@ -6,6 +6,7 @@ import com.github.sculkhorde.core.ModBlocks;
 import com.github.sculkhorde.core.ModConfig;
 import com.github.sculkhorde.core.SculkHorde;
 import com.github.sculkhorde.systems.infestation_systems.block_infestation_system.BlockInfestationSystem;
+import com.github.sculkhorde.util.BlockAlgorithms;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -71,11 +72,11 @@ public class ChunkCursorHelper {
         }
 
         // Convert Block
-        world.setBlockAndUpdate(targetPos, getNormalVariant);
+        BlockAlgorithms.setBlockCursor(world, targetPos, getNormalVariant);
 
         if(BlockInfestationSystem.shouldBeRemovedFromAboveBlock.test(world.getBlockState(targetPos.above())))
         {
-            world.setBlockAndUpdate(targetPos.above(), Blocks.AIR.defaultBlockState());
+            BlockAlgorithms.setBlockCursor(world, targetPos.above(), Blocks.AIR.defaultBlockState());
         }
 
         if (!noGrass) {
@@ -83,7 +84,7 @@ public class ChunkCursorHelper {
             boolean canCuredBlockSustainPlant = world.getBlockState(targetPos).canSustainPlant(world, targetPos, Direction.UP, (IPlantable) Blocks.POPPY);
 
             if(rand.nextBoolean() && canCuredBlockSustainPlant && world.getBlockState(targetPos.above()).isAir()) {
-                world.setBlockAndUpdate(targetPos.above(), Blocks.GRASS.defaultBlockState());
+                BlockAlgorithms.setBlockCursor(world, targetPos.above(), Blocks.GRASS.defaultBlockState());
             }
         }
 
@@ -139,7 +140,7 @@ public class ChunkCursorHelper {
         //Given random chance and the target location can see the sky, create a sculk hive
         if(r.nextInt(50000) <= 1 && canSpawnBeehive(world, targetPos)) {
             SculkHorde.LOGGER.info("Spawning Beehive at: " + targetPos);
-            world.setBlockAndUpdate(targetPos, ModBlocks.SCULK_BEE_NEST_BLOCK.get().defaultBlockState());
+            BlockAlgorithms.setBlockCursor(world, targetPos, ModBlocks.SCULK_BEE_NEST_BLOCK.get().defaultBlockState());
             SculkBeeNestBlockEntity nest = (SculkBeeNestBlockEntity) world.getBlockEntity(targetPos);
 
             //Add bees
@@ -173,13 +174,13 @@ public class ChunkCursorHelper {
             // If block is water loggable and in water and can survive, then place
             if (canBlockBeWaterLogged && fluidStateAtTargetPos.getType() == Fluids.WATER && blockState.canSurvive(world, targetPos)) {
                 blockState.setValue(BlockStateProperties.WATERLOGGED, true); // This line doesn't work to set water logged
-                world.setBlockAndUpdate(targetPos, blockState);
-                world.setBlockAndUpdate(targetPos, world.getBlockState(targetPos).setValue(BlockStateProperties.WATERLOGGED, true)); // This one does though
+                BlockAlgorithms.setBlockCursor(world, targetPos, blockState);
+                BlockAlgorithms.setBlockCursor(world, targetPos, world.getBlockState(targetPos).setValue(BlockStateProperties.WATERLOGGED, true)); // This one does though
             }
 
             //If block below target is valid and the target can be replaced by water and target is not waterloggable
             else if (belowBlockState.isFaceSturdy(world, blockBelow, Direction.UP) && blockState.canSurvive(world, targetPos) && (world.getBlockState(targetPos).isAir() || world.getBlockState(targetPos).is(Blocks.SNOW))) {
-                world.setBlockAndUpdate(targetPos, blockState);
+                BlockAlgorithms.setBlockCursor(world, targetPos, blockState);
             }
         }
 

@@ -109,7 +109,7 @@ public class CursorBridgerEntity extends Entity {
             closest = pos;
             if(this.level().getBlockState(closest).isAir())
             {
-                this.level().setBlockAndUpdate(closest, ModBlocks.SCULK_LIVING_ROCK_BLOCK.get().defaultBlockState());
+                BlockAlgorithms.setBlockCursor(level(), closest, ModBlocks.SCULK_LIVING_ROCK_BLOCK.get().defaultBlockState());
             }
 
         }
@@ -124,7 +124,7 @@ public class CursorBridgerEntity extends Entity {
         // If block break speed is < 3, then covert it to a sculk block
         if (this.level().getBlockState(this.blockPosition()).getDestroySpeed(this.level(), this.blockPosition()) <= 3)
         {
-            this.level().setBlockAndUpdate(this.blockPosition(), ModBlocks.SCULK_LIVING_ROCK_BLOCK.get().defaultBlockState());
+            BlockAlgorithms.setBlockMisc(level(), this.blockPosition(), ModBlocks.SCULK_LIVING_ROCK_BLOCK.get().defaultBlockState());
         }
 
         // Keep track of how far we've traveled

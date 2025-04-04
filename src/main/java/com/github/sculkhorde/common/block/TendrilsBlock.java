@@ -2,6 +2,7 @@ package com.github.sculkhorde.common.block;
 
 import com.github.sculkhorde.core.ModBlocks;
 import com.github.sculkhorde.systems.infestation_systems.block_infestation_system.BlockInfestationSystem;
+import com.github.sculkhorde.util.BlockAlgorithms;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -127,19 +128,19 @@ public class TendrilsBlock extends VineBlock implements IForgeBlock {
         // If the block is valid, place it
         if(isValidFace(worldIn, northBlock, blockPosIn, Direction.SOUTH))
         {
-            worldIn.setBlockAndUpdate(blockPosIn, vein.defaultBlockState().setValue(NORTH, true));
+            BlockAlgorithms.setBlockMisc(worldIn, blockPosIn, vein.defaultBlockState().setValue(NORTH, true));
         }
         else if(isValidFace(worldIn, eastBlock, blockPosIn, Direction.WEST))
         {
-            worldIn.setBlockAndUpdate(blockPosIn, vein.defaultBlockState().setValue(EAST, true));
+            BlockAlgorithms.setBlockMisc(worldIn, blockPosIn, vein.defaultBlockState().setValue(EAST, true));
         }
         else if(isValidFace(worldIn, southBlock, blockPosIn, Direction.NORTH))
         {
-            worldIn.setBlockAndUpdate(blockPosIn, vein.defaultBlockState().setValue(SOUTH, true));
+            BlockAlgorithms.setBlockMisc(worldIn, blockPosIn, vein.defaultBlockState().setValue(SOUTH, true));
         }
         else if(isValidFace(worldIn, westBlock, blockPosIn, Direction.EAST))
         {
-            worldIn.setBlockAndUpdate(blockPosIn, vein.defaultBlockState().setValue(WEST, true));
+            BlockAlgorithms.setBlockMisc(worldIn, blockPosIn, vein.defaultBlockState().setValue(WEST, true));
         }
 
     }

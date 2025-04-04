@@ -84,7 +84,7 @@ public class PlannedBlock
         //If we 1n replace the block at the location
         if(canBePlaced())
         {
-            world.setBlockAndUpdate(targetPos, plannedBlock);
+            BlockAlgorithms.setBlockStructure(world, targetPos, plannedBlock);
         }
         else
         {

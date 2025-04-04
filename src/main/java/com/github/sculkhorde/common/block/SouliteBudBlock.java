@@ -1,6 +1,7 @@
 package com.github.sculkhorde.common.block;
 
 import com.github.sculkhorde.core.ModBlocks;
+import com.github.sculkhorde.util.BlockAlgorithms;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -127,7 +128,7 @@ public class SouliteBudBlock extends AmethystBlock implements SimpleWaterloggedB
       {
          BlockState newBlockState = ModBlocks.SOULITE_CLUSTER_BLOCK.get().defaultBlockState()
                  .setValue(SouliteClusterBlock.FACING, blockState.getValue(SouliteBudBlock.FACING));
-         level.setBlockAndUpdate(pos, newBlockState);
+         BlockAlgorithms.setBlockStructure(level, pos, newBlockState);
          return;
       }
 
@@ -138,7 +139,7 @@ public class SouliteBudBlock extends AmethystBlock implements SimpleWaterloggedB
                  .setValue(SouliteBudBlock.FACING, getFacingDirection(blockState))
                  .setValue(AGE, newAge);
 
-         level.setBlockAndUpdate(pos, newBlockState);
+         BlockAlgorithms.setBlockStructure(level, pos, newBlockState);
       }
    }
 

@@ -147,7 +147,7 @@ public abstract class CursorEntity extends Entity
      */
     protected void transformBlock(BlockPos pos)
     {
-        level().setBlockAndUpdate(pos, Blocks.DIAMOND_BLOCK.defaultBlockState());
+        BlockAlgorithms.setBlockCursor(level(), pos, Blocks.DIAMOND_BLOCK.defaultBlockState());
     }
 
     protected void spawnParticleEffects()
