@@ -1,7 +1,5 @@
 package com.github.sculkhorde.systems.chunk_cursor_system;
 
-import com.github.sculkhorde.core.SculkHorde;
-
 import java.util.ArrayList;
 
 public class ChunkInfestationSystem {
@@ -47,11 +45,6 @@ public class ChunkInfestationSystem {
 
     public void serverTick()
     {
-        if(!SculkHorde.gravemind.isWaitTimeOver())
-        {
-            return;
-        }
-
         for(ChunkCursorInfector infector : chunkInfectors)
         {
             infector.tick();
