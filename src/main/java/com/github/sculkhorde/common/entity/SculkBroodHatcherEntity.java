@@ -22,6 +22,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import software.bernie.geckolib.animatable.GeoEntity;
+import software.bernie.geckolib.constant.DefaultAnimations;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
@@ -155,7 +156,7 @@ public class SculkBroodHatcherEntity extends Monster implements GeoEntity, IScul
                         new FollowSquadLeader(this),
                         new PathFindToRaidLocation<>(this),
                         //WaterAvoidingRandomWalkingGoal(mob, speedModifier)
-                        new ImprovedRandomStrollGoal(this, 1.0D).setToAvoidWater(true),
+                        new ImprovedRandomStrollGoal(this, 0.5D).setToAvoidWater(true),
                         new OpenDoorGoal(this, true)
                 };
         return goals;
@@ -191,9 +192,9 @@ public class SculkBroodHatcherEntity extends Monster implements GeoEntity, IScul
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
         controllers.add(
-                //DefaultAnimations.genericWalkIdleController(this),
-                //ATTACK_ANIMATION_CONTROLLER,
-                //DefaultAnimations.genericLivingController(this)
+                DefaultAnimations.genericWalkRunIdleController(this),
+                ATTACK_ANIMATION_CONTROLLER,
+                DefaultAnimations.genericLivingController(this)
         );
     }
     @Override
