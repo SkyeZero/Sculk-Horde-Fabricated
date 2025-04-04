@@ -18,11 +18,17 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.LeapAtTargetGoal;
 import net.minecraft.world.entity.ai.goal.OpenDoorGoal;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.entity.ai.navigation.WallClimberNavigation;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
+import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -38,8 +44,8 @@ public class SculkBroodlingEntity extends Monster implements GeoEntity, ISculkSm
      * Edited {@link com.github.sculkhorde.core.ModEntities}<br>
      * Edited {@link com.github.sculkhorde.util.ModEventSubscriber}<br>
      * Edited {@link com.github.sculkhorde.client.ClientModEventSubscriber}<br>
-     * Added {@link com.github.sculkhorde.client.model.enitity.SculkBroodHatcherModel}<br>
-     * Added {@link com.github.sculkhorde.client.renderer.entity.SculkBroodHatcherRenderer}
+     * Added {@link com.github.sculkhorde.client.model.enitity.SculkBroodlingModel}<br>
+     * Added {@link com.github.sculkhorde.client.renderer.entity.SculkBroodlingRenderer}
      */
 
     //The Health
@@ -159,7 +165,7 @@ public class SculkBroodlingEntity extends Monster implements GeoEntity, ISculkSm
                         //SwimGoal(mob)
                         new FloatGoal(this),
                         new SquadHandlingGoal(this),
-                        //MeleeAttackGoal(mob, speedModifier, followingTargetEvenIfNotSeen)
+                        new LeapAtTargetGoal(this, 0.5F),
                         new AttackGoal(),
                         new FollowSquadLeader(this),
                         new PathFindToRaidLocation<>(this),
@@ -190,6 +196,18 @@ public class SculkBroodlingEntity extends Monster implements GeoEntity, ISculkSm
 
                 };
         return goals;
+    }
+
+    @Override
+    protected @NotNull PathNavigation createNavigation(@NotNull Level p_33802_) {
+        return new WallClimberNavigation(this, p_33802_);
+    }
+    @Override
+    public void makeStuckInBlock(BlockState p_33796_, @NotNull Vec3 p_33797_) {
+        if (!p_33796_.is(Blocks.COBWEB)) {
+            super.makeStuckInBlock(p_33796_, p_33797_);
+        }
+
     }
 
     private static final RawAnimation ATTACK_ANIMATION = RawAnimation.begin().thenPlay("attack");
