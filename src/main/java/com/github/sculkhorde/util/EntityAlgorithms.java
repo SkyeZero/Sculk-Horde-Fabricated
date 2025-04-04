@@ -215,7 +215,7 @@ public class EntityAlgorithms {
                 entity.addEffect(new MobEffectInstance(debuff, duration, amplifier));
             }));
 
-            if(debuff == ModMobEffects.SCULK_INFECTION.get() || debuff == ModMobEffects.DISEASED_CYSTS.get())
+            if(debuff == ModMobEffects.SCULK_INFECTION.get() || debuff == ModMobEffects.DISEASED_CYSTS.get() || debuff == ModMobEffects.NEUROTOXIN_STAGE1.get())
             {
                 SculkHorde.statisticsData.incrementTotalVictimsInfested();
             }
