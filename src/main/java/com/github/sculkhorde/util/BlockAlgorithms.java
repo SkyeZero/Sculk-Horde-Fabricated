@@ -24,7 +24,7 @@ import java.util.function.Predicate;
 
 public class BlockAlgorithms {
 
-    public static enum PlaceBlockReason {
+    public enum PlaceBlockReason {
         Cursor,
         Structure,
         Misc,
@@ -38,6 +38,7 @@ public class BlockAlgorithms {
                     "\n" + blockState.toString() + " at " + pos.toShortString() + " in " + level.dimension().toString()
             );
 
+            return;
         }
 
         level.setBlockAndUpdate(pos, blockState);
