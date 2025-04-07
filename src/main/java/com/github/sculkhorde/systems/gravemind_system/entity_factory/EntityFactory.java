@@ -200,6 +200,15 @@ public class EntityFactory {
                         EntityFactoryEntry.StrategicValues.Infector,
                         EntityFactoryEntry.StrategicValues.Melee,
                         EntityFactoryEntry.StrategicValues.EffectiveOnGround),
+
+                new EntityFactoryEntry(ModEntities.SCULK_SHEEP.get())
+                        .setMinEvolutionRequired(Gravemind.evolution_states.Immature)
+                        .setCost((int) SculkBroodlingEntity.MAX_HEALTH)
+                        .enableExperimentalMode(ModConfig.SERVER.experimental_features_enabled)
+                        .addStrategicValues(
+                        EntityFactoryEntry.StrategicValues.Combat,
+                        EntityFactoryEntry.StrategicValues.Melee,
+                        EntityFactoryEntry.StrategicValues.EffectiveOnGround),
         };
 
         SculkHorde.entityFactory.addEntriesToFactory(entries);
