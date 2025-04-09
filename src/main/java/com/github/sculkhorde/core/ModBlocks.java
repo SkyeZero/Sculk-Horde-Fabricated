@@ -899,14 +899,15 @@ public class ModBlocks {
 	public static final RegistryObject<SpikeBlock> SPIKE =
 			registerBlock("spike", SpikeBlock::new);
 
-	public static final RegistryObject<SmallShroomBlock> SMALL_SHROOM =
-			registerBlock("small_shroom", SmallShroomBlock::new);
 
 	public static final RegistryObject<SculkFloraBlock> GRASS =
 			registerBlock("grass", SculkFloraBlock::new);
 
 	public static final RegistryObject<SculkFloraBlock> GRASS_SHORT =
 			registerBlock("grass_short", SculkFloraBlock::new);
+
+	public static final RegistryObject<SmallShroomBlock> SMALL_SHROOM =
+			registerBlock("small_shroom", SmallShroomBlock::new);
 
 	public static final RegistryObject<SculkShroomCultureBlock> SCULK_SHROOM_CULTURE =
 			registerBlock("sculk_shroom_culture", SculkShroomCultureBlock::new);

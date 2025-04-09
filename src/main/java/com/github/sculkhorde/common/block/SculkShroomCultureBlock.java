@@ -1,6 +1,6 @@
 package com.github.sculkhorde.common.block;
 
-import net.minecraft.world.level.block.Blocks;
+import com.github.sculkhorde.core.ModBlocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraftforge.common.extensions.IForgeBlock;
 
@@ -67,10 +67,7 @@ public class SculkShroomCultureBlock extends SculkFloraBlock implements IForgeBl
      */
     public static Properties getProperties()
     {
-        return Properties.copy(Blocks.RED_MUSHROOM)
-                .sound(SoundType.GRASS)
-                .noCollission()
-                .instabreak()
-                .requiresCorrectToolForDrops();
+        return Properties.copy(ModBlocks.GRASS.get())
+                .sound(SoundType.SLIME_BLOCK);
     }
 }

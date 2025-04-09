@@ -2,29 +2,26 @@ package com.github.sculkhorde.common.block;
 
 import com.github.sculkhorde.core.ModBlocks;
 import com.github.sculkhorde.core.ModParticles;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.material.MapColor;
-import net.minecraft.world.level.pathfinder.PathComputationType;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.extensions.IForgeBlock;
-
-import java.util.Random;
-
-//Not an actual block, just a parent class
-
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BushBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.pathfinder.PathComputationType;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.common.extensions.IForgeBlock;
+
+import java.util.Random;
 
 public class SculkFloraBlock extends BushBlock implements IForgeBlock {
 
@@ -47,17 +44,6 @@ public class SculkFloraBlock extends BushBlock implements IForgeBlock {
      */
     public static float BLAST_RESISTANCE = 6f;
 
-    /**
-     *  Harvest Level Affects what level of tool can mine this block and have the item drop<br>
-     *
-     *  -1 = All<br>
-     *  0 = Wood<br>
-     *  1 = Stone<br>
-     *  2 = Iron<br>
-     *  3 = Diamond<br>
-     *  4 = Netherite
-     */
-    public static int HARVEST_LEVEL = 3;
 
     /**
      * The Constructor that takes in properties

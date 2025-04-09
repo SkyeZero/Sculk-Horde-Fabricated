@@ -1,5 +1,6 @@
 package com.github.sculkhorde.common.block;
 
+import com.github.sculkhorde.core.ModBlocks;
 import com.github.sculkhorde.core.ModMobEffects;
 import com.github.sculkhorde.util.EntityAlgorithms;
 import com.github.sculkhorde.util.TickUnits;
@@ -21,12 +22,10 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LiquidBlockContainer;
-import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -93,11 +92,7 @@ public class DiseasedKelpBlock extends Block implements IForgeBlock, LiquidBlock
      */
     public static Properties getProperties()
     {
-        return Properties.of()
-                .mapColor(MapColor.QUARTZ)
-                .strength(HARDNESS, BLAST_RESISTANCE)
-                .requiresCorrectToolForDrops()
-                .sound(SoundType.SLIME_BLOCK);
+        return Properties.copy(ModBlocks.GRASS.get());
     }
 
     /** Makes entities slow and damages them. I stole this code from the berry bush.<br>
