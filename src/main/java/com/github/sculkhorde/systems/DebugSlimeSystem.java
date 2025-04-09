@@ -33,6 +33,10 @@ public class DebugSlimeSystem {
 
     public DebugSlimeSystem()
     {
+        if(ServerLifecycleHooks.getCurrentServer() == null)
+        {
+            return;
+        }
         createTeams();
     }
 
@@ -49,6 +53,7 @@ public class DebugSlimeSystem {
     }
 
     protected PlayerTeam createTeamIfAbsent(String teamID, Component teamDisplayName) {
+
         Scoreboard scoreboard = ServerLifecycleHooks.getCurrentServer().getScoreboard();
         if (scoreboard.getPlayerTeam(teamID) != null)
         {
