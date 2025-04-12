@@ -1,13 +1,15 @@
 package com.github.sculkhorde.common.entity.projectile;
 
+import com.github.sculkhorde.common.entity.AreaEffectSphericalCloudEntity;
 import com.github.sculkhorde.core.ModEntities;
+import com.github.sculkhorde.core.ModMobEffects;
 import com.github.sculkhorde.util.ColorUtil;
-import com.github.sculkhorde.util.EntityAlgorithms;
 import com.github.sculkhorde.util.ParticleUtil;
+import com.github.sculkhorde.util.TickUnits;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.entity.Entity;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.Projectile;
@@ -55,25 +57,25 @@ public class AcidBlobProjectileEntity extends AbstractProjectileEntity implement
 
     @Override
     protected void onHitEntity(EntityHitResult entityHitResult) {
-        if (!this.level().isClientSide()) {
-            Entity entity = entityHitResult.getEntity();
-            if (entity instanceof LivingEntity livingEntity){
-                if(!EntityAlgorithms.isSculkLivingEntity.test(livingEntity))
-                {
-                    entity.hurt(damageSources().generic(),this.getDamage());
-                    applyEffectToEntity(livingEntity);
-                }
-            }
-        }else{
-            super.onHitEntity(entityHitResult);
-        }
+        super.onHitEntity(entityHitResult);
+        explode();
     }
 
     @Override
     protected void onHitBlock(BlockHitResult hitResult) {
         super.onHitBlock(hitResult);
-        if (level().getBlockState(hitResult.getBlockPos()).isSolidRender(level(),hitResult.getBlockPos()))
-            discard();
+        explode();
+    }
+
+    protected void explode()
+    {
+        AreaEffectSphericalCloudEntity effectCloud = new AreaEffectSphericalCloudEntity(level(), getX(), getY(), getZ());
+        if(getOwner() instanceof LivingEntity livingOwner) { effectCloud.setOwner(livingOwner); }
+        effectCloud.setRadius(3.0F);
+        effectCloud.setDuration(TickUnits.convertSecondsToTicks(5));
+        effectCloud.addEffect(new MobEffectInstance(ModMobEffects.CORRODED.get(), TickUnits.convertMinutesToTicks(30)));
+        level().addFreshEntity(effectCloud);
+        discard();
     }
 
     @Override
