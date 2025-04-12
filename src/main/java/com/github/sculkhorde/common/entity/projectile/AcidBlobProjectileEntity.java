@@ -73,7 +73,7 @@ public class AcidBlobProjectileEntity extends AbstractProjectileEntity implement
         if(getOwner() instanceof LivingEntity livingOwner) { effectCloud.setOwner(livingOwner); }
         effectCloud.setRadius(3.0F);
         effectCloud.setDuration(TickUnits.convertSecondsToTicks(5));
-        effectCloud.addEffect(new MobEffectInstance(ModMobEffects.CORRODED.get(), TickUnits.convertMinutesToTicks(30)));
+        effectCloud.addEffect(new MobEffectInstance(ModMobEffects.CORRODED.get(), TickUnits.convertMinutesToTicks(30), 1));
         level().addFreshEntity(effectCloud);
         discard();
     }
