@@ -8,7 +8,10 @@ import com.github.sculkhorde.util.TickUnits;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -186,6 +189,21 @@ public class SculkSheepEntity extends Monster implements GeoEntity, ISculkSmartE
 
                 };
         return goals;
+    }
+
+    public boolean hurt(DamageSource damageSource, float damageAmount) {
+        if (this.level().isClientSide) {
+            return false;
+        }
+
+        if (!damageSource.is(DamageTypeTags.AVOIDS_GUARDIAN_THORNS) && !damageSource.is(DamageTypes.THORNS)) {
+            Entity entity = damageSource.getDirectEntity();
+            if (entity instanceof LivingEntity) {
+                LivingEntity livingentity = (LivingEntity)entity;
+                livingentity.hurt(this.damageSources().thorns(this), 2.0F);
+            }
+        }
+        return super.hurt(damageSource, damageAmount);
     }
 
     private static final RawAnimation ATTACK_ANIMATION = RawAnimation.begin().thenPlay("attack");
