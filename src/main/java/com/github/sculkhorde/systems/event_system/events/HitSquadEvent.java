@@ -14,6 +14,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
@@ -189,6 +191,7 @@ public class HitSquadEvent extends Event {
             reaper = SculkSoulReaperEntity.spawnWithDifficulty(player.level(), potentialSpawnPoint.get().getCenter(), getTargetProfile().getDifficultyOfNextHit());
             reaper.setHitTarget(player);
             reaper.setParentEventUUID(getEventUUID());
+            reaper.addEffect(new MobEffectInstance(MobEffects.GLOWING, Integer.MAX_VALUE));
             setState(State.PURSUIT);
             return;
         }
