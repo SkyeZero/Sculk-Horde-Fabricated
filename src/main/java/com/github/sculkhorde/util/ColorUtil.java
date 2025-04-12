@@ -4,6 +4,8 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
 
+import java.util.Objects;
+
 public class ColorUtil {
 
     public static String sculkBaseColor1 = "034150"; // Lightest
@@ -11,7 +13,7 @@ public class ColorUtil {
     public static String sculkBaseColor3 = "04252D";
     public static String sculkBaseColor4 = "002A2A";
     public static String sculkBaseColor5 = "122225";
-    public static String sculkBaseColor6 = "122225";
+    public static String sculkBaseColor6 = "122225"; // Darkest
     public static String sculkLightColor1 = "29DFEB"; // Lightest
     public static String sculkLightColor2 = "0BB4AA";
     public static String sculkLightColor3 = "009295";
@@ -122,5 +124,34 @@ public class ColorUtil {
     public static Vector3f hexToVector3F(String hex)
     {
         return Vec3.fromRGB24(hexToRGB(hex)).toVector3f();
+    }
+
+    public static int hexToInt(String hexString)
+    {
+        Objects.requireNonNull(hexString, "Input hex string cannot be null");
+
+        String processedString = hexString.trim(); // Remove leading/trailing whitespace
+
+        if (processedString.isEmpty()) {
+            throw new NumberFormatException("Input hex string cannot be empty or only whitespace");
+        }
+
+        // Check for and remove the "0x" or "0X" prefix if present
+        if (processedString.startsWith("0x") || processedString.startsWith("0X")) {
+            if (processedString.length() < 3) {
+                // Handle cases like just "0x" or "0X"
+                throw new NumberFormatException("Invalid hex string format (only prefix found): \"" + hexString + "\"");
+            }
+            processedString = processedString.substring(2); // Remove the first two characters
+            // Check if string became empty after removing prefix
+            if (processedString.isEmpty()) {
+                throw new NumberFormatException("Hex string is empty after removing '0x' prefix: \"" + hexString + "\"");
+            }
+        }
+
+        // Parse the remaining string as hexadecimal (radix 16)
+        // Integer.parseInt handles case-insensitivity (a-f or A-F)
+        // It also throws NumberFormatException for invalid characters or values out of int range.
+        return Integer.parseInt(processedString, 16);
     }
 }
