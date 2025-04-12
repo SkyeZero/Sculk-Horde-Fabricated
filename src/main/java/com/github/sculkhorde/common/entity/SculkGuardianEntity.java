@@ -2,7 +2,7 @@ package com.github.sculkhorde.common.entity;
 
 import com.github.sculkhorde.common.entity.components.TargetParameters;
 import com.github.sculkhorde.common.entity.goal.*;
-import com.github.sculkhorde.common.entity.projectile.SculkAcidicProjectileEntity;
+import com.github.sculkhorde.common.entity.projectile.AcidBlobProjectileEntity;
 import com.github.sculkhorde.core.SculkHorde;
 import com.github.sculkhorde.util.EntityAlgorithms;
 import com.github.sculkhorde.util.SquadHandler;
@@ -180,7 +180,8 @@ public class SculkGuardianEntity extends WaterAnimal implements GeoEntity, IScul
     }
 
     public void performRangedAttack(LivingEntity target) {
-        SculkAcidicProjectileEntity acid = new SculkAcidicProjectileEntity(target.level(), this, 1);
+        AcidBlobProjectileEntity acid = new AcidBlobProjectileEntity(target.level(), this, 4);
+        acid.setPos(this.position());
         double d0 = target.getX() - this.getX();
         double d1 = target.getY(0.3333333333333333D) - acid.getY();
         double d2 = target.getZ() - this.getZ();
@@ -381,35 +382,20 @@ public class SculkGuardianEntity extends WaterAnimal implements GeoEntity, IScul
             //((SculkGuardianEntity)mob).triggerAnim("attack_controller", "attack");
         }
 
-        protected void checkAndStartAttack(LivingEntity targetMob, double distanceFromTargetIn)
+        @Override
+        protected void checkAndAttack(LivingEntity targetMob)
         {
             boolean isTargetNull = targetMob == null;
             if (isTargetNull) {
                 return;
             }
-            boolean isTooFarFromTarget = distanceFromTargetIn > maxDistanceForAttack;
+            boolean isTooFarFromTarget = false; //distanceFromTargetIn > maxDistanceForAttack;
             boolean canSeeTarget = this.mob.getSensing().hasLineOfSight(targetMob);
             if (!isTimeToAttack() || isTooFarFromTarget || !canSeeTarget) {
                 return;
             }
-            triggerAnimation();
 
-            mob.level().getServer().tell(new net.minecraft.server.TickTask(mob.level().getServer().getTickCount() + ATTACK_DELAY, () ->
-            {
-
-                if (mob == null || targetMob == null) {
-                    return;
-                }
-
-                if (mob.isDeadOrDying() || targetMob.isDeadOrDying()) {
-                    return;
-                }
-
-                performRangedAttack(targetMob);
-
-            }));
-
-            resetAttackCooldown();
+            performRangedAttack(targetMob);
         }
     }
 

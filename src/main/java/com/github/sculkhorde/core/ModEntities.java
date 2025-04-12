@@ -12,6 +12,7 @@ import com.github.sculkhorde.common.entity.boss.sculk_soul_reaper.ElementalIceMa
 import com.github.sculkhorde.common.entity.boss.sculk_soul_reaper.ElementalPoisonMagicCircleAttackEntity;
 import com.github.sculkhorde.common.entity.dev.ChunkInfectEntity;
 import com.github.sculkhorde.common.entity.infection.*;
+import com.github.sculkhorde.common.entity.projectile.AcidBlobProjectileEntity;
 import com.github.sculkhorde.common.entity.projectile.CustomItemProjectileEntity;
 import com.github.sculkhorde.common.entity.projectile.PurificationFlaskProjectileEntity;
 import com.github.sculkhorde.common.entity.projectile.SculkAcidicProjectileEntity;
@@ -104,6 +105,8 @@ public class ModEntities {
     public static final RegistryObject<EntityType<ZoltraakAttackEntity>> ZOLTRAAK_ATTACK_ENTITY = ENTITY_TYPES.register("zoltraak_attack_entity", () -> EntityType.Builder.<ZoltraakAttackEntity>of(ZoltraakAttackEntity::new, MobCategory.MISC).sized(3f, 3f).clientTrackingRange(4).updateInterval(10).build("zoltraak_attack_entity"));
     public static String SOUL_BLAST_ENTITY_ID = "soul_blast";
     public static final RegistryObject<EntityType<SoulBlastAttackEntity>> SOUL_BLAST_ATTACK_ENTITY = ENTITY_TYPES.register(SOUL_BLAST_ENTITY_ID, () -> EntityType.Builder.<SoulBlastAttackEntity>of(SoulBlastAttackEntity::new, MobCategory.MISC).sized(3f, 3f).clientTrackingRange(4).updateInterval(10).build(SOUL_BLAST_ENTITY_ID));
+    public static String ACID_BLOB_PROJECTILE_ENTITY_ID = "acid_blob_projectile";
+    public static final RegistryObject<EntityType<AcidBlobProjectileEntity>> ACID_BLOB_PROJECTILE_ENTITY = ENTITY_TYPES.register(ACID_BLOB_PROJECTILE_ENTITY_ID, () -> EntityType.Builder.<AcidBlobProjectileEntity>of(AcidBlobProjectileEntity::new, MobCategory.MISC).sized(0.9f, 0.9f).clientTrackingRange(4).updateInterval(10).build(ACID_BLOB_PROJECTILE_ENTITY_ID));
 
     public static class EntityTags
     {
