@@ -94,6 +94,9 @@ public class ModConfig {
 
         public final ForgeConfigSpec.ConfigValue<Integer> max_infestation_cursor_population;
 
+        public final ForgeConfigSpec.ConfigValue<Boolean> enable_gpu_compatibility_mode;
+
+
         public void loadItemsInfectionCursorsCanEat()
         {
             infection_cursor_item_eat_list.clear();
@@ -212,6 +215,7 @@ public class ModConfig {
             chunk_loading_enabled = builder.comment("Should the Sculk Horde load chunks? If disabled, and will ruin the intended experience. For example, raids wont work properly (Default true)").define("chunk_loading_enabled",true);
             disable_defeating_sculk_horde = builder.comment("Should players be able to defeat the Sculk Horde?").define("disable_defeating_sculk_horde",false);
             sculk_horde_target_blacklist = builder.comment("Add entities to this list to stop the sculk horde from attacking them. I.E. minecraft:creeper. Be careful what you put in here, this can potentially lead to issues.").defineList("sculk_horde_target_blacklist", Arrays.asList(""), entry -> true);
+            enable_gpu_compatibility_mode = builder.comment("Should GPU compatibility mode be enabled? This Fixes Sculk mobs appearing black by removes glow layers from Sculk mobs. May be necessary for some GPU's like AMD or MAC's. Game Restart Required. (Default false)").define("enable_gpu_compatibility_mode",false);
             builder.pop();
 
             builder.push("Trigger Automatically Variables");

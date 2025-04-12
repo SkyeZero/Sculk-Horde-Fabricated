@@ -101,7 +101,8 @@ public class ConfigCommand implements Command<CommandSourceStack> {
                 .then(booleanConfigOption("should_all_other_mobs_attack_the_sculk_horde"))
                 .then(booleanConfigOption("chunk_loading_enabled"))
                 .then(booleanConfigOption("block_infestation_enabled"))
-                .then(booleanConfigOption("disable_defeating_sculk_horde"));
+                .then(booleanConfigOption("disable_defeating_sculk_horde"))
+                .then(booleanConfigOption("enable_gpu_compatibility_mode"));
     }
 
     private static ArgumentBuilder<CommandSourceStack, ?> triggerAutomaticallyConfig(CommandDispatcher<CommandSourceStack> dispatcher) {
@@ -321,6 +322,12 @@ public class ConfigCommand implements Command<CommandSourceStack> {
                 case "disable_defeating_sculk_horde":
                     if (valueType.equals(Boolean.class)) {
                         ModConfig.SERVER.disable_defeating_sculk_horde.set((Boolean) rawValue);
+                        success = true;
+                    }
+                case "enable_gpu_compatibility_mode":
+                    if (valueType.equals(Boolean.class)) {
+                        ModConfig.SERVER.enable_gpu_compatibility_mode.set((Boolean) rawValue);
+                        context.getSource().sendSystemMessage(Component.literal("Game restart required to take effect."));
                         success = true;
                     }
 

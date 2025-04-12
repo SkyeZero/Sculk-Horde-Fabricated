@@ -2,6 +2,7 @@ package com.github.sculkhorde.client.renderer.entity;
 
 import com.github.sculkhorde.client.model.enitity.SoulFireProjectileModel;
 import com.github.sculkhorde.common.entity.boss.sculk_soul_reaper.SoulFireProjectileAttackEntity;
+import com.github.sculkhorde.core.ModConfig;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
@@ -25,7 +26,7 @@ import java.util.Objects;
 public class SoulFireProjectileRenderer extends GeoEntityRenderer<SoulFireProjectileAttackEntity> {
     public SoulFireProjectileRenderer(EntityRendererProvider.Context renderManager) {
         super(renderManager, new SoulFireProjectileModel());
-        this.addRenderLayer(new AutoGlowingGeoLayer(this));
+        if(!ModConfig.SERVER.enable_gpu_compatibility_mode.get()) {this.addRenderLayer(new AutoGlowingGeoLayer(this));}
     }
 
     @Override

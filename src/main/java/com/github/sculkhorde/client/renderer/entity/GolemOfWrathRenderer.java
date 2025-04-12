@@ -11,7 +11,7 @@ public class GolemOfWrathRenderer extends GeoEntityRenderer<GolemOfWrathEntity> 
 
     public GolemOfWrathRenderer(EntityRendererProvider.Context renderManager) {
         super(renderManager, new GolemOfWrathModel());
-        //this.addRenderLayer(new AutoGlowingGeoLayer(this));
+        //if(!ModConfig.SERVER.enable_gpu_compatibility_mode.get()) {this.addRenderLayer(new AutoGlowingGeoLayer(this));}
     }
 
 }

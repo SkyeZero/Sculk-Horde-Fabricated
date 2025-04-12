@@ -2,6 +2,7 @@ package com.github.sculkhorde.client.renderer.entity;
 
 import com.github.sculkhorde.client.model.enitity.ZoltraakAttackModel;
 import com.github.sculkhorde.common.entity.boss.sculk_soul_reaper.ZoltraakAttackEntity;
+import com.github.sculkhorde.core.ModConfig;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
@@ -27,7 +28,7 @@ public class ZoltraakAttackRenderer extends GeoEntityRenderer<ZoltraakAttackEnti
 
     public ZoltraakAttackRenderer(EntityRendererProvider.Context renderManager) {
         super(renderManager, new ZoltraakAttackModel());
-        this.addRenderLayer(new AutoGlowingGeoLayer(this));
+        if(!ModConfig.SERVER.enable_gpu_compatibility_mode.get()) {this.addRenderLayer(new AutoGlowingGeoLayer(this));}
     }
     /*
     @Override
