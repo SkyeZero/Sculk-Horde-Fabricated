@@ -1,5 +1,7 @@
 package com.github.sculkhorde.common.entity.goal;
 
+import com.github.sculkhorde.util.EntityAlgorithms;
+import com.github.sculkhorde.util.TickUnits;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -7,22 +9,26 @@ import net.minecraft.world.entity.ai.goal.Goal;
 public class CustomAttackGoal extends Goal {
     protected final PathfinderMob mob;
 
-    protected int ticksUntilNextAttackInterval;
-    protected final int attackInterval = 60;
+    protected long timeOfLastExecution;
     protected long lastCanUseCheck;
-    protected int ATTACK_DELAY;
+    protected int attack_animation_delay;
     protected boolean isAttackInProgress = false;
-    protected int ticksUntilAttackExecution = ATTACK_DELAY;
+    protected int ticksUntilAttackExecution = attack_animation_delay;
     protected float maxDistanceForAttack = 0;
 
     public CustomAttackGoal(PathfinderMob mob, float maxDistanceForAttackIn, int attackDelay) {
         this.mob = mob;
-        ATTACK_DELAY = attackDelay;
+        attack_animation_delay = attackDelay;
         maxDistanceForAttack = maxDistanceForAttackIn;
     }
 
     public long getCanUseCheckInterval() {
         return 20;
+    }
+
+    protected long getExecutionCooldown()
+    {
+        return TickUnits.convertSecondsToTicks(2);
     }
 
     public boolean canUse() {
@@ -32,22 +38,31 @@ public class CustomAttackGoal extends Goal {
         }
 
         this.lastCanUseCheck = gameTime;
-        LivingEntity target = this.mob.getTarget();
-        if (target == null) {
-            return false;
-        } else if (!target.isAlive()) {
+
+        if(!isExecutionCooldownOver())
+        {
             return false;
         }
 
-        return maxDistanceForAttack >= this.mob.distanceToSqr(target.getX(), target.getY(), target.getZ());
+        if(isTargetInvalid())
+        {
+            return false;
+        }
+
+        return true;
     }
 
     public boolean canContinueToUse() {
-        return canUse();
+        if(!isAttackInProgress)
+        {
+            return false;
+        }
+        return !isTargetInvalid();
     }
 
     public void start() {
-        this.ticksUntilNextAttackInterval = 0;
+        triggerAnimation();
+        isAttackInProgress = true;
     }
 
     public void stop() {
@@ -60,45 +75,81 @@ public class CustomAttackGoal extends Goal {
 
 
     public void tick() {
-        LivingEntity target = this.mob.getTarget();
-        if (target == null) {
+        if (isTargetInvalid()) {
             return;
         }
 
-        this.ticksUntilNextAttackInterval = Math.max(getTicksUntilNextAttackInterval() - 1, 0);
+        ticksUntilAttackExecution = Math.max(ticksUntilAttackExecution - 1, 0);
 
-        if(!isAttackInProgress)
+        if(ticksUntilAttackExecution > 0)
         {
-            isAttackInProgress = true;
-            triggerAnimation();
             return;
         }
 
-        if(ticksUntilAttackExecution <= 0)
-        {
-            checkAndAttack(target);
-            resetAttackCooldown();
-        }
+        checkAndAttack(mob.getTarget());
+        endAttack();
+
     }
 
     protected void triggerAnimation() {
 
     }
 
+    protected boolean isTargetNullOrDead()
+    {
+        if (mob.getTarget() == null) {
+            return true;
+        }
+
+        return mob.getTarget().isDeadOrDying();
+    }
+
+    protected boolean isTooFarFromTarget()
+    {
+        if (mob.getTarget() == null) {
+            return true;
+        }
+
+        return EntityAlgorithms.getDistanceBetweenEntities(mob, mob.getTarget()) > maxDistanceForAttack;
+    }
+
+    protected boolean cantSeeTarget()
+    {
+        if (mob.getTarget() == null) {
+            return true;
+        }
+
+        return !this.mob.getSensing().hasLineOfSight(mob.getTarget());
+    }
+
+    protected boolean isTargetInvalid()
+    {
+        if(isTargetNullOrDead())
+        {
+            return true;
+        }
+
+        if(isTooFarFromTarget())
+        {
+            return true;
+        }
+
+        if(cantSeeTarget())
+        {
+            return true;
+        }
+
+        return false;
+    }
+
 
     protected void checkAndAttack(LivingEntity targetMob) {
-        boolean isTargetNull = targetMob == null;
-        if (isTargetNull) {
+
+        if (isTargetInvalid()) {
             return;
         }
 
-        if (mob.isDeadOrDying() || targetMob.isDeadOrDying()) {
-            return;
-        }
-
-        boolean isTooFarFromTarget = this.mob.getPerceivedTargetDistanceSquareForMeleeAttack(targetMob) > maxDistanceForAttack;
-        boolean canSeeTarget = this.mob.getSensing().hasLineOfSight(targetMob);
-        if (!isTimeToAttack() || isTooFarFromTarget || !canSeeTarget) {
+        if (!isExecutionCooldownOver()) {
             return;
         }
 
@@ -106,22 +157,14 @@ public class CustomAttackGoal extends Goal {
         onTargetHurt(targetMob);
     }
 
-    protected void resetAttackCooldown() {
-        ticksUntilNextAttackInterval = getAttackInterval();
-        ticksUntilAttackExecution = ATTACK_DELAY;
+    protected void endAttack() {
+        timeOfLastExecution = mob.level().getGameTime();
+        ticksUntilAttackExecution = attack_animation_delay;
         isAttackInProgress = false;
     }
 
-    protected boolean isTimeToAttack() {
-        return this.ticksUntilNextAttackInterval <= 0;
-    }
-
-    protected int getTicksUntilNextAttackInterval() {
-        return this.ticksUntilNextAttackInterval;
-    }
-
-    protected int getAttackInterval() {
-        return this.adjustedTickDelay(attackInterval);
+    protected boolean isExecutionCooldownOver() {
+        return mob.level().getGameTime() - timeOfLastExecution >= getExecutionCooldown();
     }
 
     public void onTargetHurt(LivingEntity target) {

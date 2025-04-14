@@ -347,7 +347,7 @@ public class GolemOfWrathEntity extends PathfinderMob implements GeoEntity, IPur
         }
 
         @Override
-        protected int getAttackInterval() {
+        protected long getExecutionCooldown() {
             return TickUnits.convertSecondsToTicks(2);
         }
 
@@ -406,10 +406,6 @@ public class GolemOfWrathEntity extends PathfinderMob implements GeoEntity, IPur
             return !canUse();
         }
 
-        @Override
-        protected int getAttackInterval() {
-            return TickUnits.convertSecondsToTicks(6);
-        }
 
         @Override
         public void onTargetHurt(LivingEntity target) {

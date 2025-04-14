@@ -378,6 +378,11 @@ public class SculkGuardianEntity extends WaterAnimal implements GeoEntity, IScul
         }
 
         @Override
+        protected long getExecutionCooldown() {
+            return TickUnits.convertSecondsToTicks(3);
+        }
+
+        @Override
         protected void triggerAnimation() {
             //((SculkGuardianEntity)mob).triggerAnim("attack_controller", "attack");
         }
@@ -385,16 +390,9 @@ public class SculkGuardianEntity extends WaterAnimal implements GeoEntity, IScul
         @Override
         protected void checkAndAttack(LivingEntity targetMob)
         {
-            boolean isTargetNull = targetMob == null;
-            if (isTargetNull) {
+            if (isTargetInvalid()) {
                 return;
             }
-            boolean isTooFarFromTarget = false; //distanceFromTargetIn > maxDistanceForAttack;
-            boolean canSeeTarget = this.mob.getSensing().hasLineOfSight(targetMob);
-            if (!isTimeToAttack() || isTooFarFromTarget || !canSeeTarget) {
-                return;
-            }
-
             performRangedAttack(targetMob);
         }
     }
