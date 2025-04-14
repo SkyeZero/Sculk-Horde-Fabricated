@@ -2,7 +2,6 @@ package com.github.sculkhorde.common.entity;
 
 import com.github.sculkhorde.common.entity.components.TargetParameters;
 import com.github.sculkhorde.common.entity.goal.*;
-import com.github.sculkhorde.core.ModSounds;
 import com.github.sculkhorde.util.SquadHandler;
 import com.github.sculkhorde.util.TickUnits;
 import net.minecraft.core.BlockPos;
@@ -227,19 +226,19 @@ public class SculkSheepEntity extends Monster implements GeoEntity, ISculkSmartE
 
 
     protected SoundEvent getAmbientSound() {
-        return ModSounds.SCULK_ZOMBIE_IDLE.get();
+        return SoundEvents.SHEEP_AMBIENT;
     }
 
     protected SoundEvent getHurtSound(DamageSource pDamageSource) {
-        return ModSounds.SCULK_ZOMBIE_HURT.get();
+        return SoundEvents.SHEEP_HURT;
     }
 
     protected SoundEvent getDeathSound() {
-        return ModSounds.SCULK_ZOMBIE_DEATH.get();
+        return SoundEvents.SHEEP_DEATH;
     }
 
     protected void playStepSound(BlockPos pPos, BlockState pBlock) {
-        this.playSound(SoundEvents.DROWNED_STEP, 0.15F, 1.0F);
+        this.playSound(SoundEvents.SHEEP_STEP, 0.15F, 1.0F);
     }
 
     public boolean dampensVibrations() {
