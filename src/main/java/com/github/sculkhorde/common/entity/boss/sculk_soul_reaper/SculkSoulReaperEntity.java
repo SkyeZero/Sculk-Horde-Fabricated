@@ -433,7 +433,7 @@ public class SculkSoulReaperEntity extends Monster implements GeoEntity, ISculkS
         super.customServerAiStep();
         this.bossEvent.setProgress(this.getHealth() / this.getMaxHealth());
 
-        if(!SculkHorde.eventSystem.doesEventExist(parentEventUUID))
+        if(!SculkHorde.eventSystem.doesEventExist(parentEventUUID) && parentEventUUID != null)
         {
             SculkHorde.LOGGER.info("SculkSoulReaperEntity | Despawned myself because parent event does not exist.");
             despawn();
