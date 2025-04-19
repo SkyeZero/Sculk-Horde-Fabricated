@@ -46,8 +46,7 @@ public class Gravemind
     private static long time_save_point = 0; //Used to track time passage.
     private static int sculkMassCheck = 0;
 
-    protected static final long INITIAL_WAIT_TIME_AFTER_SERVER_STARTUP = TickUnits.convertSecondsToTicks(30);
-    public long ticksSinceStartUp = 0;
+    public boolean isWorldFullyLoaded = false;
 
     /**
      * Default Constructor <br>
@@ -73,12 +72,12 @@ public class Gravemind
             return false;
         }
 
-        return SculkHorde.gravemind.isWaitTimeOver();
+        return SculkHorde.gravemind.isWorldFullyLoaded();
     }
 
-    public boolean isWaitTimeOver()
+    public boolean isWorldFullyLoaded()
     {
-        return ticksSinceStartUp >= INITIAL_WAIT_TIME_AFTER_SERVER_STARTUP;
+        return isWorldFullyLoaded;
     }
 
     public evolution_states getEvolutionState()
@@ -252,7 +251,6 @@ public class Gravemind
          */
         if(!isGravemindActive())
         {
-            ticksSinceStartUp += 1;
             return;
         }
 

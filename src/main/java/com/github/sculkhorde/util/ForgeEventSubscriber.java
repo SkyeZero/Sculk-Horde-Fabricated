@@ -59,6 +59,12 @@ public class ForgeEventSubscriber {
         {
             return;
         }
+
+        if(!SculkHorde.gravemind.isWorldFullyLoaded)
+        {
+            SculkHorde.gravemind.isWorldFullyLoaded = true;
+        }
+
         SculkHorde.gravemind.serverTick();
     }
 
