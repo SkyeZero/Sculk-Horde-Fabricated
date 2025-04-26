@@ -1,9 +1,9 @@
 package com.github.sculkhorde.common.item;
 
-import com.github.sculkhorde.systems.cursor_system.CursorSystem;
-import com.github.sculkhorde.systems.cursor_system.VirtualSurfaceInfestorCursor;
+import com.github.sculkhorde.common.entity.SculkMetamorphosisPodEntity;
+import com.github.sculkhorde.common.entity.SculkMiteEntity;
 import com.github.sculkhorde.util.StructureUtil;
-import net.minecraft.core.BlockPos;
+import com.github.sculkhorde.util.TickUnits;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
@@ -17,8 +17,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.extensions.IForgeItem;
 import net.minecraftforge.server.ServerLifecycleHooks;
-
-import java.util.Optional;
 
 public class DevWand extends Item implements IForgeItem {
 	/* NOTE:
@@ -86,45 +84,15 @@ public class DevWand extends Item implements IForgeItem {
 		ClipContext rayTrace = new ClipContext(playerIn.getEyePosition(1.0F), playerIn.getEyePosition(1.0F).add(playerIn.getLookAngle().scale(5)), ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, playerIn);
 
 		//IF successful, try to place a node
-		Vec3 result = rayTrace.getTo();
+		Vec3 spawnPosition = rayTrace.getTo();
 
-		Optional<VirtualSurfaceInfestorCursor> possibleCursor = CursorSystem.createSurfaceInfestorVirtualCursor(level, BlockPos.containing(result));
-
-		if(possibleCursor.isEmpty())
-		{
-			return InteractionResultHolder.pass(itemstack);
-		}
-
-		possibleCursor.get().setMaxRange(10);
-		possibleCursor.get().setTickIntervalTicks(10);
-		possibleCursor.get().setSearchIterationsPerTick(50);
-		possibleCursor.get().setMaxTransformations(5);
-
-		//ParticleUtil.spawnBurrowedBurstParticles(serverLevel, result, 8, 0.3F);
-		//ZoltraakAttackEntity.castZoltraakOnEntity(playerIn, playerIn, rayTrace.getTo());
-
-		//LivingArmorEntity entity = new LivingArmorEntity(ModEntities.LIVING_ARMOR.get(), worldIn);
-		//entity.teleportTo(playerIn.blockPosition().getX(), playerIn.blockPosition().getY(), playerIn.blockPosition().getZ());
-		//worldIn.addFreshEntity(entity);
-
-
-
-		//StructureUtil.placeStructureTemplate((ServerLevel) worldIn, struct, playerIn.blockPosition());
-		/*
-		if(structurePlacer == null)
-		{
-			ResourceLocation structure = new ResourceLocation("minecraft:igloo/top");
-			StructureTemplateManager structuretemplatemanager = serverLevel.getStructureManager();
-			Optional<StructureTemplate> structureTemplate;
-			structureTemplate = structuretemplatemanager.get(structure);
-
-			StructurePlaceSettings structureplacesettings = (new StructurePlaceSettings());
-			structurePlacer = new StructureUtil.StructurePlacer(structureTemplate.get(), serverLevel, playerIn.blockPosition(), playerIn.blockPosition(), structureplacesettings, playerIn.getRandom());
-		}
-
-		structurePlacer.tick();
-
-		 */
+		SculkMetamorphosisPodEntity pod = new SculkMetamorphosisPodEntity(serverLevel, TickUnits.convertSecondsToTicks(5));
+		pod.addEntityToSpawn(new SculkMiteEntity(serverLevel));
+		pod.addEntityToSpawn(new SculkMiteEntity(serverLevel));
+		pod.addEntityToSpawn(new SculkMiteEntity(serverLevel));
+		pod.addEntityToSpawn(new SculkMiteEntity(serverLevel));
+		pod.setPos(spawnPosition);
+		serverLevel.addFreshEntity(pod);
 
 		return InteractionResultHolder.pass(itemstack);
 	}

@@ -188,7 +188,7 @@ public class HitSquadEvent extends Event {
 
         if(potentialSpawnPoint.isPresent())
         {
-            reaper = SculkSoulReaperEntity.spawnWithDifficulty(player.level(), potentialSpawnPoint.get().getCenter(), getTargetProfile().getDifficultyOfNextHit());
+            reaper = SculkSoulReaperEntity.spawnWithDifficulty(player.level(), potentialSpawnPoint.get().getCenter(), getTargetProfile().getDifficultyOfNextHit(), true);
             reaper.setHitTarget(player);
             reaper.setParentEventUUID(getEventUUID());
             reaper.addEffect(new MobEffectInstance(MobEffects.GLOWING, Integer.MAX_VALUE));

@@ -89,6 +89,7 @@ public class ClientModEventSubscriber {
         event.registerEntityRenderer(ModEntities.SCULK_BROOD_HATCHER.get(), SculkBroodHatcherRenderer::new);
         event.registerEntityRenderer(ModEntities.SCULK_BROODLING.get(), SculkBroodlingRenderer::new);
         event.registerEntityRenderer(ModEntities.SCULK_SHEEP.get(), SculkSheepRenderer::new);
+        event.registerEntityRenderer(ModEntities.SCULK_METAMORPHOSIS_POD.get(), SculkMetamorphosisPodRenderer::new);
 
         event.registerEntityRenderer(ModEntities.SOUL_FIRE_PROJECTILE.get(), SoulFireProjectileRenderer::new);
         event.registerEntityRenderer(ModEntities.SOUL_POISON_PROJECTILE.get(), SoulPoisonProjectileRenderer::new);

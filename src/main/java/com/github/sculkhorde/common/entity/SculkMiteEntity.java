@@ -2,6 +2,7 @@ package com.github.sculkhorde.common.entity;
 
 import com.github.sculkhorde.common.entity.goal.*;
 import com.github.sculkhorde.core.ModConfig;
+import com.github.sculkhorde.core.ModEntities;
 import com.github.sculkhorde.core.ModMobEffects;
 import com.github.sculkhorde.core.ModSounds;
 import com.github.sculkhorde.util.SquadHandler;
@@ -82,6 +83,12 @@ public class SculkMiteEntity extends Monster implements GeoEntity, ISculkSmartEn
     public SculkMiteEntity(EntityType<? extends SculkMiteEntity> type, Level worldIn)
     {
         super(type, worldIn);
+        this.setPathfindingMalus(BlockPathTypes.UNPASSABLE_RAIL, 0.0F);
+    }
+
+    public SculkMiteEntity(Level worldIn)
+    {
+        super(ModEntities.SCULK_MITE.get(), worldIn);
         this.setPathfindingMalus(BlockPathTypes.UNPASSABLE_RAIL, 0.0F);
     }
 

@@ -123,7 +123,7 @@ public class SculkSoulReaperEntity extends Monster implements GeoEntity, ISculkS
         parentEventUUID = eventUUID;
     }
 
-    public static SculkSoulReaperEntity spawnWithDifficulty(Level level, Vec3 pos, int mobDifficultyLevel)
+    public static SculkSoulReaperEntity spawnWithDifficulty(Level level, Vec3 pos, int mobDifficultyLevel, boolean withSquad)
     {
         SculkSoulReaperEntity reaper = new SculkSoulReaperEntity(ModEntities.SCULK_SOUL_REAPER.get(), level);
         reaper.setPos(pos);
@@ -131,6 +131,10 @@ public class SculkSoulReaperEntity extends Monster implements GeoEntity, ISculkS
         reaper.getSquad().createSquad();
 
         level.addFreshEntity(reaper);
+        if(!withSquad)
+        {
+            return reaper;
+        }
 
         SculkRavagerEntity ravager = new SculkRavagerEntity(level);
         ravager.setPos(pos);
