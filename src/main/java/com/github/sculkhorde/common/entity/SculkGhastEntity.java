@@ -4,7 +4,6 @@ import com.github.sculkhorde.common.entity.components.ImprovedFlyingNavigator;
 import com.github.sculkhorde.common.entity.components.TargetParameters;
 import com.github.sculkhorde.common.entity.goal.*;
 import com.github.sculkhorde.core.ModConfig;
-import com.github.sculkhorde.core.ModMobEffects;
 import com.github.sculkhorde.util.BlockAlgorithms;
 import com.github.sculkhorde.util.ChunkLoading.EntityChunkLoaderHelper;
 import com.github.sculkhorde.util.EntityAlgorithms;
@@ -12,6 +11,7 @@ import com.github.sculkhorde.util.SquadHandler;
 import com.github.sculkhorde.util.TickUnits;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.DifficultyInstance;
@@ -26,13 +26,12 @@ import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.constant.DefaultAnimations;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
@@ -42,6 +41,8 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumSet;
+import java.util.List;
+import java.util.function.Predicate;
 
 public class SculkGhastEntity extends FlyingMob implements GeoEntity, ISculkSmartEntity {
 
@@ -71,12 +72,14 @@ public class SculkGhastEntity extends FlyingMob implements GeoEntity, ISculkSmar
     protected final TargetParameters TARGET_PARAMETERS = new TargetParameters(this).enableTargetHostiles().disableTargetingEntitiesInWater();
 
     protected BlockPos anchorPoint = BlockPos.ZERO;
-    Vec3 moveTargetPoint = new Vec3(anchorPoint.getX(), anchorPoint.getY(), anchorPoint.getZ());
+    protected Vec3 moveTargetPoint = new Vec3(anchorPoint.getX(), anchorPoint.getY(), anchorPoint.getZ());
 
-    ArrayList<BlockPos> searchPositions = new ArrayList<>();
-    Vec3 spawnPoint = null;
-
+    protected ArrayList<BlockPos> searchPositions = new ArrayList<>();
+    protected Vec3 spawnPoint = null;
     protected boolean isScouter = false;
+
+    protected final double MAX_MOB_MASS_STORED = 1000D;
+    protected final ArrayList<Mob> storedMobs = new ArrayList<>();
 
     /**
      * The Constructor
@@ -104,7 +107,7 @@ public class SculkGhastEntity extends FlyingMob implements GeoEntity, ISculkSmar
                 .add(Attributes.ATTACK_KNOCKBACK, ATTACK_KNOCKBACK)
                 .add(Attributes.FOLLOW_RANGE,FOLLOW_RANGE)
                 .add(Attributes.MOVEMENT_SPEED, MOVEMENT_SPEED)
-                .add(Attributes.FLYING_SPEED, 3F)
+                .add(Attributes.FLYING_SPEED, 2F)
                 .add(net.minecraftforge.common.ForgeMod.ENTITY_GRAVITY.get(), 0.0);
     }
 
@@ -143,9 +146,9 @@ public class SculkGhastEntity extends FlyingMob implements GeoEntity, ISculkSmar
     {
         return new Goal[]{
                 new Despawn(this, TickUnits.convertMinutesToTicks(15)),
-                new SweepAttackGoal(),
                 //new selectRandomLocationToVisit(),
                 //new SculkGhastGoToAnchor(this),
+                new FindAndStoreIdleMobs(),
                 new SculkGhastWanderGoal(this, 1.0F, TickUnits.convertSecondsToTicks(3), 10)
         };
     }
@@ -176,6 +179,63 @@ public class SculkGhastEntity extends FlyingMob implements GeoEntity, ISculkSmar
     }
 
     /** Getters and Setters **/
+
+    public double getStoredMobMass()
+    {
+        double result = 0;
+        for(Mob e : storedMobs)
+        {
+            if(!e.getAttributes().hasAttribute(Attributes.MAX_HEALTH))
+            {
+                continue;
+            }
+
+            result += e.getAttributes().getValue(Attributes.MAX_HEALTH);
+        }
+
+        return result;
+    }
+
+    public boolean canStoreMob(Mob entity)
+    {
+        if(entity == null || entity.isDeadOrDying())
+        {
+            return false;
+        }
+
+        if(entity.getUUID().equals(getUUID()))
+        {
+            return false;
+        }
+
+        if(!EntityAlgorithms.isSculkLivingEntity.test((entity)) && !EntityAlgorithms.isLivingEntityAllyToSculkHorde(entity))
+        {
+            return false;
+        }
+
+        if(entity.getTarget() != null)
+        {
+            return false;
+        }
+
+        if(getStoredMobMass() >= MAX_MOB_MASS_STORED)
+        {
+            return false;
+        }
+
+        if(!getSensing().hasLineOfSight(entity))
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    public void storeMob(Mob entity)
+    {
+        storedMobs.add(entity);
+        entity.discard();
+    }
 
     public Vec3 getAnchorPoint() {
         return this.anchorPoint.getCenter();
@@ -265,10 +325,6 @@ public class SculkGhastEntity extends FlyingMob implements GeoEntity, ISculkSmar
 
     protected float getStandingEyeHeight(@NotNull Pose p_33136_, EntityDimensions p_33137_) {
         return p_33137_.height * 0.35F;
-    }
-
-    public int getUniqueFlapTickOffset() {
-        return this.getId() * 3;
     }
 
     // This method allows the entity to travel in a given direction
@@ -361,8 +417,8 @@ public class SculkGhastEntity extends FlyingMob implements GeoEntity, ISculkSmar
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(DefaultAnimations.genericWalkIdleController(this).transitionLength(5));
-        controllers.add(new AnimationController<>(this, "blob_idle", 5, this::poseTumorCycle));
+        //controllers.add(DefaultAnimations.genericWalkIdleController(this).transitionLength(5));
+        //controllers.add(new AnimationController<>(this, "blob_idle", 5, this::poseTumorCycle));
     }
 
     @Override
@@ -471,78 +527,144 @@ public class SculkGhastEntity extends FlyingMob implements GeoEntity, ISculkSmar
         }
     }
 
-    abstract static class MoveTargetGoal extends Goal {
-        public MoveTargetGoal() {
-            this.setFlags(EnumSet.of(Flag.MOVE));
+    protected class FindAndStoreIdleMobs extends Goal
+    {
+        protected List<Entity> targets;
+
+        protected long timeOfLastPathRecalculation = 0;
+        protected long timeOfLastSearch = 0;
+        protected final long MOB_SEARCH_COOLDOWN = TickUnits.convertSecondsToTicks(5);
+
+        public FindAndStoreIdleMobs()
+        {
+            setFlags(EnumSet.of(Goal.Flag.MOVE));
+            setFlags(EnumSet.of(Flag.TARGET));
         }
-    }
 
-    class SweepAttackGoal extends MoveTargetGoal {
+        public Predicate<Entity> canStoreMobPredicate = (entity) ->
+        {
+            if(entity instanceof Mob mobEntity)
+            {
+                return canStoreMob(mobEntity);
+            }
 
-        private long lastTimeOfAttack = 0;
-        private final int COOLDOWN = TickUnits.convertSecondsToTicks(0);
+            return false;
+        };
 
+        @Override
         public boolean canUse() {
 
-            if(level().getGameTime() - lastTimeOfAttack < COOLDOWN)
+            if(getTarget() != null)
             {
                 return false;
             }
 
-            return SculkGhastEntity.this.getTarget() != null;
+            if(getStoredMobMass() >= MAX_MOB_MASS_STORED)
+            {
+                return false;
+            }
+
+            if(level().getGameTime() - timeOfLastSearch >= MOB_SEARCH_COOLDOWN)
+            {
+                AABB searchBox = EntityAlgorithms.createBoundingBoxCubeAtBlockPos(position(), (int) (FOLLOW_RANGE * 2));
+                targets = EntityAlgorithms.getEntitiesInBoundingBox((ServerLevel) level(), searchBox, canStoreMobPredicate);
+                timeOfLastSearch = level().getGameTime();
+            }
+
+            if(targets.isEmpty())
+            {
+                return false;
+            }
+
+            return true;
         }
 
-        public boolean canContinueToUse()
+        public void cleanTargets()
         {
-            LivingEntity target = SculkGhastEntity.this.getTarget();
-            if (target == null)
+            ArrayList<Entity> targetsToRemove = new ArrayList<>();
+
+            for(Entity target : targets)
+            {
+                if(canStoreMob((Mob) target))
+                {
+                    continue;
+                }
+
+                targetsToRemove.add(target);
+            }
+
+            for(Entity target : targetsToRemove)
+            {
+                targets.remove(target);
+            }
+        }
+
+        @Override
+        public boolean canContinueToUse() {
+
+            cleanTargets();
+
+            if(targets.isEmpty())
             {
                 return false;
             }
 
-            if (!target.isAlive())
-            {
-                return false;
-            }
-
-            return this.canUse();
+            return getStoredMobMass() < MAX_MOB_MASS_STORED;
         }
 
-        public void stop() {
-            SculkGhastEntity.this.setTarget(null);
+        @Override
+        public void start() {
+            super.start();
+
+            navigation.moveTo(targets.get(0), 1.0F);
         }
 
+        @Override
         public void tick() {
-            LivingEntity target = SculkGhastEntity.this.getTarget();
-            boolean isPhantomNull = target == null;
+            super.tick();
 
-            if(isPhantomNull)
+            if(targets.isEmpty())
             {
                 return;
             }
 
-            SculkGhastEntity.this.getNavigation().moveTo(target, 2.0D);
-            //AABB boundingBox = SculkPhantomEntity.this.getBoundingBox().inflate(0.2F);
-            float attackReach = (getBbWidth()/2) + 2;
-            //boolean doesPhantomIntersectTarget = boundingBox.intersects(target.getBoundingBox());
-            boolean doesPhantomIntersectTarget = SculkGhastEntity.this.distanceTo(target) <= attackReach;
+            Mob target = (Mob) targets.get(0);
 
-            if (doesPhantomIntersectTarget)
+            float pathRecalculationCooldown;
+            float distanceFromTarget = EntityAlgorithms.getDistanceBetweenEntities(SculkGhastEntity.this, target);
+            if(distanceFromTarget <= 5)
             {
-                SculkGhastEntity.this.doHurtTarget(target);
-                EntityAlgorithms.reducePurityEffectDuration(target, TickUnits.convertMinutesToTicks(5));
-                EntityAlgorithms.applyEffectToTarget(target, ModMobEffects.DISEASED_CYSTS.get(), TickUnits.convertSecondsToTicks(30), 0);
-                lastTimeOfAttack = level().getGameTime();
-                return;
+                pathRecalculationCooldown = TickUnits.convertSecondsToTicks(0.5F);
+            }
+            else if(distanceFromTarget <= 10)
+            {
+                pathRecalculationCooldown = TickUnits.convertSecondsToTicks(1F);
+            }
+            else if(distanceFromTarget <= 32)
+            {
+                pathRecalculationCooldown = TickUnits.convertSecondsToTicks(3F);
+            }
+            else
+            {
+                pathRecalculationCooldown = TickUnits.convertSecondsToTicks(6F);
             }
 
-            if (SculkGhastEntity.this.horizontalCollision || SculkGhastEntity.this.hurtTime > 0) {
-                lastTimeOfAttack = level().getGameTime();
+            if(level().getGameTime() - timeOfLastPathRecalculation >= pathRecalculationCooldown)
+            {
+                navigation.moveTo(targets.get(0), 1.0F);
+                timeOfLastPathRecalculation = level().getGameTime();
+            }
+
+
+            if(EntityAlgorithms.getDistanceBetweenEntities(target, SculkGhastEntity.this) < getBbWidth() * 2)
+            {
+                storeMob(target);
+                targets.remove(0);
             }
         }
     }
 
-    class Despawn extends DespawnAfterTime
+    protected class Despawn extends DespawnAfterTime
     {
         public Despawn(ISculkSmartEntity mob, int ticksThreshold) {
             super(mob, ticksThreshold);
@@ -573,7 +695,7 @@ public class SculkGhastEntity extends FlyingMob implements GeoEntity, ISculkSmar
         }
     }
 
-    class GhastBodyRotationControl extends BodyRotationControl {
+    protected class GhastBodyRotationControl extends BodyRotationControl {
         public GhastBodyRotationControl(Mob p_33216_) {
             super(p_33216_);
         }
