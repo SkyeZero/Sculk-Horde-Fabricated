@@ -3,19 +3,19 @@ package com.github.sculkhorde.common.entity;
 import com.github.sculkhorde.common.entity.components.ImprovedFlyingNavigator;
 import com.github.sculkhorde.common.entity.components.TargetParameters;
 import com.github.sculkhorde.common.entity.goal.*;
-import com.github.sculkhorde.core.ModConfig;
-import com.github.sculkhorde.util.BlockAlgorithms;
-import com.github.sculkhorde.util.ChunkLoading.EntityChunkLoaderHelper;
 import com.github.sculkhorde.util.EntityAlgorithms;
 import com.github.sculkhorde.util.SquadHandler;
 import com.github.sculkhorde.util.TickUnits;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -32,14 +32,10 @@ import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.function.Predicate;
@@ -148,6 +144,7 @@ public class SculkGhastEntity extends FlyingMob implements GeoEntity, ISculkSmar
                 new Despawn(this, TickUnits.convertMinutesToTicks(15)),
                 //new selectRandomLocationToVisit(),
                 //new SculkGhastGoToAnchor(this),
+                new DropOffMobsNearHostiles(),
                 new FindAndStoreIdleMobs(),
                 new SculkGhastWanderGoal(this, 1.0F, TickUnits.convertSecondsToTicks(3), 10)
         };
@@ -327,6 +324,24 @@ public class SculkGhastEntity extends FlyingMob implements GeoEntity, ISculkSmar
         return p_33137_.height * 0.35F;
     }
 
+    // #### Functions ####
+
+    public void releaseMob()
+    {
+        if(storedMobs.isEmpty())
+        {
+            return;
+        }
+
+        Mob savedEntity = storedMobs.get(0);
+        Mob spawnedEntity = (Mob) savedEntity.getType().spawn((ServerLevel) level(), blockPosition(), MobSpawnType.MOB_SUMMONED);
+        spawnedEntity.setTarget(getTarget());
+        spawnedEntity.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, TickUnits.convertSecondsToTicks(10), 0));
+        spawnedEntity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, TickUnits.convertSecondsToTicks(10), 1));
+        spawnedEntity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, TickUnits.convertSecondsToTicks(10), 0));
+        storedMobs.remove(0);
+    }
+
     // This method allows the entity to travel in a given direction
     @Override
     public void travel(@NotNull Vec3 direction) {
@@ -365,16 +380,15 @@ public class SculkGhastEntity extends FlyingMob implements GeoEntity, ISculkSmar
             return;
         }
 
-        if(spawnPoint == null)
+        if(getTarget() == null)
         {
-            spawnPoint = new Vec3(getX(), getY(), getZ());
+            setCustomName(Component.literal("No Target"));
+        }
+        else
+        {
+            setCustomName(Component.literal(getTarget().getClass().getSimpleName() + "\n" + " Distance: " + EntityAlgorithms.getDistanceBetweenEntities(this, getTarget())));
         }
 
-        // If this phantom is not scouting, don't bother chunk loading.
-        if(isScouter() && ModConfig.SERVER.should_phantoms_load_chunks.get())
-        {
-            EntityChunkLoaderHelper.getEntityChunkLoaderHelper().createChunkLoadRequestSquareForEntityIfAbsent(this,5, 3, TickUnits.convertMinutesToTicks(1));
-        }
     }
 
     public SpawnGroupData finalizeSpawn(@NotNull ServerLevelAccessor p_33126_, @NotNull DifficultyInstance p_33127_, @NotNull MobSpawnType p_33128_, @Nullable SpawnGroupData p_33129_, @Nullable CompoundTag p_33130_) {
@@ -407,13 +421,7 @@ public class SculkGhastEntity extends FlyingMob implements GeoEntity, ISculkSmar
 
     /** Animation **/
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
-    private static final RawAnimation TUMOR_IDLE_ANIMATION = RawAnimation.begin().thenLoop("tumor");
 
-    protected PlayState poseTumorCycle(AnimationState<SculkGhastEntity> state)
-    {
-        state.setAnimation(TUMOR_IDLE_ANIMATION);
-        return PlayState.CONTINUE;
-    }
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
@@ -429,11 +437,11 @@ public class SculkGhastEntity extends FlyingMob implements GeoEntity, ISculkSmar
     /** Sounds **/
 
     protected SoundEvent getHurtSound(@NotNull DamageSource pDamageSource) {
-        return SoundEvents.PHANTOM_HURT;
+        return SoundEvents.GHAST_HURT;
     }
 
     protected SoundEvent getDeathSound() {
-        return SoundEvents.PHANTOM_DEATH;
+        return SoundEvents.GHAST_DEATH;
     }
 
 
@@ -445,85 +453,86 @@ public class SculkGhastEntity extends FlyingMob implements GeoEntity, ISculkSmar
         return isThereIsNoFluid && isItFarEnoughAway;
     }
 
-    protected class selectRandomLocationToVisit extends Goal
+
+
+    protected class DropOffMobsNearHostiles extends Goal
     {
-        protected long lastTimeOfExecution = 0;
-        protected boolean hasExecutedOnce = false;
-        protected int circleRadiusVariance = 50;
-        protected final int BASE_CIRCLE_RADIUS = 200;
-        protected final int CIRCLE_RADIUS_INCREASE = 100;
-        protected int currentCircleRadius = BASE_CIRCLE_RADIUS + circleRadiusVariance;
+        protected long timeOfLastPathRecalculation = 0;
 
-        protected long gameTimeOfFirstEnteringAreaOfAnchor = 0;
-        protected final long TIME_TO_WAIT_BEFORE_MOVING_ON = TickUnits.convertSecondsToTicks(60);
-
-        public boolean canUse()
+        public DropOffMobsNearHostiles()
         {
-            //boolean cooldownNotMet = level().getGameTime() - lastTimeOfExecution < executionCooldown;
-            boolean isNotScouter = !isScouter();
-            boolean hasTarget = getTarget() != null;
-            boolean isWithin100BlocksOfAnchor = distanceToSqr(Vec3.atCenterOf(anchorPoint)) <= 100;
-            boolean isItTimeToMoveOn = level().getGameTime() - gameTimeOfFirstEnteringAreaOfAnchor > TIME_TO_WAIT_BEFORE_MOVING_ON && gameTimeOfFirstEnteringAreaOfAnchor != 0;
+            setFlags(EnumSet.of(Goal.Flag.MOVE));
+        }
 
-            if(isNotScouter)
+        @Override
+        public boolean canUse() {
+
+            if(getTarget() == null)
             {
                 return false;
             }
 
-            // Remember when we first entered the area of the anchor
-            if(isWithin100BlocksOfAnchor && gameTimeOfFirstEnteringAreaOfAnchor == 0)
-            {
-                gameTimeOfFirstEnteringAreaOfAnchor = level().getGameTime();
-            }
-
-            if((!isItTimeToMoveOn || hasTarget) && hasExecutedOnce)
+            if(storedMobs.isEmpty())
             {
                 return false;
             }
 
-            return level().canSeeSky(blockPosition().above());
+            return true;
         }
 
-        public boolean canContinueToUse()
-        {
-            return false;
+
+        @Override
+        public boolean canContinueToUse() {
+
+            return canUse();
         }
 
-        public Vec3 getRandomTravelLocationVec3()
-        {
-            int MAX_ATTEMPTS = 5;
+        @Override
+        public void start() {
+            super.start();
 
-            if(searchPositions.isEmpty())
+            if(getTarget() != null) { navigation.moveTo(getTarget(), 1.0F);}
+        }
+
+        @Override
+        public void tick() {
+            super.tick();
+
+            if(storedMobs.isEmpty() || getTarget() == null)
             {
-                searchPositions = BlockAlgorithms.getPointsOnCircumference(blockPosition(), MAX_ATTEMPTS, currentCircleRadius);
-                Collections.shuffle(searchPositions);
-                currentCircleRadius += CIRCLE_RADIUS_INCREASE;
+                return;
             }
 
-            for(BlockPos searchPos : searchPositions)
+            float pathRecalculationCooldown;
+            float distanceFromTarget = EntityAlgorithms.getDistanceBetweenEntities(SculkGhastEntity.this, getTarget());
+            if(distanceFromTarget <= 5)
             {
-                BlockPos groundBlockPos = BlockAlgorithms.getGroundBlockPos(level(), searchPos, level().getMaxBuildHeight());
-                BlockPos potentialNewAnchorPoint = groundBlockPos.above(20);
-                if(isAnchorPosValid(potentialNewAnchorPoint))
-                {
-                    gameTimeOfFirstEnteringAreaOfAnchor = 0;
-                    return potentialNewAnchorPoint.getCenter();
-                }
-
-                //Else remove it from the list
-                searchPositions.remove(searchPos);
-                break;
+                pathRecalculationCooldown = TickUnits.convertSecondsToTicks(0.5F);
+            }
+            else if(distanceFromTarget <= 10)
+            {
+                pathRecalculationCooldown = TickUnits.convertSecondsToTicks(1F);
+            }
+            else if(distanceFromTarget <= 32)
+            {
+                pathRecalculationCooldown = TickUnits.convertSecondsToTicks(3F);
+            }
+            else
+            {
+                pathRecalculationCooldown = TickUnits.convertSecondsToTicks(6F);
             }
 
-            return moveTargetPoint;
-        }
+            if(level().getGameTime() - timeOfLastPathRecalculation >= pathRecalculationCooldown)
+            {
+                navigation.moveTo(getTarget(), 1.0F);
+                timeOfLastPathRecalculation = level().getGameTime();
+            }
 
-        public void start()
-        {
-            lastTimeOfExecution = level().getGameTime();
-            moveTargetPoint = getRandomTravelLocationVec3();
-            anchorPoint = BlockPos.containing(moveTargetPoint);
-            hasExecutedOnce = true;
+
+            if(EntityAlgorithms.getDistanceBetweenEntities(getTarget(), SculkGhastEntity.this) < getBbWidth() * 2)
+            {
+                releaseMob();
+            }
         }
     }
 
