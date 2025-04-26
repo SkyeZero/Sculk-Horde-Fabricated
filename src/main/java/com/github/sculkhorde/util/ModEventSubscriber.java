@@ -80,6 +80,7 @@ public class ModEventSubscriber {
         event.put(ModEntities.SCULK_BROODLING.get(), SculkBroodlingEntity.createAttributes().build());
         event.put(ModEntities.SCULK_SHEEP.get(), SculkSheepEntity.createAttributes().build());
         event.put(ModEntities.SCULK_METAMORPHOSIS_POD.get(), SculkMetamorphosisPodEntity.createAttributes().build());
+        event.put(ModEntities.SCULK_GHAST.get(), SculkGhastEntity.createAttributes().build());
     }
 }
 
