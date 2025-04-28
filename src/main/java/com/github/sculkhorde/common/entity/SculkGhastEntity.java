@@ -380,14 +380,14 @@ public class SculkGhastEntity extends FlyingMob implements GeoEntity, ISculkSmar
             return;
         }
 
-        if(getTarget() == null)
+        String customDebugName = "";
+        for(Goal goal : goalSelector.getRunningGoals().toList())
         {
-            setCustomName(Component.literal("No Target"));
+            customDebugName += goal.getClass().getSimpleName();
+            customDebugName += " | ";
         }
-        else
-        {
-            setCustomName(Component.literal(getTarget().getClass().getSimpleName() + "\n" + " Distance: " + EntityAlgorithms.getDistanceBetweenEntities(this, getTarget())));
-        }
+
+        setCustomName(Component.literal(customDebugName));
 
     }
 
@@ -575,7 +575,7 @@ public class SculkGhastEntity extends FlyingMob implements GeoEntity, ISculkSmar
 
             if(level().getGameTime() - timeOfLastSearch >= MOB_SEARCH_COOLDOWN)
             {
-                AABB searchBox = EntityAlgorithms.createBoundingBoxCubeAtBlockPos(position(), (int) (FOLLOW_RANGE * 2));
+                AABB searchBox = EntityAlgorithms.createBoundingBoxCubeAtBlockPos(position(), 256);
                 targets = EntityAlgorithms.getEntitiesInBoundingBox((ServerLevel) level(), searchBox, canStoreMobPredicate);
                 timeOfLastSearch = level().getGameTime();
             }
