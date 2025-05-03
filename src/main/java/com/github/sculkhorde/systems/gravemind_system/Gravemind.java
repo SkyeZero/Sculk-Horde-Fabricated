@@ -247,7 +247,6 @@ public class Gravemind
     {
         /*  The reason we wait a minute after the server starts is due to a weird issue I experienced when developing the
             virtual cursor system. For some reason, the game will randomly stall upon generating a world at around 99%.
-            Pausing this system for a minute seems to have resolved this issue.
          */
         if(!isGravemindActive())
         {
@@ -269,6 +268,8 @@ public class Gravemind
         SculkHorde.beeNestActivitySystem.serverTick();
         SculkHorde.chunkInfestationSystem.serverTick();
         SculkHorde.debugSlimeSystem.serverTick();
+
+        SculkHorde.autoPerformanceSystem.onServerTick();
 
         if(ModConfig.isExperimentalFeaturesEnabled())
         {

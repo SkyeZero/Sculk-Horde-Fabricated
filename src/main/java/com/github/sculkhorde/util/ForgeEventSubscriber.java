@@ -19,7 +19,6 @@ import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.MobEffectEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.server.ServerLifecycleHooks;
@@ -30,23 +29,6 @@ import java.util.function.Predicate;
 @Mod.EventBusSubscriber(modid = SculkHorde.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ForgeEventSubscriber {
 
-
-
-    /**
-     * This event gets called when a world loads.
-     * All we do is initialize the gravemind and some variables
-     * used to track changes.
-     * @param event The load event
-     */
-    @SubscribeEvent
-    public static void onWorldLoad(LevelEvent.Load event)
-    {
-        if(SculkHorde.gravemind == null)
-        {
-            ModSavedData.initializeSystems();
-        }
-    }
-
     /**
      * Gets Called Every tick when a world is running.
      * @param event The event with all the details
@@ -54,10 +36,15 @@ public class ForgeEventSubscriber {
     @SubscribeEvent
     public static void WorldTickEvent(TickEvent.LevelTickEvent event)
     {
-        // If we are on client or the gravemind is null or we are not in the overworld, return
-        if(event.level.isClientSide() || (event.phase == TickEvent.Phase.END) || (SculkHorde.gravemind == null) || !event.level.equals(ServerLifecycleHooks.getCurrentServer().overworld()))
+        // If we are on client, or we are not in the overworld, return
+        if(event.level.isClientSide() || (event.phase == TickEvent.Phase.END) || !event.level.equals(ServerLifecycleHooks.getCurrentServer().overworld()))
         {
             return;
+        }
+
+        if(SculkHorde.gravemind == null)
+        {
+            ModSavedData.initializeSystems();
         }
 
         if(!SculkHorde.gravemind.isWorldFullyLoaded)
@@ -196,19 +183,6 @@ public class ForgeEventSubscriber {
         {
             MobEffectInstance effectInstance = new MobEffectInstance(ModMobEffects.SCULK_VESSEL.get(), Integer.MAX_VALUE);
             event.getEntity().addEffect(effectInstance);
-        }
-    }
-
-
-
-    @SubscribeEvent
-    public static void onServerTick(TickEvent.ServerTickEvent event)
-    {
-        if (event.phase == TickEvent.Phase.START) {
-            if(SculkHorde.autoPerformanceSystem != null)
-            {
-                SculkHorde.autoPerformanceSystem.onServerTick();
-            }
         }
     }
 

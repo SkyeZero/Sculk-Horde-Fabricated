@@ -2,6 +2,7 @@ package com.github.sculkhorde.common.entity;
 
 import com.github.sculkhorde.common.entity.components.ImprovedFlyingNavigator;
 import com.github.sculkhorde.common.entity.components.TargetParameters;
+import com.github.sculkhorde.common.entity.entity_debugging.IDebuggableGoal;
 import com.github.sculkhorde.common.entity.goal.*;
 import com.github.sculkhorde.util.EntityAlgorithms;
 import com.github.sculkhorde.util.SquadHandler;
@@ -22,6 +23,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.BodyRotationControl;
 import net.minecraft.world.entity.ai.control.FlyingMoveControl;
 import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.WrappedGoal;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
@@ -38,6 +40,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 public class SculkGhastEntity extends FlyingMob implements GeoEntity, ISculkSmartEntity {
@@ -381,14 +384,22 @@ public class SculkGhastEntity extends FlyingMob implements GeoEntity, ISculkSmar
         }
 
         String customDebugName = "";
-        for(Goal goal : goalSelector.getRunningGoals().toList())
+        for(WrappedGoal wrappedGoal : goalSelector.getRunningGoals().toList())
         {
-            customDebugName += goal.getClass().getSimpleName();
+            Goal goal = wrappedGoal.getGoal();
+            if(goal instanceof IDebuggableGoal debugGoal)
+            {
+                customDebugName += debugGoal.getGoalName().get();
+
+            }
+            else
+            {
+                customDebugName += goal.getClass().getSimpleName();
+            }
             customDebugName += " | ";
         }
 
         setCustomName(Component.literal(customDebugName));
-
     }
 
     public SpawnGroupData finalizeSpawn(@NotNull ServerLevelAccessor p_33126_, @NotNull DifficultyInstance p_33127_, @NotNull MobSpawnType p_33128_, @Nullable SpawnGroupData p_33129_, @Nullable CompoundTag p_33130_) {
@@ -536,13 +547,16 @@ public class SculkGhastEntity extends FlyingMob implements GeoEntity, ISculkSmar
         }
     }
 
-    protected class FindAndStoreIdleMobs extends Goal
+    protected class FindAndStoreIdleMobs extends Goal implements IDebuggableGoal
     {
         protected List<Entity> targets;
 
         protected long timeOfLastPathRecalculation = 0;
         protected long timeOfLastSearch = 0;
         protected final long MOB_SEARCH_COOLDOWN = TickUnits.convertSecondsToTicks(5);
+
+        protected float pathRecalculationCooldown;
+        protected boolean isTimeToResetPathCooldown = true;
 
         public FindAndStoreIdleMobs()
         {
@@ -565,23 +579,26 @@ public class SculkGhastEntity extends FlyingMob implements GeoEntity, ISculkSmar
 
             if(getTarget() != null)
             {
+                lastReasonForGoalNoStart = "Has Target";
                 return false;
             }
 
             if(getStoredMobMass() >= MAX_MOB_MASS_STORED)
             {
+                lastReasonForGoalNoStart = "Storage Full";
                 return false;
             }
 
             if(level().getGameTime() - timeOfLastSearch >= MOB_SEARCH_COOLDOWN)
             {
-                AABB searchBox = EntityAlgorithms.createBoundingBoxCubeAtBlockPos(position(), 256);
+                AABB searchBox = EntityAlgorithms.createBoundingBoxCubeAtBlockPos(position(), 128);
                 targets = EntityAlgorithms.getEntitiesInBoundingBox((ServerLevel) level(), searchBox, canStoreMobPredicate);
                 timeOfLastSearch = level().getGameTime();
             }
 
             if(targets.isEmpty())
             {
+                lastReasonForGoalNoStart = "No Targets";
                 return false;
             }
 
@@ -624,8 +641,14 @@ public class SculkGhastEntity extends FlyingMob implements GeoEntity, ISculkSmar
         @Override
         public void start() {
             super.start();
-
+            isTimeToResetPathCooldown = true;
             navigation.moveTo(targets.get(0), 1.0F);
+            lastTimeOfGoalExecution = level().getGameTime();
+        }
+
+        @Override
+        public void stop() {
+            super.stop();
         }
 
         @Override
@@ -639,37 +662,63 @@ public class SculkGhastEntity extends FlyingMob implements GeoEntity, ISculkSmar
 
             Mob target = (Mob) targets.get(0);
 
-            float pathRecalculationCooldown;
             float distanceFromTarget = EntityAlgorithms.getDistanceBetweenEntities(SculkGhastEntity.this, target);
-            if(distanceFromTarget <= 5)
+
+            if(isTimeToResetPathCooldown)
             {
-                pathRecalculationCooldown = TickUnits.convertSecondsToTicks(0.5F);
+                if(distanceFromTarget <= 5)
+                {
+                    pathRecalculationCooldown = TickUnits.convertSecondsToTicks(0.5F);
+                }
+                else if(distanceFromTarget <= 10)
+                {
+                    pathRecalculationCooldown = TickUnits.convertSecondsToTicks(1F);
+                }
+                else if(distanceFromTarget <= 32)
+                {
+                    pathRecalculationCooldown = TickUnits.convertSecondsToTicks(3F);
+                }
+                else
+                {
+                    pathRecalculationCooldown = TickUnits.convertSecondsToTicks(6F);
+                }
+                isTimeToResetPathCooldown = false;
             }
-            else if(distanceFromTarget <= 10)
-            {
-                pathRecalculationCooldown = TickUnits.convertSecondsToTicks(1F);
-            }
-            else if(distanceFromTarget <= 32)
-            {
-                pathRecalculationCooldown = TickUnits.convertSecondsToTicks(3F);
-            }
-            else
-            {
-                pathRecalculationCooldown = TickUnits.convertSecondsToTicks(6F);
-            }
+
 
             if(level().getGameTime() - timeOfLastPathRecalculation >= pathRecalculationCooldown)
             {
                 navigation.moveTo(targets.get(0), 1.0F);
                 timeOfLastPathRecalculation = level().getGameTime();
+                isTimeToResetPathCooldown = true;
             }
 
-
-            if(EntityAlgorithms.getDistanceBetweenEntities(target, SculkGhastEntity.this) < getBbWidth() * 2)
+            if(distanceFromTarget < getBbWidth() + 3)
             {
                 storeMob(target);
                 targets.remove(0);
             }
+        }
+
+        public String lastReasonForGoalNoStart;
+        @Override
+        public Optional<String> getLastReasonForGoalNoStart() {
+            return Optional.empty();
+        }
+        @Override
+        public Optional<String> getGoalName() {
+            return Optional.of("FindAndStoreIdleMobs");
+        }
+
+        public long lastTimeOfGoalExecution;
+        @Override
+        public long getLastTimeOfGoalExecution() {
+            return lastTimeOfGoalExecution;
+        }
+
+        @Override
+        public long getTimeRemainingBeforeCooldownOver() {
+            return 0;
         }
     }
 

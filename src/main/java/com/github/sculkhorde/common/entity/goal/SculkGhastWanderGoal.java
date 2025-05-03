@@ -44,6 +44,12 @@ public class SculkGhastWanderGoal extends Goal {
     // Goal Methods
     @Override
     public boolean canUse() {
+
+        if(mob.getNavigation().isInProgress())
+        {
+            return false;
+        }
+
         if (mob.isVehicle()) {
             return false;
         } else if (!forceTrigger) {
@@ -53,11 +59,6 @@ public class SculkGhastWanderGoal extends Goal {
         }
 
         if(mob.getTarget() != null)
-        {
-            return false;
-        }
-
-        if(mob.isScouter())
         {
             return false;
         }
