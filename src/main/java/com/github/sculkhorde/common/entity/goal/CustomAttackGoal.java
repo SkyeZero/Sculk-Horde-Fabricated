@@ -3,11 +3,12 @@ package com.github.sculkhorde.common.entity.goal;
 import com.github.sculkhorde.util.EntityAlgorithms;
 import com.github.sculkhorde.util.TickUnits;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.goal.Goal;
 
 public class CustomAttackGoal extends Goal {
-    protected final PathfinderMob mob;
+    protected final Mob mob;
 
     protected long timeOfLastExecution;
     protected long lastCanUseCheck;
@@ -16,7 +17,7 @@ public class CustomAttackGoal extends Goal {
     protected int ticksUntilAttackExecution = attack_animation_delay;
     protected float maxDistanceForAttack = 0;
 
-    public CustomAttackGoal(PathfinderMob mob, float maxDistanceForAttackIn, int attackDelay) {
+    public CustomAttackGoal(Mob mob, float maxDistanceForAttackIn, int attackDelay) {
         this.mob = mob;
         attack_animation_delay = attackDelay;
         maxDistanceForAttack = maxDistanceForAttackIn;

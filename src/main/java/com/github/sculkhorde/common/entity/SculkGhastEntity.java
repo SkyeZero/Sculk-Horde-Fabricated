@@ -25,6 +25,8 @@ import net.minecraft.world.entity.ai.control.FlyingMoveControl;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.WrappedGoal;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.entity.monster.RangedAttackMob;
+import net.minecraft.world.entity.projectile.LargeFireball;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
@@ -43,7 +45,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-public class SculkGhastEntity extends FlyingMob implements GeoEntity, ISculkSmartEntity {
+public class SculkGhastEntity extends FlyingMob implements GeoEntity, ISculkSmartEntity, RangedAttackMob {
 
     /**
      * In order to create a mob, the following files were created/edited.<br>
@@ -106,7 +108,7 @@ public class SculkGhastEntity extends FlyingMob implements GeoEntity, ISculkSmar
                 .add(Attributes.ATTACK_KNOCKBACK, ATTACK_KNOCKBACK)
                 .add(Attributes.FOLLOW_RANGE,FOLLOW_RANGE)
                 .add(Attributes.MOVEMENT_SPEED, MOVEMENT_SPEED)
-                .add(Attributes.FLYING_SPEED, 2F)
+                .add(Attributes.FLYING_SPEED, 0.5F)
                 .add(net.minecraftforge.common.ForgeMod.ENTITY_GRAVITY.get(), 0.0);
     }
 
@@ -147,6 +149,7 @@ public class SculkGhastEntity extends FlyingMob implements GeoEntity, ISculkSmar
                 new Despawn(this, TickUnits.convertMinutesToTicks(15)),
                 //new selectRandomLocationToVisit(),
                 //new SculkGhastGoToAnchor(this),
+                new ShootGhastProjectile(this,  20, 0),
                 new DropOffMobsNearHostiles(),
                 new FindAndStoreIdleMobs(),
                 new SculkGhastWanderGoal(this, 1.0F, TickUnits.convertSecondsToTicks(3), 10)
@@ -375,6 +378,23 @@ public class SculkGhastEntity extends FlyingMob implements GeoEntity, ISculkSmar
 
     /** Events **/
 
+    @Override
+    public void performRangedAttack(LivingEntity target, float power) {
+        if (!isSilent()) {
+            level().levelEvent(null, 1016, blockPosition(), 0);
+        }
+
+        Vec3 vec3 = getViewVector(1.0F);
+        double d2 = target.getX() - (getX() + vec3.x * power);
+        double d3 = target.getY(0.5D) - (0.5D + getY(0.5D));
+        double d4 = target.getZ() - (getZ() + vec3.z * power);
+
+        LargeFireball largefireball = new LargeFireball(level(), this, d2, d3, d4, (int) power);
+        largefireball.setPos(getX() + vec3.x * 4.0D, getY(0.5D) + 0.5D, largefireball.getZ() + vec3.z * 4.0D);
+        level().addFreshEntity(largefireball);
+
+    }
+
     public void tick()
     {
         super.tick();
@@ -464,7 +484,27 @@ public class SculkGhastEntity extends FlyingMob implements GeoEntity, ISculkSmar
         return isThereIsNoFluid && isItFarEnoughAway;
     }
 
+    protected class ShootGhastProjectile extends CustomAttackGoal
+    {
 
+        public ShootGhastProjectile(Mob mob, float maxDistanceForAttackIn, int attackDelay) {
+            super(mob, maxDistanceForAttackIn, attackDelay);
+        }
+
+        @Override
+        protected long getExecutionCooldown() {
+            return TickUnits.convertSecondsToTicks(5);
+        }
+
+        @Override
+        protected void checkAndAttack(LivingEntity targetMob)
+        {
+            if (isTargetInvalid()) {
+                return;
+            }
+            performRangedAttack(targetMob, 4.0F);
+        }
+    }
 
     protected class DropOffMobsNearHostiles extends Goal
     {
