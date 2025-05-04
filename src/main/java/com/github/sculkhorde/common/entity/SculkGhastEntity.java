@@ -489,6 +489,12 @@ public class SculkGhastEntity extends FlyingMob implements GeoEntity, ISculkSmar
 
         public ShootGhastProjectile(Mob mob, float maxDistanceForAttackIn, int attackDelay) {
             super(mob, maxDistanceForAttackIn, attackDelay);
+            //setFlags(EnumSet.of(Goal.Flag.MOVE));
+        }
+
+        @Override
+        public void start() {
+            super.start();
         }
 
         @Override
@@ -502,7 +508,7 @@ public class SculkGhastEntity extends FlyingMob implements GeoEntity, ISculkSmar
             if (isTargetInvalid()) {
                 return;
             }
-            performRangedAttack(targetMob, 4.0F);
+            performRangedAttack(targetMob, 2.0F);
         }
     }
 
@@ -779,7 +785,8 @@ public class SculkGhastEntity extends FlyingMob implements GeoEntity, ISculkSmar
         public boolean canUse()
         {
             boolean mobHasBeenNameTagged = ((Mob) mob).hasCustomName();
-            if(level.getGameTime() - creationTime > calculateTicksThreshold() && !mob.isParticipatingInRaid() && !mobHasBeenNameTagged)
+            boolean hasNoStoredMobs = getStoredMobMass() <= 0;
+            if(hasNoStoredMobs && level.getGameTime() - creationTime > calculateTicksThreshold() && !mob.isParticipatingInRaid() && !mobHasBeenNameTagged)
             {
                 return true;
             }

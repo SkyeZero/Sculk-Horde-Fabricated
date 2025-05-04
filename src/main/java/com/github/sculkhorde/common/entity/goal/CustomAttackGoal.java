@@ -4,7 +4,6 @@ import com.github.sculkhorde.util.EntityAlgorithms;
 import com.github.sculkhorde.util.TickUnits;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.goal.Goal;
 
 public class CustomAttackGoal extends Goal {
@@ -76,7 +75,7 @@ public class CustomAttackGoal extends Goal {
 
 
     public void tick() {
-        if (isTargetInvalid()) {
+        if (isTargetInvalid() || !isAttackInProgress) {
             return;
         }
 
