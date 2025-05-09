@@ -175,8 +175,15 @@ public class HitSquadEvent extends Event {
         }
 
         Player player = getPlayerIfOnline().get();
-        ModSavedData.NodeEntry entry = ModSavedData.getSaveData().getClosestNodeEntry((ServerLevel) player.level(), player.blockPosition());
-        setEventLocation(entry.getPosition());
+        Optional<ModSavedData.NodeEntry> entry = ModSavedData.getSaveData().getClosestNodeEntry((ServerLevel) player.level(), player.blockPosition());
+
+        if(entry.isEmpty() || !entry.get().isEntryValid()) {
+            SculkHorde.LOGGER.error("HitSquadEvent | Error: Could not initialize, no valid nodes nearby.");
+            setState(State.FAILURE);
+            return;
+        }
+
+        setEventLocation(entry.get().getPosition());
 
         Optional<BlockPos> potentialSpawnPoint = Optional.empty();
 

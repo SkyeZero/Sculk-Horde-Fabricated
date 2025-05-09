@@ -1,8 +1,6 @@
 package com.github.sculkhorde.systems.gravemind_system;
 
 
-import com.github.sculkhorde.common.blockentity.SculkNodeBlockEntity;
-import com.github.sculkhorde.core.ModBlockEntities;
 import com.github.sculkhorde.core.ModConfig;
 import com.github.sculkhorde.core.ModSavedData;
 import com.github.sculkhorde.core.SculkHorde;
@@ -12,8 +10,6 @@ import com.github.sculkhorde.util.ChunkLoading.BlockEntityChunkLoaderHelper;
 import com.github.sculkhorde.util.TickUnits;
 import net.minecraft.core.BlockPos;
 import net.minecraftforge.server.ServerLifecycleHooks;
-
-import java.util.*;
 
 import static com.github.sculkhorde.systems.gravemind_system.entity_factory.EntityFactoryEntry.StrategicValues.Combat;
 import static com.github.sculkhorde.systems.gravemind_system.entity_factory.EntityFactoryEntry.StrategicValues.Infector;
@@ -173,19 +169,13 @@ public class Gravemind
         boolean isSenderTypeSummoner = context.sender == ReinforcementRequest.senderType.Summoner;
         boolean isSenderTypeMassBlock = context.sender == ReinforcementRequest.senderType.SculkMass;
         boolean isThereAtLeastOneSpawnPoint = context.positions.length > 0;
-        boolean isThereSculkNodesInExistence = !ModSavedData.getSaveData().getNodeEntries().isEmpty();
 
-        if( (isSenderTypeSummoner || isSenderTypeMassBlock) && isThereAtLeastOneSpawnPoint && isThereSculkNodesInExistence)
+        if( (isSenderTypeSummoner || isSenderTypeMassBlock) && isThereAtLeastOneSpawnPoint)
         {
-            BlockPos nodeBlockPos = ModSavedData.getSaveData().getClosestNodeEntry(context.dimension, context.positions[0]).getPosition();
-            Optional<SculkNodeBlockEntity> nodeBlockEntity = context.dimension.getBlockEntity(nodeBlockPos, ModBlockEntities.SCULK_NODE_BLOCK_ENTITY.get());
-            if(nodeBlockEntity.isPresent())
+            if(SculkHorde.populationHandler.isPopulationAtMax())
             {
-                if(SculkHorde.populationHandler.isPopulationAtMax())
-                {
-                    context.isRequestApproved = false;
-                    return;
-                }
+                context.isRequestApproved = false;
+                return;
             }
         }
 

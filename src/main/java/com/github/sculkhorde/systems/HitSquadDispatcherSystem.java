@@ -59,8 +59,14 @@ public class HitSquadDispatcherSystem {
             boolean hasGoodRelationshipWithHorde = profile.getRelationshipToTheHorde() > MAX_RELATIONSHIP;
             boolean isHitCooldownNotOver = !profile.isHitCooldownOver();
 
-            ModSavedData.NodeEntry entry = ModSavedData.getSaveData().getClosestNodeEntry((ServerLevel) player.level(), player.blockPosition());
-            boolean isTooFarFromNode = BlockAlgorithms.getBlockDistanceXZ(player.blockPosition(), entry.getPosition()) > DISTANCE_REQUIRED_FROM_NODE;
+            Optional<ModSavedData.NodeEntry> entry = ModSavedData.getSaveData().getClosestNodeEntry((ServerLevel) player.level(), player.blockPosition());
+            // If there is no cloest node, just move on.
+            if(entry.isEmpty())
+            {
+                continue;
+            }
+
+            boolean isTooFarFromNode = BlockAlgorithms.getBlockDistanceXZ(player.blockPosition(), entry.get().getPosition()) > DISTANCE_REQUIRED_FROM_NODE;
 
             if(isTooFarFromNode || isHitCooldownNotOver || hasGoodRelationshipWithHorde || hasNotDestroyedEnoughNodes)
             {

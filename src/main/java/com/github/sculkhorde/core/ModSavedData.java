@@ -835,12 +835,18 @@ public class ModSavedData extends SavedData {
      *
      * @return The Closest TreeNode
      */
-    public NodeEntry getClosestNodeEntry(ServerLevel dimension, BlockPos pos) {
-        NodeEntry closestNode = null;
+    public Optional<NodeEntry> getClosestNodeEntry(ServerLevel dimension, BlockPos pos) {
+        Optional<NodeEntry> closestNode = Optional.empty();
         double closestDistance = Double.MAX_VALUE;
+
         for (NodeEntry node : getNodeEntries()) {
-            if (pos.distSqr(node.position) < closestDistance) {
-                closestNode = node;
+            if(!node.isEntryValid())
+            {
+                continue;
+            }
+
+            if (pos.distSqr(node.position) < closestDistance && node.getDimension().equals(dimension)) {
+                closestNode = Optional.of(node);
                 closestDistance = pos.distSqr(node.position);
             }
         }
@@ -1028,7 +1034,7 @@ public class ModSavedData extends SavedData {
          */
         public boolean isEntryValid()
         {
-            if(getDimension() == null) { return false; }
+            if(getDimension() == null || getPosition() == null) { return false; }
             return getDimension().getBlockState(position).getBlock().equals(ModBlocks.SCULK_NODE_BLOCK.get());
         }
 

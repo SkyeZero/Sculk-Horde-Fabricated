@@ -1,20 +1,19 @@
 package com.github.sculkhorde.common.effect;
 
 import com.github.sculkhorde.core.ModSavedData;
-import com.github.sculkhorde.core.SculkHorde;
 import com.github.sculkhorde.util.BlockAlgorithms;
 import com.github.sculkhorde.util.EntityAlgorithms;
 import com.github.sculkhorde.util.TickUnits;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class SculkVesselEffect extends MobEffect {
 
@@ -46,15 +45,15 @@ public class SculkVesselEffect extends MobEffect {
         if(entity.level().isClientSide() ) { return;}
 
         // Give strength and speed to the player if near sculk node
-        ModSavedData.NodeEntry nearestNode = ModSavedData.getSaveData().getClosestNodeEntry((ServerLevel) entity.level(), entity.blockPosition());
+        Optional<ModSavedData.NodeEntry> nearestNode = ModSavedData.getSaveData().getClosestNodeEntry((ServerLevel) entity.level(), entity.blockPosition());
 
-        if(nearestNode == null || ModSavedData.getSaveData().isHordeDefeated())
+        if(nearestNode.isEmpty() || ModSavedData.getSaveData().isHordeDefeated())
         {
             return;
         }
 
-        boolean isInSameDimension = BlockAlgorithms.areTheseDimensionsEqual((ServerLevel) entity.level(), nearestNode.getDimension());
-        boolean inRangeOfNode = BlockAlgorithms.getBlockDistance(entity.blockPosition(), nearestNode.getPosition()) <= 200;
+        boolean isInSameDimension = BlockAlgorithms.areTheseDimensionsEqual((ServerLevel) entity.level(), nearestNode.get().getDimension());
+        boolean inRangeOfNode = BlockAlgorithms.getBlockDistance(entity.blockPosition(), nearestNode.get().getPosition()) <= 200;
         if(isInSameDimension && inRangeOfNode)
         {
             EntityAlgorithms.applyEffectToTarget(entity, MobEffects.MOVEMENT_SPEED, TickUnits.convertMinutesToTicks(2), 0);
