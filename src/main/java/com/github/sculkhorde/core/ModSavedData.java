@@ -76,6 +76,7 @@ public class ModSavedData extends SavedData {
     public ModSavedData()
     {
         super();
+        initializeSystems();
     }
 
     public static ModSavedData getSaveData()
@@ -235,7 +236,7 @@ public class ModSavedData extends SavedData {
      */
     public static ModSavedData load(CompoundTag nbt) {
 
-        initializeSystems();
+
 
         //CompoundTag gravemindData = nbt.getCompound("gravemindData");
 
