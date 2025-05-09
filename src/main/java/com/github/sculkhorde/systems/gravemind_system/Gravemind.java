@@ -253,6 +253,8 @@ public class Gravemind
             return;
         }
 
+        calulateCurrentState();
+
         // Run this stuff every tick
 
         ModSavedData.getSaveData().incrementNoNodeSpawningTicksElapsed();
@@ -298,12 +300,5 @@ public class Gravemind
         ModSavedData.getSaveData().validateBeeNestEntries();
         ModSavedData.getSaveData().validateNoRaidZoneEntries();
         ModSavedData.getSaveData().validateAreasOfInterest();
-
-        //Calculate Current State
-        SculkHorde.gravemind.calulateCurrentState(); //Have the gravemind update it's state if necessary
-
-        //Check How much Mass Was Generated over this period
-        if(SculkHorde.isDebugMode()) System.out.println("Accumulated Mass Since Last Check: " + (ModSavedData.getSaveData().getSculkAccumulatedMass() - sculkMassCheck));
-        sculkMassCheck = ModSavedData.getSaveData().getSculkAccumulatedMass();
     }
 }

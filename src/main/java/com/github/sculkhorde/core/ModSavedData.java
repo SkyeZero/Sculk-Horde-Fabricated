@@ -55,34 +55,6 @@ public class ModSavedData extends SavedData {
     }
     HordeState hordeState = HordeState.UNACTIVATED;
 
-    public static ModSavedData getSaveData()
-    {
-        ModSavedData data = ServerLifecycleHooks.getCurrentServer().overworld().getDataStorage().computeIfAbsent(ModSavedData::load, ModSavedData::new, SculkHorde.SAVE_DATA_ID);
-        data.setDirty();
-        return data;
-    }
-
-    public boolean isHordeUnactivated() {
-        return hordeState == HordeState.UNACTIVATED;
-    }
-
-    public boolean isHordeActive() {
-        return hordeState == HordeState.ACTIVE;
-    }
-
-    public boolean isHordeDefeated() {
-        return hordeState == HordeState.DEFEATED;
-    }
-
-    public HordeState getHordeState() {
-        return hordeState;
-    }
-
-    public void setHordeState(HordeState hordeState) {
-        this.hordeState = hordeState;
-        setDirty();
-    }
-
     private final ArrayList<NodeEntry> nodeEntries = new ArrayList<>();
     private final ArrayList<BeeNestEntry> beeNestEntries = new ArrayList<>();
     private final Map<String, HostileEntry> hostileEntries = new HashMap<>();
@@ -103,8 +75,41 @@ public class ModSavedData extends SavedData {
      */
     public ModSavedData()
     {
-
+        super();
     }
+
+    public static ModSavedData getSaveData()
+    {
+        ModSavedData data = ServerLifecycleHooks.getCurrentServer().overworld().getDataStorage().computeIfAbsent(ModSavedData::load, ModSavedData::new, SculkHorde.SAVE_DATA_ID);
+        data.setDirty();
+        return data;
+    }
+
+    public static void initializeData(){
+        getSaveData();
+    }
+
+    public boolean isHordeUnactivated() {
+        return hordeState == HordeState.UNACTIVATED;
+    }
+
+    public boolean isHordeActive() {
+        return hordeState == HordeState.ACTIVE;
+    }
+
+    public boolean isHordeDefeated() {
+        return hordeState == HordeState.DEFEATED;
+    }
+
+    public HordeState getHordeState() {
+        return hordeState;
+    }
+
+    public void setHordeState(HordeState hordeStateIn) {
+        this.hordeState = hordeStateIn;
+        setDirty();
+    }
+
 
     /**
      * Note: We initialize systems in {@link ModSavedData#load(CompoundTag)}
@@ -119,7 +124,7 @@ public class ModSavedData extends SavedData {
      * Additionally, on a new world load, it seems that {@link ModSavedData#load(CompoundTag)} doesn't get called.
      * I'll need to initialize systems on world load anyway.
      */
-    public static void initializeSystems()
+    protected static void initializeSystems()
     {
         SculkHorde.LOGGER.info("ModSavedData | Initializing All Systems.");
 
@@ -232,7 +237,7 @@ public class ModSavedData extends SavedData {
 
         initializeSystems();
 
-        CompoundTag gravemindData = nbt.getCompound("gravemindData");
+        //CompoundTag gravemindData = nbt.getCompound("gravemindData");
 
         ModSavedData savedData = new ModSavedData();
 
@@ -245,7 +250,7 @@ public class ModSavedData extends SavedData {
         savedData.setHordeState(HordeState.values()[nbt.getInt("hordeState")]);
         SculkHorde.LOGGER.info("ModSavedData | Loaded Horde State.");
         savedData.setSculkAccumulatedMass(nbt.getInt(sculkAccumulatedMassIdentifier));
-        SculkHorde.LOGGER.info("ModSavedData | Loaded Accumulated Mass.");
+        SculkHorde.LOGGER.info("ModSavedData | Loaded Gravemind State.");
         savedData.setNoNodeSpawningTicksElapsed(nbt.getInt(ticksSinceSculkNodeDestructionIdentifier));
         SculkHorde.LOGGER.info("ModSavedData | Loaded No Node Spawning Ticks Elapsed.");
 
@@ -256,45 +261,45 @@ public class ModSavedData extends SavedData {
         SculkHorde.LOGGER.info("ModSavedData | Loaded Debug Mode State.");
 
         SculkHorde.LOGGER.info("ModSavedData | Loading Node Entries.");
-        for (int i = 0; gravemindData.contains("node_entry" + i); i++) {
-            savedData.getNodeEntries().add(NodeEntry.serialize(gravemindData.getCompound("node_entry" + i)));
+        for (int i = 0; nbt.contains("node_entry" + i); i++) {
+            savedData.getNodeEntries().add(NodeEntry.serialize(nbt.getCompound("node_entry" + i)));
         }
         SculkHorde.LOGGER.info("ModSavedData | Loaded Node Entries Successfully.");
 
         SculkHorde.LOGGER.info("ModSavedData | Loading BeeNest Entries.");
-        for (int i = 0; gravemindData.contains("bee_nest_entry" + i); i++) {
-            savedData.getBeeNestEntries().add(BeeNestEntry.serialize(gravemindData.getCompound("bee_nest_entry" + i)));
+        for (int i = 0; nbt.contains("bee_nest_entry" + i); i++) {
+            savedData.getBeeNestEntries().add(BeeNestEntry.serialize(nbt.getCompound("bee_nest_entry" + i)));
         }
         SculkHorde.LOGGER.info("ModSavedData | Loaded BeeNest Entries Successfully.");
 
         SculkHorde.LOGGER.info("ModSavedData | Loading Hostile Entries.");
-        for (int i = 0; gravemindData.contains("hostile_entry" + i); i++) {
-            HostileEntry hostileEntry = HostileEntry.serialize(gravemindData.getCompound("hostile_entry" + i));
+        for (int i = 0; nbt.contains("hostile_entry" + i); i++) {
+            HostileEntry hostileEntry = HostileEntry.serialize(nbt.getCompound("hostile_entry" + i));
             savedData.getHostileEntries().putIfAbsent(hostileEntry.identifier, hostileEntry);
         }
         SculkHorde.LOGGER.info("ModSavedData | Loaded Hostile Entries Successfully.");
 
         SculkHorde.LOGGER.info("ModSavedData | Loading Death Area Entries.");
-        for (int i = 0; gravemindData.contains("death_area_entry" + i); i++) {
-            savedData.getDeathAreaEntries().add(DeathAreaEntry.serialize(gravemindData.getCompound("death_area_entry" + i)));
+        for (int i = 0; nbt.contains("death_area_entry" + i); i++) {
+            savedData.getDeathAreaEntries().add(DeathAreaEntry.serialize(nbt.getCompound("death_area_entry" + i)));
         }
         SculkHorde.LOGGER.info("ModSavedData | Loaded Death Area Entries Successfully.");
 
         SculkHorde.LOGGER.info("ModSavedData | Loading AreaOfInterest Entries.");
-        for (int i = 0; gravemindData.contains("area_of_interest_entry" + i); i++) {
-            savedData.getAreasOfInterestEntries().add(AreaOfInterestEntry.serialize(gravemindData.getCompound("area_of_interest_entry" + i)));
+        for (int i = 0; nbt.contains("area_of_interest_entry" + i); i++) {
+            savedData.getAreasOfInterestEntries().add(AreaOfInterestEntry.serialize(nbt.getCompound("area_of_interest_entry" + i)));
         }
         SculkHorde.LOGGER.info("ModSavedData | Loaded AreaOfInterest Entries Successfully.");
 
         SculkHorde.LOGGER.info("ModSavedData | Loading NoRaidZone Entries.");
-        for(int i = 0; gravemindData.contains("no_raid_zone_entry" + i); i++) {
-            savedData.getNoRaidZoneEntries().add(NoRaidZoneEntry.serialize(gravemindData.getCompound("no_raid_zone_entry" + i)));
+        for(int i = 0; nbt.contains("no_raid_zone_entry" + i); i++) {
+            savedData.getNoRaidZoneEntries().add(NoRaidZoneEntry.serialize(nbt.getCompound("no_raid_zone_entry" + i)));
         }
         SculkHorde.LOGGER.info("ModSavedData | Loaded NoRaidZone Entries Successfully.");
 
         SculkHorde.LOGGER.info("ModSavedData | Loading PlayerProfile Entries.");
-        for(int i = 0; gravemindData.contains("player_profile_entry" + i); i++) {
-            savedData.getPlayerProfileEntries().add(PlayerProfileEntry.serialize(gravemindData.getCompound("player_profile_entry" + i)));
+        for(int i = 0; nbt.contains("player_profile_entry" + i); i++) {
+            savedData.getPlayerProfileEntries().add(PlayerProfileEntry.serialize(nbt.getCompound("player_profile_entry" + i)));
         }
         SculkHorde.LOGGER.info("ModSavedData | Loaded PlayerProfile Entries Successfully.");
 
@@ -330,9 +335,6 @@ public class ModSavedData extends SavedData {
 
     }
 
-    public ArrayList<NoRaidZoneEntry> getNoRaidZoneEntries() {
-        return noRaidZoneEntries;
-    }
 
     /**
      * This method gets called every time the world saves data from memory.
@@ -342,7 +344,7 @@ public class ModSavedData extends SavedData {
      */
     @Override
     public @NotNull CompoundTag save(CompoundTag nbt) {
-        CompoundTag gravemindData = new CompoundTag();
+        //CompoundTag gravemindData = new CompoundTag();
 
         nbt.putInt("hordeState", hordeState.ordinal());
         nbt.putInt(sculkAccumulatedMassIdentifier, sculkAccumulatedMass);
@@ -351,36 +353,36 @@ public class ModSavedData extends SavedData {
         nbt.putBoolean(debugModeIdentifier, SculkHorde.isDebugMode());
 
         for (ListIterator<NodeEntry> iterator = getNodeEntries().listIterator(); iterator.hasNext(); ) {
-            gravemindData.put("node_entry" + iterator.nextIndex(), iterator.next().deserialize());
+            nbt.put("node_entry" + iterator.nextIndex(), iterator.next().deserialize());
         }
 
         for (ListIterator<BeeNestEntry> iterator = getBeeNestEntries().listIterator(); iterator.hasNext(); ) {
-            gravemindData.put("bee_nest_entry" + iterator.nextIndex(), iterator.next().deserialize());
+            nbt.put("bee_nest_entry" + iterator.nextIndex(), iterator.next().deserialize());
         }
 
         int hostileIndex = 0;
         for (Map.Entry<String, HostileEntry> entry : getHostileEntries().entrySet()) {
-            gravemindData.put("hostile_entry" + hostileIndex, entry.getValue().deserialize());
+            nbt.put("hostile_entry" + hostileIndex, entry.getValue().deserialize());
             hostileIndex++;
         }
 
         for (ListIterator<DeathAreaEntry> iterator = getDeathAreaEntries().listIterator(); iterator.hasNext(); ) {
-            gravemindData.put("death_area_entry" + iterator.nextIndex(), iterator.next().deserialize());
+            nbt.put("death_area_entry" + iterator.nextIndex(), iterator.next().deserialize());
         }
 
         for (ListIterator<AreaOfInterestEntry> iterator = getAreasOfInterestEntries().listIterator(); iterator.hasNext(); ) {
-            gravemindData.put("area_of_interest_entry" + iterator.nextIndex(), iterator.next().deserialize());
+            nbt.put("area_of_interest_entry" + iterator.nextIndex(), iterator.next().deserialize());
         }
 
         for (ListIterator<NoRaidZoneEntry> iterator = getNoRaidZoneEntries().listIterator(); iterator.hasNext(); ) {
-            gravemindData.put("no_raid_zone_entry" + iterator.nextIndex(), iterator.next().deserialize());
+            nbt.put("no_raid_zone_entry" + iterator.nextIndex(), iterator.next().deserialize());
         }
 
         for (ListIterator<PlayerProfileEntry> iterator = getPlayerProfileEntries().listIterator(); iterator.hasNext(); ) {
-            gravemindData.put("player_profile_entry" + iterator.nextIndex(), iterator.next().deserialize());
+            nbt.put("player_profile_entry" + iterator.nextIndex(), iterator.next().deserialize());
         }
 
-        nbt.put("gravemindData", gravemindData);
+        //nbt.put("gravemindData", gravemindData);
 
         RaidData.save(nbt);
         StatisticsData.save(nbt);
@@ -391,7 +393,9 @@ public class ModSavedData extends SavedData {
         return nbt;
     }
 
-
+    public ArrayList<NoRaidZoneEntry> getNoRaidZoneEntries() {
+        return noRaidZoneEntries;
+    }
 
     /**
      * Accessors

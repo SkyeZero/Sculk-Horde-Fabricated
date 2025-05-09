@@ -44,7 +44,8 @@ public class ForgeEventSubscriber {
 
         if(SculkHorde.gravemind == null)
         {
-            ModSavedData.initializeSystems();
+            ModSavedData.initializeData();
+            return;
         }
 
         if(!SculkHorde.gravemind.isWorldFullyLoaded)
@@ -53,6 +54,22 @@ public class ForgeEventSubscriber {
         }
 
         SculkHorde.gravemind.serverTick();
+    }
+
+
+    @SubscribeEvent
+    public static void ServerTickEvent(TickEvent.ServerTickEvent event)
+    {
+        // If we are on client, or we are not in the overworld, return
+        if((event.phase == TickEvent.Phase.END))
+        {
+            return;
+        }
+
+        if(SculkHorde.gravemind == null)
+        {
+            //ModSavedData.InitializeData();
+        }
     }
 
     @SubscribeEvent
