@@ -97,4 +97,10 @@ public class FangsAttackGoal extends ReaperCastSpellGoal
             mob.level().addFreshEntity(new EvokerFangs(mob.level(), x, (double)blockPos.getY() + yOffset, z, angle, delay, mob));
         }
     }
+
+    @Override
+    protected void playCastingAnimation()
+    {
+        mob.triggerAnim(SculkSoulReaperEntity.COMBAT_ATTACK_ANIMATION_CONTROLLER_ID, SculkSoulReaperEntity.ELEMENTAL_PROJECTILE_SPELL_CHARGE_ID);
+    }
 }

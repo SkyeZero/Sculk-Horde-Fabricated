@@ -531,11 +531,13 @@ public class SculkSoulReaperEntity extends Monster implements GeoEntity, ISculkS
 
     // ####### Animation Code ###########
 
-    public static final String ATTACK_SPELL_CHARGE_ID = "attack.spell_charge";
-    private static final RawAnimation ATTACK_SPELL_CHARGE = RawAnimation.begin().thenLoop(ATTACK_SPELL_CHARGE_ID);
-    public static final String ATTACK_SPELL_USE_ID = "attack.spell_use";
-    private static final RawAnimation ATTACK_SPELL_USE = RawAnimation.begin().thenPlay(ATTACK_SPELL_USE_ID);
+    //public static final String ATTACK_SPELL_CHARGE_ID = "attack.spell_charge";
+    //private static final RawAnimation ATTACK_SPELL_CHARGE = RawAnimation.begin().thenLoop(ATTACK_SPELL_CHARGE_ID);
+    //public static final String ATTACK_SPELL_USE_ID = "attack.spell_use";
+    //private static final RawAnimation ATTACK_SPELL_USE = RawAnimation.begin().thenPlay(ATTACK_SPELL_USE_ID);
 
+    public static final String FANGS_SPELL_USE_ID = "attack.fangs";
+    public static final RawAnimation FANGS_SPELL_USE = RawAnimation.begin().thenPlay(FANGS_SPELL_USE_ID);
     public static final String ZOLTRAAK_SPELL_USE_ID = "attack.zoltraak";
     public static final RawAnimation ZOLTRAAK_SPELL_USE = RawAnimation.begin().thenPlay(ZOLTRAAK_SPELL_USE_ID);
 
@@ -564,7 +566,8 @@ public class SculkSoulReaperEntity extends Monster implements GeoEntity, ISculkS
             .triggerableAnim(FLOOR_SPEARS_SPELL_USE_ID, FLOOR_SPEARS_SPELL_USE)
             .triggerableAnim(ELEMENTAL_PROJECTILE_SPELL_CHARGE_ID, ELEMENTAL_PROJECTILE_SPELL_CHARGE)
             .triggerableAnim(ELEMENTAL_PROJECTILE_SPELL_SHOOT_ID, ELEMENTAL_PROJECTILE_SPELL_SHOOT)
-            .triggerableAnim(ELEMENTAL_PROJECTILE_SPELL_SHOOT_ID, SOUL_SPEAR_SPELL_USE);
+            .triggerableAnim(SOUL_SPEAR_SPELL_USE_ID, SOUL_SPEAR_SPELL_USE)
+            .triggerableAnim(FANGS_SPELL_USE_ID, FANGS_SPELL_USE);
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers)

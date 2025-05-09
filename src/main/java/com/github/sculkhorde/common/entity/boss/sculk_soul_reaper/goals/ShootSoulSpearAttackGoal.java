@@ -3,10 +3,7 @@ package com.github.sculkhorde.common.entity.boss.sculk_soul_reaper.goals;
 import com.github.sculkhorde.common.entity.boss.sculk_soul_reaper.SculkSoulReaperEntity;
 import com.github.sculkhorde.common.entity.boss.sculk_soul_reaper.SoulSpearProjectileAttackEntity;
 import com.github.sculkhorde.common.entity.projectile.AbstractProjectileEntity;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.phys.Vec3;
 
 public class ShootSoulSpearAttackGoal extends ReaperCastSpellGoal
@@ -30,7 +27,7 @@ public class ShootSoulSpearAttackGoal extends ReaperCastSpellGoal
         }
 
         this.mob.getNavigation().stop();
-        EntityType.LIGHTNING_BOLT.spawn((ServerLevel) mob.level(), mob.blockPosition().above(50), MobSpawnType.SPAWNER);
+        //EntityType.LIGHTNING_BOLT.spawn((ServerLevel) mob.level(), mob.blockPosition().above(50), MobSpawnType.SPAWNER);
     }
 
     @Override
@@ -73,5 +70,11 @@ public class ShootSoulSpearAttackGoal extends ReaperCastSpellGoal
         mob.playSound(SoundEvents.BLAZE_SHOOT, 1.0F, 1.0F / (mob.getRandom().nextFloat() * 0.4F + 0.8F));
         mob.level().addFreshEntity(projectile);
 
+    }
+
+    @Override
+    protected void playCastingAnimation()
+    {
+        mob.triggerAnim(SculkSoulReaperEntity.COMBAT_ATTACK_ANIMATION_CONTROLLER_ID, SculkSoulReaperEntity.SOUL_SPEAR_SPELL_USE_ID);
     }
 }
