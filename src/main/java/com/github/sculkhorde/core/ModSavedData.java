@@ -618,7 +618,19 @@ public class ModSavedData extends SavedData {
     public void addNoRaidZoneToMemory(ServerLevel dimension, BlockPos positionIn) {
         if(getNoRaidZoneEntries() == null)
         {
-            SculkHorde.LOGGER.warn("Attempted to add a no raid zone to memory but the list was null");
+            SculkHorde.LOGGER.error("addNoRaidZoneToMemory | Cannot add, getNoRaidZoneEntries() is null.");
+            return;
+        }
+
+        if(dimension == null)
+        {
+            SculkHorde.LOGGER.error("addNoRaidZoneToMemory | Cannot add, ServerLevel is null.");
+            return;
+        }
+
+        if(positionIn == null)
+        {
+            SculkHorde.LOGGER.error("addNoRaidZoneToMemory | Cannot add, BlockPos is null.");
             return;
         }
 
