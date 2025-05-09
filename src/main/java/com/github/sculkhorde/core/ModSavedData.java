@@ -120,9 +120,9 @@ public class ModSavedData extends SavedData {
      * 2. Data won't be properly reset between world loads if you try to remedy this with individual null checks.<br>
      * 3. If data not properly reset between world loads, the {@link CursorSystem} will cause the world to get stuck at 100% loading.<br><br>
      * In conclusion, it is better to initialize systems first, then load their data.
-     * <br><br>
-     * Additionally, on a new world load, it seems that {@link ModSavedData#load(CompoundTag)} doesn't get called.
-     * I'll need to initialize systems on world load anyway.
+     * <br>
+     * Reference: Nomatic Tents by skyjay1 <a test href="https://github.com/skyjay1/Nomadic-Tents/blob/master-1.19/src/main/java/nomadictents/NTSavedData.java#L30">...</a>
+     * <br>
      */
     protected static void initializeSystems()
     {
