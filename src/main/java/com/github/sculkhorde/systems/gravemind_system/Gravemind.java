@@ -30,17 +30,16 @@ public class Gravemind
 
     private evolution_states evolution_state;
 
-    //This controls the reinforcement system.
     public static EntityFactory entityFactory;
-    //This is a list of all known positions of sculkNodes.
-    //We do not want to put them too close to each other.
+
     public static final int MINIMUM_DISTANCE_BETWEEN_NODES = 300;
     public int sculk_node_limit = 1;
-
     public static int TICKS_BETWEEN_NODE_SPAWNS = TickUnits.convertMinutesToTicks(ModConfig.SERVER.sculk_node_spawn_cooldown_minutes.get());
-
     private static long time_save_point = 0; //Used to track time passage.
-    private static int sculkMassCheck = 0;
+
+    protected long timeOfLastChunkLoadAttempt = 0;
+    protected long CHUNK_LOAD_ATTEMPT_COOLDOWN = TickUnits.convertMinutesToTicks(2);
+
 
     public boolean isWorldFullyLoaded = false;
 
@@ -268,6 +267,18 @@ public class Gravemind
             SculkHorde.hitSquadDispatcherSystem.serverTick();
         }
 
+        // Make sure the area above the tomb is loaded. Only attempt every CHUNK_LOAD_ATTEMPT_COOLDOWN
+        if(ServerLifecycleHooks.getCurrentServer().overworld().getGameTime() - timeOfLastChunkLoadAttempt >= CHUNK_LOAD_ATTEMPT_COOLDOWN)
+        {
+            if(!ServerLifecycleHooks.getCurrentServer().overworld().getChunkSource().hasChunk(0,0))
+            {
+                SculkHorde.LOGGER.info("Gravemind | Loading Chunk Area at Sculk Tomb.");
+                BlockEntityChunkLoaderHelper.getChunkLoaderHelper().createChunkLoadRequestSquare((ServerLifecycleHooks.getCurrentServer().overworld()), BlockPos.ZERO, 5, 0, TickUnits.convertMinutesToTicks(10));
+                SculkHorde.LOGGER.info("Gravemind | Loaded Chunk Area at Sculk Tomb.");
+            }
+            timeOfLastChunkLoadAttempt = ServerLifecycleHooks.getCurrentServer().overworld().getGameTime();
+        }
+
         // Only run stuff below every 5 minutes
         if (ServerLifecycleHooks.getCurrentServer().overworld().getGameTime() - time_save_point < TickUnits.convertMinutesToTicks(5))
         {
@@ -276,14 +287,6 @@ public class Gravemind
 
         time_save_point = ServerLifecycleHooks.getCurrentServer().overworld().getGameTime();//Set to current time so we can recalculate time passage
         SculkHorde.beeNestActivitySystem.activate();
-
-        // Check if chunk 0,0 is loaded. If not, load it.
-        if(!ServerLifecycleHooks.getCurrentServer().overworld().getChunkSource().hasChunk(0,0))
-        {
-            SculkHorde.LOGGER.info("onWorldLoad | Loading Chunk Area at Spawn.");
-            BlockEntityChunkLoaderHelper.getChunkLoaderHelper().createChunkLoadRequestSquare((ServerLifecycleHooks.getCurrentServer().overworld()), BlockPos.ZERO, 5, 0, TickUnits.convertMinutesToTicks(10));
-            SculkHorde.LOGGER.info("onWorldLoad | Loaded Chunk Area at Spawn.");
-        }
 
         //Verification Processes to ensure our data is accurate
         ModSavedData.getSaveData().validateNodeEntries();

@@ -53,6 +53,9 @@ public class SculkAncientNodeBlockEntity extends BlockEntity implements GameEven
     protected NodeBranchingInfestationSystem infectionHandler;
     protected AncientNodePurificationHandler purificationHandler;
 
+    protected long timeOfLastChunkLoadAttempt = 0;
+    protected long CHUNK_LOAD_ATTEMPT_COOLDOWN = TickUnits.convertMinutesToTicks(5);
+
     // Phantom Event Code
     public UUID phantomEventUUID;
     public static final String phantomEventUUIDIdentifier = "phantom_event_uuid";
@@ -336,7 +339,11 @@ public class SculkAncientNodeBlockEntity extends BlockEntity implements GameEven
 
         addDarknessEffectToNearbyPlayers(level, blockPos, 25);
 
-        BlockEntityChunkLoaderHelper.getChunkLoaderHelper().createChunkLoadRequestSquare((ServerLevel) level, blockPos, ModConfig.SERVER.sculk_node_chunkload_radius.get(), 1, TickUnits.convertMinutesToTicks(30));
+        if(level.getGameTime() - blockEntity.timeOfLastChunkLoadAttempt >= blockEntity.CHUNK_LOAD_ATTEMPT_COOLDOWN)
+        {
+            BlockEntityChunkLoaderHelper.getChunkLoaderHelper().createChunkLoadRequestSquare((ServerLevel) level, blockPos, ModConfig.SERVER.sculk_node_chunkload_radius.get(), 1, TickUnits.convertMinutesToTicks(30));
+            blockEntity.timeOfLastChunkLoadAttempt = level.getGameTime();
+        }
     }
 
     public static void tickTriggerAutomatically(Level level, BlockPos blockPos, BlockState blockState, SculkAncientNodeBlockEntity blockEntity)
