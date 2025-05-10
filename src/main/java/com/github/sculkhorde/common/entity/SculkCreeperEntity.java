@@ -4,6 +4,7 @@ import com.github.sculkhorde.common.entity.components.TargetParameters;
 import com.github.sculkhorde.common.entity.goal.*;
 import com.github.sculkhorde.core.ModConfig;
 import com.github.sculkhorde.core.ModMobEffects;
+import com.github.sculkhorde.core.SculkHorde;
 import com.github.sculkhorde.systems.cursor_system.CursorSystem;
 import com.github.sculkhorde.systems.cursor_system.VirtualSurfaceInfestorCursor;
 import com.github.sculkhorde.util.EntityAlgorithms;
@@ -121,7 +122,7 @@ public class SculkCreeperEntity extends Creeper implements ISculkSmartEntity, Ge
             }
 
             EntityAlgorithms.reducePurityEffectDuration(victim, TickUnits.convertMinutesToTicks(5));
-            EntityAlgorithms.applyEffectToTarget(victim, ModMobEffects.DISEASED_CYSTS.get(), TickUnits.convertSecondsToTicks(60), 0);
+            EntityAlgorithms.applyEffectToTarget(victim, ModMobEffects.DISEASED_CYSTS.get(), TickUnits.convertSecondsToTicks(60), SculkHorde.gravemind.getPotionAmplificationBasedOnGravemindState());
         });
 
 
