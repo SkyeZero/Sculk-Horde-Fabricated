@@ -488,7 +488,7 @@ public class SculkSquidEntity extends WaterAnimal implements GeoEntity, ISculkSm
 
             if(targetMob.getHealth() < ATTACK_DAMAGE)
             {
-                EntityAlgorithms.applyEffectToTarget(targetMob, ModMobEffects.SCULK_INFECTION.get(), TickUnits.convertSecondsToTicks(30), 0);
+                EntityAlgorithms.applyEffectToTarget(targetMob, ModMobEffects.SCULK_INFECTION.get(), TickUnits.convertSecondsToTicks(30), SculkHorde.gravemind.getPotionAmplificationBasedOnGravemindState());
                 spawnInk();
             }
             else

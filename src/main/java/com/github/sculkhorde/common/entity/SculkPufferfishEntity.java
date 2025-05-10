@@ -186,7 +186,7 @@ public class SculkPufferfishEntity extends WaterAnimal implements GeoEntity, ISc
 
             if(getTarget() != null)
             {
-                EntityAlgorithms.applyEffectToTarget(getTarget(), MobEffects.GLOWING, TickUnits.convertSecondsToTicks(10), 0);
+                EntityAlgorithms.applyEffectToTarget(getTarget(), MobEffects.GLOWING, TickUnits.convertSecondsToTicks(10), SculkHorde.gravemind.getPotionAmplificationBasedOnGravemindState());
             }
 
             return InteractionResult.PASS;

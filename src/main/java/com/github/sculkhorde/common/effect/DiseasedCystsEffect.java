@@ -59,8 +59,9 @@ public class DiseasedCystsEffect extends MobEffect {
         }
 
         // Create AABB bounding box around entity and check if there are any non-sculk entities inside
+        int size = 3 + (3 * amp);
         AABB boundingBox = sourceEntity.getBoundingBox();
-        boundingBox = boundingBox.inflate(10.0D, 10.0D, 10.0D);
+        boundingBox = boundingBox.inflate(size, size, size);
         List<LivingEntity> entities = sourceEntity.level().getEntitiesOfClass(LivingEntity.class, boundingBox);
         if(!entities.isEmpty())
         {
@@ -75,13 +76,13 @@ public class DiseasedCystsEffect extends MobEffect {
 
                 //victim.hurtMarked = true;
 
-                EntityAlgorithms.reducePurityEffectDuration(victim, TickUnits.convertSecondsToTicks(60));
-                EntityAlgorithms.applyEffectToTarget(victim, ModMobEffects.DISEASED_CYSTS.get(), TickUnits.convertSecondsToTicks(60), 0);
+                EntityAlgorithms.reducePurityEffectDuration(victim, TickUnits.convertSecondsToTicks(15));
+                EntityAlgorithms.applyEffectToTarget(victim, ModMobEffects.DISEASED_CYSTS.get(), TickUnits.convertSecondsToTicks(60), SculkHorde.gravemind.getPotionAmplificationBasedOnGravemindState());
 
 
                 if(victim.getHealth() <= victim.getMaxHealth() * 0.5)
                 {
-                    EntityAlgorithms.applyEffectToTarget(victim, ModMobEffects.SCULK_INFECTION.get(), TickUnits.convertSecondsToTicks(10), 0);
+                    EntityAlgorithms.applyEffectToTarget(victim, ModMobEffects.SCULK_INFECTION.get(), TickUnits.convertSecondsToTicks(10), SculkHorde.gravemind.getPotionAmplificationBasedOnGravemindState());
                     continue;
                 }
                 float damage = (victim.getMaxHealth() * 0.1F);

@@ -230,6 +230,26 @@ public class Gravemind
         return evolution_state == evolution_states.Immature || evolution_state == evolution_states.Mature;
     }
 
+    public int getPotionAmplificationBasedOnGravemindState()
+    {
+        if(evolution_state == evolution_states.Undeveloped)
+        {
+            return 0;
+        }
+        else if(evolution_state == evolution_states.Immature)
+        {
+            return 1;
+        }
+        else if(evolution_state == evolution_states.Mature)
+        {
+            return 2;
+        }
+        else
+        {
+            return 3;
+        }
+    }
+
     // EVENTS
 
     public void serverTick()

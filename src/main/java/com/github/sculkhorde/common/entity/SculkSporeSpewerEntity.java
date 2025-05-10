@@ -257,7 +257,7 @@ public class SculkSporeSpewerEntity extends Monster implements GeoEntity, ISculk
                 }
 
                 EntityAlgorithms.reducePurityEffectDuration(victim, TickUnits.convertMinutesToTicks(1));
-                EntityAlgorithms.applyEffectToTarget(victim, ModMobEffects.SCULK_INFECTION.get(), TickUnits.convertSecondsToTicks(15), 0);
+                EntityAlgorithms.applyEffectToTarget(victim, ModMobEffects.SCULK_INFECTION.get(), TickUnits.convertSecondsToTicks(15), SculkHorde.gravemind.getPotionAmplificationBasedOnGravemindState());
                 EntityAlgorithms.applyEffectToTarget(victim, ModMobEffects.SCULK_LURE.get(), TickUnits.convertMinutesToTicks(10), 0);
 
             }

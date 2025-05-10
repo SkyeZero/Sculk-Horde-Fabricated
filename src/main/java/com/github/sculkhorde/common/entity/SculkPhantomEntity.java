@@ -6,6 +6,7 @@ import com.github.sculkhorde.common.entity.goal.*;
 import com.github.sculkhorde.core.ModConfig;
 import com.github.sculkhorde.core.ModEntities;
 import com.github.sculkhorde.core.ModMobEffects;
+import com.github.sculkhorde.core.SculkHorde;
 import com.github.sculkhorde.util.*;
 import com.github.sculkhorde.util.ChunkLoading.EntityChunkLoaderHelper;
 import net.minecraft.core.BlockPos;
@@ -635,7 +636,7 @@ public class SculkPhantomEntity extends FlyingMob implements GeoEntity, ISculkSm
             {
                 SculkPhantomEntity.this.doHurtTarget(target);
                 EntityAlgorithms.reducePurityEffectDuration(target, TickUnits.convertMinutesToTicks(5));
-                EntityAlgorithms.applyEffectToTarget(target, ModMobEffects.DISEASED_CYSTS.get(), TickUnits.convertSecondsToTicks(30), 0);
+                EntityAlgorithms.applyEffectToTarget(target, ModMobEffects.DISEASED_CYSTS.get(), TickUnits.convertSecondsToTicks(30), SculkHorde.gravemind.getPotionAmplificationBasedOnGravemindState());
                 lastTimeOfAttack = level().getGameTime();
                 return;
             }
