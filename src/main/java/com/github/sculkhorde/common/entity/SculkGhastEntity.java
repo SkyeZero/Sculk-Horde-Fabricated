@@ -4,6 +4,7 @@ import com.github.sculkhorde.common.entity.components.ImprovedFlyingNavigator;
 import com.github.sculkhorde.common.entity.components.TargetParameters;
 import com.github.sculkhorde.common.entity.entity_debugging.IDebuggableGoal;
 import com.github.sculkhorde.common.entity.goal.*;
+import com.github.sculkhorde.util.BlockAlgorithms;
 import com.github.sculkhorde.util.EntityAlgorithms;
 import com.github.sculkhorde.util.SquadHandler;
 import com.github.sculkhorde.util.TickUnits;
@@ -57,7 +58,7 @@ public class SculkGhastEntity extends FlyingMob implements GeoEntity, ISculkSmar
      */
 
     //The Health
-    public static final float MAX_HEALTH = 15F;
+    public static final float MAX_HEALTH = 30F;
     //The armor of the mob
     public static final float ARMOR = 5F;
     //ATTACK_DAMAGE determines How much damage it's melee attacks do
@@ -71,14 +72,8 @@ public class SculkGhastEntity extends FlyingMob implements GeoEntity, ISculkSmar
 
     // Controls what types of entities this mob can target
     protected final TargetParameters TARGET_PARAMETERS = new TargetParameters(this).enableTargetHostiles().disableTargetingEntitiesInWater();
-
     protected BlockPos anchorPoint = BlockPos.ZERO;
-    protected Vec3 moveTargetPoint = new Vec3(anchorPoint.getX(), anchorPoint.getY(), anchorPoint.getZ());
-
-    protected ArrayList<BlockPos> searchPositions = new ArrayList<>();
-    protected Vec3 spawnPoint = null;
     protected boolean isScouter = false;
-
     protected final double MAX_MOB_MASS_STORED = 1000D;
     protected final ArrayList<Mob> storedMobs = new ArrayList<>();
 
@@ -152,7 +147,7 @@ public class SculkGhastEntity extends FlyingMob implements GeoEntity, ISculkSmar
                 new ShootGhastProjectile(this,  20, 0),
                 new DropOffMobsNearHostiles(),
                 new FindAndStoreIdleMobs(),
-                new SculkGhastWanderGoal(this, 1.0F, TickUnits.convertSecondsToTicks(3), 10)
+                new SculkGhastWanderGoal(this, 1.0F, TickUnits.convertSecondsToTicks(3), 20)
         };
     }
 
@@ -229,6 +224,29 @@ public class SculkGhastEntity extends FlyingMob implements GeoEntity, ISculkSmar
         if(!getSensing().hasLineOfSight(entity))
         {
             return false;
+        }
+
+        if(entity.getBbHeight() > SculkGhastEntity.this.getBbHeight() || entity.getBbWidth() > SculkGhastEntity.this.getBbWidth())
+        {
+            return false;
+        }
+
+        if(entity instanceof SculkGhastEntity)
+        {
+            return false;
+        }
+
+        if(entity.getMaxHealth() >= 50)
+        {
+            return false;
+        }
+
+        if(entity instanceof ISculkSmartEntity smartEntity)
+        {
+            if(smartEntity.isParticipatingInRaid())
+            {
+                return false;
+            }
         }
 
         return true;
@@ -334,18 +352,26 @@ public class SculkGhastEntity extends FlyingMob implements GeoEntity, ISculkSmar
 
     public void releaseMob()
     {
-        if(storedMobs.isEmpty())
+
+        if(!storedMobs.isEmpty())
         {
+            Mob storedEntity = storedMobs.get(0);
+            Mob spawnedEntity = (Mob) storedEntity.getType().spawn((ServerLevel) level(), blockPosition().below((int) ((getBbHeight()/ 2) + 1)), MobSpawnType.MOB_SUMMONED);
+            spawnedEntity.setTarget(getTarget());
+            spawnedEntity.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, TickUnits.convertSecondsToTicks(10), 0));
+            spawnedEntity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, TickUnits.convertSecondsToTicks(10), 1));
+            spawnedEntity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, TickUnits.convertSecondsToTicks(10), 0));
+            storedMobs.remove(0);
             return;
         }
 
-        Mob savedEntity = storedMobs.get(0);
-        Mob spawnedEntity = (Mob) savedEntity.getType().spawn((ServerLevel) level(), blockPosition(), MobSpawnType.MOB_SUMMONED);
-        spawnedEntity.setTarget(getTarget());
-        spawnedEntity.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, TickUnits.convertSecondsToTicks(10), 0));
-        spawnedEntity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, TickUnits.convertSecondsToTicks(10), 1));
-        spawnedEntity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, TickUnits.convertSecondsToTicks(10), 0));
-        storedMobs.remove(0);
+        Mob storedEntity = new SculkMetamorphosisPodEntity(level(), TickUnits.convertSecondsToTicks(10));
+        storedEntity.setPos(position());
+        level().addFreshEntity(storedEntity);
+        storedEntity.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, TickUnits.convertSecondsToTicks(10), 0));
+        storedEntity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, TickUnits.convertSecondsToTicks(10), 1));
+        storedEntity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, TickUnits.convertSecondsToTicks(10), 0));
+
     }
 
     // This method allows the entity to travel in a given direction
@@ -514,7 +540,11 @@ public class SculkGhastEntity extends FlyingMob implements GeoEntity, ISculkSmar
 
     protected class DropOffMobsNearHostiles extends Goal
     {
+        protected float requiredDistance = 5;
         protected long timeOfLastPathRecalculation = 0;
+        protected long timeOfLastMobRelease = 0;
+
+        protected BlockPos stagingArea;
 
         public DropOffMobsNearHostiles()
         {
@@ -528,12 +558,6 @@ public class SculkGhastEntity extends FlyingMob implements GeoEntity, ISculkSmar
             {
                 return false;
             }
-
-            if(storedMobs.isEmpty())
-            {
-                return false;
-            }
-
             return true;
         }
 
@@ -544,52 +568,69 @@ public class SculkGhastEntity extends FlyingMob implements GeoEntity, ISculkSmar
             return canUse();
         }
 
+        public long getMobReleaseCooldown()
+        {
+            if(storedMobs.isEmpty())
+            {
+                return TickUnits.convertSecondsToTicks(5);
+            }
+
+            return TickUnits.convertSecondsToTicks(1);
+        }
+
         @Override
         public void start() {
             super.start();
 
             if(getTarget() != null) { navigation.moveTo(getTarget(), 1.0F);}
+            stagingArea = BlockAlgorithms.getGroundBlockPosUnderEntity(level(), SculkGhastEntity.this).above(5);
         }
+
+
 
         @Override
         public void tick() {
             super.tick();
 
-            if(storedMobs.isEmpty() || getTarget() == null)
+            if(getTarget() == null)
             {
                 return;
             }
 
             float pathRecalculationCooldown;
-            float distanceFromTarget = EntityAlgorithms.getDistanceBetweenEntities(SculkGhastEntity.this, getTarget());
-            if(distanceFromTarget <= 5)
+            float distanceFromStagingArea= BlockAlgorithms.getBlockDistance(stagingArea, blockPosition());
+
+            if(distanceFromStagingArea > requiredDistance)
             {
-                pathRecalculationCooldown = TickUnits.convertSecondsToTicks(0.5F);
-            }
-            else if(distanceFromTarget <= 10)
-            {
-                pathRecalculationCooldown = TickUnits.convertSecondsToTicks(1F);
-            }
-            else if(distanceFromTarget <= 32)
-            {
-                pathRecalculationCooldown = TickUnits.convertSecondsToTicks(3F);
-            }
-            else
-            {
-                pathRecalculationCooldown = TickUnits.convertSecondsToTicks(6F);
+                if(distanceFromStagingArea <= 32)
+                {
+                    pathRecalculationCooldown = TickUnits.convertSecondsToTicks(1F);
+                }
+                else if(distanceFromStagingArea <= 48)
+                {
+                    pathRecalculationCooldown = TickUnits.convertSecondsToTicks(3F);
+                }
+                else
+                {
+                    pathRecalculationCooldown = TickUnits.convertSecondsToTicks(6F);
+                }
+
+                if(level().getGameTime() - timeOfLastPathRecalculation >= pathRecalculationCooldown)
+                {
+                    navigation.moveTo(stagingArea.getX(), stagingArea.getY(), stagingArea.getZ(), 1.0F);
+                    timeOfLastPathRecalculation = level().getGameTime();
+                }
+                return;
             }
 
-            if(level().getGameTime() - timeOfLastPathRecalculation >= pathRecalculationCooldown)
+            if(level().getGameTime() - timeOfLastMobRelease < getMobReleaseCooldown())
             {
-                navigation.moveTo(getTarget(), 1.0F);
-                timeOfLastPathRecalculation = level().getGameTime();
+                return;
             }
 
-
-            if(EntityAlgorithms.getDistanceBetweenEntities(getTarget(), SculkGhastEntity.this) < getBbWidth() * 2)
-            {
-                releaseMob();
-            }
+            timeOfLastMobRelease = level().getGameTime();
+            navigation.stop();
+            releaseMob();
         }
     }
 

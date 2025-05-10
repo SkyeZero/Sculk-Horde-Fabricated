@@ -2,10 +2,14 @@ package com.github.sculkhorde.common.entity;
 
 import com.github.sculkhorde.common.entity.components.TargetParameters;
 import com.github.sculkhorde.core.ModEntities;
+import com.github.sculkhorde.core.SculkHorde;
 import com.github.sculkhorde.systems.cursor_system.CursorSystem;
 import com.github.sculkhorde.systems.cursor_system.VirtualSurfaceInfestorCursor;
+import com.github.sculkhorde.systems.gravemind_system.entity_factory.EntityFactoryEntry;
+import com.github.sculkhorde.systems.gravemind_system.entity_factory.ReinforcementRequest;
 import com.github.sculkhorde.util.SquadHandler;
 import com.github.sculkhorde.util.TickUnits;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
@@ -123,11 +127,14 @@ public class SculkMetamorphosisPodEntity extends Monster implements GeoEntity, I
             return;
         }
 
-        for(Entity e : entitiesToSpawn)
-        {
-            e.setPos(getX(), getY(), getZ());
-            level().addFreshEntity(e);
-        }
+        ReinforcementRequest request = new ReinforcementRequest((ServerLevel) level(), blockPosition());
+        request.sender = ReinforcementRequest.senderType.Summoner;
+        request.is_aggressor_nearby = true;
+        request.budget = 30;
+        request.approvedStrategicValues.add(EntityFactoryEntry.StrategicValues.Combat);
+        request.approvedStrategicValues.add(EntityFactoryEntry.StrategicValues.EffectiveOnGround);
+
+        SculkHorde.entityFactory.createReinforcementRequestFromSummoner(level(), blockPosition(), false, request);
         spawnCursor();
         discard();
     }
