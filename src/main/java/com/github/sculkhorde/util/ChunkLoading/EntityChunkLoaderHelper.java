@@ -100,7 +100,6 @@ public class EntityChunkLoaderHelper
             {
                 if(SculkHorde.isDebugMode()) {SculkHorde.LOGGER.info("EntityChunkLoader | Chunk EXPIRED, Unloading and Removing");}
                 indexesToRemove.add(i);
-                return;
             }
         }
 

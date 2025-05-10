@@ -10,7 +10,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
 
 import java.util.ArrayList;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 public class BlockEntityChunkLoaderHelper
 {
@@ -98,7 +97,6 @@ public class BlockEntityChunkLoaderHelper
             {
                 if(SculkHorde.isDebugMode()) {SculkHorde.LOGGER.info("EntityChunkLoader | Chunk EXPIRED, Unloading and Removing");}
                 indexesToRemove.add(i);
-                return;
             }
         }
 
