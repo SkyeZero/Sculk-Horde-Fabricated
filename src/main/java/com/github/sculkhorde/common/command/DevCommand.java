@@ -22,8 +22,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.LevelChunk;
 
-import java.util.ArrayList;
-
 public class DevCommand implements Command<CommandSourceStack> {
 
     public static ArgumentBuilder<CommandSourceStack, ?> register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext buildContext) {
@@ -31,6 +29,9 @@ public class DevCommand implements Command<CommandSourceStack> {
         return Commands.literal("dev")
                 .then(Commands.literal("test")
                         .executes(DevCommand::test)
+                )
+                .then(Commands.literal("clear_chunkload_requests")
+                        .executes(DevCommand::clearChunkLoadRequests)
                 )
                 .then(Commands.literal("infect")
                         .then(Commands.literal("blocks")
@@ -195,6 +196,13 @@ public class DevCommand implements Command<CommandSourceStack> {
         SculkHorde.chunkInfestationSystem.addChunkInfector(infector);
 
         return 0;
+    }
+
+    private static int clearChunkLoadRequests(CommandContext<CommandSourceStack> context) {
+        SculkHorde.entityChunkLoaderHelper.getEntityChunkLoadRequests().clear();
+        SculkHorde.blockEntityChunkLoaderHelper.getBlockChunkLoadRequests().clear();
+
+        return 1;
     }
 
     protected static int blocksPerTick;

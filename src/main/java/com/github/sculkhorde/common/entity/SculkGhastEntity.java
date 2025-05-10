@@ -144,7 +144,7 @@ public class SculkGhastEntity extends FlyingMob implements GeoEntity, ISculkSmar
                 new Despawn(this, TickUnits.convertMinutesToTicks(15)),
                 //new selectRandomLocationToVisit(),
                 //new SculkGhastGoToAnchor(this),
-                new ShootGhastProjectile(this,  20, 0),
+                new ShootGhastProjectile(this,  48, 0),
                 new DropOffMobsNearHostiles(),
                 new FindAndStoreIdleMobs(),
                 new SculkGhastWanderGoal(this, 1.0F, TickUnits.convertSecondsToTicks(3), 20)
