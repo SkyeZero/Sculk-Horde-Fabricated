@@ -80,6 +80,11 @@ public class CursorSurfaceInfectorEntity extends CursorEntity{
         {
             return true;
         }
+        // This is to prevent the entity from getting stuck in a loop
+        else if(visitedPositons.containsKey(pos.asLong()))
+        {
+            return true;
+        }
         else if(ModSavedData.getSaveData().isHordeDefeated())
         {
             return true;
@@ -110,15 +115,8 @@ public class CursorSurfaceInfectorEntity extends CursorEntity{
         {
             return true;
         }
-
         // Check if block is not beyond world border
-        if(!level().isInWorldBounds(pos))
-        {
-            return true;
-        }
-
-        // This is to prevent the entity from getting stuck in a loop
-        if(visitedPositons.containsKey(pos.asLong()))
+        else if(!level().isInWorldBounds(pos))
         {
             return true;
         }

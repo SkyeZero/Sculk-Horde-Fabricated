@@ -222,6 +222,11 @@ public class BlockAlgorithms {
         return (float) Math.sqrt( Math.pow(pos2.getX() - pos1.getX(), 2) + Math.pow(pos2.getY() - pos1.getY(), 2) + Math.pow(pos2.getZ() - pos1.getZ(), 2));
     }
 
+    public static float getDistance(Vec3 pos1, Vec3 pos2)
+    {
+        return (float) Math.sqrt( Math.pow(pos2.x - pos1.x, 2) + Math.pow(pos2.y - pos1.y, 2) + Math.pow(pos2.z - pos1.z, 2));
+    }
+
     public static float getBlockDistanceXZ(BlockPos pos1, BlockPos pos2)
     {
         return (float) Math.sqrt( Math.pow(pos2.getX() - pos1.getX(), 2) + Math.pow(pos2.getZ() - pos1.getZ(), 2));
@@ -545,7 +550,28 @@ public class BlockAlgorithms {
 
         for(BlockPos position : list)
         {
-            if(serverWorld.getBlockState(position).is(ModBlocks.INFESTATION_WARD_BLOCK.get()))
+            if(serverWorld.getBlockState(position).is(ModBlocks.BlockTags.WARDS_AGAINST_INFESTATION))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Checks immediate blocks to see if any of them are infestation ward blocks
+     * @param serverWorld The world
+     * @param targetPos The position to check
+     * @return true if any air found, false otherwise
+     */
+    public static boolean isExposedToPurificationWardBlock(ServerLevel serverWorld, BlockPos targetPos)
+    {
+        ArrayList<BlockPos> list = getAdjacentNeighbors(targetPos);
+
+        for(BlockPos position : list)
+        {
+            if(serverWorld.getBlockState(position).is(ModBlocks.BlockTags.WARDS_AGAINST_PURIFICATION))
             {
                 return true;
             }

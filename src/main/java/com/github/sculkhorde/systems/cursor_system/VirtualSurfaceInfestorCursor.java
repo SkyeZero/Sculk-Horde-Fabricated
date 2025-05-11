@@ -78,6 +78,10 @@ public class VirtualSurfaceInfestorCursor extends VirtualCursor{
         {
             return true;
         }
+        else if(visitedPositions.containsKey(pos.asLong()))
+        {
+            return true;
+        }
         else if(ModSavedData.getSaveData().isHordeDefeated())
         {
             return true;
@@ -100,27 +104,20 @@ public class VirtualSurfaceInfestorCursor extends VirtualCursor{
                 return true;
             }
         }
-        else if(isExposedToInfestationWardBlock((ServerLevel) getLevel(), pos))
-        {
-            return true;
-        }
         else if(BlockAlgorithms.getBlockDistance(origin, pos) > MAX_RANGE)
         {
             return true;
         }
-
+        else if(isExposedToInfestationWardBlock((ServerLevel) getLevel(), pos))
+        {
+            return true;
+        }
         // Check if block is not beyond world border
-        if(!getLevel().isInWorldBounds(pos))
+        else if(!getLevel().isInWorldBounds(pos))
         {
             return true;
         }
-
-        // This is to prevent the entity from getting stuck in a loop
-        if(visitedPositions.containsKey(pos.asLong()))
-        {
-            return true;
-        }
-
+        
         boolean isBlockNotExposedToAir = !BlockAlgorithms.isExposedToAir((ServerLevel) getLevel(), pos);
         boolean isBlockNotSculkArachnoid = !state.is(ModBlocks.SCULK_ARACHNOID.get());
         boolean isBlockNotSculkDuraMatter = !state.is(ModBlocks.SCULK_DURA_MATTER.get());

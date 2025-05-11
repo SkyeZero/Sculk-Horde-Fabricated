@@ -1041,6 +1041,8 @@ public class ModBlocks {
 		public static final TagKey<Block> SCULK_BEE_HARVESTABLE = create("sculk_bee_harvestable");
 		public static final TagKey<Block> INFESTED_BLOCK = create("infested_block");
 		public static final TagKey<Block> CONVERTS_TO_CRUMBLING_VARIANT = create("converts_to_crumbling_variant");
+		public static final TagKey<Block> WARDS_AGAINST_INFESTATION = create("wards_against_infestation");
+		public static final TagKey<Block> WARDS_AGAINST_PURIFICATION = create("wards_against_purification");
 
 		public static final TagKey<Block> NOT_INFESTABLE = create("not_infestable");
 

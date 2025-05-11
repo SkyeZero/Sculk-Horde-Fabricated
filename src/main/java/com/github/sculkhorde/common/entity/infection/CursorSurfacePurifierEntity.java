@@ -18,6 +18,8 @@ import java.util.Objects;
 import java.util.Random;
 import java.util.function.Predicate;
 
+import static com.github.sculkhorde.util.BlockAlgorithms.isExposedToPurificationWardBlock;
+
 public class CursorSurfacePurifierEntity extends CursorEntity{
 
     /**
@@ -106,13 +108,16 @@ public class CursorSurfacePurifierEntity extends CursorEntity{
     @Override
     protected boolean isObstructed(BlockState state, BlockPos pos)
     {
-
-        if(BlockAlgorithms.getBlockDistance(origin, pos) > MAX_RANGE)
+        // This is to prevent the entity from getting stuck in a loop
+        if(visitedPositons.containsKey(pos.asLong()))
         {
             return true;
         }
-
-        if(state.isAir())
+        else if(BlockAlgorithms.getBlockDistance(origin, pos) > MAX_RANGE)
+        {
+            return true;
+        }
+        else if(state.isAir())
         {
             return true;
         }
@@ -131,9 +136,7 @@ public class CursorSurfacePurifierEntity extends CursorEntity{
                 return true;
             }
         }
-
-        // This is to prevent the entity from getting stuck in a loop
-        if(visitedPositons.containsKey(pos.asLong()))
+        else if(isExposedToPurificationWardBlock((ServerLevel) this.level(), pos))
         {
             return true;
         }
