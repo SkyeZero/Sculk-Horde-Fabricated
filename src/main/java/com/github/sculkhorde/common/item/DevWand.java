@@ -1,9 +1,7 @@
 package com.github.sculkhorde.common.item;
 
-import com.github.sculkhorde.common.entity.SculkMetamorphosisPodEntity;
-import com.github.sculkhorde.common.entity.SculkMiteEntity;
 import com.github.sculkhorde.util.StructureUtil;
-import com.github.sculkhorde.util.TickUnits;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
@@ -83,16 +81,14 @@ public class DevWand extends Item implements IForgeItem {
 
 		ClipContext rayTrace = new ClipContext(playerIn.getEyePosition(1.0F), playerIn.getEyePosition(1.0F).add(playerIn.getLookAngle().scale(5)), ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, playerIn);
 
-		//IF successful, try to place a node
+
 		Vec3 spawnPosition = rayTrace.getTo();
 
-		SculkMetamorphosisPodEntity pod = new SculkMetamorphosisPodEntity(serverLevel, TickUnits.convertSecondsToTicks(5));
-		pod.addEntityToSpawn(new SculkMiteEntity(serverLevel));
-		pod.addEntityToSpawn(new SculkMiteEntity(serverLevel));
-		pod.addEntityToSpawn(new SculkMiteEntity(serverLevel));
-		pod.addEntityToSpawn(new SculkMiteEntity(serverLevel));
-		pod.setPos(spawnPosition);
-		serverLevel.addFreshEntity(pod);
+		if(!level.canSeeSky(BlockPos.containing(spawnPosition)))
+		{
+			playerIn.sendSystemMessage(Component.literal("Error: Cannot See Sky."));
+			return InteractionResultHolder.fail(itemstack);
+		}
 
 		return InteractionResultHolder.pass(itemstack);
 	}

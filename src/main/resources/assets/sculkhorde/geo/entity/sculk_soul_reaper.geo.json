@@ -80,7 +80,6 @@
 					"name": "head_chunk_NW",
 					"parent": "head_chunks",
 					"pivot": [4, 28, -4],
-					"rotation": [0, 0, 0],
 					"cubes": [
 						{
 							"origin": [0, 28, -4],

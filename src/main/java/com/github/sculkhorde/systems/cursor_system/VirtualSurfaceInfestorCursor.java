@@ -117,7 +117,7 @@ public class VirtualSurfaceInfestorCursor extends VirtualCursor{
         {
             return true;
         }
-        
+
         boolean isBlockNotExposedToAir = !BlockAlgorithms.isExposedToAir((ServerLevel) getLevel(), pos);
         boolean isBlockNotSculkArachnoid = !state.is(ModBlocks.SCULK_ARACHNOID.get());
         boolean isBlockNotSculkDuraMatter = !state.is(ModBlocks.SCULK_DURA_MATTER.get());

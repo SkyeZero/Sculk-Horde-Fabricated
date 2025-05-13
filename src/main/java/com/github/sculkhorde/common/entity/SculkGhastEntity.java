@@ -9,6 +9,7 @@ import com.github.sculkhorde.util.EntityAlgorithms;
 import com.github.sculkhorde.util.SquadHandler;
 import com.github.sculkhorde.util.TickUnits;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Position;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -72,10 +73,10 @@ public class SculkGhastEntity extends FlyingMob implements GeoEntity, ISculkSmar
 
     // Controls what types of entities this mob can target
     protected final TargetParameters TARGET_PARAMETERS = new TargetParameters(this).enableTargetHostiles().disableTargetingEntitiesInWater();
-    protected BlockPos anchorPoint = BlockPos.ZERO;
-    protected boolean isScouter = false;
+    protected BlockPos goalPos;
     protected final double MAX_MOB_MASS_STORED = 1000D;
     protected final ArrayList<Mob> storedMobs = new ArrayList<>();
+    protected Position goalPosition; // Used for sending the ghast to a location.
 
     /**
      * The Constructor
@@ -145,6 +146,7 @@ public class SculkGhastEntity extends FlyingMob implements GeoEntity, ISculkSmar
                 //new selectRandomLocationToVisit(),
                 //new SculkGhastGoToAnchor(this),
                 new ShootGhastProjectile(this,  48, 0),
+                new SculkGhastDeployTroopsAtGoalPosition(this),
                 new DropOffMobsNearHostiles(),
                 new FindAndStoreIdleMobs(),
                 new SculkGhastWanderGoal(this, 1.0F, TickUnits.convertSecondsToTicks(3), 20)
@@ -258,8 +260,8 @@ public class SculkGhastEntity extends FlyingMob implements GeoEntity, ISculkSmar
         entity.discard();
     }
 
-    public Vec3 getAnchorPoint() {
-        return this.anchorPoint.getCenter();
+    public Vec3 getGoalPos() {
+        return this.goalPos.getCenter();
     }
 
     @Override
@@ -289,13 +291,6 @@ public class SculkGhastEntity extends FlyingMob implements GeoEntity, ISculkSmar
         return getTarget() == null;
     }
 
-    public boolean isScouter() {
-        return isScouter;
-    }
-
-    public void setScouter(boolean isScouter) {
-        this.isScouter = isScouter;
-    }
 
     /** Attributes **/
 
@@ -449,7 +444,7 @@ public class SculkGhastEntity extends FlyingMob implements GeoEntity, ISculkSmar
     }
 
     public SpawnGroupData finalizeSpawn(@NotNull ServerLevelAccessor p_33126_, @NotNull DifficultyInstance p_33127_, @NotNull MobSpawnType p_33128_, @Nullable SpawnGroupData p_33129_, @Nullable CompoundTag p_33130_) {
-        this.anchorPoint = this.blockPosition().above(5);
+        this.goalPos = this.blockPosition().above(5);
         return super.finalizeSpawn(p_33126_, p_33127_, p_33128_, p_33129_, p_33130_);
     }
 
@@ -462,17 +457,15 @@ public class SculkGhastEntity extends FlyingMob implements GeoEntity, ISculkSmar
     public void readAdditionalSaveData(@NotNull CompoundTag tag) {
         super.readAdditionalSaveData(tag);
         if (tag.contains("AX")) {
-            this.anchorPoint = new BlockPos(tag.getInt("AX"), tag.getInt("AY"), tag.getInt("AZ"));
+            this.goalPos = new BlockPos(tag.getInt("AX"), tag.getInt("AY"), tag.getInt("AZ"));
         }
-        isScouter = tag.getBoolean("scouter");
     }
 
     public void addAdditionalSaveData(@NotNull CompoundTag tag) {
         super.addAdditionalSaveData(tag);
-        tag.putInt("AX", this.anchorPoint.getX());
-        tag.putInt("AY", this.anchorPoint.getY());
-        tag.putInt("AZ", this.anchorPoint.getZ());
-        tag.putBoolean("scouter", isScouter);
+        tag.putInt("AX", this.goalPos.getX());
+        tag.putInt("AY", this.goalPos.getY());
+        tag.putInt("AZ", this.goalPos.getZ());
 
     }
 
@@ -558,6 +551,12 @@ public class SculkGhastEntity extends FlyingMob implements GeoEntity, ISculkSmar
             {
                 return false;
             }
+
+            if(goalPos != null)
+            {
+                return false;
+            }
+
             return true;
         }
 
@@ -667,6 +666,11 @@ public class SculkGhastEntity extends FlyingMob implements GeoEntity, ISculkSmar
             if(getTarget() != null)
             {
                 lastReasonForGoalNoStart = "Has Target";
+                return false;
+            }
+
+            if(goalPos != null)
+            {
                 return false;
             }
 
@@ -817,7 +821,7 @@ public class SculkGhastEntity extends FlyingMob implements GeoEntity, ISculkSmar
 
         public long calculateTicksThreshold()
         {
-            if(isScouter()) { return ticksThreshold; }
+            if(goalPos != null) { return ticksThreshold; }
 
             return ticksThreshold/3;
         }
@@ -837,7 +841,7 @@ public class SculkGhastEntity extends FlyingMob implements GeoEntity, ISculkSmar
         @Override
         public void start()
         {
-            if(isScouter()) { discard(); }
+            if(goalPos != null) { discard(); }
         }
     }
 
