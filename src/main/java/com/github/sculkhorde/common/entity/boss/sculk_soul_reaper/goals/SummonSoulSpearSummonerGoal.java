@@ -31,7 +31,7 @@ public class SummonSoulSpearSummonerGoal extends ReaperCastSpellGoal
 
     @Override
     protected int getBaseCastingTime() {
-        return TickUnits.convertSecondsToTicks(0.5F);
+        return TickUnits.convertSecondsToTicks(0.56F);
     }
 
     @Override
@@ -54,6 +54,6 @@ public class SummonSoulSpearSummonerGoal extends ReaperCastSpellGoal
     @Override
     protected void playCastingAnimation()
     {
-        mob.triggerAnim(SculkSoulReaperEntity.COMBAT_ATTACK_ANIMATION_CONTROLLER_ID, SculkSoulReaperEntity.SOUL_SPEAR_SPELL_USE_ID);
+        mob.triggerAnim(SculkSoulReaperEntity.COMBAT_ATTACK_ANIMATION_CONTROLLER_ID, SculkSoulReaperEntity.ATTACK_SPELL_USE_ID);
     }
 }

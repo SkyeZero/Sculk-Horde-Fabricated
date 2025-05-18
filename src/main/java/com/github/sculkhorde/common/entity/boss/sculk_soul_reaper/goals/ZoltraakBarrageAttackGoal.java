@@ -146,4 +146,13 @@ public class ZoltraakBarrageAttackGoal extends ReaperCastSpellGoal
         attackkIntervalCooldown = attackIntervalTicks;
     }
 
+    @Override
+    protected int getBaseCastingTime() {
+        return TickUnits.convertSecondsToTicks(1);
+    }
+
+    @Override
+    protected void playCastingAnimation() {
+        mob.triggerAnim(SculkSoulReaperEntity.COMBAT_ATTACK_ANIMATION_CONTROLLER_ID, SculkSoulReaperEntity.ATTACK_SPELL_USE_ID);
+    }
 }

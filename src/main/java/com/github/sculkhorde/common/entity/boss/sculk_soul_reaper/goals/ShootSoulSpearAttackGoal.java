@@ -3,6 +3,7 @@ package com.github.sculkhorde.common.entity.boss.sculk_soul_reaper.goals;
 import com.github.sculkhorde.common.entity.boss.sculk_soul_reaper.SculkSoulReaperEntity;
 import com.github.sculkhorde.common.entity.boss.sculk_soul_reaper.SoulSpearProjectileAttackEntity;
 import com.github.sculkhorde.common.entity.projectile.AbstractProjectileEntity;
+import com.github.sculkhorde.util.TickUnits;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.phys.Vec3;
 
@@ -70,6 +71,11 @@ public class ShootSoulSpearAttackGoal extends ReaperCastSpellGoal
         mob.playSound(SoundEvents.BLAZE_SHOOT, 1.0F, 1.0F / (mob.getRandom().nextFloat() * 0.4F + 0.8F));
         mob.level().addFreshEntity(projectile);
 
+    }
+
+    @Override
+    protected int getBaseCastingTime() {
+        return TickUnits.convertSecondsToTicks(0.52F);
     }
 
     @Override

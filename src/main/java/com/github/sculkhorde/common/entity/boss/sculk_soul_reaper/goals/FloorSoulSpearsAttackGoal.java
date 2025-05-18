@@ -96,7 +96,7 @@ public class FloorSoulSpearsAttackGoal extends ReaperCastSpellGoal
 
     @Override
     protected int getBaseCastingTime() {
-        return TickUnits.convertSecondsToTicks(1F);
+        return TickUnits.convertSecondsToTicks(0.72F);
     }
 
     @Override

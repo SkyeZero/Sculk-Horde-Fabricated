@@ -134,7 +134,7 @@ public class ElementalMagicCircleAttackGoal extends ReaperCastSpellGoal
 
     @Override
     protected int getBaseCastingTime() {
-        return TickUnits.convertSecondsToTicks(0.75F);
+        return TickUnits.convertSecondsToTicks(0.96F);
     }
 
     @Override

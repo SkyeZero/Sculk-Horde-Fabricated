@@ -536,8 +536,8 @@ public class SculkSoulReaperEntity extends Monster implements GeoEntity, ISculkS
     //public static final String ATTACK_SPELL_USE_ID = "attack.spell_use";
     //private static final RawAnimation ATTACK_SPELL_USE = RawAnimation.begin().thenPlay(ATTACK_SPELL_USE_ID);
 
-    public static final String FANGS_SPELL_USE_ID = "attack.fangs";
-    public static final RawAnimation FANGS_SPELL_USE = RawAnimation.begin().thenPlay(FANGS_SPELL_USE_ID);
+    public static final String ATTACK_SPELL_USE_ID = "attack.spell_use";
+    public static final RawAnimation FANGS_SPELL_USE = RawAnimation.begin().thenPlay(ATTACK_SPELL_USE_ID);
     public static final String ZOLTRAAK_SPELL_USE_ID = "attack.zoltraak";
     public static final RawAnimation ZOLTRAAK_SPELL_USE = RawAnimation.begin().thenPlay(ZOLTRAAK_SPELL_USE_ID);
 
@@ -559,21 +559,20 @@ public class SculkSoulReaperEntity extends Monster implements GeoEntity, ISculkS
     public static final String COMBAT_ATTACK_ANIMATION_CONTROLLER_ID = "attack_controller";
     private final AnimationController COMBAT_ATTACK_ANIMATION_CONTROLLER = new AnimationController<>(this, COMBAT_ATTACK_ANIMATION_CONTROLLER_ID, state -> PlayState.STOP)
             .transitionLength(5)
-            //.triggerableAnim(ATTACK_SPELL_CHARGE_ID, ATTACK_SPELL_CHARGE)
-            //.triggerableAnim(ATTACK_SPELL_USE_ID, ATTACK_SPELL_USE)
             .triggerableAnim(ZOLTRAAK_SPELL_USE_ID, ZOLTRAAK_SPELL_USE)
             .triggerableAnim(MAGIC_CIRCLE_SPELL_USE_ID, MAGIC_CIRCLE_SPELL_USE)
             .triggerableAnim(FLOOR_SPEARS_SPELL_USE_ID, FLOOR_SPEARS_SPELL_USE)
             .triggerableAnim(ELEMENTAL_PROJECTILE_SPELL_CHARGE_ID, ELEMENTAL_PROJECTILE_SPELL_CHARGE)
             .triggerableAnim(ELEMENTAL_PROJECTILE_SPELL_SHOOT_ID, ELEMENTAL_PROJECTILE_SPELL_SHOOT)
             .triggerableAnim(SOUL_SPEAR_SPELL_USE_ID, SOUL_SPEAR_SPELL_USE)
-            .triggerableAnim(FANGS_SPELL_USE_ID, FANGS_SPELL_USE);
+            .triggerableAnim(ATTACK_SPELL_USE_ID, FANGS_SPELL_USE);
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers)
     {
         controllers.add(
                 DefaultAnimations.genericWalkIdleController(this).transitionLength(5),
+                //DefaultAnimations.genericLivingController(this).transitionLength(5),
                 COMBAT_ATTACK_ANIMATION_CONTROLLER
         );
     }

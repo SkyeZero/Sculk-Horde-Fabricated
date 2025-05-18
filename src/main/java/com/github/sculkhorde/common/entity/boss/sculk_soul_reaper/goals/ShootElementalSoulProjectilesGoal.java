@@ -13,7 +13,7 @@ public class ShootElementalSoulProjectilesGoal extends ReaperCastSpellGoal
     protected int elapsedAttackDuration = 0;
     protected final int executionCooldown = TickUnits.convertSecondsToTicks(10);
     protected int ticksElapsed = executionCooldown;
-    protected int attackIntervalTicks = TickUnits.convertSecondsToTicks(0.2F);
+    protected int attackIntervalTicks = TickUnits.convertSecondsToTicks(0.56F);
     protected int attackkIntervalCooldown = 0;
     protected int projectileType = 0;
     protected int minDifficulty = 0;
@@ -112,7 +112,7 @@ public class ShootElementalSoulProjectilesGoal extends ReaperCastSpellGoal
 
     @Override
     protected int getBaseCastingTime() {
-        return TickUnits.convertSecondsToTicks(0.75F);
+        return TickUnits.convertSecondsToTicks(1.44F);
     }
 
     @Override

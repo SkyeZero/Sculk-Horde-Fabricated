@@ -99,8 +99,7 @@ public class FangsAttackGoal extends ReaperCastSpellGoal
     }
 
     @Override
-    protected void playCastingAnimation()
-    {
-        mob.triggerAnim(SculkSoulReaperEntity.COMBAT_ATTACK_ANIMATION_CONTROLLER_ID, SculkSoulReaperEntity.ELEMENTAL_PROJECTILE_SPELL_CHARGE_ID);
+    protected void playAttackAnimation() {
+        mob.triggerAnim(SculkSoulReaperEntity.COMBAT_ATTACK_ANIMATION_CONTROLLER_ID, SculkSoulReaperEntity.ATTACK_SPELL_USE_ID);
     }
 }

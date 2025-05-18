@@ -164,5 +164,5 @@ public class PathBuilder {
     public void setMaxDistance(int value) {
         MAX_DISTANCE = value;
     }
-    
+
 }

@@ -3,6 +3,7 @@ package com.github.sculkhorde.common.entity.boss.sculk_soul_reaper.goals;
 import com.github.sculkhorde.common.entity.boss.sculk_soul_reaper.SculkSoulReaperEntity;
 import com.github.sculkhorde.common.entity.boss.sculk_soul_reaper.SoulBlastAttackEntity;
 import com.github.sculkhorde.common.entity.entity_debugging.IDebuggableGoal;
+import com.github.sculkhorde.util.TickUnits;
 import net.minecraft.sounds.SoundEvents;
 
 import java.util.Optional;
@@ -49,6 +50,17 @@ public class SoulBlastAttackGoal extends ReaperCastSpellGoal implements IDebugga
         mob.playSound(SoundEvents.BLAZE_SHOOT, 1.0F, 1.0F / (mob.getRandom().nextFloat() * 0.4F + 0.8F));
         mob.level().addFreshEntity(attackEntity);
 
+    }
+
+
+    @Override
+    protected int getBaseCastingTime() {
+        return TickUnits.convertSecondsToTicks(1F);
+    }
+
+    @Override
+    protected void playAttackAnimation() {
+        mob.triggerAnim(SculkSoulReaperEntity.COMBAT_ATTACK_ANIMATION_CONTROLLER_ID, SculkSoulReaperEntity.ATTACK_SPELL_USE_ID);
     }
 
     @Override
