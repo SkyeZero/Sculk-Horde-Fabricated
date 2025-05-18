@@ -1,4 +1,4 @@
-package com.github.sculkhorde.systems;
+package com.github.sculkhorde.systems.event_system.events.HitSquadEvent;
 
 import com.github.sculkhorde.core.SculkHorde;
 import com.github.sculkhorde.util.BlockAlgorithms;

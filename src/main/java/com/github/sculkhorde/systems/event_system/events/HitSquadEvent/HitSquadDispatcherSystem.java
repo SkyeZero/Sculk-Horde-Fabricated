@@ -1,8 +1,8 @@
-package com.github.sculkhorde.systems;
+package com.github.sculkhorde.systems.event_system.events.HitSquadEvent;
 
 import com.github.sculkhorde.core.ModSavedData;
 import com.github.sculkhorde.core.SculkHorde;
-import com.github.sculkhorde.systems.event_system.events.HitSquadEvent;
+import com.github.sculkhorde.systems.event_system.events.HitSquadEvent.HitSquadEvent;
 import com.github.sculkhorde.util.BlockAlgorithms;
 import com.github.sculkhorde.util.EntityAlgorithms;
 import com.github.sculkhorde.util.PlayerProfileHandler;

@@ -8,6 +8,7 @@ import com.github.sculkhorde.systems.*;
 import com.github.sculkhorde.systems.chunk_cursor_system.ChunkInfestationSystem;
 import com.github.sculkhorde.systems.cursor_system.CursorSystem;
 import com.github.sculkhorde.systems.event_system.EventSystem;
+import com.github.sculkhorde.systems.event_system.events.HitSquadEvent.HitSquadDispatcherSystem;
 import com.github.sculkhorde.systems.gravemind_system.Gravemind;
 import com.github.sculkhorde.systems.gravemind_system.entity_factory.EntityFactory;
 import com.github.sculkhorde.systems.raid_system.RaidHandler;

@@ -29,7 +29,7 @@ public class GhastDeploymentEvent extends Event {
     protected UUID target;
     protected SculkGhastEntity ghast;
 
-    protected static final Vec3 targetPos;
+    protected static final Vec3 targetPos = null; //todo finish
 
     protected enum State {
         INITIALIZATION,
@@ -177,14 +177,14 @@ public class GhastDeploymentEvent extends Event {
                     return !BlockAlgorithms.isAir(getDimension().getBlockState(pos));
                 }
             };
-            123;
+            //123;
 
             spawnFinder.get().isValidTargetBlock = new Predicate<BlockPos>() {
                 @Override
                 public boolean test(BlockPos pos) {
                     return false;
                 }
-            }
+            };
 
         }
 

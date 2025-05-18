@@ -1,9 +1,8 @@
-package com.github.sculkhorde.systems.event_system.events;
+package com.github.sculkhorde.systems.event_system.events.HitSquadEvent;
 
 import com.github.sculkhorde.common.entity.boss.sculk_soul_reaper.SculkSoulReaperEntity;
 import com.github.sculkhorde.core.ModSavedData;
 import com.github.sculkhorde.core.SculkHorde;
-import com.github.sculkhorde.systems.HitSquadSpawnFinder;
 import com.github.sculkhorde.systems.event_system.Event;
 import com.github.sculkhorde.util.BlockAlgorithms;
 import com.github.sculkhorde.util.ChunkLoading.EntityChunkLoaderHelper;

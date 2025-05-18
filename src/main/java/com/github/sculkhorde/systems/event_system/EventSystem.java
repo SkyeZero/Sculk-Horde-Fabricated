@@ -2,7 +2,7 @@ package com.github.sculkhorde.systems.event_system;
 
 import com.github.sculkhorde.core.ModSavedData;
 import com.github.sculkhorde.core.SculkHorde;
-import com.github.sculkhorde.systems.event_system.events.HitSquadEvent;
+import com.github.sculkhorde.systems.event_system.events.HitSquadEvent.HitSquadEvent;
 import com.github.sculkhorde.systems.event_system.events.SpawnPhantomsEvent;
 import com.github.sculkhorde.util.TickUnits;
 import net.minecraft.core.registries.Registries;

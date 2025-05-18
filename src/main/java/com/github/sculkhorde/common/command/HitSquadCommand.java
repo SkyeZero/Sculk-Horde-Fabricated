@@ -2,7 +2,7 @@ package com.github.sculkhorde.common.command;
 
 import com.github.sculkhorde.core.ModSavedData;
 import com.github.sculkhorde.core.SculkHorde;
-import com.github.sculkhorde.systems.event_system.events.HitSquadEvent;
+import com.github.sculkhorde.systems.event_system.events.HitSquadEvent.HitSquadEvent;
 import com.github.sculkhorde.systems.raid_system.RaidHandler;
 import com.github.sculkhorde.util.EntityAlgorithms;
 import com.github.sculkhorde.util.PlayerProfileHandler;
@@ -19,8 +19,8 @@ import net.minecraft.server.level.ServerPlayer;
 
 import java.util.Collection;
 
-import static com.github.sculkhorde.systems.HitSquadDispatcherSystem.MAX_RELATIONSHIP;
-import static com.github.sculkhorde.systems.HitSquadDispatcherSystem.MIN_NODES_DESTROYED;
+import static com.github.sculkhorde.systems.event_system.events.HitSquadEvent.HitSquadDispatcherSystem.MAX_RELATIONSHIP;
+import static com.github.sculkhorde.systems.event_system.events.HitSquadEvent.HitSquadDispatcherSystem.MIN_NODES_DESTROYED;
 
 public class HitSquadCommand implements Command<CommandSourceStack> {
 
