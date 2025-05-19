@@ -246,7 +246,7 @@
 				},
 				"tendril3": {
 					"rotation": {
-						"vector": [-3.14599, "math.cos(query.anim_time * 3 * 10) * +30.9572", "math.cos(query.anim_time * 2 * 50) * -18.9638"]
+						"vector": [-3.14599, "math.cos(query.anim_time * 3 * 10) * -30.9572", "math.cos(query.anim_time * 2 * 50) * -18.9638"]
 					}
 				}
 			}
