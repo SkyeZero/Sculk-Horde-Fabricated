@@ -558,7 +558,6 @@ public class SculkSoulReaperEntity extends Monster implements GeoEntity, ISculkS
 
     public static final String COMBAT_ATTACK_ANIMATION_CONTROLLER_ID = "attack_controller";
     private final AnimationController COMBAT_ATTACK_ANIMATION_CONTROLLER = new AnimationController<>(this, COMBAT_ATTACK_ANIMATION_CONTROLLER_ID, state -> PlayState.STOP)
-            .transitionLength(5)
             .triggerableAnim(ZOLTRAAK_SPELL_USE_ID, ZOLTRAAK_SPELL_USE)
             .triggerableAnim(MAGIC_CIRCLE_SPELL_USE_ID, MAGIC_CIRCLE_SPELL_USE)
             .triggerableAnim(FLOOR_SPEARS_SPELL_USE_ID, FLOOR_SPEARS_SPELL_USE)
@@ -572,8 +571,8 @@ public class SculkSoulReaperEntity extends Monster implements GeoEntity, ISculkS
     {
         controllers.add(
                 DefaultAnimations.genericWalkIdleController(this).transitionLength(5),
-                //DefaultAnimations.genericLivingController(this).transitionLength(5),
-                COMBAT_ATTACK_ANIMATION_CONTROLLER
+                DefaultAnimations.genericLivingController(this).transitionLength(5),
+                COMBAT_ATTACK_ANIMATION_CONTROLLER.transitionLength(5)
         );
     }
 
