@@ -236,17 +236,17 @@
 			"bones": {
 				"tendril2": {
 					"rotation": {
-						"vector": [-3.01374, "Math.cos(query.anim_time * 3 * 30) * -26.4728", "Math.cos(query.anim_time * 1 * 13) * -26.4728"]
+						"vector": [-3.01374, "math.cos(query.anim_time * 3 * 30) * -26.4728", "math.cos(query.anim_time * 1 * 13) * -26.4728"]
 					}
 				},
 				"tendril1": {
 					"rotation": {
-						"vector": [-3.01374, "Math.cos(query.anim_time * 3 * 10) * -26.4728", "Math.cos(query.anim_time * 1 * 1 * 3) * -26.4728"]
+						"vector": [-3.01374, "math.cos(query.anim_time * 3 * 10) * -26.4728", "math.cos(query.anim_time * 1 * 1 * 3) * -26.4728"]
 					}
 				},
 				"tendril3": {
 					"rotation": {
-						"vector": [-3.14599, "Math.cos(query.anim_time * 3 * 10) * +30.9572", "Math.cos(query.anim_time * 2 * 50) * -18.9638"]
+						"vector": [-3.14599, "math.cos(query.anim_time * 3 * 10) * +30.9572", "math.cos(query.anim_time * 2 * 50) * -18.9638"]
 					}
 				}
 			}
