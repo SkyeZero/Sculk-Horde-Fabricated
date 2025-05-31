@@ -264,7 +264,7 @@ public class SculkZombieEntity extends Monster implements GeoEntity, ISculkSmart
 
         protected double getAttackReachSqr(LivingEntity pAttackTarget)
         {
-            return 3.5F;
+            return 2F;
         }
 
         @Override

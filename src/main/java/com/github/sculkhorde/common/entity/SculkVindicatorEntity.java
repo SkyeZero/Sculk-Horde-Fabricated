@@ -275,7 +275,7 @@ public class SculkVindicatorEntity extends Monster implements GeoEntity, ISculkS
 
         protected double getAttackReachSqr(LivingEntity pAttackTarget)
         {
-            return 3.5F;
+            return 2F;
         }
 
         @Override
