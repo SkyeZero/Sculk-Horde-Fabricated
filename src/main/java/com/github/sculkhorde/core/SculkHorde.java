@@ -11,6 +11,7 @@ import com.github.sculkhorde.systems.event_system.EventSystem;
 import com.github.sculkhorde.systems.event_system.events.HitSquadEvent.HitSquadDispatcherSystem;
 import com.github.sculkhorde.systems.gravemind_system.Gravemind;
 import com.github.sculkhorde.systems.gravemind_system.entity_factory.EntityFactory;
+import com.github.sculkhorde.systems.path_builder_system.PathBuilderSystem;
 import com.github.sculkhorde.systems.raid_system.RaidHandler;
 import com.github.sculkhorde.util.ChunkLoading.BlockEntityChunkLoaderHelper;
 import com.github.sculkhorde.util.ChunkLoading.EntityChunkLoaderHelper;
@@ -55,6 +56,7 @@ public class SculkHorde {
 
     public static AutoPerformanceSystem autoPerformanceSystem;
     public static ChunkInfestationSystem chunkInfestationSystem;
+    public static PathBuilderSystem pathBuilderSystem;
 
     //This is the instance of our class, and we register it to the ModEventBus (which I have stored in a variable).
     public SculkHorde()

@@ -6,9 +6,12 @@ import net.minecraft.server.level.ServerLevel;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.function.Predicate;
 
 public class PathBuilderRequest {
+
+    public final UUID uuid = UUID.randomUUID();
     protected BlockPos desiredDestination;
     protected BlockPos startLocation;
 
@@ -17,7 +20,9 @@ public class PathBuilderRequest {
 
     protected boolean hasPathBuildingStarted = false;
     protected boolean isPathBuildingInProgress = false;
+    protected boolean isSearching = false;
     protected boolean isPathBuildSuccessful = false;
+
 
     protected ServerLevel level;
     protected int requiredProximityToDesiredLocation = 5;
@@ -47,6 +52,11 @@ public class PathBuilderRequest {
     public boolean isPathBuildSuccessful()
     {
         return isPathBuildSuccessful;
+    }
+
+    public boolean isSearching()
+    {
+        return isSearching;
     }
 
     public Optional<List<BlockPos>> getFinalPath()
@@ -84,6 +94,16 @@ public class PathBuilderRequest {
     public void setPath(List<BlockPos> pathIn)
     {
         path = pathIn;
+    }
+
+    public void startPathBuilding()
+    {
+        hasPathBuildingStarted = true;
+    }
+
+    public void setPathBuildingInProgress(boolean value)
+    {
+        isPathBuildingInProgress = value;
     }
 
 }

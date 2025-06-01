@@ -11,6 +11,7 @@ import com.github.sculkhorde.systems.chunk_cursor_system.ChunkInfestationSystem;
 import com.github.sculkhorde.systems.cursor_system.CursorSystem;
 import com.github.sculkhorde.systems.event_system.EventSystem;
 import com.github.sculkhorde.systems.gravemind_system.Gravemind;
+import com.github.sculkhorde.systems.path_builder_system.PathBuilderSystem;
 import com.github.sculkhorde.systems.raid_system.RaidData;
 import com.github.sculkhorde.systems.raid_system.RaidHandler;
 import com.github.sculkhorde.util.BlockAlgorithms;
@@ -206,6 +207,10 @@ public class ModSavedData extends SavedData {
         SculkHorde.LOGGER.info("ModSavedData | Loading statisticsData.");
         SculkHorde.statisticsData = new StatisticsData();
         SculkHorde.LOGGER.info("ModSavedData | Loaded statisticsData Successfully.");
+
+        SculkHorde.LOGGER.info("ModSavedData | Loading pathBuilderSystem.");
+        SculkHorde.pathBuilderSystem = new PathBuilderSystem();
+        SculkHorde.LOGGER.info("ModSavedData | Loaded pathBuilderSystem Successfully.");
 
         SculkHorde.LOGGER.info("ModSavedData | Loading list of items cursors can eat.");
         ModConfig.SERVER.loadItemsInfectionCursorsCanEat();

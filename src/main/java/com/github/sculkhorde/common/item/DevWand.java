@@ -1,5 +1,8 @@
 package com.github.sculkhorde.common.item;
 
+import com.github.sculkhorde.core.ModSavedData;
+import com.github.sculkhorde.core.SculkHorde;
+import com.github.sculkhorde.systems.path_builder_system.PathBuilderRequest;
 import com.github.sculkhorde.util.StructureUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -15,6 +18,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.extensions.IForgeItem;
 import net.minecraftforge.server.ServerLifecycleHooks;
+
+import java.util.Optional;
 
 public class DevWand extends Item implements IForgeItem {
 	/* NOTE:
@@ -64,7 +69,6 @@ public class DevWand extends Item implements IForgeItem {
 	}
 
 
-	// ```/place template minecraft:village/snowy/villagers/nitwit```
 
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level level, Player playerIn, InteractionHand handIn)
@@ -80,8 +84,6 @@ public class DevWand extends Item implements IForgeItem {
 		ServerLevel serverLevel = (ServerLevel) level;
 
 		ClipContext rayTrace = new ClipContext(playerIn.getEyePosition(1.0F), playerIn.getEyePosition(1.0F).add(playerIn.getLookAngle().scale(5)), ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, playerIn);
-
-
 		Vec3 spawnPosition = rayTrace.getTo();
 
 		if(!level.canSeeSky(BlockPos.containing(spawnPosition)))
@@ -89,6 +91,17 @@ public class DevWand extends Item implements IForgeItem {
 			playerIn.sendSystemMessage(Component.literal("Error: Cannot See Sky."));
 			return InteractionResultHolder.fail(itemstack);
 		}
+
+		Optional<ModSavedData.NodeEntry> closestNode = ModSavedData.getSaveData().getClosestNodeEntry(serverLevel, playerIn.blockPosition());
+
+		if(closestNode.isEmpty())
+		{
+			playerIn.sendSystemMessage(Component.literal("Error: No Nearby Node."));
+			return InteractionResultHolder.fail(itemstack);
+		}
+
+		PathBuilderRequest request = new PathBuilderRequest(serverLevel, closestNode.get().getPosition(), BlockPos.containing(playerIn.getEyePosition()), 10, null, null);
+		SculkHorde.pathBuilderSystem.addPathBuilderRequest(request);
 
 		return InteractionResultHolder.pass(itemstack);
 	}

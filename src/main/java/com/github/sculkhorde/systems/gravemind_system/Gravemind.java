@@ -279,6 +279,7 @@ public class Gravemind
         SculkHorde.beeNestActivitySystem.serverTick();
         SculkHorde.chunkInfestationSystem.serverTick();
         SculkHorde.debugSlimeSystem.serverTick();
+        SculkHorde.pathBuilderSystem.serverTick();
 
         SculkHorde.autoPerformanceSystem.onServerTick();
 
