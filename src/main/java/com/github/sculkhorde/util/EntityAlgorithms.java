@@ -809,7 +809,7 @@ public class EntityAlgorithms {
             {
                 return false;
             }
-            else if(getDamageDealerAsMob().distanceTo(target.get()) > attackReach)
+            else if(EntityAlgorithms.getDistanceBetweenEntities(getDamageDealerAsMob(), target.get()) > attackReach)
             {
                 return false;
             }

@@ -262,11 +262,6 @@ public class SculkZombieEntity extends Monster implements GeoEntity, ISculkSmart
             return canUse();
         }
 
-        protected double getAttackReachSqr(LivingEntity pAttackTarget)
-        {
-            return 2F;
-        }
-
         @Override
         protected int getAttackInterval() {
             return TickUnits.convertSecondsToTicks(0.5F);

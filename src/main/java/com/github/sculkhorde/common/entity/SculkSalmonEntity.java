@@ -227,12 +227,6 @@ public class SculkSalmonEntity extends Salmon implements GeoEntity, ISculkSmartE
             return canUse();
         }
 
-        protected double getAttackReachSqr(LivingEntity pAttackTarget)
-        {
-            float f = SculkSalmonEntity.this.getBbWidth() - 0.1F;
-            return (double)(f * 2.0F * f * 2.0F + pAttackTarget.getBbWidth());
-        }
-
         @Override
         protected int getAttackInterval() {
             return TickUnits.convertSecondsToTicks(2);

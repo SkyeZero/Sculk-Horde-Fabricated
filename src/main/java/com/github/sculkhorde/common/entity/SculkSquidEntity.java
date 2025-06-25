@@ -454,10 +454,10 @@ public class SculkSquidEntity extends WaterAnimal implements GeoEntity, ISculkSm
             return canUse();
         }
 
-        protected double getAttackReachSqr(LivingEntity pAttackTarget)
+        @Override
+        protected double getAttackReachBlocks()
         {
-            float f = SculkSquidEntity.this.getBbHeight() - 0.1F;
-            return (double)(f * 2.0F * f * 2.0F + pAttackTarget.getBbWidth());
+            return 1.5D;
         }
 
         @Override
@@ -477,7 +477,7 @@ public class SculkSquidEntity extends WaterAnimal implements GeoEntity, ISculkSm
             {
                 return;
             }
-            double attackReach = this.getAttackReachSqr(this.mob);
+            double attackReach = this.getAttackReachWithHitboxes(this.mob);
             boolean isTooFarFromTarget = distanceFromTargetIn > attackReach;
             boolean canSeeTarget = this.mob.getSensing().hasLineOfSight(targetMob);
             if (!isTimeToAttack() || isTooFarFromTarget || !canSeeTarget)

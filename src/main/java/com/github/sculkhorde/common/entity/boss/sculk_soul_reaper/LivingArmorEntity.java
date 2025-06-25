@@ -369,7 +369,7 @@ public class LivingArmorEntity extends Monster implements GeoEntity, ISculkSmart
             return canUse();
         }
 
-        protected double getAttackReachSqr(LivingEntity pAttackTarget)
+        protected double getAttackReachWithHitboxes(LivingEntity target)
         {
             return 3.5F;
         }

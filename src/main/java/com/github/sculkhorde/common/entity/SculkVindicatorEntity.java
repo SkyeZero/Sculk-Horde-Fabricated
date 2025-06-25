@@ -273,10 +273,6 @@ public class SculkVindicatorEntity extends Monster implements GeoEntity, ISculkS
             super(SculkVindicatorEntity.this, 1.0D, false, 10);
         }
 
-        protected double getAttackReachSqr(LivingEntity pAttackTarget)
-        {
-            return 2F;
-        }
 
         @Override
         protected int getAttackInterval() {

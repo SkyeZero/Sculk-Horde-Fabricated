@@ -398,12 +398,6 @@ public class SculkHatcherEntity extends Monster implements GeoEntity, ISculkSmar
             return canUse();
         }
 
-        protected double getAttackReachSqr(LivingEntity pAttackTarget)
-        {
-            float f = SculkHatcherEntity.this.getBbWidth() - 0.1F;
-            return (double)(f * 2.0F * f * 2.0F + pAttackTarget.getBbWidth());
-        }
-
         @Override
         protected int getAttackInterval() {
             return TickUnits.convertSecondsToTicks(1);

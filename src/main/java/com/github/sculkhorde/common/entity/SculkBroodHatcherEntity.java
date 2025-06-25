@@ -271,7 +271,7 @@ public class SculkBroodHatcherEntity extends Monster implements GeoEntity, IScul
             return canUse();
         }
 
-        protected double getAttackReachSqr(LivingEntity pAttackTarget)
+        protected double getAttackReachBlocks()
         {
             return 3.5F;
         }

@@ -276,9 +276,9 @@ public class SculkSheepEntity extends Monster implements GeoEntity, ISculkSmartE
             return canUse();
         }
 
-        protected double getAttackReachSqr(LivingEntity pAttackTarget)
+        protected double getAttackReachBlocks()
         {
-            return 3.5F;
+            return 3F;
         }
 
         @Override

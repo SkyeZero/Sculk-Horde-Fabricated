@@ -1,6 +1,5 @@
 package com.github.sculkhorde.systems.path_builder_system;
 
-import com.github.sculkhorde.core.ModConfig;
 import com.github.sculkhorde.core.SculkHorde;
 import com.github.sculkhorde.util.BlockAlgorithms;
 import com.github.sculkhorde.util.TickUnits;
@@ -16,7 +15,7 @@ import java.util.*;
 import java.util.function.Predicate;
 
 public class PathBuilder {
-    private final PriorityQueue<BlockPos> queue = new PriorityQueue<>(Comparator.comparingInt(this::getHeuristic));
+    private final PriorityQueue<BlockPos> priorityQueue = new PriorityQueue<>(Comparator.comparingDouble(this::getHeuristic));
     private final Map<Long, Boolean> visitedPositions = new HashMap<>();
     private final Map<BlockPos, BlockPos> cameFrom = new HashMap<>();
     private boolean debugMode = true;
@@ -47,7 +46,7 @@ public class PathBuilder {
         return request;
     }
 
-    protected int getHeuristic(BlockPos pos) {
+    protected float getHeuristic(BlockPos pos) {
 
         if(request.isEmpty())
         {
@@ -61,27 +60,17 @@ public class PathBuilder {
 
         // Modifier for preference above ground
         ServerLevel level = getCurrentRequest().get().getLevel(); // Assuming PathBuilderRequest has getLevel()
-        if (level != null) {
 
-            BlockPos groundPos = BlockAlgorithms.getGroundBlockPos(level, pos, pos.getY());
-            int heightOffTheGround = pos.getY() - groundPos.getY();
+        BlockPos groundPos = BlockAlgorithms.getGroundBlockPos(level, pos, pos.getY());
+        int heightOffTheGround = pos.getY() - groundPos.getY();
 
-            // The top of the solid ground is at groundSurfaceY - 1.
-            // We want to be at least MIN_HEIGHT_ABOVE_GROUND blocks *above* this solid ground.
-            // So, the minimum desired Y is (groundSurfaceY - 1) + MIN_HEIGHT_ABOVE_GROUND.
-            int minPreferredY = (groundSurfaceY - 1) + MIN_HEIGHT_ABOVE_GROUND;
-
-            if (pos.getY() < minPreferredY) {
-                // Add a penalty if the block is lower than preferred
-                // The penalty makes this path less attractive
-                heuristic += ABOVE_GROUND_PREFERENCE_PENALTY;
-            }
-            // Optional: You could also add a smaller penalty for each block below the threshold:
-            // heuristic += (minPreferredY - pos.getY()) * SOME_FACTOR; // If pos.getY() < minPreferredY
-
-        } else {
-            SculkHorde.LOGGER.warn("PathBuilderSystem | Level is null, cannot apply above-ground preference.");
+        if(heightOffTheGround < 10 && BlockAlgorithms.getBlockDistance(request.get().desiredDestination, pos) > 10)
+        {
+            heuristic = 0;
         }
+
+        return Math.max(0, heuristic);
+
     }
 
     protected boolean isEmpty()
@@ -202,7 +191,7 @@ public class PathBuilder {
         currentRequest.hasPathBuildingStarted = true;
         currentRequest.isPathBuildingInProgress = true;
         currentRequest.isSearching = true;
-        queue.add(request.get().startLocation);
+        priorityQueue.add(request.get().startLocation);
         visitedPositions.put(request.get().startLocation.asLong(), true);
         SculkHorde.LOGGER.debug("PathBuilder | Path Builder Initialized.");
     }
@@ -211,7 +200,7 @@ public class PathBuilder {
     {
         PathBuilderRequest currentRequest = request.get();
 
-        if (queue.isEmpty()) {
+        if (priorityQueue.isEmpty()) {
 
             if(debugMode)
             {
@@ -232,7 +221,7 @@ public class PathBuilder {
             currentRequest.getLevel().addFreshEntity(debugStand);
         }
 
-        BlockPos currentPos = queue.poll();
+        BlockPos currentPos = priorityQueue.poll();
 
         if(debugMode)
         {
@@ -265,7 +254,7 @@ public class PathBuilder {
                 continue;
             }
 
-            queue.add(neighbor);
+            priorityQueue.add(neighbor);
             visitedPositions.put(neighbor.asLong(), true);
             cameFrom.put(neighbor, currentPos);
         }

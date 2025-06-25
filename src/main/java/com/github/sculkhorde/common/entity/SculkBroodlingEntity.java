@@ -281,11 +281,6 @@ public class SculkBroodlingEntity extends Monster implements GeoEntity, ISculkSm
             return canUse();
         }
 
-        protected double getAttackReachSqr(LivingEntity pAttackTarget)
-        {
-            return 3.5F;
-        }
-
         @Override
         protected int getAttackInterval() {
             return TickUnits.convertSecondsToTicks(0.5F);

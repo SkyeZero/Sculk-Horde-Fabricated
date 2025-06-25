@@ -241,7 +241,7 @@ public class CustomMeleeAttackGoal extends Goal{
         {
             return;
         }
-        double attackReach = this.getAttackReachSqr(this.mob);
+        double attackReach = this.getAttackReachWithHitboxes(targetMob);
         boolean isTooFarFromTarget = distanceFromTargetIn > attackReach;
         boolean canSeeTarget = this.mob.getSensing().hasLineOfSight(targetMob);
         if (!isTimeToAttack() || isTooFarFromTarget || !canSeeTarget)
@@ -270,8 +270,14 @@ public class CustomMeleeAttackGoal extends Goal{
         return this.adjustedTickDelay(attackInterval);
     }
 
-    protected double getAttackReachSqr(LivingEntity p_25556_) {
-        return (double)(this.mob.getBbWidth() * 2.0F * this.mob.getBbWidth() * 2.0F + p_25556_.getBbWidth());
+    protected double getAttackReachBlocks()
+    {
+        return 2F;
+    }
+
+    protected double getAttackReachWithHitboxes(LivingEntity target) {
+
+        return (this.mob.getBbWidth() / 2.0F) + (target.getBbWidth() / 2.0F) + getAttackReachBlocks();
     }
 
     public void onTargetHurt(LivingEntity target)

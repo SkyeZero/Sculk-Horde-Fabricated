@@ -661,9 +661,9 @@ public class SculkEndermanEntity extends Monster implements GeoEntity, ISculkSma
             super(SculkEndermanEntity.this, 1.0D, true, 17);
         }
 
-        protected double getAttackReachSqr(LivingEntity pAttackTarget)
+        protected double getAttackReachBlocks()
         {
-            return 6;
+            return 3.5D;
         }
 
         @Override

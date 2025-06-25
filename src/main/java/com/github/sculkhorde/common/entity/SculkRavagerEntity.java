@@ -267,10 +267,9 @@ public class SculkRavagerEntity extends Ravager implements GeoEntity, ISculkSmar
             return canUse();
         }
 
-        protected double getAttackReachSqr(LivingEntity pAttackTarget)
+        protected double getAttackReachBlocks()
         {
-            float f = SculkRavagerEntity.this.getBbWidth() - 0.1F;
-            return (double)(f * 2.0F * f * 2.0F + pAttackTarget.getBbWidth());
+            return 1.5D;
         }
 
         @Override
