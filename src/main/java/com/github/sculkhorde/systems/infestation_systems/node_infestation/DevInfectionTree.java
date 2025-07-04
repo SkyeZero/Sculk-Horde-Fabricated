@@ -19,6 +19,17 @@ public class DevInfectionTree extends InfectionTree{
         super(world, direction, rootPos, true);
     }
 
+    protected boolean canTick()
+    {
+        // If the root is null, or the tree is not active, do nothing
+        if(root.blockPos == BlockPos.ZERO || !isActive())
+        {
+            return false;
+        }
+
+        return true;
+    }
+
     /**
      * Creates a new infection cursor
      * @param maxInfections The maximum number of infections the cursor can perform

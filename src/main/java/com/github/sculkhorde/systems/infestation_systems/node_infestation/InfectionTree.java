@@ -149,22 +149,31 @@ public class InfectionTree {
         cursorInfection.setMaxTransformations(50);
     }
 
+    protected boolean canTick()
+    {
+        // If the root is null, or the tree is not active, do nothing
+        if(root.blockPos == BlockPos.ZERO || !isActive())
+        {
+            return false;
+        }
+
+        if(ModSavedData.getSaveData().getSculkAccumulatedMass() <= 0)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
     /**
      * Ticks the infection tree
      */
     public void tick()
     {
-        // If the root is null, or the tree is not active, do nothing
-        if(root.blockPos == BlockPos.ZERO || !isActive())
+        if(!canTick())
         {
             return;
         }
-
-        if(ModSavedData.getSaveData().getSculkAccumulatedMass() <= 0)
-        {
-            return;
-        }
-
 
         // If the probe has failed too many times, change state to complete
         if(failedProbeAttempts >= MAX_FAILED_PROBE_ATTEMPTS)
