@@ -507,17 +507,32 @@ public class BlockInfestationSystem {
     {
 
         //Given random chance and the target location can see the sky, create a sculk hive
-        if(new Random().nextInt(4000) <= 1 && blockIsAirOrSnow(world.getBlockState(targetPos)) && blockIsAirOrSnow(world.getBlockState(targetPos.above())) && blockIsAirOrSnow(world.getBlockState(targetPos.above().above())))
+        if(new Random().nextInt(4000) > 1)
         {
-            BlockAlgorithms.setBlockCursor(world, targetPos, ModBlocks.SCULK_BEE_NEST_BLOCK.get().defaultBlockState());
-            SculkBeeNestBlockEntity nest = (SculkBeeNestBlockEntity) world.getBlockEntity(targetPos);
-
-            //Add bees
-            nest.addFreshInfectorOccupant();
-            nest.addFreshInfectorOccupant();
-            nest.addFreshHarvesterOccupant();
-            nest.addFreshHarvesterOccupant();
+            return;
         }
+
+        if(!blockIsAirOrSnow(world.getBlockState(targetPos))
+                || !blockIsAirOrSnow(world.getBlockState(targetPos.above()))
+                || !blockIsAirOrSnow(world.getBlockState(targetPos.above().above()))
+        )
+        {
+            return;
+        }
+
+        BlockAlgorithms.setBlockCursor(world, targetPos, ModBlocks.SCULK_BEE_NEST_BLOCK.get().defaultBlockState());
+        SculkBeeNestBlockEntity nest = (SculkBeeNestBlockEntity) world.getBlockEntity(targetPos);
+
+        if(nest == null)
+        {
+            return;
+        }
+
+        //Add bees
+        nest.addFreshInfectorOccupant();
+        nest.addFreshInfectorOccupant();
+        nest.addFreshHarvesterOccupant();
+        nest.addFreshHarvesterOccupant();
 
     }
 

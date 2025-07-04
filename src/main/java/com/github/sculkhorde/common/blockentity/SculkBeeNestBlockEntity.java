@@ -269,52 +269,54 @@ public class SculkBeeNestBlockEntity extends BlockEntity
     }
 
     public void addOccupantWithPresetTicks(Entity entity, boolean hasNectar, int ticks) {
-        if (getOccupantCount() < MAX_OCCUPANTS)
+        if (getOccupantCount() >= MAX_OCCUPANTS || this.level == null)
         {
-            entity.stopRiding();
-            entity.ejectPassengers();
-            CompoundTag compoundtag = new CompoundTag();
-            entity.save(compoundtag);
-            this.storeBee(compoundtag, ticks, hasNectar);
-            if (this.level != null)
-            {
-                if (entity instanceof Bee)
-                {
-                    Bee bee = (Bee)entity;
-                    if (bee.hasSavedFlowerPos() && (!this.hasSavedFlowerPos() || this.level.random.nextBoolean())) {
-                        this.savedFlowerPos = bee.getSavedFlowerPos();
-                    }
-                }
-
-                BlockPos blockpos = this.getBlockPos();
-                this.level.playSound((Player)null, (double)blockpos.getX(), (double)blockpos.getY(), (double)blockpos.getZ(), SoundEvents.BEEHIVE_ENTER, SoundSource.BLOCKS, 1.0F, 1.0F);
-                this.level.gameEvent(GameEvent.BLOCK_CHANGE, blockpos, GameEvent.Context.of(entity, this.getBlockState()));
-
-                //Give Sculk Horde Mass
-                if(ModSavedData.getSaveData() != null) { ModSavedData.getSaveData().addSculkAccumulatedMass(5); }
-                if(SculkHorde.statisticsData != null) { SculkHorde.statisticsData.addTotalMassFromBees(5); }
-
-
-                //Summon Surface Infestor
-                if(ModConfig.SERVER.block_infestation_enabled.get() && Math.abs(level.getGameTime() - timeOfLastCursorSpawn) >= CURSOR_SPAWN_COOLDOWN)
-                {
-                    timeOfLastCursorSpawn = level.getGameTime();
-                    Optional<VirtualSurfaceInfestorCursor> cursor = CursorSystem.createSurfaceInfestorVirtualCursor(level, blockpos);
-
-                    if(cursor.isPresent())
-                    {
-                        cursor.get().setMaxTransformations(100);
-                        cursor.get().setMaxRange(100);
-                        cursor.get().setTickIntervalTicks(TickUnits.convertSecondsToTicks(1));
-                        cursor.get().setSearchIterationsPerTick(10);
-                    }
-                }
-
-            }
-
-            entity.discard();
-            super.setChanged();
+            return;
         }
+
+        entity.stopRiding();
+        entity.ejectPassengers();
+        CompoundTag compoundtag = new CompoundTag();
+        entity.save(compoundtag);
+        this.storeBee(compoundtag, ticks, hasNectar);
+
+        if (entity instanceof Bee)
+        {
+            Bee bee = (Bee)entity;
+            if (bee.hasSavedFlowerPos() && (!this.hasSavedFlowerPos() || this.level.random.nextBoolean())) {
+                this.savedFlowerPos = bee.getSavedFlowerPos();
+            }
+        }
+
+        BlockPos blockpos = this.getBlockPos();
+        this.level.playSound((Player)null, (double)blockpos.getX(), (double)blockpos.getY(), (double)blockpos.getZ(), SoundEvents.BEEHIVE_ENTER, SoundSource.BLOCKS, 1.0F, 1.0F);
+        this.level.gameEvent(GameEvent.BLOCK_CHANGE, blockpos, GameEvent.Context.of(entity, this.getBlockState()));
+
+        //Give Sculk Horde Mass
+        if(ModSavedData.getSaveData() != null) { ModSavedData.getSaveData().addSculkAccumulatedMass(5); }
+        if(SculkHorde.statisticsData != null) { SculkHorde.statisticsData.addTotalMassFromBees(5); }
+
+
+        //Summon Surface Infestor
+        if(ModConfig.SERVER.block_infestation_enabled.get() && Math.abs(level.getGameTime() - timeOfLastCursorSpawn) >= CURSOR_SPAWN_COOLDOWN)
+        {
+            timeOfLastCursorSpawn = level.getGameTime();
+            Optional<VirtualSurfaceInfestorCursor> cursor = CursorSystem.createSurfaceInfestorVirtualCursor(level, blockpos);
+
+            if(cursor.isPresent())
+            {
+                cursor.get().setMaxTransformations(100);
+                cursor.get().setMaxRange(100);
+                cursor.get().setTickIntervalTicks(TickUnits.convertSecondsToTicks(1));
+                cursor.get().setSearchIterationsPerTick(10);
+            }
+        }
+
+
+
+        entity.discard();
+        super.setChanged();
+
     }
 
     public void storeBee(CompoundTag p_155158_, int p_155159_, boolean p_155160_) {
