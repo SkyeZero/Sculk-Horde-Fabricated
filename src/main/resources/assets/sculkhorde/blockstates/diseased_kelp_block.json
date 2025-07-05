@@ -1,5 +1,6 @@
 {
   "variants": {
-    "": { "model": "sculkhorde:block/diseased_kelp_block" }
+    "end=false": { "model": "sculkhorde:block/diseased_kelp_block" },
+    "end=true": { "model": "sculkhorde:block/diseased_kelp_end_block" }
   }
 }

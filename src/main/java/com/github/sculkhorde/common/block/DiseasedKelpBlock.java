@@ -9,7 +9,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
-import net.minecraft.tags.FluidTags;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -23,6 +22,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LiquidBlockContainer;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
@@ -70,11 +71,17 @@ public class DiseasedKelpBlock extends Block implements IForgeBlock, LiquidBlock
     public static float BLAST_RESISTANCE = 0.5f;
 
     /**
+     * Denotes whether this is the end block or not.
+     */
+    public static final BooleanProperty END = BooleanProperty.create("end");
+
+    /**
      * The Constructor that takes in properties
      * @param prop The Properties
      */
     public DiseasedKelpBlock(Properties prop) {
         super(prop);
+        this.registerDefaultState(this.getStateDefinition().any().setValue(END, false));
     }
 
     /**
@@ -93,6 +100,58 @@ public class DiseasedKelpBlock extends Block implements IForgeBlock, LiquidBlock
     public static Properties getProperties()
     {
         return Properties.copy(ModBlocks.GRASS.get());
+    }
+
+    /**
+     * Necessary for this to work.
+     * @param builder
+     */
+    @Override
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
+    {
+        builder.add(END);
+    }
+
+    public boolean isEndBlock(BlockState pState)
+    {
+        return pState.getValue(END);
+    }
+
+    /** MODIFIERS **/
+
+    public void setEndBlock(Level pLevel, BlockState pState, BlockPos pPos, Boolean value)
+    {
+        /**
+         * Sets a block state into this world.Flags are as follows:
+         * 1 will cause a block update.
+         * 2 will send the change to clients.
+         * 4 will prevent the block from being re-rendered.
+         * 8 will force any re-renders to run on the main thread instead
+         * 16 will prevent neighbor reactions (e.g. fences connecting, observers pulsing).
+         * 32 will prevent neighbor reactions from spawning drops.
+         * 64 will signify the block is being moved.
+         * Flags can be OR-ed
+         */
+        pLevel.setBlock(pPos, pState.setValue(END, value), 3);
+    }
+
+    @Override
+    public void onNeighborChange(BlockState state, LevelReader level, BlockPos pos, BlockPos neighbor) {
+        super.onNeighborChange(state, level, pos, neighbor);
+
+        if(!neighbor.equals(pos.above()))
+        {
+            return;
+        }
+
+        if(!level.getBlockState(neighbor).is(ModBlocks.DISEASED_KELP_BLOCK.get()))
+        {
+            setEndBlock((Level) level, state, pos, true);
+            return;
+        }
+
+        setEndBlock((Level) level, state, pos, false);
+
     }
 
     /** Makes entities slow and damages them. I stole this code from the berry bush.<br>
@@ -172,9 +231,8 @@ public class DiseasedKelpBlock extends Block implements IForgeBlock, LiquidBlock
     }
 
     @Nullable
-    public BlockState getStateForPlacement(BlockPlaceContext p_54302_) {
-        FluidState fluidstate = p_54302_.getLevel().getFluidState(p_54302_.getClickedPos());
-        return fluidstate.is(FluidTags.WATER) && fluidstate.getAmount() == 8 ? super.getStateForPlacement(p_54302_) : null;
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
+        return this.defaultBlockState().setValue(END, false);
     }
 
     public FluidState getFluidState(BlockState p_54319_) {
