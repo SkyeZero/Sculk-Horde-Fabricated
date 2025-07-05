@@ -13,6 +13,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.gameevent.vibrations.VibrationSystem;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraftforge.common.extensions.IForgeBlock;
 
@@ -92,7 +93,14 @@ public class BroodNestBlock extends BaseEntityBlock implements IForgeBlock {
 
     @Nullable
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState blockState, BlockEntityType<T> blockEntityType) {
-        return level.isClientSide ? null : createTickerHelper(blockEntityType, ModBlockEntities.BROOD_NEST_BLOCK_ENTITY.get(), BroodNestBlockEntity::tick);
+        if(level.isClientSide)
+        {
+            return null;
+        }
+
+        return BaseEntityBlock.createTickerHelper(blockEntityType, ModBlockEntities.BROOD_NEST_BLOCK_ENTITY.get(), (level1, pos, state, entity) -> {
+            VibrationSystem.Ticker.tick(level1, entity.getVibrationData(), entity.getVibrationUser());
+        });
     }
 
     @Override

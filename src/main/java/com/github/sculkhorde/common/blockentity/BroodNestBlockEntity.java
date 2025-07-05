@@ -7,25 +7,39 @@ import com.github.sculkhorde.systems.gravemind_system.Gravemind;
 import com.github.sculkhorde.systems.infestation_systems.block_infestation_system.BlockInfestationSystem;
 import com.github.sculkhorde.util.EntityAlgorithms;
 import com.github.sculkhorde.util.TickUnits;
+import com.mojang.serialization.Dynamic;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.GameEventTags;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.gameevent.BlockPositionSource;
+import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.level.gameevent.GameEventListener;
+import net.minecraft.world.level.gameevent.PositionSource;
+import net.minecraft.world.level.gameevent.vibrations.VibrationSystem;
 import net.minecraft.world.level.material.Fluids;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class BroodNestBlockEntity extends BlockEntity {
+public class BroodNestBlockEntity extends BlockEntity implements GameEventListener.Holder<VibrationSystem.Listener>, VibrationSystem{
     protected long lastTickTime = 0;
-    protected int tickInterval = TickUnits.convertSecondsToTicks(15);
+    protected int minTickInterval = TickUnits.convertSecondsToTicks(15);
 
     public ArrayList<LivingEntity> spawnedEntities = new ArrayList<>();
     public final int MAX_ENTITIES = 6;
 
+    // Vibration Code
+    private final VibrationSystem.User vibrationUser = new BroodNestBlockEntity.VibrationUser(this);
+    private VibrationSystem.Data vibrationData = new VibrationSystem.Data();
+    private final VibrationSystem.Listener vibrationListener = new VibrationSystem.Listener(this);
 
     /**
      * The Constructor that takes in properties
@@ -34,96 +48,6 @@ public class BroodNestBlockEntity extends BlockEntity {
         super(ModBlockEntities.BROOD_NEST_BLOCK_ENTITY.get(), pos, state);
     }
 
-    /**
-     * Called when loading block entity from world.
-     * @param compoundNBT Where NBT data is stored.
-     */
-    @Override
-    public void load(CompoundTag compoundNBT) {
-        super.load(compoundNBT);
-        //this.storedSculkMass = compoundNBT.getInt(storedSculkMassIdentifier);
-    }
-
-    /**
-     * ???
-     * @param compoundNBT Where NBT data is stored??
-     * @return ???
-     */
-    @Override
-    public void saveAdditional(CompoundTag compoundNBT) {
-
-        //compoundNBT.putInt(storedSculkMassIdentifier, this.storedSculkMass);
-        super.saveAdditional(compoundNBT);
-    }
-
-    /*
-    public int getStoredSculkMass()
-    {
-        return storedSculkMass;
-    }
-
-    public void setStoredSculkMass(int value)
-    {
-        storedSculkMass = Math.max(0, value);
-    }
-
-    public void addStoredSculkMass(int value)
-    {
-        storedSculkMass = Math.max(0, storedSculkMass + value);
-    }
-
-     */
-
-
-    public static void tick(Level level, BlockPos blockPos, BlockState blockState, BroodNestBlockEntity blockEntity)
-    {
-        // If world is not a server world, return
-        if(level.isClientSide)
-        {
-            return;
-        }
-
-        // Delay the spawning of mobs for balance, and so that the mass block can recognise if it is under water.
-        // When they are first placed, they are not waterlogged. This will result in spawning a surface unit
-        // for the first tick, instead of a aquatic unit.
-        if(blockEntity.lastTickTime == 0)
-        {
-            blockEntity.lastTickTime = level.getGameTime();
-        }
-
-
-        // Tick every 10 seconds
-        if(level.getGameTime() - blockEntity.lastTickTime < blockEntity.tickInterval)
-        {
-            return;
-        }
-
-        blockEntity.lastTickTime = level.getGameTime();
-
-        if(!Gravemind.isGravemindActive())
-        {
-            return;
-        }
-
-
-        if(SculkHorde.populationHandler.isPopulationAtMax())
-        {
-            return;
-        }
-
-        if(blockEntity.spawnedEntities.size() >= blockEntity.MAX_ENTITIES)
-        {
-            return;
-        }
-
-        // Spawn Spiders
-        if(EntityAlgorithms.getNonSculkEntitiesAtBlockPos((ServerLevel) level, blockPos, 16).isEmpty())
-        {
-            return;
-        }
-
-        blockEntity.spawnBroodlings(3);
-    }
 
     public void spawnBroodlings(int amount)
     {
@@ -219,5 +143,130 @@ public class BroodNestBlockEntity extends BlockEntity {
         }
         //else return empty
         return list;
+    }
+
+    /* ~~~~~~~~ Save/Load Events ~~~~~~~~  */
+
+    public void load(CompoundTag nbt) {
+        super.load(nbt);
+
+        if (nbt.contains("listener", 10)) {
+            VibrationSystem.Data.CODEC.parse(new Dynamic<>(NbtOps.INSTANCE, nbt.getCompound("listener"))).resultOrPartial(SculkHorde.LOGGER::error).ifPresent((data) -> {
+                this.vibrationData = data;
+            });
+        }
+
+    }
+
+    protected void saveAdditional(CompoundTag nbt)
+    {
+        super.saveAdditional(nbt);
+        VibrationSystem.Data.CODEC.encodeStart(NbtOps.INSTANCE, this.vibrationData).resultOrPartial(SculkHorde.LOGGER::error).ifPresent((p_222871_) -> {
+            nbt.put("listener", p_222871_);
+        });
+    }
+
+    /* ~~~~~~~~ Vibration Events ~~~~~~~~  */
+
+    public VibrationSystem.Listener getListener() {
+        return this.vibrationListener;
+    }
+
+    public VibrationSystem.Data getVibrationData() {
+        return this.vibrationData;
+    }
+
+    public VibrationSystem.User getVibrationUser() {
+        return this.vibrationUser;
+    }
+
+
+
+    /**
+     * The listener for the sculk summoner block entity.
+     */
+    class VibrationUser implements VibrationSystem.User
+    {
+        private static final int LISTENER_RADIUS = 24;
+        private final PositionSource positionSource = new BlockPositionSource(BroodNestBlockEntity.this.worldPosition);
+        private final BroodNestBlockEntity broodNest;
+
+        public VibrationUser(BroodNestBlockEntity broodNestIn) {
+            this.broodNest = broodNestIn;
+        }
+
+
+        public int getListenerRadius() {
+            return LISTENER_RADIUS;
+        }
+
+        public PositionSource getPositionSource() {
+            return this.positionSource;
+        }
+
+        public TagKey<GameEvent> getListenableEvents() {
+            return GameEventTags.SHRIEKER_CAN_LISTEN;
+        }
+
+        public boolean canReceiveVibration(ServerLevel level, BlockPos pos, GameEvent event, GameEvent.Context context) {
+
+            // If world is not a server world, return
+            if(level.isClientSide)
+            {
+                return false;
+            }
+
+            if(!Gravemind.isGravemindActive())
+            {
+                return false;
+            }
+
+            if(broodNest.spawnedEntities.size() >= broodNest.MAX_ENTITIES)
+            {
+                return false;
+            }
+
+            if(SculkHorde.populationHandler.isPopulationAtMax())
+            {
+                return false;
+            }
+
+
+            // Delay the spawning of mobs for balance
+            if(broodNest.lastTickTime == 0)
+            {
+                broodNest.lastTickTime = level.getGameTime();
+            }
+
+
+            if(level.getGameTime() - broodNest.lastTickTime < broodNest.minTickInterval)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public void onReceiveVibration(ServerLevel level, BlockPos blockPos, GameEvent gameEvent, @Nullable Entity entity, @Nullable Entity entity1, float power)
+        {
+            broodNest.lastTickTime = level.getGameTime();
+
+            // Spawn Spiders
+            if(EntityAlgorithms.getNonSculkEntitiesAtBlockPos((ServerLevel) level, blockPos, 16).isEmpty())
+            {
+                return;
+            }
+
+            broodNest.spawnBroodlings(3);
+        }
+
+        public void onDataChanged()
+        {
+            setChanged();
+        }
+
+        public boolean requiresAdjacentChunksToBeTicking() {
+            return true;
+        }
     }
 }
