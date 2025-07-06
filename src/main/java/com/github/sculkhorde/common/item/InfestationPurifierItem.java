@@ -6,11 +6,15 @@ import com.github.sculkhorde.util.ForgeEventSubscriber;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.BlockSource;
 import net.minecraft.core.Direction;
+import net.minecraft.core.dispenser.DefaultDispenseItemBehavior;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -20,11 +24,13 @@ import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.extensions.IForgeItem;
@@ -42,6 +48,23 @@ public class InfestationPurifierItem extends Item implements IForgeItem {
      */
     public InfestationPurifierItem(Properties properties) {
         super(properties);
+
+        DispenserBlock.registerBehavior(this, new DefaultDispenseItemBehavior() {
+            public ItemStack execute(BlockSource blockSource, ItemStack itemStack) {
+                Direction direction = blockSource.getBlockState().getValue(DispenserBlock.FACING);
+                Vec3 spawnPos = blockSource.getPos().relative(direction).getCenter();
+                ServerLevel serverlevel = blockSource.getLevel();
+
+
+                InfestationPurifierEntity entity = new InfestationPurifierEntity(serverlevel);
+                entity.setPos(spawnPos);
+                entity.addEffect(new MobEffectInstance(MobEffects.GLOWING, Integer.MAX_VALUE, 0));
+                serverlevel.addFreshEntity(entity);
+                itemStack.shrink(1);
+
+                return itemStack;
+            }
+        });
     }
 
     /**
