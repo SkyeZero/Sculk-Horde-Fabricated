@@ -20,7 +20,7 @@ import org.lwjgl.glfw.GLFW;
 import java.util.List;
 
 public class DiasciteAxeItem extends AxeItem implements IForgeItem, IHealthRepairable {
-    protected static float ATTACK_SPEED = 1.0F;
+    protected static float ATTACK_SPEED = -3.0F;
     protected static int ATTACK_DAMAGE = 5;
     protected static Properties PROPERTIES = new Properties()
             .setNoRepair()

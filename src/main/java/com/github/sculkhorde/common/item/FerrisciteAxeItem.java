@@ -19,8 +19,8 @@ import org.lwjgl.glfw.GLFW;
 import java.util.List;
 
 public class FerrisciteAxeItem extends AxeItem implements IForgeItem, IHealthRepairable {
-    protected static float ATTACK_SPEED = 1.0F;
-    protected static int ATTACK_DAMAGE = 5;
+    protected static float ATTACK_SPEED = -3.1F;
+    protected static int ATTACK_DAMAGE = 6;
     public static String blocksBrokenTagID = "blocks_broken";
     public static String lastBlockBrokenID = "last_block_broken";
 
@@ -31,7 +31,7 @@ public class FerrisciteAxeItem extends AxeItem implements IForgeItem, IHealthRep
             .defaultDurability(3000);
 
     public FerrisciteAxeItem() {
-        super(Tiers.DIAMOND, ATTACK_DAMAGE, ATTACK_SPEED, PROPERTIES);
+        super(Tiers.IRON, ATTACK_DAMAGE, ATTACK_SPEED, PROPERTIES);
     }
 
     @Override
