@@ -11,7 +11,10 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
@@ -211,16 +214,30 @@ public class ForgeEventSubscriber {
             return;
         }
 
-        // Event has no phases
         if(event.getEntity() instanceof Mob mob)
         {
-            if(EntityAlgorithms.isLivingEntityExplicitDenyTarget(mob) || !mob.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE))
+            if(!EntityAlgorithms.isLivingEntityExplicitDenyTarget(mob) && mob.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE))
             {
-                return;
+                mob.targetSelector.addGoal(0, new NearestAttackableTargetGoal<>(mob, LivingEntity.class, true, shouldEntitiesAttackTheSculkHorde));
             }
-
-            mob.targetSelector.addGoal(0, new NearestAttackableTargetGoal<>(mob, LivingEntity.class, true, shouldEntitiesAttackTheSculkHorde));
         }
+
+        if(event.getEntity() instanceof Animal animal)
+        {
+            if(!EntityAlgorithms.isSculkLivingEntity.test(animal) && !EntityAlgorithms.isLivingEntityAllyToSculkHorde(animal))
+            {
+                animal.targetSelector.addGoal(0, new AvoidEntityGoal<LivingEntity>(animal, LivingEntity.class, 6.0F, 1.0F, 1.2F, EntityAlgorithms.isSculkLivingEntity));
+            }
+        }
+
+        if(event.getEntity() instanceof Villager villager)
+        {
+            if(!EntityAlgorithms.isSculkLivingEntity.test(villager) && !EntityAlgorithms.isLivingEntityAllyToSculkHorde(villager))
+            {
+                villager.targetSelector.addGoal(0, new AvoidEntityGoal<LivingEntity>(villager, LivingEntity.class, 6.0F, 1.0F, 1.2F, EntityAlgorithms.isSculkLivingEntity));
+            }
+        }
+
     }
 
     public static Predicate<LivingEntity> shouldEntitiesAttackTheSculkHorde = (e) ->
