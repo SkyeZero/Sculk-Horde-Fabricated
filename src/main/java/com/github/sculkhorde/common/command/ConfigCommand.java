@@ -145,7 +145,11 @@ public class ConfigCommand implements Command<CommandSourceStack> {
 
     private static ArgumentBuilder<CommandSourceStack, ?> experimentalFeaturesConfig(CommandDispatcher<CommandSourceStack> dispatcher) {
         return Commands.literal("experimental_features")
-                .then(booleanConfigOption("experimental_features_enabled"));
+                .then(booleanConfigOption("experimental_features_enabled"))
+                .then(booleanConfigOption("experimental_aquatic_infestation_enabled"))
+                .then(booleanConfigOption("experimental_sheep_enabled"))
+                .then(booleanConfigOption("experimental_brood_hatcher_enabled"))
+                .then(booleanConfigOption("experimental_hit_squad_event_enabled"));
 
     }
 
@@ -447,7 +451,30 @@ public class ConfigCommand implements Command<CommandSourceStack> {
                         success = true;
                     }
                     break;
-
+                case "experimental_aquatic_infestation_enabled":
+                    if (valueType.equals(Boolean.class)) {
+                        ModConfig.SERVER.experimental_aquatic_infestation_enabled.set((Boolean) rawValue);
+                        success = true;
+                    }
+                    break;
+                case "experimental_sheep_enabled":
+                    if (valueType.equals(Boolean.class)) {
+                        ModConfig.SERVER.experimental_sheep_enabled.set((Boolean) rawValue);
+                        success = true;
+                    }
+                    break;
+                case "experimental_brood_hatcher_enabled":
+                    if (valueType.equals(Boolean.class)) {
+                        ModConfig.SERVER.experimental_brood_hatcher_enabled.set((Boolean) rawValue);
+                        success = true;
+                    }
+                    break;
+                case "experimental_hit_squad_event_enabled":
+                    if (valueType.equals(Boolean.class)) {
+                        ModConfig.SERVER.experimental_hit_squad_event_enabled.set((Boolean) rawValue);
+                        success = true;
+                    }
+                    break;
 
 
                 //####  Sculk Raid Config ####

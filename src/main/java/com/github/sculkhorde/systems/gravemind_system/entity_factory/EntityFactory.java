@@ -186,7 +186,7 @@ public class EntityFactory {
                         .setMinEvolutionRequired(Gravemind.evolution_states.Mature)
                         .setCost((int) SculkBroodHatcherEntity.MAX_HEALTH)
                         .setLimit(1)
-                        .enableExperimentalMode(ModConfig.SERVER.experimental_features_enabled)
+                        .enableExperimentalMode(ModConfig.SERVER.experimental_brood_hatcher_enabled)
                         .addStrategicValues(
                         EntityFactoryEntry.StrategicValues.Infector,
                         EntityFactoryEntry.StrategicValues.Melee,
@@ -195,7 +195,7 @@ public class EntityFactory {
                 new EntityFactoryEntry(ModEntities.SCULK_BROODLING.get())
                         .setMinEvolutionRequired(Gravemind.evolution_states.Mature)
                         .setCost((int) SculkBroodlingEntity.MAX_HEALTH)
-                        .enableExperimentalMode(ModConfig.SERVER.experimental_features_enabled)
+                        .enableExperimentalMode(ModConfig.SERVER.experimental_brood_hatcher_enabled)
                         .addStrategicValues(
                         EntityFactoryEntry.StrategicValues.Infector,
                         EntityFactoryEntry.StrategicValues.Melee,
@@ -204,7 +204,7 @@ public class EntityFactory {
                 new EntityFactoryEntry(ModEntities.SCULK_SHEEP.get())
                         .setMinEvolutionRequired(Gravemind.evolution_states.Immature)
                         .setCost((int) SculkBroodlingEntity.MAX_HEALTH)
-                        .enableExperimentalMode(ModConfig.SERVER.experimental_features_enabled)
+                        .enableExperimentalMode(ModConfig.SERVER.experimental_sheep_enabled)
                         .addStrategicValues(
                         EntityFactoryEntry.StrategicValues.Combat,
                         EntityFactoryEntry.StrategicValues.Melee,

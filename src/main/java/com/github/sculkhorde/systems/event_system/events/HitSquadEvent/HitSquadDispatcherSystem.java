@@ -1,8 +1,8 @@
 package com.github.sculkhorde.systems.event_system.events.HitSquadEvent;
 
+import com.github.sculkhorde.core.ModConfig;
 import com.github.sculkhorde.core.ModSavedData;
 import com.github.sculkhorde.core.SculkHorde;
-import com.github.sculkhorde.systems.event_system.events.HitSquadEvent.HitSquadEvent;
 import com.github.sculkhorde.util.BlockAlgorithms;
 import com.github.sculkhorde.util.EntityAlgorithms;
 import com.github.sculkhorde.util.PlayerProfileHandler;
@@ -88,6 +88,11 @@ public class HitSquadDispatcherSystem {
     {
         ServerLevel level = ServerLifecycleHooks.getCurrentServer().overworld();
         if(Math.abs(level.getGameTime() - timeOfLastCheckForDispatch) < CHECK_INTERVAL)
+        {
+            return;
+        }
+
+        if(!ModConfig.SERVER.experimental_features_enabled.get() || !ModConfig.SERVER.experimental_hit_squad_event_enabled.get())
         {
             return;
         }

@@ -1,6 +1,7 @@
 package com.github.sculkhorde.systems.event_system.events.HitSquadEvent;
 
 import com.github.sculkhorde.common.entity.boss.sculk_soul_reaper.SculkSoulReaperEntity;
+import com.github.sculkhorde.core.ModConfig;
 import com.github.sculkhorde.core.ModSavedData;
 import com.github.sculkhorde.core.SculkHorde;
 import com.github.sculkhorde.systems.event_system.Event;
@@ -64,6 +65,11 @@ public class HitSquadEvent extends Event {
 
     public boolean canContinue()
     {
+        if(!ModConfig.SERVER.experimental_features_enabled.get() || !ModConfig.SERVER.experimental_hit_squad_event_enabled.get())
+        {
+            return false;
+        }
+
         return !isEventOver;
     }
 

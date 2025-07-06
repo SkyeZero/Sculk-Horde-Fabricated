@@ -73,8 +73,6 @@ public class ModConfig {
         public final ForgeConfigSpec.ConfigValue<Integer> sculk_raid_enderman_scouting_duration_minutes;
         public final ForgeConfigSpec.ConfigValue<Integer> sculk_raid_global_cooldown_between_raids_minutes;
         public final ForgeConfigSpec.ConfigValue<Integer> sculk_raid_no_raid_zone_duration_minutes;
-
-        public final ForgeConfigSpec.ConfigValue<Boolean> experimental_features_enabled;
         public final ForgeConfigSpec.ConfigValue<Double> purification_speed_multiplier;
         public final ForgeConfigSpec.ConfigValue<Integer> infestation_purifier_range;
         private final ForgeConfigSpec.ConfigValue<List<? extends String>> items_infection_cursors_can_eat;
@@ -96,6 +94,11 @@ public class ModConfig {
 
         public final ForgeConfigSpec.ConfigValue<Boolean> enable_gpu_compatibility_mode;
 
+        public final ForgeConfigSpec.ConfigValue<Boolean> experimental_features_enabled;
+        public final ForgeConfigSpec.ConfigValue<Boolean> experimental_sheep_enabled;
+        public final ForgeConfigSpec.ConfigValue<Boolean> experimental_aquatic_infestation_enabled;
+        public final ForgeConfigSpec.ConfigValue<Boolean> experimental_hit_squad_event_enabled;
+        public final ForgeConfigSpec.ConfigValue<Boolean> experimental_brood_hatcher_enabled;
 
         public void loadItemsInfectionCursorsCanEat()
         {
@@ -255,6 +258,10 @@ public class ModConfig {
 
             builder.push("Experimental Features");
             experimental_features_enabled = builder.comment("Should experimental features be enabled? (Default false)").define("experimental_features_enabled",false);
+            experimental_aquatic_infestation_enabled = builder.comment("Should experimental aquatic infestation features be enabled? (Default false)").define("experimental_aquatic_infestation_enabled",false);
+            experimental_sheep_enabled = builder.comment("Should the experimental sculk sheep be enabled? (Default false)").define("experimental_sheep_enabled",false);
+            experimental_brood_hatcher_enabled = builder.comment("Should the experimental brood hatcher be enabled? (Default false)").define("experimental_brood_hatcher_enabled",false);
+            experimental_hit_squad_event_enabled = builder.comment("Should experimental hit squad event feature be enabled? (Default false)").define("experimental_hit_squad_event_enabled",false);
             builder.pop();
 
             builder.push("Sculk Raid Variables");
