@@ -148,6 +148,20 @@ public class ForgeEventSubscriber {
             ModSavedData.getSaveData().addHostileToMemory((LivingEntity) damageSourceEntity);
         }
 
+
+        if(damageSourceEntity instanceof LivingEntity attackingEntity)
+        {
+            itemStack = attackingEntity.getMainHandItem();
+            if(!itemStack.getItem().equals(ModItems.SCULK_SWEEPER_SWORD.get()))
+            {
+               return;
+            }
+
+            if(EntityAlgorithms.isSculkLivingEntity.test(targetEntity))
+            {
+                itemStack.setDamageValue((int) Math.max(0, itemStack.getDamageValue() - event.getAmount()));
+            }
+        }
     }
 
     @SubscribeEvent

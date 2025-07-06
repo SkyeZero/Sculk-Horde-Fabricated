@@ -31,7 +31,7 @@ import java.util.List;
 public class SculkSweeperSword extends SwordItem implements IForgeItem {
 
     public SculkSweeperSword() {
-        this(Tiers.DIAMOND, 4, -3F, new Item.Properties().rarity(Rarity.EPIC).setNoRepair().durability(10));
+        this(Tiers.DIAMOND, 3, -2.2F, new Item.Properties().rarity(Rarity.EPIC).setNoRepair().durability(100));
     }
     public SculkSweeperSword(Tier tier, int baseDamage, float baseAttackSpeed, Properties prop) {
         super(tier, baseDamage, baseAttackSpeed, prop);
@@ -66,7 +66,7 @@ public class SculkSweeperSword extends SwordItem implements IForgeItem {
         boolean isSculkLivingEntity = EntityAlgorithms.isSculkLivingEntity.test(targetEntity);
         if(isSculkLivingEntity)
         {
-            itemStack.setDamageValue(Math.max(0, itemStack.getDamageValue() - 1));
+            //itemStack.setDamageValue(Math.max(0, itemStack.getDamageValue() - 1));
         }
         return true;
     }
