@@ -56,6 +56,7 @@ public class ModConfig {
         public final ForgeConfigSpec.ConfigValue<Integer> trigger_ancient_node_wait_days;
         public final ForgeConfigSpec.ConfigValue<Integer> trigger_ancient_node_time_of_day;
         public final ForgeConfigSpec.ConfigValue<Boolean> should_all_other_mobs_attack_the_sculk_horde;
+        public final ForgeConfigSpec.ConfigValue<Boolean> should_animals_and_villagers_avoid_the_sculk_horde;
 
         public final ForgeConfigSpec.ConfigValue<Integer> gravemind_mass_goal_for_immature_stage;
         public final ForgeConfigSpec.ConfigValue<Integer> gravemind_mass_goal_for_mature_stage;
@@ -214,6 +215,7 @@ public class ModConfig {
 
             builder.push("General Variables");
             should_all_other_mobs_attack_the_sculk_horde = builder.comment("Should all other entities attack the sculk horde by default? (Default true)").define("should_all_other_mobs_attack_the_sculk_horde",true);
+            should_animals_and_villagers_avoid_the_sculk_horde = builder.comment("Should all animals and villagers avoid the sculk horde by default? (Default true)").define("should_animals_and_villagers_avoid_the_sculk_horde",true);
             block_infestation_enabled = builder.comment("Should the Sculk Horde infest blocks? (Default true)").define("block_infestation_enabled",true);
             chunk_loading_enabled = builder.comment("Should the Sculk Horde load chunks? If disabled, and will ruin the intended experience. For example, raids wont work properly (Default true)").define("chunk_loading_enabled",true);
             disable_defeating_sculk_horde = builder.comment("Should players be able to defeat the Sculk Horde?").define("disable_defeating_sculk_horde",false);

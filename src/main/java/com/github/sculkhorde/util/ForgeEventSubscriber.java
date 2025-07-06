@@ -226,7 +226,7 @@ public class ForgeEventSubscriber {
         {
             if(!EntityAlgorithms.isSculkLivingEntity.test(animal) && !EntityAlgorithms.isLivingEntityAllyToSculkHorde(animal))
             {
-                animal.targetSelector.addGoal(0, new AvoidEntityGoal<LivingEntity>(animal, LivingEntity.class, 6.0F, 1.0F, 1.2F, EntityAlgorithms.isSculkLivingEntity));
+                animal.targetSelector.addGoal(0, new AvoidEntityGoal<LivingEntity>(animal, LivingEntity.class, 6.0F, 1.0F, 1.2F, shouldEntitiesAvoidTheSculkHorde));
             }
         }
 
@@ -234,7 +234,7 @@ public class ForgeEventSubscriber {
         {
             if(!EntityAlgorithms.isSculkLivingEntity.test(villager) && !EntityAlgorithms.isLivingEntityAllyToSculkHorde(villager))
             {
-                villager.targetSelector.addGoal(0, new AvoidEntityGoal<LivingEntity>(villager, LivingEntity.class, 6.0F, 1.0F, 1.2F, EntityAlgorithms.isSculkLivingEntity));
+                villager.targetSelector.addGoal(0, new AvoidEntityGoal<LivingEntity>(villager, LivingEntity.class, 6.0F, 1.0F, 1.2F, shouldEntitiesAvoidTheSculkHorde));
             }
         }
 
@@ -243,5 +243,10 @@ public class ForgeEventSubscriber {
     public static Predicate<LivingEntity> shouldEntitiesAttackTheSculkHorde = (e) ->
     {
         return ModConfig.SERVER.should_all_other_mobs_attack_the_sculk_horde.get() && EntityAlgorithms.isSculkLivingEntity.test(e);
+    };
+
+    public static Predicate<LivingEntity> shouldEntitiesAvoidTheSculkHorde = (e) ->
+    {
+        return ModConfig.SERVER.should_animals_and_villagers_avoid_the_sculk_horde.get() && EntityAlgorithms.isSculkLivingEntity.test(e);
     };
 }

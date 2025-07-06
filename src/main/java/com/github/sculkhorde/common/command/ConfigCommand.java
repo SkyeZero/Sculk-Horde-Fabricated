@@ -99,6 +99,7 @@ public class ConfigCommand implements Command<CommandSourceStack> {
     private static ArgumentBuilder<CommandSourceStack, ?> generalConfig(CommandDispatcher<CommandSourceStack> dispatcher) {
         return Commands.literal("general")
                 .then(booleanConfigOption("should_all_other_mobs_attack_the_sculk_horde"))
+                .then(booleanConfigOption("should_animals_and_villagers_avoid_the_sculk_horde"))
                 .then(booleanConfigOption("chunk_loading_enabled"))
                 .then(booleanConfigOption("block_infestation_enabled"))
                 .then(booleanConfigOption("disable_defeating_sculk_horde"))
@@ -308,6 +309,12 @@ public class ConfigCommand implements Command<CommandSourceStack> {
                 case "should_all_other_mobs_attack_the_sculk_horde":
                     if(valueType.equals(Boolean.class)) {
                         ModConfig.SERVER.should_all_other_mobs_attack_the_sculk_horde.set((Boolean) rawValue);
+                        success = true;
+                    }
+                    break;
+                case "should_animals_and_villagers_avoid_the_sculk_horde":
+                    if(valueType.equals(Boolean.class)) {
+                        ModConfig.SERVER.should_animals_and_villagers_avoid_the_sculk_horde.set((Boolean) rawValue);
                         success = true;
                     }
                     break;
