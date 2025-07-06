@@ -233,7 +233,7 @@
   "block.sculkhorde.infested_wood_fence_gate": "Puerta de valla infestada",
 
   "item.sculkhorde.sculk_sweeper_sword": "El barredor de sculk",
-  "tooltip.sculkhorde.sculk_sweeper_sword.functionality": "§7§oUna espada con un amplio barrido. Solamente hace el 50% de daño a criaturas que no son de sculk. Atacar criaturas de sculk acumula una carga que puede ser liberada con clic derecho. Este ataque especial genera espinas de sculk en los pies de criaturas de sculk.",
+  "tooltip.sculkhorde.sculk_sweeper_sword.functionality": "§7§oUna espada con un amplio barrido. Atacar criaturas de sculk acumula una carga que puede ser liberada con clic derecho. Este ataque especial genera espinas de sculk en los pies de criaturas de sculk.",
   "tooltip.sculkhorde.sculk_sweeper_sword.lore": "§7§oUna espada especial diseñada para matar enjambres de criaturas de sculk. La hoja fue forjada de la cuchilla de un §7§oenderman de sculk§r§7§o.",
   "item.sculkhorde.sculk_enderman_cleaver": "Cuchilla de enderman sculk",
   "tooltip.sculkhorde.sculk_enderman_cleaver.functionality": "§7§oLa hoja de una cuchilla de un §7§oenderman de sculk§r§7§o. Es usada para crear §7§oel barredor de sculk§r§7§o.",

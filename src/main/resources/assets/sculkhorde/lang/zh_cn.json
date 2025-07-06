@@ -183,7 +183,7 @@
     "block.sculkhorde.infested_wood_stairs": "幽匿化的木制楼梯",
   
     "item.sculkhorde.sculk_sweeper_sword": "幽匿清道夫",
-    "tooltip.sculkhorde.sculk_sweeper_sword.functionality": "§7§o一把十分锋利的剑. 对非幽匿类实体仅造成50%伤害. 对准幽匿类实体右键可以释放特殊攻击，这会在目标实体下方产生 幽匿尖刺.",
+    "tooltip.sculkhorde.sculk_sweeper_sword.functionality": "§7§o一把十分锋利的剑. 对准幽匿类实体右键可以释放特殊攻击，这会在目标实体下方产生 幽匿尖刺.",
     "tooltip.sculkhorde.sculk_sweeper_sword.lore": "§7§o一把用来杀死成群幽匿的剑. 其材料来自 §7§o幽匿末影人§r§7§o.",
     "item.sculkhorde.sculk_enderman_cleaver": "幽匿末影屠刀",
     "tooltip.sculkhorde.sculk_enderman_cleaver.functionality": "§7§o屠刀的刀刃来自 §7§o幽匿末影人§r§7§o. 它可以用来制作 §7§o幽匿清道夫§r§7§o.",

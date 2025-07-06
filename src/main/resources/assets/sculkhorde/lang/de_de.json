@@ -233,7 +233,7 @@
   "block.sculkhorde.infested_wood_fence_gate": "Infiziertes hölzernes Zauntor",
 
   "item.sculkhorde.sculk_sweeper_sword": "Der Sculk Sweeper",
-  "tooltip.sculkhorde.sculk_sweeper_sword.functionality": "§7§oEin Schwert mit einer großen, ausladenden Schneide. Fügt den nicht Sculk-Kreaturen nur 50 % Schaden zu. Beim Angreifen von Sculk-Kreaturen wird eine Ladung aufgebaut, die mit einem Rechtsklick freigegeben werden kann. Dieser Spezialangriff lässt Sculk-Dornen unter den Füßen von Sculk-Kreaturen erscheinen.",
+  "tooltip.sculkhorde.sculk_sweeper_sword.functionality": "§7§oEin Schwert mit einer großen, ausladenden Schneide. Beim Angreifen von Sculk-Kreaturen wird eine Ladung aufgebaut, die mit einem Rechtsklick freigegeben werden kann. Dieser Spezialangriff lässt Sculk-Dornen unter den Füßen von Sculk-Kreaturen erscheinen.",
   "tooltip.sculkhorde.sculk_sweeper_sword.lore": "§7§oEin Spezialschwert, das dazu entwickelt wurde, ganze Schwärme von Sculk-Kreaturen zu töten. Die Klinge wurde aus dem Hackmesser eines §7§oSculk Enderman§r§7§o geschmiedet.",
   "item.sculkhorde.sculk_enderman_cleaver": "Hackmesser eines Sculk Enderman",
   "tooltip.sculkhorde.sculk_enderman_cleaver.functionality": "§7§oDie Klinge vom Hackmesser eines §7§oSculk Enderman§r§7§o. Wird zur Herstellung des §7§oSculk Sweeper§r§7§o verwendet.",

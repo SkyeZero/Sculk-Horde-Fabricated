@@ -148,7 +148,7 @@
   "block.sculkhorde.infested_wood_mass": "Masse de Bois Infestée",
 
   "item.sculkhorde.sculk_sweeper_sword": "La Trancheuse de Sculk",
-  "tooltip.sculkhorde.sculk_sweeper_sword.functionality": "Une épée spéciale conçue pour tuer des essaims de Créatures Sculk. N'inflige que 50% de dégâts aux monstres non-sculk. Attaquer des Créatures Sculk crée une charge qui peut être libérée avec un clic droit. Cette attaque spéciale fera apparaître des Pics Sculk aux pieds des Créautres Sculk. La lame est forgée à partir du couperet d'un Enderman Sculk.",
+  "tooltip.sculkhorde.sculk_sweeper_sword.functionality": "Une épée spéciale conçue pour tuer des essaims de Créatures Sculk. Attaquer des Créatures Sculk crée une charge qui peut être libérée avec un clic droit. Cette attaque spéciale fera apparaître des Pics Sculk aux pieds des Créautres Sculk. La lame est forgée à partir du couperet d'un Enderman Sculk.",
   "item.sculkhorde.sculk_enderman_cleaver": "Couperet d'Enderman Sculk",
   "tooltip.sculkhorde.sculk_enderman_cleaver.functionality": "La lame du couperet d'un Enderman Sculk. Il est utilisé pour fabriquer La Trancheuse de Sculk. \nIl semble être fait d'un matériau semblable à un os sculkifié. Extrêmement tranchant et résistant comme du métal.",
 

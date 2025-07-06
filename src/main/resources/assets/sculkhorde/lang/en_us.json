@@ -233,7 +233,7 @@
   "block.sculkhorde.infested_wood_fence_gate": "Infested Wood Fence Gate",
 
   "item.sculkhorde.sculk_sweeper_sword": "The Sculk Sweeper",
-  "tooltip.sculkhorde.sculk_sweeper_sword.functionality": "§7§oA sword with a large sweeping edge. Only does 50% damage to non-sculk mobs. Attacking Sculk Mobs builds up a charge that can be released with right-click. This special attack will spawn Sculk Spines at the feet of Sculk Mobs.",
+  "tooltip.sculkhorde.sculk_sweeper_sword.functionality": "§7§oA sword with a large sweeping edge. Attacking Sculk Mobs builds up a charge that can be released with right-click. This special attack will spawn Sculk Spines at the feet of Sculk Mobs.",
   "tooltip.sculkhorde.sculk_sweeper_sword.lore": "§7§oA special sword designed to kill swarms of Sculk Mobs. The blade is forged from the cleaver of a §7§oSculk Enderman§r§7§o.",
   "item.sculkhorde.sculk_enderman_cleaver": "Sculk Enderman Cleaver",
   "tooltip.sculkhorde.sculk_enderman_cleaver.functionality": "§7§oThe blade from the cleaver of a §7§oSculk Enderman§r§7§o. It is used to craft §7§oThe Sculk Sweeper§r§7§o.",

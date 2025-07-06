@@ -2,6 +2,7 @@ package com.github.sculkhorde.common.item;
 
 import com.github.sculkhorde.common.entity.boss.sculk_enderman.SculkSpineSpikeAttackEntity;
 import com.github.sculkhorde.util.EntityAlgorithms;
+import com.github.sculkhorde.util.SoundUtil;
 import com.github.sculkhorde.util.TickUnits;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.Minecraft;
@@ -77,7 +78,7 @@ public class SculkSweeperSword extends SwordItem implements IForgeItem {
         if(!itemstack.isDamaged() && !level.isClientSide())
         {
             doSpikeAttack(player, player, itemstack);
-            level.playSound(player, player.blockPosition(), SoundEvents.EVOKER_FANGS_ATTACK, player.getSoundSource());
+            SoundUtil.playSoundInLevel(level, player.blockPosition(), SoundEvents.EVOKER_FANGS_ATTACK, player.getSoundSource() );
             return InteractionResultHolder.success(itemstack);
         }
         return InteractionResultHolder.pass(itemstack);
