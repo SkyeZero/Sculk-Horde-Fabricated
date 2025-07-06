@@ -67,14 +67,15 @@ public class SculkSporeSpewerEntity extends Monster implements GeoEntity, ISculk
     public static final float MOVEMENT_SPEED = 0F;
 
     // Controls what types of entities this mob can target
-    private TargetParameters TARGET_PARAMETERS = new TargetParameters(this).enableTargetPassives().enableTargetHostiles();
+    protected TargetParameters TARGET_PARAMETERS = new TargetParameters(this).enableTargetPassives().enableTargetHostiles();
 
-    private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
+    protected final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
-    private VirtualSurfaceInfestorCursor cursor;
+    protected VirtualSurfaceInfestorCursor cursor;
 
-    private long INFECTION_INTERVAL_TICKS = TickUnits.convertSecondsToTicks(5);
-    private long lastInfectionTime = 0;
+    protected long INFECTION_INTERVAL_TICKS = TickUnits.convertSecondsToTicks(5);
+    protected long lastInfectionTime = 0;
+    protected boolean isParticipatingInRaid = false;
 
     public static final EntityDataAccessor<Integer> DATA_TICKS_ALIVE = SynchedEntityData.defineId(SculkEndermanEntity.class, EntityDataSerializers.INT);
     /**
@@ -114,8 +115,6 @@ public class SculkSporeSpewerEntity extends Monster implements GeoEntity, ISculk
         return false;
     }
 
-    private boolean isParticipatingInRaid = false;
-
     @Override
     public SquadHandler getSquad() {
         return null;
@@ -143,58 +142,12 @@ public class SculkSporeSpewerEntity extends Monster implements GeoEntity, ISculk
      */
     @Override
     public void registerGoals() {
-
-        Goal[] goalSelectorPayload = goalSelectorPayload();
-        for(int priority = 0; priority < goalSelectorPayload.length; priority++)
-        {
-            this.goalSelector.addGoal(priority, goalSelectorPayload[priority]);
-        }
-
-        Goal[] targetSelectorPayload = targetSelectorPayload();
-        for(int priority = 0; priority < targetSelectorPayload.length; priority++)
-        {
-            this.targetSelector.addGoal(priority, targetSelectorPayload[priority]);
-        }
-
+        
+            this.goalSelector.addGoal(0, new dieAfterTimeGoal(this));
+            this.targetSelector.addGoal(0, new TargetAttacker(this).setAlertAllies());
     }
 
-    /**
-     * Prepares an array of goals to give to registerGoals() for the goalSelector.<br>
-     * The purpose was to make registering goals simpler by automatically determining priority
-     * based on the order of the items in the array. First element is of priority 0, which
-     * represents highest priority. Priority value then increases by 1, making each element
-     * less of a priority than the last.
-     * @return Returns an array of goals ordered from highest to lowest piority
-     */
-    public Goal[] goalSelectorPayload()
-    {
-        Goal[] goals =
-                {
-                        // MeleeAttackGoal(mob, speedModifier, followingTargetEvenIfNotSeen)
-                        new dieAfterTimeGoal(this),
-                };
-        return goals;
-    }
-
-    /**
-     * Prepares an array of goals to give to registerGoals() for the targetSelector.<br>
-     * The purpose was to make registering goals simpler by automatically determining priority
-     * based on the order of the items in the array. First element is of priority 0, which
-     * represents highest priority. Priority value then increases by 1, making each element
-     * less of a priority than the last.
-     * @return Returns an array of goals ordered from highest to lowest piority
-     */
-    public Goal[] targetSelectorPayload()
-    {
-        Goal[] goals =
-                {
-                        //HurtByTargetGoal(mob)
-                        new TargetAttacker(this).setAlertAllies(),
-                };
-        return goals;
-    }
     //Animation Related Functions
-
     private static final RawAnimation SPREAD_ANIMATION = RawAnimation.begin().thenPlay("spread");
     private final AnimationController SPREAD_ANIMATION_CONTROLLER = new AnimationController<>(this, "spread_controller", state -> PlayState.STOP)
             .triggerableAnim("spread_animation", SPREAD_ANIMATION);
@@ -242,6 +195,7 @@ public class SculkSporeSpewerEntity extends Monster implements GeoEntity, ISculk
             // Spawn Block Traverser
             spawnCursor();
             triggerAnim("spread_controller", "spread_animation");
+
         }
 
         if (level().getGameTime() - lastInfectionTime > INFECTION_INTERVAL_TICKS)
@@ -292,20 +246,6 @@ public class SculkSporeSpewerEntity extends Monster implements GeoEntity, ISculk
             possibleCursor.get().setSearchIterationsPerTick(10);
             cursor = possibleCursor.get();
         }
-
-        /*
-        level().getServer().tell(new TickTask(level().getServer().getTickCount() + 1, () -> {
-            // Spawn Block Traverser
-            cursor = new CursorSurfaceInfectorEntity(level());
-            cursor.setPos(this.blockPosition().getX(), this.blockPosition().getY() - 1, this.blockPosition().getZ());
-            cursor.setMaxTransformations(100);
-            cursor.setMaxRange(100);
-            cursor.setTickIntervalMilliseconds(50);
-            cursor.setSearchIterationsPerTick(1);
-            level().addFreshEntity(cursor);
-        }));
-
-         */
     }
 
     protected SoundEvent getAmbientSound() {
@@ -324,9 +264,9 @@ public class SculkSporeSpewerEntity extends Monster implements GeoEntity, ISculk
      * This is a custom goal that I made to make the mob die after a certain amount of time.
      * This is useful for mobs that are meant to be temporary, such as the Sculk Spore Spewer.
      */
-    private class dieAfterTimeGoal extends Goal
+    protected class dieAfterTimeGoal extends Goal
     {
-        private final SculkSporeSpewerEntity entity;
+        protected final SculkSporeSpewerEntity entity;
 
         public dieAfterTimeGoal(SculkSporeSpewerEntity entity) {
             this.entity = entity;
@@ -382,11 +322,4 @@ public class SculkSporeSpewerEntity extends Monster implements GeoEntity, ISculk
         this.entityData.set(DATA_TICKS_ALIVE, nbt.getInt(DATA_TICKS_ALIVE_IDENTIFIER));
     }
 
-    /* DO NOT USE THIS FOR ANYTHING, CAUSES DESYNC
-    @Override
-    public void onRemovedFromWorld() {
-        ModSavedData.getSaveData().addSculkAccumulatedMass((int) this.getHealth());
-        super.onRemovedFromWorld();
-    }
-    */
 }
