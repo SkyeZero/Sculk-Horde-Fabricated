@@ -76,6 +76,8 @@ public class SculkSporeSpewerEntity extends Monster implements GeoEntity, ISculk
     protected long INFECTION_INTERVAL_TICKS = TickUnits.convertSecondsToTicks(5);
     protected long lastInfectionTime = 0;
     protected boolean isParticipatingInRaid = false;
+    protected final int MAX_FAILED_CURSORS = 4;
+    protected int failedCursors = 0;
 
     public static final EntityDataAccessor<Integer> DATA_TICKS_ALIVE = SynchedEntityData.defineId(SculkEndermanEntity.class, EntityDataSerializers.INT);
     /**
@@ -142,7 +144,7 @@ public class SculkSporeSpewerEntity extends Monster implements GeoEntity, ISculk
      */
     @Override
     public void registerGoals() {
-        
+
             this.goalSelector.addGoal(0, new dieAfterTimeGoal(this));
             this.targetSelector.addGoal(0, new TargetAttacker(this).setAlertAllies());
     }
@@ -181,6 +183,21 @@ public class SculkSporeSpewerEntity extends Monster implements GeoEntity, ISculk
             }
             return;
         }
+
+        // Track how many cursors fail.
+        if(cursor != null && cursor.isFinished() && !cursor.isSuccessful())
+        {
+            cursor = null;
+            failedCursors += 1;
+        }
+
+        // If too many failed cursors, just despawn and return health back to horde
+        if(failedCursors >= MAX_FAILED_CURSORS)
+        {
+            ModSavedData.getSaveData().addSculkAccumulatedMass((int) getHealth());
+            discard();
+        }
+
 
         Random random = new Random();
         boolean passRandomChance = random.nextInt(100) == 0;
