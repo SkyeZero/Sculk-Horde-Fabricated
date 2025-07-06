@@ -1,14 +1,11 @@
 package com.github.sculkhorde.core;
 
 
-import com.github.sculkhorde.common.entity.projectile.CustomItemProjectileEntity;
-import com.github.sculkhorde.common.entity.projectile.SculkAcidicProjectileEntity;
 import com.github.sculkhorde.common.item.*;
 import com.github.sculkhorde.util.ColorUtil;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.RecordItem;
@@ -121,36 +118,11 @@ public class ModItems {
 	public static final RegistryObject<InfestationPurifierItem> INFESTATION_PURIFIER = ITEMS.register("infestation_purifier",
 			InfestationPurifierItem::new);
 
-	public static final RegistryObject<CustomItemProjectile> CUSTOM_ITEM_PROJECTILE = ITEMS.register("custom_item_projectile",
-			CustomItemProjectile::new);
+	public static final RegistryObject<CustomItemProjectileItem> CUSTOM_ITEM_PROJECTILE = ITEMS.register("custom_item_projectile",
+			CustomItemProjectileItem::new);
 
-	public static final RegistryObject<CustomItemProjectile> SCULK_ACIDIC_PROJECTILE = ITEMS.register("sculk_acidic_projectile",
-			() -> new CustomItemProjectile()
-			{
-				@Override
-				@OnlyIn(Dist.CLIENT)
-				public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
-					if(InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), GLFW.GLFW_KEY_LEFT_SHIFT))
-					{
-						tooltip.add(Component.translatable("tooltip.sculkhorde.sculk_acidic_projectile.functionality"));
-					}
-					else if(InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), GLFW.GLFW_KEY_LEFT_CONTROL))
-					{
-						tooltip.add(Component.translatable("tooltip.sculkhorde.sculk_acidic_projectile.lore"));
-					}
-					else
-					{
-						tooltip.add(Component.translatable("tooltip.sculkhorde.default"));
-					}
-				}
-
-				@Override
-				public CustomItemProjectileEntity getCustomItemProjectileEntity(Level level, Player player)
-				{
-					return new SculkAcidicProjectileEntity(level, player, getDamage());
-				}
-			});
-
+	public static final RegistryObject<SculkAcidicProjectileItem> SCULK_ACIDIC_PROJECTILE = ITEMS.register("sculk_acidic_projectile",
+			SculkAcidicProjectileItem::new);
 	public static final RegistryObject<SculkResinItem> SCULK_RESIN = ITEMS.register("sculk_resin",
 			SculkResinItem::new);
 

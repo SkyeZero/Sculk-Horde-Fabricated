@@ -42,6 +42,10 @@ public class SculkAcidicProjectileEntity extends CustomItemProjectileEntity {
         this.setDamage(damageIn);
     }
 
+    public SculkAcidicProjectileEntity(Level worldIn) {
+        this(ModEntities.SCULK_ACIDIC_PROJECTILE_ENTITY.get(), worldIn);
+    }
+
 
     /** MODIFIERS **/
 
@@ -116,9 +120,6 @@ public class SculkAcidicProjectileEntity extends CustomItemProjectileEntity {
     }
 
     /** EVENTS **/
-
-
-
     @Override
     public void tick() {
         super.tick();

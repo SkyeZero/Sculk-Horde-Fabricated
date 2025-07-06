@@ -20,7 +20,7 @@ import org.lwjgl.glfw.GLFW;
 
 import java.util.List;
 
-public class PurificationFlaskItem extends CustomItemProjectile implements IForgeItem {
+public class PurificationFlaskItem extends CustomItemProjectileItem implements IForgeItem {
 
     public PurificationFlaskItem() {
         super();
