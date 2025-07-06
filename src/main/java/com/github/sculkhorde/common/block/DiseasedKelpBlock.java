@@ -112,14 +112,14 @@ public class DiseasedKelpBlock extends Block implements IForgeBlock, LiquidBlock
         builder.add(END);
     }
 
-    public boolean isEndBlock(BlockState pState)
+    public static boolean isEndBlock(BlockState pState)
     {
         return pState.getValue(END);
     }
 
     /** MODIFIERS **/
 
-    public void setEndBlock(Level pLevel, BlockState pState, BlockPos pPos, Boolean value)
+    public static void setEndBlock(Level pLevel, BlockState pState, BlockPos pPos, Boolean value)
     {
         /**
          * Sets a block state into this world.Flags are as follows:
@@ -137,21 +137,12 @@ public class DiseasedKelpBlock extends Block implements IForgeBlock, LiquidBlock
 
     @Override
     public void onNeighborChange(BlockState state, LevelReader level, BlockPos pos, BlockPos neighbor) {
-        super.onNeighborChange(state, level, pos, neighbor);
 
-        if(!neighbor.equals(pos.above()))
-        {
-            return;
-        }
-
-        if(!level.getBlockState(neighbor).is(ModBlocks.DISEASED_KELP_BLOCK.get()))
-        {
+        if (level.getBlockState(pos.above()).is(ModBlocks.DISEASED_KELP_BLOCK.get())) {
+            setEndBlock((Level) level, state, pos, false);
+        } else {
             setEndBlock((Level) level, state, pos, true);
-            return;
         }
-
-        setEndBlock((Level) level, state, pos, false);
-
     }
 
     /** Makes entities slow and damages them. I stole this code from the berry bush.<br>
@@ -219,6 +210,12 @@ public class DiseasedKelpBlock extends Block implements IForgeBlock, LiquidBlock
 
     @Override
     public boolean canSurvive(BlockState blockState, LevelReader levelReader, BlockPos blockPos) {
+
+        if(levelReader.getFluidState(blockPos).isEmpty())
+        {
+            return false;
+        }
+
         return levelReader.getBlockState(blockPos.below()).isSolid()
                 || levelReader.getBlockState(blockPos.below()).is(this)
                 || levelReader.getBlockState(blockPos.below()).is(Blocks.KELP)
@@ -231,8 +228,49 @@ public class DiseasedKelpBlock extends Block implements IForgeBlock, LiquidBlock
     }
 
     @Nullable
+    @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
-        return this.defaultBlockState().setValue(END, false);
+        Level level = context.getLevel();
+        BlockPos pos = context.getClickedPos();
+
+        boolean isTop = !level.getBlockState(pos.above()).is(ModBlocks.DISEASED_KELP_BLOCK.get());
+        return this.defaultBlockState().setValue(END, isTop);
+    }
+
+    @Override
+    public void onPlace(BlockState newState, Level level, BlockPos pos, BlockState oldState, boolean idk) {
+        super.onPlace(newState, level, pos, newState, idk);
+
+        if(level.isClientSide)
+        {
+            return;
+        }
+
+        if (level.getBlockState(pos.above()).is(ModBlocks.DISEASED_KELP_BLOCK.get())) {
+            setEndBlock(level, newState, pos, false);
+        } else {
+            setEndBlock(level, newState, pos, true);
+        }
+
+        if(level.getBlockState(pos.below()).is(ModBlocks.DISEASED_KELP_BLOCK.get()))
+        {
+            setEndBlock(level, newState, pos.below(), false);
+        }
+    }
+
+    @Override
+    public void onRemove(BlockState newState, Level level, BlockPos pos, BlockState oldState, boolean p_60519_) {
+        super.onRemove(newState, level, pos, oldState, p_60519_);
+
+        if(level.isClientSide)
+        {
+            return;
+        }
+
+        if(level.getBlockState(pos.below()).is(ModBlocks.DISEASED_KELP_BLOCK.get()))
+        {
+            setEndBlock(level, newState, pos.below(), true);
+        }
     }
 
     public FluidState getFluidState(BlockState p_54319_) {

@@ -1,7 +1,6 @@
 package com.github.sculkhorde.systems.infestation_systems.block_infestation_system;
 
-import com.github.sculkhorde.systems.gravemind_system.Gravemind;
-import com.github.sculkhorde.systems.infestation_systems.block_infestation_system.infestation_entries.BlockInfestationTable;
+import com.github.sculkhorde.common.block.DiseasedKelpBlock;
 import com.github.sculkhorde.common.block.SculkNodeBlock;
 import com.github.sculkhorde.common.blockentity.SculkBeeNestBlockEntity;
 import com.github.sculkhorde.common.pools.PoolBlocks;
@@ -9,6 +8,8 @@ import com.github.sculkhorde.core.ModBlocks;
 import com.github.sculkhorde.core.ModConfig;
 import com.github.sculkhorde.core.SculkHorde;
 import com.github.sculkhorde.modding_api.BlockInfestationAPI;
+import com.github.sculkhorde.systems.gravemind_system.Gravemind;
+import com.github.sculkhorde.systems.infestation_systems.block_infestation_system.infestation_entries.BlockInfestationTable;
 import com.github.sculkhorde.util.BlockAlgorithms;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -28,6 +29,7 @@ import net.minecraftforge.common.IPlantable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 import java.util.function.Predicate;
 
@@ -551,9 +553,18 @@ public class BlockInfestationSystem {
 
 
             int height = world.random.nextInt(25);
+            Optional<BlockPos> lastPlacedKelp = Optional.empty();
             for(int i = 0; i < height && !world.getBlockState(targetPos.above(i + 1)).getFluidState().isEmpty(); i++)
             {
-                BlockAlgorithms.setBlockCursor(world, targetPos.above(i), ModBlocks.DISEASED_KELP_BLOCK.get().defaultBlockState());
+                BlockState blockState = ModBlocks.DISEASED_KELP_BLOCK.get().defaultBlockState();
+                lastPlacedKelp = Optional.of(targetPos.above(i));
+
+                BlockAlgorithms.setBlockCursor(world, targetPos.above(i), blockState);
+            }
+
+            if(lastPlacedKelp.isPresent() && world.getBlockState(lastPlacedKelp.get()).is(ModBlocks.DISEASED_KELP_BLOCK.get()))
+            {
+                DiseasedKelpBlock.setEndBlock(world, world.getBlockState(lastPlacedKelp.get()), lastPlacedKelp.get(), true);
             }
         }
 
