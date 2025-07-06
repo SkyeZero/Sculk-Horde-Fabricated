@@ -35,6 +35,10 @@ public class PurificationFlaskProjectileEntity extends CustomItemProjectileEntit
         super(entityIn, worldIn);
     }
 
+    public PurificationFlaskProjectileEntity(Level worldIn) {
+        super(ModEntities.PURIFICATION_FLASK_PROJECTILE_ENTITY.get(), worldIn);
+    }
+
     /**
      * Constructor
      * @param worldIn The World to spawn the projectile in
