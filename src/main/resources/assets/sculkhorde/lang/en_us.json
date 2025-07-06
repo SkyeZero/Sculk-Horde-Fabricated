@@ -459,5 +459,10 @@
   "effect.sculkhorde.dense": "Dense",
   "effect.sculkhorde.dense.description": "Increases the gravity effect on players.",
   "effect.sculkhorde.neurotoxin": "Neurotoxin",
-  "effect.sculkhorde.neurotoxin.description": "WIP"
+  "effect.sculkhorde.neurotoxin.description": "WIP",
+
+  "item.minecraft.potion.effect.corroded_potion": "Potion of Corroded",
+  "item.minecraft.splash_potion.effect.corroded_potion": "Splash Potion of Corroded",
+  "item.minecraft.lingering_potion.effect.corroded_potion": "Lingering Potion of Corroded",
+  "item.minecraft.tipped_arrow.effect.corroded_potion": "Arrow of Corroded"
 }
