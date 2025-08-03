@@ -60,8 +60,13 @@ public class SculkSummonerBlockEntity extends BlockEntity implements GameEventLi
     private long lastGameTimeOfVibrationRecieve = 0;
     private final int MAX_SPAWNED_ENTITIES = 4;
     ReinforcementRequest request;
-    private final TargetParameters hostileTargetParameters = new TargetParameters().enableTargetHostiles().enableTargetInfected();
-    private final TargetParameters infectableTargetParameters = new TargetParameters().enableTargetPassives();
+    private final TargetParameters hostileTargetParameters = new TargetParameters()
+            .enableTargetHostiles()
+            .enableTargetInfected()
+            .enableTargetSwimmers();
+    private final TargetParameters infectableTargetParameters = new TargetParameters()
+            .enableTargetPassives()
+            .enableTargetSwimmers();
 
     // Vibration Code
     private final VibrationSystem.User vibrationUser = new VibrationUser(this);
@@ -152,6 +157,19 @@ public class SculkSummonerBlockEntity extends BlockEntity implements GameEventLi
 
     }
 
+    protected boolean areAnyLivingEntitiesFlying(List<LivingEntity> entities)
+    {
+        for(LivingEntity entity : entities)
+        {
+            if(EntityAlgorithms.getHeightOffGround(entity) > 1.5F)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public void requestReinforcementsFromGravemind()
     {
         boolean isSummonerWaterLogged = getBlockState().getValue(BlockStateProperties.WATERLOGGED);
@@ -183,11 +201,17 @@ public class SculkSummonerBlockEntity extends BlockEntity implements GameEventLi
         // Better Control if aquatic mobs spawn
         if(isSummonerWaterLogged)
         {
-            request.deniedStrategicValues.add(EntityFactoryEntry.StrategicValues.EffectiveOnGround);
+            request.approvedStrategicValues.add(EntityFactoryEntry.StrategicValues.Aquatic);
         }
-        else
+
+        if(!isSummonerWaterLogged)
         {
-            request.deniedStrategicValues.add(EntityFactoryEntry.StrategicValues.Aquatic);
+            request.approvedStrategicValues.add(EntityFactoryEntry.StrategicValues.EffectiveOnGround);
+        }
+
+        if(!isSummonerWaterLogged && (areAnyLivingEntitiesFlying(possibleAggressorTargets) || areAnyLivingEntitiesFlying(possibleLivingEntityTargets)))
+        {
+            request.approvedStrategicValues.add(EntityFactoryEntry.StrategicValues.EffectiveInSkies);
         }
 
         if (!this.possibleAggressorTargets.isEmpty()) {

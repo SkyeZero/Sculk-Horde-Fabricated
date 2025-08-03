@@ -135,10 +135,34 @@ public class DiseasedKelpBlock extends Block implements IForgeBlock, LiquidBlock
         pLevel.setBlock(pPos, pState.setValue(END, value), 3);
     }
 
+    public boolean isBlockAboveKelpOrDiseasedKelp(LevelReader level, BlockPos pos)
+    {
+        if(level.getBlockState(pos.above()).is(ModBlocks.DISEASED_KELP_BLOCK.get())
+        || level.getBlockState(pos.above()).is(Blocks.KELP)
+        || level.getBlockState(pos.above()).is(Blocks.KELP_PLANT))
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    public boolean isBlockBelowKelpOrDiseasedKelp(LevelReader level, BlockPos pos)
+    {
+        if(level.getBlockState(pos.below()).is(ModBlocks.DISEASED_KELP_BLOCK.get())
+                || level.getBlockState(pos.below()).is(Blocks.KELP)
+                || level.getBlockState(pos.below()).is(Blocks.KELP_PLANT))
+        {
+            return true;
+        }
+
+        return false;
+    }
+
     @Override
     public void onNeighborChange(BlockState state, LevelReader level, BlockPos pos, BlockPos neighbor) {
 
-        if (level.getBlockState(pos.above()).is(ModBlocks.DISEASED_KELP_BLOCK.get())) {
+        if (isBlockAboveKelpOrDiseasedKelp(level, pos)) {
             setEndBlock((Level) level, state, pos, false);
         } else {
             setEndBlock((Level) level, state, pos, true);
@@ -217,9 +241,7 @@ public class DiseasedKelpBlock extends Block implements IForgeBlock, LiquidBlock
         }
 
         return levelReader.getBlockState(blockPos.below()).isSolid()
-                || levelReader.getBlockState(blockPos.below()).is(this)
-                || levelReader.getBlockState(blockPos.below()).is(Blocks.KELP)
-                || levelReader.getBlockState(blockPos.below()).is(Blocks.KELP_PLANT);
+                || isBlockBelowKelpOrDiseasedKelp(levelReader, blockPos);
     }
 
     @Override
@@ -233,7 +255,7 @@ public class DiseasedKelpBlock extends Block implements IForgeBlock, LiquidBlock
         Level level = context.getLevel();
         BlockPos pos = context.getClickedPos();
 
-        boolean isTop = !level.getBlockState(pos.above()).is(ModBlocks.DISEASED_KELP_BLOCK.get());
+        boolean isTop = !isBlockAboveKelpOrDiseasedKelp(level, pos);
         return this.defaultBlockState().setValue(END, isTop);
     }
 
@@ -246,13 +268,13 @@ public class DiseasedKelpBlock extends Block implements IForgeBlock, LiquidBlock
             return;
         }
 
-        if (level.getBlockState(pos.above()).is(ModBlocks.DISEASED_KELP_BLOCK.get())) {
+        if (isBlockAboveKelpOrDiseasedKelp(level, pos)) {
             setEndBlock(level, newState, pos, false);
         } else {
             setEndBlock(level, newState, pos, true);
         }
 
-        if(level.getBlockState(pos.below()).is(ModBlocks.DISEASED_KELP_BLOCK.get()))
+        if(isBlockBelowKelpOrDiseasedKelp(level, pos))
         {
             setEndBlock(level, newState, pos.below(), false);
         }
@@ -267,7 +289,7 @@ public class DiseasedKelpBlock extends Block implements IForgeBlock, LiquidBlock
             return;
         }
 
-        if(level.getBlockState(pos.below()).is(ModBlocks.DISEASED_KELP_BLOCK.get()))
+        if(isBlockBelowKelpOrDiseasedKelp(level, pos))
         {
             setEndBlock(level, newState, pos.below(), true);
         }
