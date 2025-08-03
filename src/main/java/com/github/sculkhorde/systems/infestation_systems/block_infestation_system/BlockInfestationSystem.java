@@ -546,7 +546,7 @@ public class BlockInfestationSystem {
     public static void tryPlaceDiseasedKelp(ServerLevel world, BlockPos targetPos)
     {
 
-        if(ModConfig.isExperimentalFeaturesEnabled() && new Random().nextInt(30) <= 1 && world.getFluidState(targetPos).is(Fluids.WATER))
+        if(world.getRandom().nextInt(30) <= 1 && world.getFluidState(targetPos).is(Fluids.WATER))
         {
             boolean isTargetPosEmptyWater = world.getBlockState(targetPos).is(Blocks.WATER);
             if(!isTargetPosEmptyWater) { return; }
