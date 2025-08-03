@@ -170,8 +170,8 @@ public class BlockInfestationSystem {
         explicitInfectableBlocks.addEntry(89, Blocks.BASALT, ModBlocks.INFESTED_BASALT.get().defaultBlockState());
         explicitInfectableBlocks.addEntry(90, Blocks.SMOOTH_BASALT, ModBlocks.INFESTED_SMOOTH_BASALT.get().defaultBlockState());
         explicitInfectableBlocks.addEntry(91, Blocks.END_STONE, ModBlocks.INFESTED_ENDSTONE.get().defaultBlockState());
-        if(ModConfig.isExperimentalFeaturesEnabled() && ModConfig.SERVER.experimental_aquatic_infestation_enabled.get()) { explicitInfectableBlocks.addEntry(92, Blocks.KELP_PLANT, ModBlocks.DISEASED_KELP_BLOCK.get().defaultBlockState()); }
-        if(ModConfig.isExperimentalFeaturesEnabled() && ModConfig.SERVER.experimental_aquatic_infestation_enabled.get()) { explicitInfectableBlocks.addEntry(93, Blocks.KELP, ModBlocks.DISEASED_KELP_BLOCK.get().defaultBlockState()); }
+        explicitInfectableBlocks.addEntry(92, Blocks.KELP_PLANT, ModBlocks.DISEASED_KELP_BLOCK.get().defaultBlockState());
+        explicitInfectableBlocks.addEntry(93, Blocks.KELP, ModBlocks.DISEASED_KELP_BLOCK.get().defaultBlockState());
 
         // Deeper and Darker Compatibility
         explicitInfectableBlocks.addEntry(1, "minecraft:deepslate", "deeperdarker:sculk_stone");
