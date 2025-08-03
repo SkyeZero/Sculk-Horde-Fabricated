@@ -121,7 +121,8 @@ public class SculkStingerEntity extends FlyingMob implements GeoEntity, ISculkSm
     public Goal[] goalSelectorPayload()
     {
         return new Goal[]{
-                new Despawn(this, TickUnits.convertMinutesToTicks(15)),
+                new DespawnAfterTime(this, TickUnits.convertMinutesToTicks(2)),
+                new DespawnWhenIdle(this, TickUnits.convertMinutesToTicks(1)),
                 new SweepAndBurrowAttackGoal(),
                 new FlyingWanderGoal(this, 1.0F, TickUnits.convertSecondsToTicks(3), 10)
         };
@@ -366,35 +367,6 @@ public class SculkStingerEntity extends FlyingMob implements GeoEntity, ISculkSm
             if (SculkStingerEntity.this.horizontalCollision || SculkStingerEntity.this.hurtTime > 0) {
                 lastTimeOfAttack = level().getGameTime();
             }
-        }
-    }
-
-    class Despawn extends DespawnAfterTime
-    {
-        public Despawn(ISculkSmartEntity mob, int ticksThreshold) {
-            super(mob, ticksThreshold);
-        }
-
-        public long calculateTicksThreshold()
-        {
-            return ticksThreshold;
-        }
-
-        @Override
-        public boolean canUse()
-        {
-            boolean mobHasBeenNameTagged = ((Mob) mob).hasCustomName();
-            if(level.getGameTime() - creationTime > calculateTicksThreshold() && !mob.isParticipatingInRaid() && !mobHasBeenNameTagged)
-            {
-                return true;
-            }
-            return false;
-        }
-
-        @Override
-        public void start()
-        {
-            discard();
         }
     }
 
