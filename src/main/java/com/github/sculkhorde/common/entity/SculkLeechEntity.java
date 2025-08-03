@@ -2,11 +2,11 @@ package com.github.sculkhorde.common.entity;
 
 import com.github.sculkhorde.common.entity.components.TargetParameters;
 import com.github.sculkhorde.common.entity.goal.*;
+import com.github.sculkhorde.core.ModSounds;
 import com.github.sculkhorde.util.EntityAlgorithms;
 import com.github.sculkhorde.util.SquadHandler;
 import com.github.sculkhorde.util.TickUnits;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -85,15 +85,15 @@ public class SculkLeechEntity extends Salmon implements GeoEntity, ISculkSmartEn
     }
 
     protected SoundEvent getAmbientSound() {
-        return SoundEvents.SALMON_AMBIENT;
+        return ModSounds.SCULK_MITE_IDLE.get();
     }
 
     protected SoundEvent getDeathSound() {
-        return SoundEvents.SALMON_DEATH;
+        return ModSounds.SCULK_MITE_DEATH.get();
     }
 
     protected SoundEvent getHurtSound(DamageSource p_29795_) {
-        return SoundEvents.SALMON_HURT;
+        return ModSounds.SCULK_MITE_HURT.get();
     }
 
     /**

@@ -4,12 +4,12 @@ import com.github.sculkhorde.common.entity.components.ImprovedFlyingNavigator;
 import com.github.sculkhorde.common.entity.components.TargetParameters;
 import com.github.sculkhorde.common.entity.goal.*;
 import com.github.sculkhorde.core.ModMobEffects;
+import com.github.sculkhorde.core.ModSounds;
 import com.github.sculkhorde.core.SculkHorde;
 import com.github.sculkhorde.util.EntityAlgorithms;
 import com.github.sculkhorde.util.SquadHandler;
 import com.github.sculkhorde.util.TickUnits;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -287,13 +287,16 @@ public class SculkStingerEntity extends FlyingMob implements GeoEntity, ISculkSm
     }
 
     /** Sounds **/
-
-    protected SoundEvent getHurtSound(@NotNull DamageSource pDamageSource) {
-        return SoundEvents.PHANTOM_HURT;
+    protected SoundEvent getAmbientSound() {
+        return ModSounds.SCULK_MITE_IDLE.get();
     }
 
     protected SoundEvent getDeathSound() {
-        return SoundEvents.PHANTOM_DEATH;
+        return ModSounds.SCULK_MITE_DEATH.get();
+    }
+
+    protected SoundEvent getHurtSound(DamageSource p_29795_) {
+        return ModSounds.SCULK_MITE_HURT.get();
     }
 
     abstract static class MoveTargetGoal extends Goal {

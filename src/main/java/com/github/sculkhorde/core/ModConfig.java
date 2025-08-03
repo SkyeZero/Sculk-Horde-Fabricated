@@ -97,7 +97,6 @@ public class ModConfig {
 
         public final ForgeConfigSpec.ConfigValue<Boolean> experimental_features_enabled;
         public final ForgeConfigSpec.ConfigValue<Boolean> experimental_sheep_enabled;
-        public final ForgeConfigSpec.ConfigValue<Boolean> experimental_aquatic_infestation_enabled;
         public final ForgeConfigSpec.ConfigValue<Boolean> experimental_hit_squad_event_enabled;
         public final ForgeConfigSpec.ConfigValue<Boolean> experimental_brood_hatcher_enabled;
 
@@ -260,7 +259,6 @@ public class ModConfig {
 
             builder.push("Experimental Features");
             experimental_features_enabled = builder.comment("Should experimental features be enabled? (Default false)").define("experimental_features_enabled",false);
-            experimental_aquatic_infestation_enabled = builder.comment("Should experimental aquatic infestation features be enabled? (Default false)").define("experimental_aquatic_infestation_enabled",false);
             experimental_sheep_enabled = builder.comment("Should the experimental sculk sheep be enabled? (Default false)").define("experimental_sheep_enabled",false);
             experimental_brood_hatcher_enabled = builder.comment("Should the experimental brood hatcher be enabled? (Default false)").define("experimental_brood_hatcher_enabled",false);
             experimental_hit_squad_event_enabled = builder.comment("Should experimental hit squad event feature be enabled? (Default false)").define("experimental_hit_squad_event_enabled",false);

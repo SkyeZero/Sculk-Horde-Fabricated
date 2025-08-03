@@ -59,7 +59,7 @@ public class TargetParameters
         String mob = this.mob == null ? "null " : this.mob.getScoreboardName();
         String checkType = validatingExistingTarget ? " is Checking Current Target: " : " is Checking Potential Target: ";
 
-        if(SculkHorde.isDebugMode()) { SculkHorde.LOGGER.debug(Header + mob + checkType + e.getScoreboardName() + " " + message); }
+        //if(SculkHorde.isDebugMode()) { SculkHorde.LOGGER.debug(Header + mob + checkType + e.getScoreboardName() + " " + message); }
     }
 
 
