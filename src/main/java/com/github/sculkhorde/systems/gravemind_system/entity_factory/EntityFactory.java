@@ -160,6 +160,15 @@ public class EntityFactory {
                                 EntityFactoryEntry.StrategicValues.Aquatic)
                         .enableExperimentalMode(ModConfig.SERVER.experimental_features_enabled),
 
+                new EntityFactoryEntry(ModEntities.SCULK_STINGER.get())
+                        .setMinEvolutionRequired(Gravemind.evolution_states.Undeveloped)
+                        .setCost((int) SculkLeechEntity.MAX_HEALTH)
+                        .addStrategicValues(
+                                EntityFactoryEntry.StrategicValues.Infector,
+                                EntityFactoryEntry.StrategicValues.Melee,
+                                EntityFactoryEntry.StrategicValues.EffectiveInSkies)
+                        .enableExperimentalMode(ModConfig.SERVER.experimental_features_enabled),
+
                 new EntityFactoryEntry(ModEntities.SCULK_SQUID.get())
                         .setMinEvolutionRequired(Gravemind.evolution_states.Undeveloped)
                         .setCost((int) SculkSquidEntity.MAX_HEALTH)

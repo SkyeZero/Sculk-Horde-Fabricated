@@ -75,6 +75,7 @@ public class ModEntities {
     public static final RegistryObject<EntityType<SculkMetamorphosisPodEntity>> SCULK_METAMORPHOSIS_POD = registerMob("sculk_metamorphosis_pod", SculkMetamorphosisPodEntity::new, 1f, 1.9f, 0x000000, 0x000000);
     public static final RegistryObject<EntityType<SculkGhastEntity>> SCULK_GHAST = registerMob("sculk_ghast", SculkGhastEntity::new, 4.9f, 4.9f, 0x000000, 0x000000);
     public static final RegistryObject<EntityType<SculkLeechEntity>> SCULK_LEECH = registerMob("sculk_leech", SculkLeechEntity::new, 0.8f, 0.8f, 0x000000, 0x000000);
+    public static final RegistryObject<EntityType<SculkStingerEntity>> SCULK_STINGER = registerMob("sculk_stinger", SculkStingerEntity::new, 0.8f, 0.8f, 0x000000, 0x000000);
 
 
     public static final RegistryObject<EntityType<CursorProberEntity>> CURSOR_PROBER = ENTITY_TYPES.register("cursor_prober", () -> EntityType.Builder.<CursorProberEntity>of(CursorProberEntity::new, MobCategory.MISC).sized(1f, 1f).clientTrackingRange(4).updateInterval(10).build("cursor_prober"));
