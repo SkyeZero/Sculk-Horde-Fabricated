@@ -45,11 +45,9 @@ public class SculkStingerEntity extends FlyingMob implements GeoEntity, ISculkSm
     //The armor of the mob
     public static final float ARMOR = 0F;
     //ATTACK_DAMAGE determines How much damage its melee attacks do
-    public static final float ATTACK_DAMAGE = 3F;
-    //ATTACK_KNOCKBACK determines the knockback a mob will take
-    public static final float ATTACK_KNOCKBACK = 2F;
+    public static final float ATTACK_DAMAGE = 1F;
     //FOLLOW_RANGE determines how far away this mob can see and chase enemies
-    public static final float FOLLOW_RANGE = 32F;
+    public static final float FOLLOW_RANGE = 16F;
     //MOVEMENT_SPEED determines how far away this mob can see other mobs
     public static final float MOVEMENT_SPEED = 0.2F;
 
@@ -80,7 +78,6 @@ public class SculkStingerEntity extends FlyingMob implements GeoEntity, ISculkSm
                 .add(Attributes.MAX_HEALTH, MAX_HEALTH)
                 .add(Attributes.ARMOR, ARMOR)
                 .add(Attributes.ATTACK_DAMAGE, ATTACK_DAMAGE)
-                .add(Attributes.ATTACK_KNOCKBACK, ATTACK_KNOCKBACK)
                 .add(Attributes.FOLLOW_RANGE,FOLLOW_RANGE)
                 .add(Attributes.MOVEMENT_SPEED, MOVEMENT_SPEED)
                 .add(Attributes.FLYING_SPEED, 0.2F)
