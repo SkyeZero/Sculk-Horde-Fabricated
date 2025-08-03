@@ -1,9 +1,8 @@
 package com.github.sculkhorde.common.entity;
 
-import com.github.sculkhorde.common.entity.goal.*;
-import com.github.sculkhorde.util.EntityAlgorithms;
-import com.github.sculkhorde.util.SquadHandler;
 import com.github.sculkhorde.common.entity.components.TargetParameters;
+import com.github.sculkhorde.common.entity.goal.*;
+import com.github.sculkhorde.util.SquadHandler;
 import com.github.sculkhorde.util.TickUnits;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -116,7 +115,7 @@ public class SculkSalmonEntity extends Salmon implements GeoEntity, ISculkSmartE
 
         this.goalSelector.addGoal(0, new DespawnAfterTime(this, TickUnits.convertMinutesToTicks(2)));
         this.goalSelector.addGoal(0, new DespawnWhenIdle(this, TickUnits.convertMinutesToTicks(1)));
-        this.goalSelector.addGoal(1, new InfectGoal());
+        this.goalSelector.addGoal(1, new AttackGoal());
 
         Goal[] targetSelectorPayload = targetSelectorPayload();
         for(int priority = 0; priority < targetSelectorPayload.length; priority++)
@@ -205,10 +204,10 @@ public class SculkSalmonEntity extends Salmon implements GeoEntity, ISculkSmartE
         return true;
     }
 
-    class InfectGoal extends CustomMeleeAttackGoal
+    class AttackGoal extends CustomMeleeAttackGoal
     {
 
-        public InfectGoal()
+        public AttackGoal()
         {
             super(SculkSalmonEntity.this, 1.0D, false, 10);
         }
@@ -230,23 +229,6 @@ public class SculkSalmonEntity extends Salmon implements GeoEntity, ISculkSmartE
         @Override
         protected int getAttackInterval() {
             return TickUnits.convertSecondsToTicks(2);
-        }
-
-        @Override
-        public void onTargetHurt(LivingEntity target) {
-            float targetMobRemainingHealth = target.getHealth() / target.getMaxHealth();
-            if(targetMobRemainingHealth <= 0.5 && !target.hasEffect(SculkMiteEntity.INFECT_EFFECT))
-            {
-                EntityAlgorithms.applyEffectToTarget(target, SculkMiteEntity.INFECT_EFFECT, SculkMiteEntity.INFECT_DURATION, SculkMiteEntity.INFECT_LEVEL);
-
-                //Kill The Bastard
-                /**
-                 *  Note:
-                 *  Never call thisMob.die(). This is not meant to be used, but is a public method for whatever reason.
-                 */
-                //thisMob.die(DamageSource.GENERIC);
-                mob.hurt(mob.damageSources().generic(), mob.getHealth());
-            }
         }
 
         @Override

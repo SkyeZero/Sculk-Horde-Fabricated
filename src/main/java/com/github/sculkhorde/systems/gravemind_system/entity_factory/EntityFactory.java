@@ -147,6 +147,14 @@ public class EntityFactory {
                         .setMinEvolutionRequired(Gravemind.evolution_states.Undeveloped)
                         .setCost((int) SculkSalmonEntity.MAX_HEALTH)
                         .addStrategicValues(
+                                EntityFactoryEntry.StrategicValues.Melee,
+                                EntityFactoryEntry.StrategicValues.Aquatic)
+                        .enableExperimentalMode(ModConfig.SERVER.experimental_features_enabled),
+
+                new EntityFactoryEntry(ModEntities.SCULK_LEECH.get())
+                        .setMinEvolutionRequired(Gravemind.evolution_states.Undeveloped)
+                        .setCost((int) SculkLeechEntity.MAX_HEALTH)
+                        .addStrategicValues(
                                 EntityFactoryEntry.StrategicValues.Infector,
                                 EntityFactoryEntry.StrategicValues.Melee,
                                 EntityFactoryEntry.StrategicValues.Aquatic)
