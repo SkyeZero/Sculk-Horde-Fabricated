@@ -78,6 +78,7 @@ public class SculkStingerEntity extends FlyingMob implements GeoEntity, ISculkSm
                 .add(Attributes.MAX_HEALTH, MAX_HEALTH)
                 .add(Attributes.ARMOR, ARMOR)
                 .add(Attributes.ATTACK_DAMAGE, ATTACK_DAMAGE)
+                .add(Attributes.ATTACK_KNOCKBACK, ATTACK_KNOCKBACK)
                 .add(Attributes.FOLLOW_RANGE,FOLLOW_RANGE)
                 .add(Attributes.MOVEMENT_SPEED, MOVEMENT_SPEED)
                 .add(Attributes.FLYING_SPEED, 0.2F)
