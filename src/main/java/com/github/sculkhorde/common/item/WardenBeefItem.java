@@ -18,8 +18,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvType;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.List;
@@ -51,12 +51,17 @@ public class WardenBeefItem extends Item {
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
         if (itemstack.isEdible()) {
+            player.startUsingItem(hand);
+            return InteractionResultHolder.consume(itemstack);
+
+            /*
             if (true || player.canEat(itemstack.getFoodProperties(player).canAlwaysEat())) {
                 player.startUsingItem(hand);
                 return InteractionResultHolder.consume(itemstack);
             } else {
                 return InteractionResultHolder.fail(itemstack);
             }
+            */
         } else {
             return InteractionResultHolder.pass(player.getItemInHand(hand));
         }
@@ -73,7 +78,7 @@ public class WardenBeefItem extends Item {
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
         tooltip.add(Component.translatable("tooltip.sculkhorde.warden_beef"));
 

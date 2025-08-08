@@ -1,19 +1,23 @@
 package com.github.sculkhorde.core;
 
+import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
+import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.CreativeModeTabs;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.RegistryObject;
+import io.github.fabricators_of_create.porting_lib.util.LazyRegistrar;
+import io.github.fabricators_of_create.porting_lib.util.RegistryObject;
 
-@Mod.EventBusSubscriber(modid = SculkHorde.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ModCreativeModeTab {
-    public static final DeferredRegister<CreativeModeTab> TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, SculkHorde.MOD_ID);
 
-    public static final RegistryObject<CreativeModeTab> SCULK_HORDE_TAB = TABS.register("sculk_horde_tab", () -> CreativeModeTab.builder()
+    public static final LazyRegistrar<CreativeModeTab> TABS = LazyRegistrar.create(Registries.CREATIVE_MODE_TAB, SculkHorde.MOD_ID);
+
+    public static final RegistryObject<CreativeModeTab> SCULK_HORDE_TAB = TABS.register("sculk_horde_tab", () -> FabricItemGroup.builder()
             .title(Component.translatable("itemGroup.sculkhorde_tab"))
             .icon(() -> new ItemStack(ModBlocks.SCULK_ANCIENT_NODE_BLOCK.get()))
             .displayItems((enabledFeatures, event) -> {
@@ -177,13 +181,13 @@ public class ModCreativeModeTab {
                 event.accept(ModBlocks.INFESTED_STURDY_SLAB.get());
                 event.accept(ModBlocks.INFESTED_STURDY_WALL.get());
                 event.accept(ModBlocks.INFESTED_STURDY_FENCE.get());
-                event.accept(ModBlocks.INFESTED_WOOD_FENCE.get());
+                // event.accept(ModBlocks.INFESTED_WOOD_FENCE.get());
                 event.accept(ModBlocks.INFESTED_WOOD_FENCE_GATE.get());
                 event.accept(ModBlocks.INFESTED_STURDY_FENCE_GATE.get());
             })
             .build());
 
-    public static final RegistryObject<CreativeModeTab> SCULK_HORDE_EXPERIMENTAL_TAB = TABS.register("sculk_horde_tab_experimental", () -> CreativeModeTab.builder()
+    public static final RegistryObject<CreativeModeTab> SCULK_HORDE_EXPERIMENTAL_TAB = TABS.register("sculk_horde_tab_experimental", () -> FabricItemGroup.builder()
             .title(Component.translatable("itemGroup.sculk_horde_tab_experimental"))
             .icon(() -> new ItemStack(ModBlocks.DEV_MASS_INFECTINATOR_3000_BLOCK.get()))
             .displayItems((enabledFeatures, event) -> {

@@ -17,7 +17,7 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.Optional;
 import java.util.function.Predicate;
 
@@ -76,7 +76,7 @@ public final class ProjectileUtil {
                 Vec3 vec31 = optional.get();
                 double d1 = p_37289_.distanceToSqr(vec31);
                 if (d1 < d0 || d0 == 0.0D) {
-                    if (entity1.getRootVehicle() == p_37288_.getRootVehicle() && !entity1.canRiderInteract()) {
+                    if (entity1.getRootVehicle() == p_37288_.getRootVehicle()) { // TODO: INVESTIGATE - && !entity1.canRiderInteract()) {
                         if (d0 == 0.0D) {
                             entity = entity1;
                             vec3 = vec31;

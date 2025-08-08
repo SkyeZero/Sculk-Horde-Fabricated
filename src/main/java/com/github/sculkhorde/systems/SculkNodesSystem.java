@@ -6,7 +6,7 @@ import com.github.sculkhorde.core.SculkHorde;
 import com.github.sculkhorde.systems.event_system.events.SpawnPhantomsEvent;
 import com.github.sculkhorde.util.TickUnits;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraftforge.server.ServerLifecycleHooks;
+import io.github.fabricators_of_create.porting_lib.util.ServerLifecycleHooks;
 
 import java.util.ArrayList;
 

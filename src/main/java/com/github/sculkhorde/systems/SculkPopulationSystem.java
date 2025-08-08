@@ -10,7 +10,7 @@ import com.github.sculkhorde.util.EntityAlgorithms;
 import com.github.sculkhorde.util.TickUnits;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraftforge.server.ServerLifecycleHooks;
+import io.github.fabricators_of_create.porting_lib.util.ServerLifecycleHooks;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -79,7 +79,7 @@ public class SculkPopulationSystem {
         scoutingPhantomsPopulation = 0;
 
         ServerLifecycleHooks.getCurrentServer().getAllLevels().forEach( level -> {
-            Iterable<Entity> listOfEntities = level.getEntities().getAll();
+            Iterable<Entity> listOfEntities = level.getAllEntities();
 
             for(Entity entity : listOfEntities)
             {

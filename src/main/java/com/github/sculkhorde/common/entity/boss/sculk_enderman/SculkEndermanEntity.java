@@ -1,5 +1,6 @@
 package com.github.sculkhorde.common.entity.boss.sculk_enderman;
 
+import com.github.sculkhorde.client.SculkHordeClient;
 import com.github.sculkhorde.common.entity.ISculkSmartEntity;
 import com.github.sculkhorde.common.entity.goal.*;
 import com.github.sculkhorde.core.ModEntities;
@@ -56,7 +57,7 @@ public class SculkEndermanEntity extends Monster implements GeoEntity, ISculkSma
      * In order to create a mob, the following java files were created/edited.<br>
      * Edited {@link ModEntities}<br>
      * Edited {@link com.github.sculkhorde.util.ModEventSubscriber}<br>
-     * Edited {@link com.github.sculkhorde.client.ClientModEventSubscriber}<br>
+     * Edited {@link SculkHordeClient}<br>
      * Added {@link SculkEndermanEntity}<br>
      * Added {@link com.github.sculkhorde.client.model.enitity.SculkEndermanModel}<br>
      * Added {@link com.github.sculkhorde.client.renderer.entity.SculkEndermanRenderer}
@@ -434,38 +435,32 @@ public class SculkEndermanEntity extends Monster implements GeoEntity, ISculkSma
      * @param z The z position
      * @return Returns true if the teleport was successful
      */
-    protected boolean teleport(double x, double y, double z)
-    {
-        if(!canTeleport)
-        {
-            return false;
-        }
+    protected boolean teleport(double x, double y, double z) {
+        if(!canTeleport) return false;
 
         BlockPos.MutableBlockPos blockpos$mutableblockpos = new BlockPos.MutableBlockPos(x, y, z);
-
-        while(blockpos$mutableblockpos.getY() > this.level().getMinBuildHeight() && !this.level().getBlockState(blockpos$mutableblockpos).blocksMotion())
-        {
+        while(blockpos$mutableblockpos.getY() > this.level().getMinBuildHeight() && !this.level().getBlockState(blockpos$mutableblockpos).blocksMotion()) {
             blockpos$mutableblockpos.move(Direction.DOWN);
         }
 
         BlockState blockstate = this.level().getBlockState(blockpos$mutableblockpos);
         boolean isMotionBlockFlag = false; blockstate.blocksMotion();
         boolean isWaterFlag = blockstate.getFluidState().is(FluidTags.WATER);
-        if (!isWaterFlag)
-        {
+        if (!isWaterFlag) {
+            // TODO: INVESTIGATE - EVENT NOT IN FABRIC
+            /*
             net.minecraftforge.event.entity.EntityTeleportEvent.EnderEntity event = net.minecraftforge.event.ForgeEventFactory.onEnderTeleport(this, x, y, z);
-            if (event.isCanceled())
-            {
+            if (event.isCanceled()) {
                 return false;
             }
+            */
+
             Vec3 vec3 = this.position();
-            boolean ifCanRandomTeleport = this.randomTeleport(event.getTargetX(), event.getTargetY(), event.getTargetZ(), true);
-            if (ifCanRandomTeleport)
-            {
+            boolean ifCanRandomTeleport = this.randomTeleport(x, y, z, true);
+            if (ifCanRandomTeleport) {
                 this.level().gameEvent(GameEvent.TELEPORT, vec3, GameEvent.Context.of(this));
-                if (!this.isSilent())
-                {
-                    this.level().playSound((Player)null, this.xo, this.yo, this.zo, SoundEvents.ENDERMAN_TELEPORT, this.getSoundSource(), 1.0F, 1.0F);
+                if (!this.isSilent()) {
+                    this.level().playSound(null, this.xo, this.yo, this.zo, SoundEvents.ENDERMAN_TELEPORT, this.getSoundSource(), 1.0F, 1.0F);
                     this.playSound(ModSounds.SCULK_ENDERMAN_PORTAL.get(), 1.0F, 1.0F);
                     ticksSinceLastTeleport = 0;
                 }

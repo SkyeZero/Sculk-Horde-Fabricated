@@ -1,6 +1,6 @@
 package com.github.sculkhorde.common.block;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 import com.github.sculkhorde.systems.infestation_systems.block_infestation_system.infestation_entries.ITagInfestedBlock;
 import com.github.sculkhorde.systems.infestation_systems.block_infestation_system.infestation_entries.ITagInfestedBlockEntity;
@@ -14,9 +14,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.extensions.IForgeBlock;
 
-public class InfestedSlabBlock extends SlabBlock implements EntityBlock, IForgeBlock, ITagInfestedBlock {
+public class InfestedSlabBlock extends SlabBlock implements EntityBlock, ITagInfestedBlock {
 
     public InfestedSlabBlock(Properties properties) {
         super(properties);

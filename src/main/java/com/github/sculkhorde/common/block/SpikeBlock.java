@@ -14,14 +14,13 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.extensions.IForgeBlock;
+import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvType;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
-public class SpikeBlock extends SculkFloraBlock implements IForgeBlock {
+public class SpikeBlock extends SculkFloraBlock {
 
     /*
      *  NOTE:
@@ -139,7 +138,7 @@ public class SpikeBlock extends SculkFloraBlock implements IForgeBlock {
      * @param flagIn The flag
      */
     @Override
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public void appendHoverText(ItemStack stack, @Nullable BlockGetter iBlockReader, List<Component> tooltip, TooltipFlag flagIn) {
 
         super.appendHoverText(stack, iBlockReader, tooltip, flagIn); //Not sure why we need this

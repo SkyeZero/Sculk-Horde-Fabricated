@@ -1,5 +1,6 @@
 package com.github.sculkhorde.common.entity.boss.sculk_enderman;
 
+import com.github.sculkhorde.client.SculkHordeClient;
 import com.github.sculkhorde.common.entity.boss.SpecialEffectEntity;
 import com.github.sculkhorde.core.ModEntities;
 import com.github.sculkhorde.core.ModSounds;
@@ -24,7 +25,7 @@ import java.util.function.Predicate;
 /**
  * The following java files were created/edited for this entity.<br>
  * Edited {@link ModEntities}<br>
- * Edited {@link com.github.sculkhorde.client.ClientModEventSubscriber}<br>
+ * Edited {@link SculkHordeClient}<br>
  * Added {@link EnderBubbleAttackEntity}<br>
  * Added {@link com.github.sculkhorde.client.model.enitity.EnderBubbleAttackModel}<br>
  * Added {@link com.github.sculkhorde.client.renderer.entity.EnderBubbleAttackRenderer}

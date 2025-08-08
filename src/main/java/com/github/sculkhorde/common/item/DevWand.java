@@ -16,12 +16,11 @@ import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.extensions.IForgeItem;
-import net.minecraftforge.server.ServerLifecycleHooks;
+import io.github.fabricators_of_create.porting_lib.util.ServerLifecycleHooks;
 
 import java.util.Optional;
 
-public class DevWand extends Item implements IForgeItem {
+public class DevWand extends Item {
 	/* NOTE:
 	 * Learned from https://www.youtube.com/watch?v=0vLbG-KrQy4 "Advanced Items - Minecraft Forge 1.16.4 Modding Tutorial"
 	 * and learned from https://www.youtube.com/watch?v=itVLuEcJRPQ "Add CUSTOM TOOLS to Minecraft 1.16.5 with Forge"

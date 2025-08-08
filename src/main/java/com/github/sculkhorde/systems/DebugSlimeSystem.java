@@ -13,7 +13,7 @@ import net.minecraft.world.entity.monster.Slime;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.scores.PlayerTeam;
 import net.minecraft.world.scores.Scoreboard;
-import net.minecraftforge.server.ServerLifecycleHooks;
+import io.github.fabricators_of_create.porting_lib.util.ServerLifecycleHooks;
 
 import java.util.ArrayList;
 
@@ -70,7 +70,7 @@ public class DebugSlimeSystem {
         Slime slime = new Slime(EntityType.SLIME, level);
         slime.setPos(pos.getCenter());
         slime.setInvulnerable(true);
-        slime.goalSelector.removeAllGoals(Predicates.alwaysTrue());
+        slime.removeAllGoals(Predicates.alwaysTrue());
         slime.addEffect(new MobEffectInstance(MobEffects.GLOWING, Integer.MAX_VALUE, Integer.MAX_VALUE));
         slime.addEffect(new MobEffectInstance(MobEffects.INVISIBILITY, Integer.MAX_VALUE, Integer.MAX_VALUE));
         slime.setSilent(true);

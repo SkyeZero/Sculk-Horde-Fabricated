@@ -12,13 +12,12 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.extensions.IForgeItem;
+import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvType;
 
 import java.util.List;
 
-public class DevConversionWand extends Item implements IForgeItem {
+public class DevConversionWand extends Item {
 	/* NOTE:
 	 * Learned from https://www.youtube.com/watch?v=0vLbG-KrQy4 "Advanced Items - Minecraft Forge 1.16.4 Modding Tutorial"
 	 * and learned from https://www.youtube.com/watch?v=itVLuEcJRPQ "Add CUSTOM TOOLS to Minecraft 1.16.5 with Forge"
@@ -58,7 +57,7 @@ public class DevConversionWand extends Item implements IForgeItem {
 
 	//This changes the text you see when hovering over an item
 	@Override
-	@OnlyIn(Dist.CLIENT)
+	@Environment(EnvType.CLIENT)
 	public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
 		
 		super.appendHoverText(stack, worldIn, tooltip, flagIn); //Not sure why we need this

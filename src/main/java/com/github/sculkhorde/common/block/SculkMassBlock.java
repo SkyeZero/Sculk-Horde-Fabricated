@@ -28,11 +28,10 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.common.extensions.IForgeBlock;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
-public class SculkMassBlock extends BaseEntityBlock implements IForgeBlock, SimpleWaterloggedBlock {
+public class SculkMassBlock extends BaseEntityBlock implements SimpleWaterloggedBlock {
 
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 

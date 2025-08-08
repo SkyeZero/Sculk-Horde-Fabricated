@@ -40,7 +40,7 @@ import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
@@ -104,8 +104,9 @@ public class SculkGhastEntity extends FlyingMob implements GeoEntity, ISculkSmar
                 .add(Attributes.ATTACK_KNOCKBACK, ATTACK_KNOCKBACK)
                 .add(Attributes.FOLLOW_RANGE,FOLLOW_RANGE)
                 .add(Attributes.MOVEMENT_SPEED, MOVEMENT_SPEED)
-                .add(Attributes.FLYING_SPEED, 0.5F)
-                .add(net.minecraftforge.common.ForgeMod.ENTITY_GRAVITY.get(), 0.0);
+                .add(Attributes.FLYING_SPEED, 0.5F);
+                // TODO: INVESTIGATE
+                // .add(net.minecraftforge.common.ForgeMod.ENTITY_GRAVITY.get(), 0.0);
     }
 
 

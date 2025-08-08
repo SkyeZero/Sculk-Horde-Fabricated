@@ -13,13 +13,13 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraftforge.common.IPlantable;
 
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
@@ -81,7 +81,8 @@ public class ChunkCursorHelper {
 
         if (!noGrass) {
             Random rand = new Random();
-            boolean canCuredBlockSustainPlant = world.getBlockState(targetPos).canSustainPlant(world, targetPos, Direction.UP, (IPlantable) Blocks.POPPY);
+            BlockState cured = world.getBlockState(targetPos);
+            boolean canCuredBlockSustainPlant = cured.is(BlockTags.DIRT) || cured.is(Blocks.FARMLAND); // TODO: INVESTIGATE - world.getBlockState(targetPos).canSustainPlant(world, targetPos, Direction.UP, (IPlantable) Blocks.POPPY);
 
             if(rand.nextBoolean() && canCuredBlockSustainPlant && world.getBlockState(targetPos.above()).isAir()) {
                 BlockAlgorithms.setBlockCursor(world, targetPos.above(), Blocks.GRASS.defaultBlockState());

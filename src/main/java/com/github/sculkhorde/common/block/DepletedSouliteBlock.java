@@ -7,9 +7,8 @@ import net.minecraft.world.level.block.HalfTransparentBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.MapColor;
-import net.minecraftforge.common.extensions.IForgeBlock;
 
-public class DepletedSouliteBlock extends HalfTransparentBlock implements IForgeBlock {
+public class DepletedSouliteBlock extends HalfTransparentBlock {
 
     /**
      * HARDNESS determines how difficult a block is to break<br>

@@ -119,7 +119,8 @@ public class SoulHarvestingRecipe implements Recipe<SimpleContainer> {
                 ingredient.toNetwork(bufferIn);
             }
 
-            bufferIn.writeItemStack(recipeIn.getResultItem(null), false);
+            // TODO: VERIFY FUNCTION - bufferIn.writeItemStack(recipeIn.getResultItem(null), false);
+            bufferIn.writeItem(recipeIn.getResultItem(null));
 
             // Log the size of the data being written
             System.out.println("SoulHarvesterRecipe | Data size being written: " + bufferIn.writerIndex());

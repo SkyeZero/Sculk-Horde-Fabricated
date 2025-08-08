@@ -7,10 +7,12 @@ import com.github.sculkhorde.core.ModSounds;
 import com.github.sculkhorde.util.SquadHandler;
 import com.github.sculkhorde.common.entity.components.TargetParameters;
 import com.github.sculkhorde.util.TickUnits;
+import io.github.fabricators_of_create.porting_lib.tool.ToolActions;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
@@ -30,7 +32,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.ToolActions;
 import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -292,9 +293,10 @@ public class LivingArmorEntity extends Monster implements GeoEntity, ISculkSmart
     protected void blockUsingShield(LivingEntity entityIn) {
         super.blockUsingShield(entityIn);
         this.playSound(SoundEvents.SHIELD_BLOCK, 1.0F, 1.0F);
-        if (entityIn.getMainHandItem().canDisableShield(this.useItem, this, entityIn)) {
+        if (entityIn.getMainHandItem().is(ItemTags.AXES)) { // if (entityIn.getMainHandItem().canDisableShield(this.useItem, this, entityIn)) {
             this.disableShield(true);
         }
+        // TODO: INVESTIGATE
     }
 
     public void disableShield(boolean increase) {

@@ -18,19 +18,18 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.MapColor;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.extensions.IForgeBlock;
+import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvType;
 import org.lwjgl.glfw.GLFW;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 /**
  * Chunk Loader Code created by SuperMartijn642
  */
 
-public class GolemOfWrathAnimatorBlock extends BaseEntityBlock implements IForgeBlock {
+public class GolemOfWrathAnimatorBlock extends BaseEntityBlock {
 
     /**
      * HARDNESS determines how difficult a block is to break<br>
@@ -103,7 +102,7 @@ public class GolemOfWrathAnimatorBlock extends BaseEntityBlock implements IForge
      * @param flagIn The flag
      */
     @Override
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public void appendHoverText(ItemStack stack, @Nullable BlockGetter iBlockReader, List<Component> tooltip, TooltipFlag flagIn) {
 
         super.appendHoverText(stack, iBlockReader, tooltip, flagIn); //Not sure why we need this

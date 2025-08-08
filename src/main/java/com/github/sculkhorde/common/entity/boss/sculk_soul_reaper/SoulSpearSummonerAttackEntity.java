@@ -1,5 +1,6 @@
 package com.github.sculkhorde.common.entity.boss.sculk_soul_reaper;
 
+import com.github.sculkhorde.client.SculkHordeClient;
 import com.github.sculkhorde.common.entity.boss.SpecialEffectEntity;
 import com.github.sculkhorde.common.entity.projectile.AbstractProjectileEntity;
 import com.github.sculkhorde.core.ModEntities;
@@ -23,7 +24,7 @@ import java.util.List;
 /**
  * The following java files were created/edited for this entity.<br>
  * Edited {@link ModEntities}<br>
- * Edited {@link com.github.sculkhorde.client.ClientModEventSubscriber}<br>
+ * Edited {@link SculkHordeClient}<br>
  * Added {@link SoulSpearSummonerAttackEntity}<br>
  * Added {@link com.github.sculkhorde.client.model.enitity.ChaosTeleporationRiftModel}<br>
  * Added {@link com.github.sculkhorde.client.renderer.entity.ChaosTeleporationRiftRenderer}

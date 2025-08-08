@@ -11,7 +11,7 @@ import com.github.sculkhorde.util.EntityAlgorithms;
 import com.github.sculkhorde.util.TickUnits;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.server.ServerLifecycleHooks;
+import io.github.fabricators_of_create.porting_lib.util.ServerLifecycleHooks;
 
 public class NodeAtmosphereInfestationSystem {
     // The parent tile entity

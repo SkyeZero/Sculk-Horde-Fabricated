@@ -5,11 +5,11 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.client.event.ViewportEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public class SculkFogRenderer {
 
+    // TODO: PORT
+    /*
     @SubscribeEvent
     public void renderFogListener(ViewportEvent.RenderFog event) {
         Entity entity = event.getCamera().getEntity();
@@ -50,5 +50,6 @@ public class SculkFogRenderer {
 
         }
     }
+     */
 
 }

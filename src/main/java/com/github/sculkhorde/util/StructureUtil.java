@@ -39,7 +39,8 @@ import net.minecraft.world.phys.shapes.DiscreteVoxelShape;
 import java.util.*;
 
 import static net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate.processBlockInfos;
-import static net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate.processEntityInfos;
+// import static net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate.processEntityInfos;
+// TODO: INVESTIGATE ABOVE
 
 
 public class StructureUtil {
@@ -91,9 +92,11 @@ public class StructureUtil {
         }
     }
 
+    // TODO: Disabled for now, investigate import and function "processEntityInfos()". This function is technically never called however
     private static void addEntitiesToWorld(StructureTemplate structureTemplate, ServerLevelAccessor p_74524_, BlockPos p_74525_, StructurePlaceSettings placementIn) {
         StructureTemplateAccessor structureTemplateAccessor = ((StructureTemplateAccessor) structureTemplate);
 
+        /*
         for(StructureTemplate.StructureEntityInfo structuretemplate$structureentityinfo : processEntityInfos(structureTemplate, p_74524_, p_74525_, placementIn, structureTemplateAccessor.getEntityInfoList())) {
             BlockPos blockpos = structuretemplate$structureentityinfo.blockPos; // FORGE: Position will have already been transformed by processEntityInfos
             if (placementIn.getBoundingBox() == null || placementIn.getBoundingBox().isInside(blockpos)) {
@@ -117,6 +120,7 @@ public class StructureUtil {
                 });
             }
         }
+        */
 
     }
 
@@ -145,7 +149,7 @@ public class StructureUtil {
                 int maxZ = Integer.MIN_VALUE;
 
                 // Process each block in the structure
-                for (StructureTemplate.StructureBlockInfo blockInfo : processBlockInfos(world, startPos, offsetPos, settings, blockInfoList, structureTemplate)) {
+                for (StructureTemplate.StructureBlockInfo blockInfo : processBlockInfos(world, startPos, offsetPos, settings, blockInfoList)) { // TODO: INVESTIGATE - FORGE HAS METHOD: processBlockInfos(world, startPos, offsetPos, settings, blockInfoList, structureTemplate))
                     BlockPos blockPos = blockInfo.pos();
                     if (boundingBox == null || boundingBox.isInside(blockPos)) {
                         FluidState fluidState = settings.shouldKeepLiquids() ? world.getFluidState(blockPos) : null;
@@ -394,7 +398,7 @@ public class StructureUtil {
                 liquidPositions = Lists.newArrayListWithCapacity(settings.shouldKeepLiquids() ? rawBlockInfoList.size() : 0);
                 sourceLiquidPositions = Lists.newArrayListWithCapacity(settings.shouldKeepLiquids() ? rawBlockInfoList.size() : 0);
                 blockEntityDataList = Lists.newArrayListWithCapacity(rawBlockInfoList.size());
-                processedBlockInfoList = processBlockInfos(world, startPos, offsetPos, settings, rawBlockInfoList, structureTemplate);
+                processedBlockInfoList = processBlockInfos(world, startPos, offsetPos, settings, rawBlockInfoList); // TODO: INVESTIGATE - structureTemplate
 
                 // Calculate Offset
                 Optional<BlockPos> structureOrigin = getOriginPos(processedBlockInfoList);

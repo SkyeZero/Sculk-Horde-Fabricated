@@ -2,8 +2,7 @@ package com.github.sculkhorde.common.block;
 
 import com.github.sculkhorde.core.ModBlocks;
 import net.minecraft.world.level.block.SoundType;
-import net.minecraftforge.common.extensions.IForgeBlock;
-public class SmallShroomBlock extends SculkFloraBlock implements IForgeBlock {
+public class SmallShroomBlock extends SculkFloraBlock {
 
     /*
      *  NOTE:

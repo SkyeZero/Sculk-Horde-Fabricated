@@ -1,5 +1,6 @@
 package com.github.sculkhorde.common.effect;
 
+import com.github.sculkhorde.fabricated.CurableEffect;
 import com.github.sculkhorde.util.ColorUtil;
 import com.github.sculkhorde.util.TickUnits;
 import net.minecraft.world.effect.MobEffect;
@@ -10,7 +11,7 @@ import net.minecraft.world.item.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SoulDisruptionEffect extends MobEffect {
+public class SoulDisruptionEffect extends MobEffect implements CurableEffect {
 
     public static int liquidColor = ColorUtil.hexToRGB("29DFEB");
     public static MobEffectCategory effectType = MobEffectCategory.NEUTRAL;

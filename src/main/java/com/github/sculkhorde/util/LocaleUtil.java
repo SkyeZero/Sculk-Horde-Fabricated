@@ -4,13 +4,11 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ItemLike;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvType;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 public class LocaleUtil {
 
@@ -35,22 +33,22 @@ public class LocaleUtil {
         return Component.literal(String.valueOf(number));
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public static String getLocaleString(String langKey) {
         return getLocaleString(langKey, (ChatFormatting)null);
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public static String getItemName(ItemLike object) {
         return I18n.get(object.asItem().getDescriptionId());
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public static String getLocaleString(String langKey, String... args) {
         return getLocaleString(langKey, null, args);
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public static String getLocaleString(String langKey, @Nullable ChatFormatting colour, String... args) {
         return (colour != null ? colour : "") + I18n.get(langKey, (Object[])args);
     }

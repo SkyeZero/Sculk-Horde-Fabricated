@@ -2,6 +2,8 @@ package com.github.sculkhorde.common.effect;
 
 import com.github.sculkhorde.common.block.SculkMassBlock;
 import com.github.sculkhorde.core.*;
+import com.github.sculkhorde.fabricated.CurableEffect;
+import com.github.sculkhorde.fabricated.events.EntityEvents;
 import com.github.sculkhorde.util.EntityAlgorithms;
 import com.github.sculkhorde.util.ParticleUtil;
 import com.github.sculkhorde.util.TickUnits;
@@ -10,17 +12,17 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraftforge.event.entity.living.MobEffectEvent;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SculkBurrowedEffect extends MobEffect implements IPotionExpireEffect{
+public class SculkBurrowedEffect extends MobEffect implements EntityEvents.MobEffectExpireEvent, CurableEffect {
 
     public static int spawnInterval = 20;
     public static int liquidColor = 338997;
@@ -47,32 +49,36 @@ public class SculkBurrowedEffect extends MobEffect implements IPotionExpireEffec
     }
 
 
-    public void onPotionExpire(MobEffectEvent.Expired event)
-    {
-        if(event.getEntity().level().isClientSide()) { return;}
+    @Override
+    public void onExpired(LivingEntity entity, MobEffectInstance mobEffectInstance) {
+        if (entity == null || entity.level().isClientSide()) return;
+        if(EntityAlgorithms.isSculkLivingEntity.test(entity) || !entity.level().isInWorldBounds(entity.blockPosition())) return;
 
-        LivingEntity entity = event.getEntity();
-        // OR mob outside of world border
-        if(entity == null || EntityAlgorithms.isSculkLivingEntity.test(entity) || !entity.level().isInWorldBounds(entity.blockPosition()))
-        {
-            return;
-        }
+        Level level = entity.level();
 
         //Spawn Effect Level + 1 number of mites
         int infectionDamage = 4;
         BlockPos entityPosition = entity.blockPosition();
 
-        //Spawn Mite
-        if(entity.level().getFluidState(entityPosition) == Fluids.EMPTY.defaultFluidState() || !ModConfig.isExperimentalFeaturesEnabled()) { ModEntities.SCULK_MITE.get().spawn((ServerLevel) event.getEntity().level(), entityPosition, MobSpawnType.SPAWNER); }
-        else { ModEntities.SCULK_SALMON.get().spawn((ServerLevel) event.getEntity().level(), entityPosition, MobSpawnType.SPAWNER); }
+        // Choose to spawn Mite or Salmon depending on if in a fluid like water. Salmon requires Experimental Features
+        if (level.getFluidState(entityPosition) == Fluids.EMPTY.defaultFluidState() || !ModConfig.isExperimentalFeaturesEnabled()) {
+            ModEntities.SCULK_MITE.get().spawn((ServerLevel) level, entityPosition, MobSpawnType.SPAWNER);
+        }
+        else {
+            ModEntities.SCULK_SALMON.get().spawn((ServerLevel) level, entityPosition, MobSpawnType.SPAWNER);
+        }
 
-        //Spawn Sculk Mass
+        // Place Sculk Mass
         placeSculkMass(entity);
-        //Do infectionDamage to victim per mite
+
+        // Damage entity
         entity.hurt(entity.damageSources().magic(), infectionDamage);
-        ParticleUtil.spawnBurrowedBurstParticles((ServerLevel) entity.level(), entity.position().add(0, 0.66F, 0).toVector3f(), 12, 0.2F);
-        //((ServerLevel) entity.level()).playSound(entity, entity.blockPosition(), ModSounds.BURROWED_BURST.get(), SoundSource.HOSTILE, 1.0F, 1.0F);
-        entity.level().playSound((Player)null, entity.blockPosition().getX(), entity.blockPosition().getY(), entity.blockPosition().getZ(), ModSounds.BURROWED_BURST.get(), SoundSource.HOSTILE, 1.0F, 1.0F);
+
+        // Spawn Particles for Burst Animation
+        ParticleUtil.spawnBurrowedBurstParticles((ServerLevel) level, entity.position().add(0, 0.66F, 0).toVector3f(), 12, 0.2F);
+
+        // Play Burst SFX
+        level.playSound(null, entityPosition, ModSounds.BURROWED_BURST.get(), SoundSource.HOSTILE);
     }
 
     public static void placeSculkMass(LivingEntity entity)

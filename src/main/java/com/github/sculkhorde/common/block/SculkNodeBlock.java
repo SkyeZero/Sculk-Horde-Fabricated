@@ -31,12 +31,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.material.MapColor;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.extensions.IForgeBlock;
-import net.minecraftforge.server.ServerLifecycleHooks;
+import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvType;
+import io.github.fabricators_of_create.porting_lib.util.ServerLifecycleHooks;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -48,7 +47,7 @@ import static com.github.sculkhorde.util.BlockAlgorithms.getBlockDistance;
  * Chunk Loader Code created by SuperMartijn642
  */
 
-public class SculkNodeBlock extends BaseEntityBlock implements IForgeBlock {
+public class SculkNodeBlock extends BaseEntityBlock {
     /**
      * HARDNESS determines how difficult a block is to break<br>
      * 0.6f = dirt<br>
@@ -345,7 +344,7 @@ public class SculkNodeBlock extends BaseEntityBlock implements IForgeBlock {
      * @param flagIn The flag
      */
     @Override
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public void appendHoverText(ItemStack stack, @Nullable BlockGetter iBlockReader, List<Component> tooltip, TooltipFlag flagIn) {
 
         super.appendHoverText(stack, iBlockReader, tooltip, flagIn); //Not sure why we need this

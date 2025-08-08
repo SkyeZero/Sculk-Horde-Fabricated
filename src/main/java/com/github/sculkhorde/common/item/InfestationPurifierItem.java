@@ -2,7 +2,7 @@ package com.github.sculkhorde.common.item;
 
 import com.github.sculkhorde.common.entity.InfestationPurifierEntity;
 import com.github.sculkhorde.util.EntityAlgorithms;
-import com.github.sculkhorde.util.ForgeEventSubscriber;
+import com.github.sculkhorde.util.FabricEventSubscriber;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -31,14 +31,13 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.extensions.IForgeItem;
+import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvType;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.List;
 
-public class InfestationPurifierItem extends Item implements IForgeItem {
+public class InfestationPurifierItem extends Item {
 
     private InfestationPurifierEntity purifier; // The cursor entity
 
@@ -89,7 +88,7 @@ public class InfestationPurifierItem extends Item implements IForgeItem {
 
     //This changes the text you see when hovering over an item
     @Override
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
         if(InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), GLFW.GLFW_KEY_LEFT_SHIFT))
         {
@@ -114,7 +113,7 @@ public class InfestationPurifierItem extends Item implements IForgeItem {
     /**
      * This function occurs when the item is right-clicked on a block.
      * This will then add every block within a sphere of a specified radius if it isnt air
-     * and then add it to the convversion queue to be processed in {@link ForgeEventSubscriber#WorldTickEvent}
+     * and then add it to the convversion queue to be processed in {@link FabricEventSubscriber#onWorldStartTick(ServerLevel)}
      * @param level The world
      * @param playerIn The player entity who used it
      * @param handIn The hand they used it in
@@ -170,9 +169,12 @@ public class InfestationPurifierItem extends Item implements IForgeItem {
         
     }
 
+    // TODO: INVESTIGATE
+    /*
     @Override
     public boolean onEntityItemUpdate(ItemStack stack, ItemEntity entity) {
         entity.setGlowingTag(true);
         return super.onEntityItemUpdate(stack, entity);
     }
+     */
 }

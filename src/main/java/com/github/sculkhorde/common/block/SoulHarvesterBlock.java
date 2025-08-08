@@ -16,6 +16,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -35,16 +36,14 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.extensions.IForgeBlock;
-import net.minecraftforge.network.NetworkHooks;
+import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvType;
 import org.lwjgl.glfw.GLFW;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
-public class SoulHarvesterBlock extends BaseEntityBlock implements IForgeBlock {
+public class SoulHarvesterBlock extends BaseEntityBlock {
 
     /**
      * HARDNESS determines how difficult a block is to break<br>
@@ -164,7 +163,13 @@ public class SoulHarvesterBlock extends BaseEntityBlock implements IForgeBlock {
 
         BlockEntity entity = pLevel.getBlockEntity(pPos);
         if(entity instanceof SoulHarvesterBlockEntity) {
-            NetworkHooks.openScreen(((ServerPlayer)pPlayer), (SoulHarvesterBlockEntity)entity, pPos);
+
+            MenuProvider provider = (SoulHarvesterBlockEntity) pLevel.getBlockEntity(pPos);
+
+            if (provider != null) {
+                pPlayer.openMenu(provider);
+            }
+
         } else {
             throw new IllegalStateException("Our Container provider is missing!");
         }
@@ -182,7 +187,7 @@ public class SoulHarvesterBlock extends BaseEntityBlock implements IForgeBlock {
      * @param flagIn The flag
      */
     @Override
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public void appendHoverText(ItemStack stack, @Nullable BlockGetter iBlockReader, List<Component> tooltip, TooltipFlag flagIn) {
         if(InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), GLFW.GLFW_KEY_LEFT_SHIFT))
         {

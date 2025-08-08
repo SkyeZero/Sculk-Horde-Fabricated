@@ -3,7 +3,7 @@ package com.github.sculkhorde.systems.infestation_systems.block_infestation_syst
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 public interface ITagInfestedBlockEntity {
 

@@ -1,5 +1,6 @@
 package com.github.sculkhorde.common.entity;
 
+import com.github.sculkhorde.client.SculkHordeClient;
 import com.github.sculkhorde.common.entity.goal.*;
 import com.github.sculkhorde.core.ModEntities;
 import com.github.sculkhorde.util.SquadHandler;
@@ -44,7 +45,7 @@ public class SculkHatcherEntity extends Monster implements GeoEntity, ISculkSmar
      * In order to create a mob, the following java files were created/edited.<br>
      * Edited {@link ModEntities}<br>
      * Edited {@link com.github.sculkhorde.util.ModEventSubscriber}<br>
-     * Edited {@link com.github.sculkhorde.client.ClientModEventSubscriber}<br>
+     * Edited {@link SculkHordeClient}<br>
      * Edited {@link com.github.sculkhorde.common.world.ModWorldEvents} (this might not be necessary)<br>
      * Edited {@link com.github.sculkhorde.common.world.gen.ModEntityGen}<br>
      * Added {@link SculkHatcherEntity}<br>

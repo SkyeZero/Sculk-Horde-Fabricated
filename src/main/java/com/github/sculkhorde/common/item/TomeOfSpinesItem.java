@@ -10,14 +10,13 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.extensions.IForgeItem;
+import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvType;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class TomeOfSpinesItem extends TomeItem implements IForgeItem {
+public class TomeOfSpinesItem extends TomeItem {
 
 	/**
 	 * The Constructor that takes in properties
@@ -38,7 +37,7 @@ public class TomeOfSpinesItem extends TomeItem implements IForgeItem {
 
 	//This changes the text you see when hovering over an item
 	@Override
-	@OnlyIn(Dist.CLIENT)
+	@Environment(EnvType.CLIENT)
 	public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
 		/*
 		super.appendHoverText(stack, worldIn, tooltip, flagIn); //Not sure why we need this

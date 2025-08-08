@@ -25,7 +25,6 @@ import net.minecraft.world.level.block.MultifaceBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraftforge.common.IPlantable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -395,9 +394,10 @@ public class BlockInfestationSystem {
             BlockAlgorithms.setBlockCursor(world, targetPos.above(), Blocks.AIR.defaultBlockState());
         }
 
-        boolean canCuredBlockSustatinPlant = world.getBlockState(targetPos).canSustainPlant(world, targetPos, Direction.UP, (IPlantable) Blocks.POPPY);
+        BlockState cured = world.getBlockState(targetPos);
+        boolean canCuredBlockSustainPlant = cured.is(BlockTags.DIRT) || cured.is(Blocks.FARMLAND); // TODO: INVESTIGATE - world.getBlockState(targetPos).canSustainPlant(world, targetPos, Direction.UP, (IPlantable) Blocks.POPPY);
         Random rand = new Random();
-        if(rand.nextBoolean() && canCuredBlockSustatinPlant && world.getBlockState(targetPos.above()).isAir())
+        if(rand.nextBoolean() && canCuredBlockSustainPlant && world.getBlockState(targetPos.above()).isAir())
         {
             BlockAlgorithms.setBlockCursor(world, targetPos.above(), Blocks.GRASS.defaultBlockState());
         }

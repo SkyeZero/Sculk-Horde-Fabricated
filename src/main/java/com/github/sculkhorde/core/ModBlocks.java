@@ -3,6 +3,7 @@ package com.github.sculkhorde.core;
 import com.github.sculkhorde.common.block.*;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -14,21 +15,20 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvType;
+import io.github.fabricators_of_create.porting_lib.util.LazyRegistrar;
+import io.github.fabricators_of_create.porting_lib.util.RegistryObject;
 import org.lwjgl.glfw.GLFW;
 import oshi.util.tuples.Pair;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
 public class ModBlocks {
-	public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, SculkHorde.MOD_ID);
+	public static final LazyRegistrar<Block> BLOCKS = LazyRegistrar.create(Registries.BLOCK, SculkHorde.MOD_ID);
 	public static final List<Pair<RegistryObject<? extends Block>, ResourceLocation>> BLOCKS_TO_DATAGEN = new ArrayList<>();
 
 	//Method to Register Blocks & Register them as items
@@ -52,7 +52,7 @@ public class ModBlocks {
 	}
 
 	private static RegistryObject<StairBlock> stairs(String id, RegistryObject<Block> original) {
-		return registerBlock(id + "_stairs", () -> new StairBlock(() -> StairBlock.stateById(0), BlockBehaviour.Properties.copy(original.get())));
+		return registerBlock(id + "_stairs", () -> new StairBlock(StairBlock.stateById(0), BlockBehaviour.Properties.copy(original.get())));
 	}
 
 	//simple methods to quickly register slabs
@@ -137,7 +137,7 @@ public class ModBlocks {
 			)
 			{
 				@Override
-				@OnlyIn(Dist.CLIENT)
+				@Environment(EnvType.CLIENT)
 				public void appendHoverText(ItemStack stack, @Nullable BlockGetter iBlockReader, List<Component> tooltip, TooltipFlag flagIn) {
 					if(InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), GLFW.GLFW_KEY_LEFT_SHIFT))
 					{
@@ -179,7 +179,7 @@ public class ModBlocks {
 			)
 			{
 				@Override
-				@OnlyIn(Dist.CLIENT)
+				@Environment(EnvType.CLIENT)
 				public void appendHoverText(ItemStack stack, @Nullable BlockGetter iBlockReader, List<Component> tooltip, TooltipFlag flagIn) {
 					if(InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), GLFW.GLFW_KEY_LEFT_SHIFT))
 					{
@@ -879,7 +879,7 @@ public class ModBlocks {
 			)
 			{
 				@Override
-				@OnlyIn(Dist.CLIENT)
+				@Environment(EnvType.CLIENT)
 				public void appendHoverText(ItemStack stack, @Nullable BlockGetter iBlockReader, List<Component> tooltip, TooltipFlag flagIn) {
 					if(InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), GLFW.GLFW_KEY_LEFT_SHIFT))
 					{
@@ -1047,21 +1047,8 @@ public class ModBlocks {
 		public static final TagKey<Block> NOT_INFESTABLE = create("not_infestable");
 
 		// Helper Function
-		private static TagKey<Block> create(String location)
-		{
-			return net.minecraft.tags.BlockTags.create(new ResourceLocation(SculkHorde.MOD_ID, location));
-		}
-
-		// Helper Function
-		private static TagKey<Block> createForge(String location)
-		{
-			return net.minecraft.tags.BlockTags.create(new ResourceLocation("forge", location));
-		}
-
-		// Helper Function
-		private static TagKey<Block> createMinecraft(String location)
-		{
-			return net.minecraft.tags.BlockTags.create(new ResourceLocation(location));
+		private static TagKey<Block> create(String location) {
+			return TagKey.create(Registries.BLOCK, new ResourceLocation(SculkHorde.MOD_ID, location));
 		}
 	}
 }

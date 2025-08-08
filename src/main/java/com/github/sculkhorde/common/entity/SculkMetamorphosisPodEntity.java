@@ -1,5 +1,6 @@
 package com.github.sculkhorde.common.entity;
 
+import com.github.sculkhorde.client.SculkHordeClient;
 import com.github.sculkhorde.common.entity.components.TargetParameters;
 import com.github.sculkhorde.core.ModEntities;
 import com.github.sculkhorde.core.SculkHorde;
@@ -34,7 +35,7 @@ public class SculkMetamorphosisPodEntity extends Monster implements GeoEntity, I
     /**
      * In order to create a mob, the following java files were created/edited.<br>
      * Edited {@link com.github.sculkhorde.util.ModEventSubscriber}<br>
-     * Edited {@link com.github.sculkhorde.client.ClientModEventSubscriber}<br>
+     * Edited {@link SculkHordeClient}<br>
      * Added {@link com.github.sculkhorde.client.model.enitity.SculkMetamorphosisPodModel}<br>
      * Added {@link com.github.sculkhorde.client.renderer.entity.SculkMetamorphosisPodRenderer}<br>
      */

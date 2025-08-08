@@ -17,14 +17,13 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.MapColor;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.extensions.IForgeBlock;
+import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvType;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
-public class TendrilsBlock extends VineBlock implements IForgeBlock {
+public class TendrilsBlock extends VineBlock {
     /**
      * The Constructor that takes in properties
      * @param prop The Properties
@@ -197,7 +196,7 @@ public class TendrilsBlock extends VineBlock implements IForgeBlock {
      * @param flagIn ???
      */
     @Override
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public void appendHoverText(ItemStack stack, @Nullable BlockGetter iBlockReader, List<Component> tooltip, TooltipFlag flagIn) {
 
         super.appendHoverText(stack, iBlockReader, tooltip, flagIn); //Not sure why we need this

@@ -7,13 +7,17 @@ import com.github.sculkhorde.common.recipe.SoulHarvestingRecipe;
 import com.github.sculkhorde.common.screen.SoulHarvesterMenu;
 import com.github.sculkhorde.core.ModBlockEntities;
 import com.github.sculkhorde.core.ModSounds;
+import com.github.sculkhorde.fabricated.ImplementedInventory;
 import com.github.sculkhorde.util.AdvancementUtil;
 import com.github.sculkhorde.util.EntityAlgorithms;
 import com.github.sculkhorde.util.ParticleUtil;
+import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -23,6 +27,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.Containers;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.SimpleContainer;
@@ -43,11 +48,6 @@ import net.minecraft.world.level.gameevent.GameEventListener;
 import net.minecraft.world.level.gameevent.PositionSource;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib.animatable.GeoBlockEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -57,20 +57,24 @@ import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.Optional;
 
 import static com.github.sculkhorde.common.block.SoulHarvesterBlock.MAX_HEALTH;
 
 
-public class SoulHarvesterBlockEntity extends BlockEntity implements MenuProvider, GeoBlockEntity, GameEventListener.Holder<SoulHarvesterBlockEntity.SoulHarvesterListener> {
+public class SoulHarvesterBlockEntity extends BlockEntity implements ExtendedScreenHandlerFactory, ImplementedInventory, GeoBlockEntity, GameEventListener.Holder<SoulHarvesterBlockEntity.SoulHarvesterListener> {
+
     private final SoulHarvesterListener soulHarvesterListener;
     private AABB searchArea;
     private static final int INPUT_SLOT = 0;
     private static final int OUTPUT_SLOT = 1;
 
-    private final ItemStackHandler itemHandler = new ItemStackHandler(2);
-    private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
+    private final NonNullList<ItemStack> inventory = NonNullList.withSize(2, ItemStack.EMPTY);
+
+    // TODO: INVESTIGATE
+    // private final ItemStackHandler itemHandler = new ItemStackHandler(2);
+    // private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
 
     protected final ContainerData data;
     private int progress = 0;
@@ -157,6 +161,7 @@ public class SoulHarvesterBlockEntity extends BlockEntity implements MenuProvide
         setHealthHarvested(newTotal);
     }
 
+    /*
     @Override
     public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
         if(cap == ForgeCapabilities.ITEM_HANDLER) {
@@ -165,6 +170,7 @@ public class SoulHarvesterBlockEntity extends BlockEntity implements MenuProvide
 
         return super.getCapability(cap, side);
     }
+     */
 
     @Override
     public Component getDisplayName() {
@@ -183,20 +189,20 @@ public class SoulHarvesterBlockEntity extends BlockEntity implements MenuProvide
     }
 
     private Optional<SoulHarvestingRecipe> getCurrentRecipe() {
-        SimpleContainer inventory = new SimpleContainer(itemHandler.getSlots());
-        for(int i = 0; i < itemHandler.getSlots(); i++) {
-            inventory.setItem(i, itemHandler.getStackInSlot(i));
+        SimpleContainer inventory = new SimpleContainer(this.getContainerSize());
+        for(int i = 0; i < this.getContainerSize(); i++) {
+            inventory.setItem(i, getItem(i));
         }
 
         return this.level.getRecipeManager().getRecipeFor(SoulHarvestingRecipe.Type.INSTANCE, inventory, level);
     }
 
     private boolean canInsertItemIntoOutputSlot(Item item) {
-        return this.itemHandler.getStackInSlot(OUTPUT_SLOT).isEmpty() || this.itemHandler.getStackInSlot(OUTPUT_SLOT).is(item);
+        return this.getItem(OUTPUT_SLOT).isEmpty() || this.getItem(OUTPUT_SLOT).is(item);
     }
 
     private boolean canInsertAmountIntoOutputSlot(int count) {
-        return this.itemHandler.getStackInSlot(OUTPUT_SLOT).getCount() + count <= this.itemHandler.getStackInSlot(OUTPUT_SLOT).getMaxStackSize();
+        return this.getItem(OUTPUT_SLOT).getCount() + count <= this.getItem(OUTPUT_SLOT).getMaxStackSize();
     }
 
     private boolean hasProgressFinished() {
@@ -213,19 +219,21 @@ public class SoulHarvesterBlockEntity extends BlockEntity implements MenuProvide
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int pContainerId, Inventory pPlayerInventory, Player pPlayer) {
+        // return null;
+        // TODO: INVESTIGATE
         return new SoulHarvesterMenu(pContainerId, pPlayerInventory, this, this.data);
     }
 
     public void drops() {
-        SimpleContainer inventory = new SimpleContainer(itemHandler.getSlots());
-        for(int i = 0; i < itemHandler.getSlots(); i++) {
-            inventory.setItem(i, itemHandler.getStackInSlot(i));
+        SimpleContainer inventory = new SimpleContainer(this.getContainerSize());
+        for(int i = 0; i < this.getContainerSize(); i++) {
+            inventory.setItem(i, getItem(i));
         }
         Containers.dropContents(this.level, this.worldPosition, inventory);
     }
 
     public boolean isAnyItemInInputSlot() {
-        return !this.itemHandler.getStackInSlot(INPUT_SLOT).isEmpty();
+        return !this.getItem(INPUT_SLOT).isEmpty();
     }
 
 
@@ -263,10 +271,10 @@ public class SoulHarvesterBlockEntity extends BlockEntity implements MenuProvide
         Optional<SoulHarvestingRecipe> recipe = getCurrentRecipe();
         ItemStack result = recipe.get().getResultItem(null);
 
-        this.itemHandler.extractItem(INPUT_SLOT, 1, false);
+        this.removeItem(INPUT_SLOT, 1);
 
-        this.itemHandler.setStackInSlot(OUTPUT_SLOT, new ItemStack(result.getItem(),
-                this.itemHandler.getStackInSlot(OUTPUT_SLOT).getCount() + result.getCount()));
+        this.setItem(OUTPUT_SLOT, new ItemStack(result.getItem(),
+                this.getItem(OUTPUT_SLOT).getCount() + result.getCount()));
 
         this.setHealthHarvested(0);
 
@@ -354,6 +362,7 @@ public class SoulHarvesterBlockEntity extends BlockEntity implements MenuProvide
 
     /* ~~~~~~~~~~~~ Data ~~~~~~~~~~~~ */
 
+    /*
     @Override
     public void onLoad() {
         super.onLoad();
@@ -364,10 +373,11 @@ public class SoulHarvesterBlockEntity extends BlockEntity implements MenuProvide
         super.invalidateCaps();
         lazyItemHandler.invalidate();
     }
+     */
 
     @Override
     protected void saveAdditional(CompoundTag pTag) {
-        pTag.put("inventory", itemHandler.serializeNBT());
+        ContainerHelper.saveAllItems(pTag, inventory); // pTag.put("inventory", itemHandler.serializeNBT());
         pTag.putInt("soul_harvester.progress", progress);
         pTag.putInt("soul_harvester.healthHarvested", healthHarvested);
         super.saveAdditional(pTag);
@@ -376,7 +386,7 @@ public class SoulHarvesterBlockEntity extends BlockEntity implements MenuProvide
     @Override
     public void load(CompoundTag pTag) {
         super.load(pTag);
-        itemHandler.deserializeNBT(pTag.getCompound("inventory"));
+        ContainerHelper.loadAllItems(pTag, inventory); //itemHandler.deserializeNBT(pTag.getCompound("inventory"));
         progress = pTag.getInt("soul_harvester.progress");
         healthHarvested = pTag.getInt("soul_harvester.healthHarvested");
     }
@@ -418,28 +428,28 @@ public class SoulHarvesterBlockEntity extends BlockEntity implements MenuProvide
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
         controllers.add(new AnimationController<>(this, state ->
-        {
-            BlockState blockState = state.getAnimatable().getLevel().getBlockState(state.getAnimatable().worldPosition);
+                {
+                    BlockState blockState = state.getAnimatable().getLevel().getBlockState(state.getAnimatable().worldPosition);
 
-            if(level.getBlockEntity(worldPosition) == null || level.getBlockEntity(worldPosition).getType() != ModBlockEntities.SOUL_HARVESTER_BLOCK_ENTITY.get())
-            {
-                return null;
-            }
+                    if(level.getBlockEntity(worldPosition) == null || level.getBlockEntity(worldPosition).getType() != ModBlockEntities.SOUL_HARVESTER_BLOCK_ENTITY.get())
+                    {
+                        return null;
+                    }
 
-            if(blockState.getValue(SoulHarvesterBlock.IS_ACTIVE))
-            {
-                return state.setAndContinue(ACTIVE_ANIMATION);
-            }
-            else if(blockState.getValue(SoulHarvesterBlock.IS_PREPARED))
-            {
-                return state.setAndContinue(READYUP_ANIMATION);
-            }
-            else
-            {
-                return state.setAndContinue(IDLE_ANIMATION);
-            }
-        }
-        ),
+                    if(blockState.getValue(SoulHarvesterBlock.IS_ACTIVE))
+                    {
+                        return state.setAndContinue(ACTIVE_ANIMATION);
+                    }
+                    else if(blockState.getValue(SoulHarvesterBlock.IS_PREPARED))
+                    {
+                        return state.setAndContinue(READYUP_ANIMATION);
+                    }
+                    else
+                    {
+                        return state.setAndContinue(IDLE_ANIMATION);
+                    }
+                }
+                ),
                 FINISH_ANIMATION_CONTROLLER
         );
     }
@@ -447,5 +457,16 @@ public class SoulHarvesterBlockEntity extends BlockEntity implements MenuProvide
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {
         return this.cache;
+    }
+
+    // FABRIC
+    @Override
+    public void writeScreenOpeningData(ServerPlayer serverPlayer, FriendlyByteBuf friendlyByteBuf) {
+        friendlyByteBuf.writeBlockPos(this.getBlockPos());
+    }
+
+    @Override
+    public NonNullList<ItemStack> getItems() {
+        return inventory;
     }
 }

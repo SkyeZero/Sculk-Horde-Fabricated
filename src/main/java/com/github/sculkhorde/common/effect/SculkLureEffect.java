@@ -2,6 +2,7 @@ package com.github.sculkhorde.common.effect;
 
 import com.github.sculkhorde.core.ModMobEffects;
 import com.github.sculkhorde.core.ModSavedData;
+import com.github.sculkhorde.fabricated.CurableEffect;
 import com.github.sculkhorde.util.EntityAlgorithms;
 import com.github.sculkhorde.util.TickUnits;
 import net.minecraft.server.level.ServerLevel;
@@ -13,7 +14,7 @@ import net.minecraft.world.item.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SculkLureEffect extends MobEffect {
+public class SculkLureEffect extends MobEffect implements CurableEffect {
 
     public static int liquidColor = 338997;
     public static MobEffectCategory effectType = MobEffectCategory.HARMFUL;

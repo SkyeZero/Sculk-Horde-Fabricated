@@ -33,16 +33,14 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.EntityCollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.IPlantable;
-import net.minecraftforge.common.extensions.IForgeBlock;
+import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvType;
 import org.lwjgl.glfw.GLFW;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
-public class DiseasedKelpBlock extends Block implements IForgeBlock, LiquidBlockContainer {
+public class DiseasedKelpBlock extends Block implements LiquidBlockContainer {
 
     /*
      *  NOTE:
@@ -159,6 +157,8 @@ public class DiseasedKelpBlock extends Block implements IForgeBlock, LiquidBlock
         return false;
     }
 
+    // TODO: PORT OR REFORMAT INTO SAME AS KELP PLANT
+    /*
     @Override
     public void onNeighborChange(BlockState state, LevelReader level, BlockPos pos, BlockPos neighbor) {
 
@@ -168,6 +168,7 @@ public class DiseasedKelpBlock extends Block implements IForgeBlock, LiquidBlock
             setEndBlock((Level) level, state, pos, true);
         }
     }
+     */
 
     /** Makes entities slow and damages them. I stole this code from the berry bush.<br>
      * @param blockState The current blockstate
@@ -201,7 +202,7 @@ public class DiseasedKelpBlock extends Block implements IForgeBlock, LiquidBlock
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public void appendHoverText(ItemStack stack, @Nullable BlockGetter iBlockReader, List<Component> tooltip, TooltipFlag flagIn) {
 
         if(InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), GLFW.GLFW_KEY_LEFT_SHIFT))
@@ -244,10 +245,13 @@ public class DiseasedKelpBlock extends Block implements IForgeBlock, LiquidBlock
                 || isBlockBelowKelpOrDiseasedKelp(levelReader, blockPos);
     }
 
+    // TODO: INVESTIGATE
+    /*
     @Override
     public boolean canSustainPlant(BlockState state, BlockGetter world, BlockPos pos, Direction facing, IPlantable plantable) {
         return true;
     }
+     */
 
     @Nullable
     @Override

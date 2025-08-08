@@ -10,9 +10,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.extensions.IForgeItem;
 
-public abstract class TomeItem extends Item implements IForgeItem {
+public abstract class TomeItem extends Item {
 
 	/**
 	 * The Constructor that takes in properties

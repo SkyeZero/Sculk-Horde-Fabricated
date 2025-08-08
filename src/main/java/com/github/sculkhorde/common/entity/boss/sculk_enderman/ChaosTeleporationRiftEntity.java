@@ -1,5 +1,6 @@
 package com.github.sculkhorde.common.entity.boss.sculk_enderman;
 
+import com.github.sculkhorde.client.SculkHordeClient;
 import com.github.sculkhorde.common.entity.boss.SpecialEffectEntity;
 import com.github.sculkhorde.core.ModEntities;
 import com.github.sculkhorde.util.EntityAlgorithms;
@@ -9,7 +10,6 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -32,7 +32,7 @@ import java.util.List;
 /**
  * The following java files were created/edited for this entity.<br>
  * Edited {@link ModEntities}<br>
- * Edited {@link com.github.sculkhorde.client.ClientModEventSubscriber}<br>
+ * Edited {@link SculkHordeClient}<br>
  * Added {@link ChaosTeleporationRiftEntity}<br>
  * Added {@link com.github.sculkhorde.client.model.enitity.ChaosTeleporationRiftModel}<br>
  * Added {@link com.github.sculkhorde.client.renderer.entity.ChaosTeleporationRiftRenderer}
@@ -112,9 +112,12 @@ public class ChaosTeleporationRiftEntity extends SpecialEffectEntity implements 
 
                 Vec3 vec3 = entity.position();
                 level().gameEvent(GameEvent.TELEPORT, vec3, GameEvent.Context.of(entity));
-                net.minecraftforge.event.entity.EntityTeleportEvent.ChorusFruit event = net.minecraftforge.event.ForgeEventFactory.onChorusFruitTeleport(entity, d3, d4, d5);
-                if (event.isCanceled()) return;
-                if (entity.randomTeleport(event.getTargetX(), event.getTargetY(), event.getTargetZ(), true)) {
+
+                // TODO: INVESTIGATE - EVENT NOT IN FABRIC
+                /* net.minecraftforge.event.entity.EntityTeleportEvent.ChorusFruit event = net.minecraftforge.event.ForgeEventFactory.onChorusFruitTeleport(entity, d3, d4, d5);
+                if (event.isCanceled()) return; */
+
+                if (entity.randomTeleport(d3, d4, d5, true)) { // if (entity.randomTeleport(event.getTargetX(), event.getTargetY(), event.getTargetZ(), true)) {
                     SoundEvent soundevent = entity instanceof Fox ? SoundEvents.FOX_TELEPORT : SoundEvents.CHORUS_FRUIT_TELEPORT;
                     level().playSound((Player)null, d0, d1, d2, soundevent, SoundSource.PLAYERS, 1.0F, 1.0F);
                     entity.playSound(soundevent, 1.0F, 1.0F);

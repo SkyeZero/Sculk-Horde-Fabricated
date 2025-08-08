@@ -9,7 +9,7 @@ import com.github.sculkhorde.systems.gravemind_system.entity_factory.Reinforceme
 import com.github.sculkhorde.util.ChunkLoading.BlockEntityChunkLoaderHelper;
 import com.github.sculkhorde.util.TickUnits;
 import net.minecraft.core.BlockPos;
-import net.minecraftforge.server.ServerLifecycleHooks;
+import io.github.fabricators_of_create.porting_lib.util.ServerLifecycleHooks;
 
 import static com.github.sculkhorde.systems.gravemind_system.entity_factory.EntityFactoryEntry.StrategicValues.Combat;
 import static com.github.sculkhorde.systems.gravemind_system.entity_factory.EntityFactoryEntry.StrategicValues.Infector;

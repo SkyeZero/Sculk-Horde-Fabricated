@@ -13,14 +13,13 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.DispenserBlock;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.extensions.IForgeItem;
+import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvType;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.List;
 
-public class PurificationFlaskItem extends CustomItemProjectileItem implements IForgeItem {
+public class PurificationFlaskItem extends CustomItemProjectileItem {
 
     public PurificationFlaskItem() {
         super();
@@ -67,7 +66,7 @@ public class PurificationFlaskItem extends CustomItemProjectileItem implements I
 
     //This changes the text you see when hovering over an item
     @Override
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
 
         if(InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), GLFW.GLFW_KEY_LEFT_SHIFT))

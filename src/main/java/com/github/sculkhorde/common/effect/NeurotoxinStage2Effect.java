@@ -1,6 +1,8 @@
 package com.github.sculkhorde.common.effect;
 
 import com.github.sculkhorde.core.ModMobEffects;
+import com.github.sculkhorde.fabricated.CurableEffect;
+import com.github.sculkhorde.fabricated.events.EntityEvents;
 import com.github.sculkhorde.util.EntityAlgorithms;
 import com.github.sculkhorde.util.TickUnits;
 import net.minecraft.server.level.ServerPlayer;
@@ -12,14 +14,13 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.event.entity.living.MobEffectEvent;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
-public class NeurotoxinStage2Effect extends MobEffect implements IPotionExpireEffect{
+public class NeurotoxinStage2Effect extends MobEffect implements EntityEvents.MobEffectExpireEvent, CurableEffect {
 
     public static int liquidColor = 338997;
     public static MobEffectCategory effectType = MobEffectCategory.HARMFUL;
@@ -63,16 +64,9 @@ public class NeurotoxinStage2Effect extends MobEffect implements IPotionExpireEf
     }
 
     @Override
-    public void onPotionExpire(MobEffectEvent.Expired event)
-    {
-        if(event.getEntity().level().isClientSide()) { return;}
-
-        LivingEntity entity = event.getEntity();
-        // OR mob outside of world border
-        if(entity == null || EntityAlgorithms.isSculkLivingEntity.test(entity))
-        {
-            return;
-        }
+    public void onExpired(LivingEntity entity, MobEffectInstance mobEffectInstance) {
+        if (entity == null || entity.level().isClientSide()) return;
+        if(EntityAlgorithms.isSculkLivingEntity.test(entity)) return;
 
         entity.addEffect(new MobEffectInstance(ModMobEffects.NEUROTOXIN_STAGE3.get(), TickUnits.convertMinutesToTicks(2), 0));
     }

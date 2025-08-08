@@ -5,18 +5,16 @@ import com.github.sculkhorde.common.item.*;
 import com.github.sculkhorde.util.ColorUtil;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.RecordItem;
-import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.ForgeSpawnEggItem;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvType;
+import io.github.fabricators_of_create.porting_lib.util.LazyRegistrar;
+import io.github.fabricators_of_create.porting_lib.util.RegistryObject;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.List;
@@ -25,12 +23,12 @@ import static com.github.sculkhorde.util.ColorUtil.hexToInt;
 
 public class ModItems {
     //https://www.mr-pineapple.co.uk/tutorials/items
-    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, SculkHorde.MOD_ID);
+    public static final LazyRegistrar<Item> ITEMS = LazyRegistrar.create(Registries.ITEM, SculkHorde.MOD_ID);
 
 	public static final RegistryObject<SculkSweeperSword> SCULK_SWEEPER_SWORD = ITEMS.register("sculk_sweeper_sword", SculkSweeperSword::new);
 	public static final RegistryObject<Item> SCULK_ENDERMAN_CLEAVER = ITEMS.register("sculk_enderman_cleaver", () -> new Item(new Item.Properties()){
 		@Override
-		@OnlyIn(Dist.CLIENT)
+		@Environment(EnvType.CLIENT)
 		public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
 			if(InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), GLFW.GLFW_KEY_LEFT_SHIFT))
 			{
@@ -51,7 +49,7 @@ public class ModItems {
 
 	public static final RegistryObject<Item> CRYING_SOULS = ITEMS.register("crying_souls", () -> new Item(new Item.Properties()){
 		@Override
-		@OnlyIn(Dist.CLIENT)
+		@Environment(EnvType.CLIENT)
 		public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
 			if(InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), GLFW.GLFW_KEY_LEFT_SHIFT))
 			{
@@ -70,7 +68,7 @@ public class ModItems {
 
 	public static final RegistryObject<Item> PURE_SOULS = ITEMS.register("pure_souls", () -> new Item(new Item.Properties()){
 		@Override
-		@OnlyIn(Dist.CLIENT)
+		@Environment(EnvType.CLIENT)
 		public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
 			if(InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), GLFW.GLFW_KEY_LEFT_SHIFT))
 			{
@@ -89,7 +87,7 @@ public class ModItems {
 
 	public static final RegistryObject<Item> ESSENCE_OF_PURITY = ITEMS.register("essence_of_purity", () -> new Item(new Item.Properties()){
 		@Override
-		@OnlyIn(Dist.CLIENT)
+		@Environment(EnvType.CLIENT)
 		public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
 			if(InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), GLFW.GLFW_KEY_LEFT_SHIFT))
 			{
@@ -129,7 +127,7 @@ public class ModItems {
 	public static final RegistryObject<Item> CALCITE_CLUMP = ITEMS.register("calcite_clump",
 			() -> new Item(new Item.Properties()){
 				@Override
-				@OnlyIn(Dist.CLIENT)
+				@Environment(EnvType.CLIENT)
 				public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
 					if(InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), GLFW.GLFW_KEY_LEFT_SHIFT))
 					{
@@ -157,7 +155,7 @@ public class ModItems {
 
 	public static final RegistryObject<Item> CHUNK_O_BRAIN = ITEMS.register("chunk_o_brain", () -> new Item(new Item.Properties()){
 		@Override
-		@OnlyIn(Dist.CLIENT)
+		@Environment(EnvType.CLIENT)
 		public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
 			if(InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), GLFW.GLFW_KEY_LEFT_SHIFT))
 			{
@@ -176,7 +174,7 @@ public class ModItems {
 
 	public static final RegistryObject<Item> DORMANT_HEART_OF_THE_HORDE = ITEMS.register("dormant_heart_of_the_horde", () -> new Item(new Item.Properties()){
 		@Override
-		@OnlyIn(Dist.CLIENT)
+		@Environment(EnvType.CLIENT)
 		public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
 			if(InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), GLFW.GLFW_KEY_LEFT_SHIFT))
 			{
@@ -195,7 +193,7 @@ public class ModItems {
 
 	public static final RegistryObject<Item> HEART_OF_THE_HORDE = ITEMS.register("heart_of_the_horde", () -> new Item(new Item.Properties()){
 		@Override
-		@OnlyIn(Dist.CLIENT)
+		@Environment(EnvType.CLIENT)
 		public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
 			if(InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), GLFW.GLFW_KEY_LEFT_SHIFT))
 			{
@@ -215,7 +213,7 @@ public class ModItems {
 
 	public static final RegistryObject<Item> HEART_OF_PURITY = ITEMS.register("heart_of_purity", () -> new Item(new Item.Properties()){
 		@Override
-		@OnlyIn(Dist.CLIENT)
+		@Environment(EnvType.CLIENT)
 		public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
 			if(InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), GLFW.GLFW_KEY_LEFT_SHIFT))
 			{
@@ -234,7 +232,7 @@ public class ModItems {
 	public static final RegistryObject<EyeOfPurityItem> EYE_OF_PURITY = ITEMS.register("eye_of_purity", () -> new EyeOfPurityItem()
 	{
 		@Override
-		@OnlyIn(Dist.CLIENT)
+		@Environment(EnvType.CLIENT)
 		public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
 			if(InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), GLFW.GLFW_KEY_LEFT_SHIFT))
 			{
@@ -253,7 +251,7 @@ public class ModItems {
 
 	public static final RegistryObject<Item> COIN_OF_CONTRIBUTION = ITEMS.register("coin_of_contribution", () -> new Item(new Item.Properties()){
 		@Override
-		@OnlyIn(Dist.CLIENT)
+		@Environment(EnvType.CLIENT)
 		public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
 			tooltip.add(Component.translatable("tooltip.sculkhorde.coin_of_contribution"));
 		}
@@ -276,7 +274,7 @@ public class ModItems {
 
 	public static final RegistryObject<Item> SOULITE_SHARD = ITEMS.register("soulite_shard", () -> new Item(new Item.Properties()){
 		@Override
-		@OnlyIn(Dist.CLIENT)
+		@Environment(EnvType.CLIENT)
 		public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
 			if(InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), GLFW.GLFW_KEY_LEFT_SHIFT))
 			{
@@ -298,7 +296,7 @@ public class ModItems {
 
 	public static final RegistryObject<Item> FERRISCITE = ITEMS.register("ferriscite", () -> new Item(new Item.Properties()){
 		@Override
-		@OnlyIn(Dist.CLIENT)
+		@Environment(EnvType.CLIENT)
 		public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
 			if(InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), GLFW.GLFW_KEY_LEFT_SHIFT))
 			{
@@ -317,7 +315,7 @@ public class ModItems {
 
 	public static final RegistryObject<Item> DIASCITE = ITEMS.register("diascite", () -> new Item(new Item.Properties()){
 		@Override
-		@OnlyIn(Dist.CLIENT)
+		@Environment(EnvType.CLIENT)
 		public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
 			if(InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), GLFW.GLFW_KEY_LEFT_SHIFT))
 			{
@@ -336,7 +334,7 @@ public class ModItems {
 
 	public static final RegistryObject<Item> SOUL_ANIMATOR = ITEMS.register("soul_animator", () -> new Item(new Item.Properties()){
 		@Override
-		@OnlyIn(Dist.CLIENT)
+		@Environment(EnvType.CLIENT)
 		public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
 			if(InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), GLFW.GLFW_KEY_LEFT_SHIFT))
 			{
@@ -378,29 +376,33 @@ public class ModItems {
 	public static final RegistryObject<BladeOfPurityItem> BLADE_OF_PURITY = ITEMS.register("blade_of_purity",
 			BladeOfPurityItem::new);
 
-	public static final RegistryObject<ForgeSpawnEggItem> SCULK_SPORE_SPEWER_SPAWN_EGG = ITEMS.register("sculk_spore_spewer_spawn_egg",() ->  new ForgeSpawnEggItem(ModEntities.SCULK_SPORE_SPEWER, hexToInt(ColorUtil.sculkBaseColor6), hexToInt(ColorUtil.sculkBaseColor1), new Item.Properties()));
-	public static final RegistryObject<ForgeSpawnEggItem> SCULK_MITE_SPAWN_EGG = ITEMS.register("sculk_mite_spawn_egg",() ->  new ForgeSpawnEggItem(ModEntities.SCULK_MITE, hexToInt(ColorUtil.sculkBaseColor6), hexToInt(ColorUtil.sculkLightColor6), new Item.Properties()));
-	public static final RegistryObject<ForgeSpawnEggItem> SCULK_MITE_AGGRESSOR_SPAWN_EGG = ITEMS.register("sculk_mite_aggressor_spawn_egg",() ->  new ForgeSpawnEggItem(ModEntities.SCULK_MITE_AGGRESSOR, hexToInt(ColorUtil.sculkBaseColor6), hexToInt(ColorUtil.sculkBoneColor1), new Item.Properties()));
-	public static final RegistryObject<ForgeSpawnEggItem> SCULK_ZOMBIE_SPAWN_EGG = ITEMS.register("sculk_zombie_spawn_egg",() ->  new ForgeSpawnEggItem(ModEntities.SCULK_ZOMBIE, 0x44975c, hexToInt(ColorUtil.sculkLightColor6), new Item.Properties()));
-	public static final RegistryObject<ForgeSpawnEggItem> SCULK_SPITTER_SPAWN_EGG = ITEMS.register("sculk_spitter_spawn_egg",() ->  new ForgeSpawnEggItem(ModEntities.SCULK_SPITTER, 0xD1D6B6, hexToInt(ColorUtil.sculkLightColor6), new Item.Properties()));
-	public static final RegistryObject<ForgeSpawnEggItem> SCULK_CREEPER_SPAWN_EGG = ITEMS.register("sculk_creeper_spawn_egg",() ->  new ForgeSpawnEggItem(ModEntities.SCULK_CREEPER, 0x0DA70B, hexToInt(ColorUtil.sculkLightColor6), new Item.Properties()));
-	public static final RegistryObject<ForgeSpawnEggItem> SCULK_HATCHER_SPAWN_EGG = ITEMS.register("sculk_hatcher_spawn_egg",() ->  new ForgeSpawnEggItem(ModEntities.SCULK_HATCHER, 0x443626, hexToInt(ColorUtil.sculkLightColor6), new Item.Properties()));
-	public static final RegistryObject<ForgeSpawnEggItem> SCULK_VINDICATOR_SPAWN_EGG = ITEMS.register("sculk_vindicator_spawn_egg",() ->  new ForgeSpawnEggItem(ModEntities.SCULK_VINDICATOR, 0x959B9B, hexToInt(ColorUtil.sculkLightColor6), new Item.Properties()));
-	public static final RegistryObject<ForgeSpawnEggItem> SCULK_RAVAGER_SPAWN_EGG = ITEMS.register("sculk_ravager_spawn_egg",() ->  new ForgeSpawnEggItem(ModEntities.SCULK_RAVAGER, 0x5B5049, hexToInt(ColorUtil.sculkLightColor6), new Item.Properties()));
-	public static final RegistryObject<ForgeSpawnEggItem> SCULK_ENDERMAN_SPAWN_EGG = ITEMS.register("sculk_enderman_spawn_egg",() ->  new ForgeSpawnEggItem(ModEntities.SCULK_ENDERMAN, 0x111B21, 0xE079FA, new Item.Properties()));
-	public static final RegistryObject<ForgeSpawnEggItem> SCULK_PHANTOM_SPAWN_EGG = ITEMS.register("sculk_phantom_spawn_egg",() ->  new ForgeSpawnEggItem(ModEntities.SCULK_PHANTOM, 0x88FF00, hexToInt(ColorUtil.sculkLightColor6), new Item.Properties()));
-	public static final RegistryObject<ForgeSpawnEggItem> SCULK_SALMON_SPAWN_EGG = ITEMS.register("sculk_salmon_spawn_egg",() ->  new ForgeSpawnEggItem(ModEntities.SCULK_SALMON, 0xA93432, hexToInt(ColorUtil.sculkLightColor6), new Item.Properties()));
-	public static final RegistryObject<ForgeSpawnEggItem> SCULK_SQUID_SPAWN_EGG = ITEMS.register("sculk_squid_spawn_egg",() ->  new ForgeSpawnEggItem(ModEntities.SCULK_SQUID, 0x1D3241, hexToInt(ColorUtil.sculkLightColor6), new Item.Properties()));
-	public static final RegistryObject<ForgeSpawnEggItem> SCULK_PUFFERFISH_SPAWN_EGG = ITEMS.register("sculk_pufferfish_spawn_egg",() ->  new ForgeSpawnEggItem(ModEntities.SCULK_PUFFERFISH, 0xE7A701, hexToInt(ColorUtil.sculkLightColor6), new Item.Properties()));
-	public static final RegistryObject<ForgeSpawnEggItem> SCULK_WITCH_SPAWN_EGG = ITEMS.register("sculk_witch_spawn_egg",() ->  new ForgeSpawnEggItem(ModEntities.SCULK_WITCH, 0x310000, hexToInt(ColorUtil.sculkLightColor6), new Item.Properties()));
-	public static final RegistryObject<ForgeSpawnEggItem> SCULK_GUARDIAN_SPAWN_EGG = ITEMS.register("sculk_guardian_spawn_egg",() ->  new ForgeSpawnEggItem(ModEntities.SCULK_GUARDIAN, 0x547A6B, hexToInt(ColorUtil.sculkAcidColor1), new Item.Properties()));
-	public static final RegistryObject<ForgeSpawnEggItem> SCULK_BROOD_HATCHER_SPAWN_EGG = ITEMS.register("sculk_brood_hatcher_spawn_egg",() ->  new ForgeSpawnEggItem(ModEntities.SCULK_BROOD_HATCHER, hexToInt(ColorUtil.sculkBoneColor5), hexToInt(ColorUtil.sculkLightColor1), new Item.Properties()));
-	public static final RegistryObject<ForgeSpawnEggItem> SCULK_BROODLING_SPAWN_EGG = ITEMS.register("sculk_broodling_spawn_egg",() ->  new ForgeSpawnEggItem(ModEntities.SCULK_BROODLING, hexToInt(ColorUtil.sculkBoneColor6), hexToInt(ColorUtil.sculkLightColor1), new Item.Properties()));
-	public static final RegistryObject<ForgeSpawnEggItem> SCULK_SHEEP_SPAWN_EGG = ITEMS.register("sculk_sheep_spawn_egg",() ->  new ForgeSpawnEggItem(ModEntities.SCULK_SHEEP, 0xFFFFFF, hexToInt(ColorUtil.sculkBoneColor1), new Item.Properties()));
-	public static final RegistryObject<ForgeSpawnEggItem> SCULK_GHAST_SPAWN_EGG = ITEMS.register("sculk_ghast_spawn_egg",() ->  new ForgeSpawnEggItem(ModEntities.SCULK_GHAST, 0xFFFFFF, hexToInt(ColorUtil.sculkAcidColor1), new Item.Properties()));
-	public static final RegistryObject<ForgeSpawnEggItem> SCULK_LEECH_SPAWN_EGG = ITEMS.register("sculk_leech_spawn_egg",() ->  new ForgeSpawnEggItem(ModEntities.SCULK_LEECH, hexToInt(ColorUtil.sculkBaseColor6), hexToInt(ColorUtil.sculkLightColor6), new Item.Properties()));
-	public static final RegistryObject<ForgeSpawnEggItem> SCULK_STINGER_SPAWN_EGG = ITEMS.register("sculk_stinger_spawn_egg",() ->  new ForgeSpawnEggItem(ModEntities.SCULK_STINGER, hexToInt(ColorUtil.sculkBaseColor6), hexToInt(ColorUtil.sculkLightColor6), new Item.Properties()));
+	public static final RegistryObject<SpawnEggItem> SCULK_SPORE_SPEWER_SPAWN_EGG = ITEMS.register("sculk_spore_spewer_spawn_egg",() -> createSpawnEgg(ModEntities.SCULK_SPORE_SPEWER, hexToInt(ColorUtil.sculkBaseColor6), hexToInt(ColorUtil.sculkBaseColor1), new Item.Properties()));
+	public static final RegistryObject<SpawnEggItem> SCULK_MITE_SPAWN_EGG = ITEMS.register("sculk_mite_spawn_egg",() -> createSpawnEgg(ModEntities.SCULK_MITE, hexToInt(ColorUtil.sculkBaseColor6), hexToInt(ColorUtil.sculkLightColor6), new Item.Properties()));
+	public static final RegistryObject<SpawnEggItem> SCULK_MITE_AGGRESSOR_SPAWN_EGG = ITEMS.register("sculk_mite_aggressor_spawn_egg",() -> createSpawnEgg(ModEntities.SCULK_MITE_AGGRESSOR, hexToInt(ColorUtil.sculkBaseColor6), hexToInt(ColorUtil.sculkBoneColor1), new Item.Properties()));
+	public static final RegistryObject<SpawnEggItem> SCULK_ZOMBIE_SPAWN_EGG = ITEMS.register("sculk_zombie_spawn_egg",() -> createSpawnEgg(ModEntities.SCULK_ZOMBIE, 0x44975c, hexToInt(ColorUtil.sculkLightColor6), new Item.Properties()));
+	public static final RegistryObject<SpawnEggItem> SCULK_SPITTER_SPAWN_EGG = ITEMS.register("sculk_spitter_spawn_egg",() -> createSpawnEgg(ModEntities.SCULK_SPITTER, 0xD1D6B6, hexToInt(ColorUtil.sculkLightColor6), new Item.Properties()));
+	public static final RegistryObject<SpawnEggItem> SCULK_CREEPER_SPAWN_EGG = ITEMS.register("sculk_creeper_spawn_egg",() -> createSpawnEgg(ModEntities.SCULK_CREEPER, 0x0DA70B, hexToInt(ColorUtil.sculkLightColor6), new Item.Properties()));
+	public static final RegistryObject<SpawnEggItem> SCULK_HATCHER_SPAWN_EGG = ITEMS.register("sculk_hatcher_spawn_egg",() -> createSpawnEgg(ModEntities.SCULK_HATCHER, 0x443626, hexToInt(ColorUtil.sculkLightColor6), new Item.Properties()));
+	public static final RegistryObject<SpawnEggItem> SCULK_VINDICATOR_SPAWN_EGG = ITEMS.register("sculk_vindicator_spawn_egg",() -> createSpawnEgg(ModEntities.SCULK_VINDICATOR, 0x959B9B, hexToInt(ColorUtil.sculkLightColor6), new Item.Properties()));
+	public static final RegistryObject<SpawnEggItem> SCULK_RAVAGER_SPAWN_EGG = ITEMS.register("sculk_ravager_spawn_egg",() -> createSpawnEgg(ModEntities.SCULK_RAVAGER, 0x5B5049, hexToInt(ColorUtil.sculkLightColor6), new Item.Properties()));
+	public static final RegistryObject<SpawnEggItem> SCULK_ENDERMAN_SPAWN_EGG = ITEMS.register("sculk_enderman_spawn_egg",() -> createSpawnEgg(ModEntities.SCULK_ENDERMAN, 0x111B21, 0xE079FA, new Item.Properties()));
+	public static final RegistryObject<SpawnEggItem> SCULK_PHANTOM_SPAWN_EGG = ITEMS.register("sculk_phantom_spawn_egg",() -> createSpawnEgg(ModEntities.SCULK_PHANTOM, 0x88FF00, hexToInt(ColorUtil.sculkLightColor6), new Item.Properties()));
+	public static final RegistryObject<SpawnEggItem> SCULK_SALMON_SPAWN_EGG = ITEMS.register("sculk_salmon_spawn_egg",() -> createSpawnEgg(ModEntities.SCULK_SALMON, 0xA93432, hexToInt(ColorUtil.sculkLightColor6), new Item.Properties()));
+	public static final RegistryObject<SpawnEggItem> SCULK_SQUID_SPAWN_EGG = ITEMS.register("sculk_squid_spawn_egg",() -> createSpawnEgg(ModEntities.SCULK_SQUID, 0x1D3241, hexToInt(ColorUtil.sculkLightColor6), new Item.Properties()));
+	public static final RegistryObject<SpawnEggItem> SCULK_PUFFERFISH_SPAWN_EGG = ITEMS.register("sculk_pufferfish_spawn_egg",() -> createSpawnEgg(ModEntities.SCULK_PUFFERFISH, 0xE7A701, hexToInt(ColorUtil.sculkLightColor6), new Item.Properties()));
+	public static final RegistryObject<SpawnEggItem> SCULK_WITCH_SPAWN_EGG = ITEMS.register("sculk_witch_spawn_egg",() -> createSpawnEgg(ModEntities.SCULK_WITCH, 0x310000, hexToInt(ColorUtil.sculkLightColor6), new Item.Properties()));
+	public static final RegistryObject<SpawnEggItem> SCULK_GUARDIAN_SPAWN_EGG = ITEMS.register("sculk_guardian_spawn_egg",() -> createSpawnEgg(ModEntities.SCULK_GUARDIAN, 0x547A6B, hexToInt(ColorUtil.sculkAcidColor1), new Item.Properties()));
+	public static final RegistryObject<SpawnEggItem> SCULK_BROOD_HATCHER_SPAWN_EGG = ITEMS.register("sculk_brood_hatcher_spawn_egg",() -> createSpawnEgg(ModEntities.SCULK_BROOD_HATCHER, hexToInt(ColorUtil.sculkBoneColor5), hexToInt(ColorUtil.sculkLightColor1), new Item.Properties()));
+	public static final RegistryObject<SpawnEggItem> SCULK_BROODLING_SPAWN_EGG = ITEMS.register("sculk_broodling_spawn_egg",() -> createSpawnEgg(ModEntities.SCULK_BROODLING, hexToInt(ColorUtil.sculkBoneColor6), hexToInt(ColorUtil.sculkLightColor1), new Item.Properties()));
+	public static final RegistryObject<SpawnEggItem> SCULK_SHEEP_SPAWN_EGG = ITEMS.register("sculk_sheep_spawn_egg",() -> createSpawnEgg(ModEntities.SCULK_SHEEP, 0xFFFFFF, hexToInt(ColorUtil.sculkBoneColor1), new Item.Properties()));
+	public static final RegistryObject<SpawnEggItem> SCULK_GHAST_SPAWN_EGG = ITEMS.register("sculk_ghast_spawn_egg",() -> createSpawnEgg(ModEntities.SCULK_GHAST, 0xFFFFFF, hexToInt(ColorUtil.sculkAcidColor1), new Item.Properties()));
+	public static final RegistryObject<SpawnEggItem> SCULK_LEECH_SPAWN_EGG = ITEMS.register("sculk_leech_spawn_egg",() -> createSpawnEgg(ModEntities.SCULK_LEECH, hexToInt(ColorUtil.sculkBaseColor6), hexToInt(ColorUtil.sculkLightColor6), new Item.Properties()));
+	public static final RegistryObject<SpawnEggItem> SCULK_STINGER_SPAWN_EGG = ITEMS.register("sculk_stinger_spawn_egg",() -> createSpawnEgg(ModEntities.SCULK_STINGER, hexToInt(ColorUtil.sculkBaseColor6), hexToInt(ColorUtil.sculkLightColor6), new Item.Properties()));
 
-	public static final RegistryObject<Item> DEEP_GREEN_MUSIC_DISC = ITEMS.register("deep_green_music_disc", () -> new RecordItem(6, ModSounds.DEEP_GREEN, new Item.Properties().stacksTo(1), 5120));
-	public static final RegistryObject<Item> BLIND_AND_ALONE_MUSIC_DISC = ITEMS.register("blind_and_alone_music_disc", () -> new RecordItem(6, ModSounds.BLIND_AND_ALONE, new Item.Properties().stacksTo(1), 4920));
+	private static <T extends EntityType<? extends Mob>> SpawnEggItem createSpawnEgg(RegistryObject<T> entity, int i, int j, Item.Properties properties) {
+		return new SpawnEggItem(entity.get(), i, j, properties);
+	}
+	
+	public static final RegistryObject<Item> DEEP_GREEN_MUSIC_DISC = ITEMS.register("deep_green_music_disc", () -> new RecordItem(6, ModSounds.DEEP_GREEN.get(), new Item.Properties().stacksTo(1), 5120));
+	public static final RegistryObject<Item> BLIND_AND_ALONE_MUSIC_DISC = ITEMS.register("blind_and_alone_music_disc", () -> new RecordItem(6, ModSounds.BLIND_AND_ALONE.get(), new Item.Properties().stacksTo(1), 4920));
 }

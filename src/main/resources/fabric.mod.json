@@ -1,0 +1,52 @@
+{
+	"schemaVersion": 1,
+	"id": "sculkhorde",
+	"version": "${version}",
+	"name": "Sculk Horde",
+	"description": "Sculk Horde implements a new end-game era to your game that once activated, will force you to fight against the newly awakened ancient sculk horde in order to survive. This ancient enemy seeks to infect and consume the world in it's entirety.",
+	"authors": [
+		{
+			"name": "Team Peril (Original Creator)",
+			"contact": {
+				"homepage": "https://github.com/TeamPeril"
+			}
+		},
+		{
+			"name": "SkyelanderZero (Fabric Port)",
+			"contact": {
+				"homepage": "https://github.com/SkyeZero",
+				"email": "subjectskyezero@gmail.com"
+			}
+		}
+	],
+	"contact": {
+		"homepage": "https://github.com/SkyeZero/Sculk-Horde-Fabricated",
+		"sources": "https://github.com/SkyeZero/Sculk-Horde-Fabricated",
+		"issues": "https://github.com/SkyeZero/Sculk-Horde-Fabricated/issues",
+		"email": "subjectskyezero@gmail.com"
+	},
+	"license": "All rights reserved",
+	"icon": "assets/sculkhorde/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"com.github.sculkhorde.core.SculkHorde"
+		],
+		"client": [
+			"com.github.sculkhorde.client.SculkHordeClient"
+		],
+		"fabric-datagen": [
+			"com.github.sculkhorde.SculkHordeDataGenerator"
+		]
+	},
+	"mixins": [
+		"mixins.sculkhorde.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.16.14",
+		"minecraft": "~1.20.1",
+		"java": ">=17",
+		"fabric-api": "*",
+		"geckolib": ">=4.4.7"
+	}
+}

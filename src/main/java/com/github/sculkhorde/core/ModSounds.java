@@ -1,15 +1,14 @@
 package com.github.sculkhorde.core;
 
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import io.github.fabricators_of_create.porting_lib.util.LazyRegistrar;
+import io.github.fabricators_of_create.porting_lib.util.RegistryObject;
 
 public class ModSounds {
-    public static final DeferredRegister<SoundEvent> SOUND_EVENTS =
-            DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, SculkHorde.MOD_ID);
+    public static final LazyRegistrar<SoundEvent> SOUND_EVENTS =
+            LazyRegistrar.create(Registries.SOUND_EVENT, SculkHorde.MOD_ID);
 
     public static final RegistryObject<SoundEvent> RAID_START_SOUND = registerSoundEvent("raid_start_sound");
     public static final RegistryObject<SoundEvent> HORDE_START_SOUND = registerSoundEvent("horde_start_sound");
@@ -57,7 +56,7 @@ public class ModSounds {
         return SOUND_EVENTS.register(name, () -> SoundEvent.createVariableRangeEvent(id));
     }
 
-    public static void register(IEventBus eventBus) {
-        SOUND_EVENTS.register(eventBus);
+    public static void register() {
+        SOUND_EVENTS.register();
     }
 }

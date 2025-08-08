@@ -15,13 +15,12 @@ import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.extensions.IForgeItem;
+import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvType;
 
 import java.util.List;
 
-public class DevNodeSpawner extends Item implements IForgeItem {
+public class DevNodeSpawner extends Item {
 
 	/**
 	 * The Constructor that takes in properties
@@ -75,7 +74,7 @@ public class DevNodeSpawner extends Item implements IForgeItem {
 
 	//This changes the text you see when hovering over an item
 	@Override
-	@OnlyIn(Dist.CLIENT)
+	@Environment(EnvType.CLIENT)
 	public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
 
 		super.appendHoverText(stack, worldIn, tooltip, flagIn); //Not sure why we need this

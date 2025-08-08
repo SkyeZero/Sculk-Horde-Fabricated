@@ -12,15 +12,14 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.MapColor;
-import net.minecraftforge.common.extensions.IForgeBlock;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Chunk Loader Code created by SuperMartijn642
  */
 
-public class StructureCoreBlock extends BaseEntityBlock implements IForgeBlock {
+public class StructureCoreBlock extends BaseEntityBlock {
 
     /**
      * HARDNESS determines how difficult a block is to break<br>

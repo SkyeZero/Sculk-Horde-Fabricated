@@ -15,11 +15,10 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.vibrations.VibrationSystem;
 import net.minecraft.world.level.material.MapColor;
-import net.minecraftforge.common.extensions.IForgeBlock;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
-public class BroodNestBlock extends BaseEntityBlock implements IForgeBlock {
+public class BroodNestBlock extends BaseEntityBlock {
 
     /**
      * HARDNESS determines how difficult a block is to break<br>

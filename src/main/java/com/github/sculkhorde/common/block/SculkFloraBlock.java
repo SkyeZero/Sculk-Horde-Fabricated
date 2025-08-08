@@ -19,11 +19,10 @@ import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.common.extensions.IForgeBlock;
 
 import java.util.Random;
 
-public class SculkFloraBlock extends BushBlock implements IForgeBlock {
+public class SculkFloraBlock extends BushBlock {
 
     /**
      * HARDNESS determines how difficult a block is to break<br>

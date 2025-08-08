@@ -13,9 +13,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.material.MapColor;
-import net.minecraftforge.common.extensions.IForgeBlock;
 
-public class SculkDuraMatterBlock extends Block implements IForgeBlock {
+public class SculkDuraMatterBlock extends Block {
 
     /**
      * HARDNESS determines how difficult a block is to break<br>

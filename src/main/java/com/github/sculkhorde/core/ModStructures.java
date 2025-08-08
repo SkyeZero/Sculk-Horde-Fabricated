@@ -6,17 +6,17 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureType;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.RegistryObject;
+import io.github.fabricators_of_create.porting_lib.util.LazyRegistrar;
+import io.github.fabricators_of_create.porting_lib.util.RegistryObject;
 
 import java.util.Locale;
 
 
 public class ModStructures {
 
-    public static final DeferredRegister<StructureType<?>> STRUCTURES = DeferredRegister.create(Registries.STRUCTURE_TYPE, SculkHorde.MOD_ID);
+    public static final LazyRegistrar<StructureType<?>> STRUCTURES = LazyRegistrar.create(Registries.STRUCTURE_TYPE, SculkHorde.MOD_ID);
 
-    public static final DeferredRegister<StructurePieceType> STRUCTURE_PIECES = DeferredRegister.create(Registries.STRUCTURE_PIECE, SculkHorde.MOD_ID);
+    public static final LazyRegistrar<StructurePieceType> STRUCTURE_PIECES = LazyRegistrar.create(Registries.STRUCTURE_PIECE, SculkHorde.MOD_ID);
 
     public static final RegistryObject<StructureType<SculkTombStructure>> SCULK_TOMB_STRUCTURE = STRUCTURES.register("sculk_tomb_structure", () -> explicitStructureTypeTyping(SculkTombStructure.CODEC));
 

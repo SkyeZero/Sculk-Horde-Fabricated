@@ -12,14 +12,14 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.extensions.IForgeBlock;
 
-import javax.annotation.Nullable;
+import net.minecraft.world.level.block.state.properties.WoodType;
+import org.jetbrains.annotations.Nullable;
 
-public class InfestedFenceGateBlock extends FenceGateBlock implements EntityBlock, IForgeBlock, ITagInfestedBlock {
+public class InfestedFenceGateBlock extends FenceGateBlock implements EntityBlock, ITagInfestedBlock {
 
 	public InfestedFenceGateBlock(Properties properties) {
-        super(properties, SoundEvents.NETHER_WOOD_FENCE_GATE_OPEN, SoundEvents.NETHER_WOOD_FENCE_GATE_CLOSE);
+        super(properties, WoodType.CRIMSON);
     }
 	/* Properties from BaseEntityBlock */
 	

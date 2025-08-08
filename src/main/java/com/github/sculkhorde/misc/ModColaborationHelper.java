@@ -1,5 +1,6 @@
 package com.github.sculkhorde.misc;
 
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
@@ -7,7 +8,6 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraftforge.fml.ModList;
 
 public class ModColaborationHelper {
 
@@ -26,6 +26,9 @@ public class ModColaborationHelper {
         }
     }
 
+    public static boolean isLoaded(String id) {
+        return FabricLoader.getInstance().isModLoaded(id);
+    }
 
     // https://www.curseforge.com/minecraft/mc-mods/from-another-world
     public static String FROM_ANOTHER_WORLD_ID = "fromanotherworld";
@@ -33,7 +36,7 @@ public class ModColaborationHelper {
 
     public static boolean isFromAnotherWorldLoaded()
     {
-        return ModList.get().isLoaded(FROM_ANOTHER_WORLD_ID);
+        return isLoaded(FROM_ANOTHER_WORLD_ID);
     }
 
     public static boolean doesEntityBelongToFromAnotherWorldMod(LivingEntity entity)
@@ -52,7 +55,7 @@ public class ModColaborationHelper {
     public static String SPORE_ID = "spore";
     public static boolean isSporeLoaded()
     {
-        return ModList.get().isLoaded(SPORE_ID);
+        return isLoaded(SPORE_ID);
     }
 
     private static TagKey<EntityType<?>> SPORE_TAG_KEY = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(SPORE_ID + ":fungus_entities"));
@@ -72,7 +75,7 @@ public class ModColaborationHelper {
     public static String DEEPER_AND_DARKER = "deeper_and_darker";
     public static boolean isDeeperAndDarkerLoaded()
     {
-        return ModList.get().isLoaded(DEEPER_AND_DARKER);
+        return isLoaded(DEEPER_AND_DARKER);
     }
 
     public static boolean doesEntityBelongToDeeperAndDarkerMod(LivingEntity entity)
@@ -92,7 +95,7 @@ public class ModColaborationHelper {
     public static String DAWN_OF_THE_FLOOD_ID = "dotf";
     public static boolean isDawnOfTheFloodLoaded()
     {
-        return ModList.get().isLoaded(DEEPER_AND_DARKER);
+        return isLoaded(DEEPER_AND_DARKER);
     }
 
     public static boolean doesEntityBelongToDawnOfTheFloodMod(LivingEntity entity)
@@ -112,7 +115,7 @@ public class ModColaborationHelper {
     public static String ANOTHER_DIMENSION_INVASION_ID = "invasion";
     public static boolean isAnotherDimensionInvasionLoaded()
     {
-        return ModList.get().isLoaded(ANOTHER_DIMENSION_INVASION_ID);
+        return isLoaded(ANOTHER_DIMENSION_INVASION_ID);
     }
 
     public static boolean doesEntityBelongToAnotherDimensionInvasionMod(LivingEntity entity)
@@ -132,7 +135,7 @@ public class ModColaborationHelper {
     public static String SWARM_INFECTION_ID = "swarm_infection";
     public static boolean isSwarmInfectionLoaded()
     {
-        return ModList.get().isLoaded(SWARM_INFECTION_ID);
+        return isLoaded(SWARM_INFECTION_ID);
     }
 
     public static boolean doesEntityBelongToSwarmInfectionMod(LivingEntity entity)
@@ -153,7 +156,7 @@ public class ModColaborationHelper {
     private static TagKey<EntityType<?>> FLESH_THAT_HATES_TAG_KEY = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(FLESH_THAT_HATES_ID + ":fleshy_entities"));
     public static boolean isTheFleshThatHatesLoaded()
     {
-        return ModList.get().isLoaded(FLESH_THAT_HATES_ID);
+        return isLoaded(FLESH_THAT_HATES_ID);
     }
 
     public static boolean doesEntityBelongToTheFleshThatHatesMod(LivingEntity entity)
@@ -172,7 +175,7 @@ public class ModColaborationHelper {
     public static String WITHERING_AWAY_REBORN_ID = "withering_away_reborn";
     public static boolean isWitheringAwayRebornLoaded()
     {
-        return ModList.get().isLoaded(WITHERING_AWAY_REBORN_ID);
+        return isLoaded(WITHERING_AWAY_REBORN_ID);
     }
 
     public static boolean doesEntityBelongToWitheringAwayRebornMod(LivingEntity entity)
@@ -192,7 +195,7 @@ public class ModColaborationHelper {
     public static String ABOMINATIONS_INFECTION_ID = "abominations_infection";
     public static boolean isAbominationsInfectionLoaded()
     {
-        return ModList.get().isLoaded(ABOMINATIONS_INFECTION_ID);
+        return isLoaded(ABOMINATIONS_INFECTION_ID);
     }
 
     public static boolean doesEntityBelongToAbominationsInfectionMod(LivingEntity entity)
@@ -212,7 +215,7 @@ public class ModColaborationHelper {
     public static String PRION_INFECTION_ID = "prionmod";
     public static boolean isPrionInfectionLoaded()
     {
-        return ModList.get().isLoaded(PRION_INFECTION_ID);
+        return isLoaded(PRION_INFECTION_ID);
     }
 
     public static boolean doesEntityBelongToPrionInfectionMod(LivingEntity entity)
@@ -232,7 +235,7 @@ public class ModColaborationHelper {
     public static String BULBUS_INFECTION_ID = "bulbus";
     public static boolean isBulbusLoaded()
     {
-        return ModList.get().isLoaded(BULBUS_INFECTION_ID);
+        return isLoaded(BULBUS_INFECTION_ID);
     }
 
     public static boolean doesEntityBelongToBulbusMod(LivingEntity entity)
@@ -252,7 +255,7 @@ public class ModColaborationHelper {
     public static String ENTOMOPHOBIA_ID = "entomophobia";
     public static boolean isEntomophobiaLoaded()
     {
-        return ModList.get().isLoaded(ENTOMOPHOBIA_ID);
+        return isLoaded(ENTOMOPHOBIA_ID);
     }
 
     public static boolean doesEntityBelongToEntomophobiaMod(LivingEntity entity)
@@ -270,7 +273,7 @@ public class ModColaborationHelper {
     public static String COMPLETE_DISTORTION_INFECTION_ID = "complete_distortion_reborn";
     public static boolean isCompleteDistortionInfectionLoaded()
     {
-        return ModList.get().isLoaded(COMPLETE_DISTORTION_INFECTION_ID);
+        return isLoaded(COMPLETE_DISTORTION_INFECTION_ID);
     }
 
     public static boolean doesEntityBelongToCompleteDistortionInfectionMod(LivingEntity entity)
@@ -288,7 +291,7 @@ public class ModColaborationHelper {
     public static String PHAYRIOSIS_PARASITE_INFECTION_ID = "phayriosis";
     public static boolean isPharyriosisParasiteInfectionLoaded()
     {
-        return ModList.get().isLoaded(PHAYRIOSIS_PARASITE_INFECTION_ID);
+        return isLoaded(PHAYRIOSIS_PARASITE_INFECTION_ID);
     }
 
     public static boolean doesEntityBelongToPharyriosisParasiteInfectionMod(LivingEntity entity)
@@ -308,7 +311,7 @@ public class ModColaborationHelper {
     public static String MI_ALLIANCE_ID = "mialliance";
     public static boolean isMiAllianceLoaded()
     {
-        return ModList.get().isLoaded(MI_ALLIANCE_ID);
+        return isLoaded(MI_ALLIANCE_ID);
     }
 
     public static boolean doesEntityBelongToMIAllianceMod(LivingEntity entity)
@@ -326,7 +329,7 @@ public class ModColaborationHelper {
     public static String SCAPE_AND_RUN_PARASITES_ID = "srparasites";
     public static boolean isScapeAndRunParasitesLoaded()
     {
-        return ModList.get().isLoaded(SCAPE_AND_RUN_PARASITES_ID);
+        return isLoaded(SCAPE_AND_RUN_PARASITES_ID);
     }
 
     public static boolean doesEntityBelongToScapeAndRunParasitesMod(LivingEntity entity)
@@ -345,7 +348,7 @@ public class ModColaborationHelper {
 
     public static boolean isArsNouveauLoaded()
     {
-        return ModList.get().isLoaded("ars_nouveau");
+        return isLoaded("ars_nouveau");
     }
 
     public static boolean isThisAnArsNouveauBlackListEntity(LivingEntity entity)

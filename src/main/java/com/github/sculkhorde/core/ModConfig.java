@@ -3,6 +3,7 @@ package com.github.sculkhorde.core;
 import com.electronwill.nightconfig.core.Config;
 import com.electronwill.nightconfig.core.file.CommentedFileConfig;
 import com.electronwill.nightconfig.core.io.WritingMode;
+import io.github.fabricators_of_create.porting_lib.config.ModConfigSpec;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
@@ -11,7 +12,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.ForgeConfigSpec;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.File;
@@ -22,83 +22,83 @@ import java.util.List;
 public class ModConfig {
 
     public static final Server SERVER;
-    public static final ForgeConfigSpec SERVER_SPEC;
+    public static final ModConfigSpec SERVER_SPEC;
 
     public static final DataGen DATAGEN;
-    public static final ForgeConfigSpec DATAGEN_SPEC;
+    public static final ModConfigSpec DATAGEN_SPEC;
 
     public static class Server {
 
-        public final ForgeConfigSpec.ConfigValue<Boolean> target_faw_entities;
-        public final ForgeConfigSpec.ConfigValue<Boolean> target_spore_entities;
-        public final ForgeConfigSpec.ConfigValue<Boolean> target_dawn_of_the_flood_entities;
-        public final ForgeConfigSpec.ConfigValue<Boolean> target_the_flesh_that_hates_entities;
-        public final ForgeConfigSpec.ConfigValue<Boolean> target_abominations_infection_entities;
-        public final ForgeConfigSpec.ConfigValue<Boolean> target_another_dimension_infection_entities;
-        public final ForgeConfigSpec.ConfigValue<Boolean> target_complete_distortion_entities;
-        public final ForgeConfigSpec.ConfigValue<Boolean> target_entomophobia_entities;
-        public final ForgeConfigSpec.ConfigValue<Boolean> target_phayriosis_entities;
-        public final ForgeConfigSpec.ConfigValue<Boolean> target_prion_infection_entities;
-        public final ForgeConfigSpec.ConfigValue<Boolean> target_swarm_infection_entities;
-        public final ForgeConfigSpec.ConfigValue<Boolean> target_bulbus_infection_entities;
-        public final ForgeConfigSpec.ConfigValue<Boolean> target_withering_away_reborn_entities;
-        public final ForgeConfigSpec.ConfigValue<Boolean> target_mi_alliance_entities;
-        public final ForgeConfigSpec.ConfigValue<Boolean> target_deeper_and_darker_entities;
-        public final ForgeConfigSpec.ConfigValue<Boolean> target_scape_and_run_parasites_entities;
+        public final ModConfigSpec.ConfigValue<Boolean> target_faw_entities;
+        public final ModConfigSpec.ConfigValue<Boolean> target_spore_entities;
+        public final ModConfigSpec.ConfigValue<Boolean> target_dawn_of_the_flood_entities;
+        public final ModConfigSpec.ConfigValue<Boolean> target_the_flesh_that_hates_entities;
+        public final ModConfigSpec.ConfigValue<Boolean> target_abominations_infection_entities;
+        public final ModConfigSpec.ConfigValue<Boolean> target_another_dimension_infection_entities;
+        public final ModConfigSpec.ConfigValue<Boolean> target_complete_distortion_entities;
+        public final ModConfigSpec.ConfigValue<Boolean> target_entomophobia_entities;
+        public final ModConfigSpec.ConfigValue<Boolean> target_phayriosis_entities;
+        public final ModConfigSpec.ConfigValue<Boolean> target_prion_infection_entities;
+        public final ModConfigSpec.ConfigValue<Boolean> target_swarm_infection_entities;
+        public final ModConfigSpec.ConfigValue<Boolean> target_bulbus_infection_entities;
+        public final ModConfigSpec.ConfigValue<Boolean> target_withering_away_reborn_entities;
+        public final ModConfigSpec.ConfigValue<Boolean> target_mi_alliance_entities;
+        public final ModConfigSpec.ConfigValue<Boolean> target_deeper_and_darker_entities;
+        public final ModConfigSpec.ConfigValue<Boolean> target_scape_and_run_parasites_entities;
 
 
 
-        public final ForgeConfigSpec.ConfigValue<Boolean> block_infestation_enabled;
-        public final ForgeConfigSpec.ConfigValue<Boolean> chunk_loading_enabled;
-        public final ForgeConfigSpec.ConfigValue<Boolean> disable_defeating_sculk_horde;
-        public final ForgeConfigSpec.ConfigValue<Integer> max_unit_population;
-        public final ForgeConfigSpec.ConfigValue<Boolean> trigger_ancient_node_automatically;
-        public final ForgeConfigSpec.ConfigValue<Integer> trigger_ancient_node_wait_days;
-        public final ForgeConfigSpec.ConfigValue<Integer> trigger_ancient_node_time_of_day;
-        public final ForgeConfigSpec.ConfigValue<Boolean> should_all_other_mobs_attack_the_sculk_horde;
-        public final ForgeConfigSpec.ConfigValue<Boolean> should_animals_and_villagers_avoid_the_sculk_horde;
+        public final ModConfigSpec.ConfigValue<Boolean> block_infestation_enabled;
+        public final ModConfigSpec.ConfigValue<Boolean> chunk_loading_enabled;
+        public final ModConfigSpec.ConfigValue<Boolean> disable_defeating_sculk_horde;
+        public final ModConfigSpec.ConfigValue<Integer> max_unit_population;
+        public final ModConfigSpec.ConfigValue<Boolean> trigger_ancient_node_automatically;
+        public final ModConfigSpec.ConfigValue<Integer> trigger_ancient_node_wait_days;
+        public final ModConfigSpec.ConfigValue<Integer> trigger_ancient_node_time_of_day;
+        public final ModConfigSpec.ConfigValue<Boolean> should_all_other_mobs_attack_the_sculk_horde;
+        public final ModConfigSpec.ConfigValue<Boolean> should_animals_and_villagers_avoid_the_sculk_horde;
 
-        public final ForgeConfigSpec.ConfigValue<Integer> gravemind_mass_goal_for_immature_stage;
-        public final ForgeConfigSpec.ConfigValue<Integer> gravemind_mass_goal_for_mature_stage;
+        public final ModConfigSpec.ConfigValue<Integer> gravemind_mass_goal_for_immature_stage;
+        public final ModConfigSpec.ConfigValue<Integer> gravemind_mass_goal_for_mature_stage;
 
-        public final ForgeConfigSpec.ConfigValue<Integer> sculk_node_chunkload_radius;
-        public final ForgeConfigSpec.ConfigValue<Integer> sculk_node_spawn_cooldown_minutes;
+        public final ModConfigSpec.ConfigValue<Integer> sculk_node_chunkload_radius;
+        public final ModConfigSpec.ConfigValue<Integer> sculk_node_spawn_cooldown_minutes;
 
-        public final ForgeConfigSpec.ConfigValue<Boolean> should_sculk_mites_spawn_in_deep_dark;
+        public final ModConfigSpec.ConfigValue<Boolean> should_sculk_mites_spawn_in_deep_dark;
 
-        public final ForgeConfigSpec.ConfigValue<Boolean> should_phantoms_load_chunks;
-        public final ForgeConfigSpec.ConfigValue<Boolean> should_sculk_nodes_and_raids_spawn_phantoms;
-        public final ForgeConfigSpec.ConfigValue<Boolean> should_ancient_node_spawn_phantoms;
+        public final ModConfigSpec.ConfigValue<Boolean> should_phantoms_load_chunks;
+        public final ModConfigSpec.ConfigValue<Boolean> should_sculk_nodes_and_raids_spawn_phantoms;
+        public final ModConfigSpec.ConfigValue<Boolean> should_ancient_node_spawn_phantoms;
         
-        public final ForgeConfigSpec.ConfigValue<Boolean> sculk_raid_enabled;
-        public final ForgeConfigSpec.ConfigValue<Integer> sculk_raid_enderman_scouting_duration_minutes;
-        public final ForgeConfigSpec.ConfigValue<Integer> sculk_raid_global_cooldown_between_raids_minutes;
-        public final ForgeConfigSpec.ConfigValue<Integer> sculk_raid_no_raid_zone_duration_minutes;
-        public final ForgeConfigSpec.ConfigValue<Double> purification_speed_multiplier;
-        public final ForgeConfigSpec.ConfigValue<Integer> infestation_purifier_range;
-        private final ForgeConfigSpec.ConfigValue<List<? extends String>> items_infection_cursors_can_eat;
+        public final ModConfigSpec.ConfigValue<Boolean> sculk_raid_enabled;
+        public final ModConfigSpec.ConfigValue<Integer> sculk_raid_enderman_scouting_duration_minutes;
+        public final ModConfigSpec.ConfigValue<Integer> sculk_raid_global_cooldown_between_raids_minutes;
+        public final ModConfigSpec.ConfigValue<Integer> sculk_raid_no_raid_zone_duration_minutes;
+        public final ModConfigSpec.ConfigValue<Double> purification_speed_multiplier;
+        public final ModConfigSpec.ConfigValue<Integer> infestation_purifier_range;
+        private final ModConfigSpec.ConfigValue<List<? extends String>> items_infection_cursors_can_eat;
         public static final HashMap<String, Boolean> infection_cursor_item_eat_list = new HashMap<>();
 
-        private final ForgeConfigSpec.ConfigValue<List<? extends String>> make_block_infestable;
+        private final ModConfigSpec.ConfigValue<List<? extends String>> make_block_infestable;
         public static final HashMap<String, Boolean> manually_configured_infestable_blocks = new HashMap<>();
 
-        public final ForgeConfigSpec.DoubleValue infection_speed_multiplier;
-        public final ForgeConfigSpec.ConfigValue<Integer> max_nodes_active;
-        public final ForgeConfigSpec.ConfigValue<Boolean> disable_auto_performance_system;
+        public final ModConfigSpec.DoubleValue infection_speed_multiplier;
+        public final ModConfigSpec.ConfigValue<Integer> max_nodes_active;
+        public final ModConfigSpec.ConfigValue<Boolean> disable_auto_performance_system;
 
-        public final ForgeConfigSpec.ConfigValue<Integer> minutes_required_for_performance_increase;
-        public final ForgeConfigSpec.ConfigValue<Integer> seconds_required_for_performance_decrease;
+        public final ModConfigSpec.ConfigValue<Integer> minutes_required_for_performance_increase;
+        public final ModConfigSpec.ConfigValue<Integer> seconds_required_for_performance_decrease;
 
-        private final ForgeConfigSpec.ConfigValue<List<? extends String>> sculk_horde_target_blacklist;
+        private final ModConfigSpec.ConfigValue<List<? extends String>> sculk_horde_target_blacklist;
 
-        public final ForgeConfigSpec.ConfigValue<Integer> max_infestation_cursor_population;
+        public final ModConfigSpec.ConfigValue<Integer> max_infestation_cursor_population;
 
-        public final ForgeConfigSpec.ConfigValue<Boolean> enable_gpu_compatibility_mode;
+        public final ModConfigSpec.ConfigValue<Boolean> enable_gpu_compatibility_mode;
 
-        public final ForgeConfigSpec.ConfigValue<Boolean> experimental_features_enabled;
-        public final ForgeConfigSpec.ConfigValue<Boolean> experimental_sheep_enabled;
-        public final ForgeConfigSpec.ConfigValue<Boolean> experimental_hit_squad_event_enabled;
-        public final ForgeConfigSpec.ConfigValue<Boolean> experimental_brood_hatcher_enabled;
+        public final ModConfigSpec.ConfigValue<Boolean> experimental_features_enabled;
+        public final ModConfigSpec.ConfigValue<Boolean> experimental_sheep_enabled;
+        public final ModConfigSpec.ConfigValue<Boolean> experimental_hit_squad_event_enabled;
+        public final ModConfigSpec.ConfigValue<Boolean> experimental_brood_hatcher_enabled;
 
         public void loadItemsInfectionCursorsCanEat()
         {
@@ -181,7 +181,7 @@ public class ModConfig {
             return false;
         }
 
-        public Server(ForgeConfigSpec.Builder builder) {
+        public Server(ModConfigSpec.Builder builder) {
 
             Config.setInsertionOrderPreserved(true);
 
@@ -279,24 +279,24 @@ public class ModConfig {
 
     public static class DataGen {
 
-        public DataGen(ForgeConfigSpec.Builder builder){
+        public DataGen(ModConfigSpec.Builder builder){
 
         }
 
     }
 
     static {
-        Pair<Server, ForgeConfigSpec> commonSpecPair = new ForgeConfigSpec.Builder().configure(Server::new);
+        Pair<Server, ModConfigSpec> commonSpecPair = new ModConfigSpec.Builder().configure(Server::new);
         SERVER = commonSpecPair.getLeft();
         SERVER_SPEC = commonSpecPair.getRight();
 
-        Pair<DataGen , ForgeConfigSpec> commonPair = new ForgeConfigSpec.Builder().configure(DataGen::new);
+        Pair<DataGen , ModConfigSpec> commonPair = new ModConfigSpec.Builder().configure(DataGen::new);
         DATAGEN = commonPair.getLeft();
         DATAGEN_SPEC = commonPair.getRight();
 
     }
 
-    public static void loadConfig(ForgeConfigSpec config, String path) {
+    public static void loadConfig(ModConfigSpec config, String path) {
         final CommentedFileConfig file = CommentedFileConfig.builder(new File(path)).sync().autosave().writingMode(WritingMode.REPLACE).build();
         file.load();
         config.setConfig(file);

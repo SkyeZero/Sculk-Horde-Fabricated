@@ -5,6 +5,7 @@ import com.github.sculkhorde.util.EntityAlgorithms;
 import com.github.sculkhorde.util.SoundUtil;
 import com.github.sculkhorde.util.TickUnits;
 import com.mojang.blaze3d.platform.InputConstants;
+import io.github.fabricators_of_create.porting_lib.item.api.extensions.RepairableItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -20,18 +21,17 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.extensions.IForgeItem;
+import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvType;
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.List;
 
-public class SculkSweeperSword extends SwordItem implements IForgeItem {
+public class SculkSweeperSword extends SwordItem implements RepairableItem {
 
     public SculkSweeperSword() {
-        this(Tiers.DIAMOND, 3, -2.2F, new Item.Properties().rarity(Rarity.EPIC).setNoRepair().durability(100));
+        this(Tiers.DIAMOND, 3, -2.2F, new Item.Properties().rarity(Rarity.EPIC).durability(100));
     }
     public SculkSweeperSword(Tier tier, int baseDamage, float baseAttackSpeed, Properties prop) {
         super(tier, baseDamage, baseAttackSpeed, prop);
@@ -84,11 +84,14 @@ public class SculkSweeperSword extends SwordItem implements IForgeItem {
         return InteractionResultHolder.pass(itemstack);
     }
 
+    // TODO: INVESTIGATE
+    /*
     @Override
     public @NotNull AABB getSweepHitBox(@NotNull ItemStack stack, @NotNull Player player, @NotNull Entity target)
     {
         return target.getBoundingBox().inflate(3.0D, 0.25D, 3.0D);
     }
+    */
 
     public boolean onBlockStartBreak(ItemStack itemstack, BlockPos pos, Player player)
     {
@@ -96,7 +99,7 @@ public class SculkSweeperSword extends SwordItem implements IForgeItem {
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
         if(InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), GLFW.GLFW_KEY_LEFT_SHIFT))
         {
@@ -112,12 +115,15 @@ public class SculkSweeperSword extends SwordItem implements IForgeItem {
         }
     }
 
+    // TODO: INVESTIGATE
     // Leave at 1f to prevent the sword from crashing the game when it is repaired
+    /*
     @Override
     public float getXpRepairRatio(ItemStack stack)
     {
         return 1f;
     }
+    */
 
     public boolean isRepairable(@NotNull ItemStack stack)
     {

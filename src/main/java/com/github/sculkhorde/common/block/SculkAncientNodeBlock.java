@@ -26,9 +26,8 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.gameevent.GameEventListener;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.common.extensions.IForgeBlock;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.concurrent.TimeUnit;
 
 
@@ -37,7 +36,7 @@ import java.util.concurrent.TimeUnit;
  * Chunk Loader Code created by SuperMartijn642
  */
 
-public class SculkAncientNodeBlock extends BaseEntityBlock implements IForgeBlock {
+public class SculkAncientNodeBlock extends BaseEntityBlock {
     /**
      * HARDNESS determines how difficult a block is to break<br>
      * 0.6f = dirt<br>

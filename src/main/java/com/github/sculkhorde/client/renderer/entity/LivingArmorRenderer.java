@@ -19,10 +19,10 @@ import software.bernie.geckolib.renderer.GeoEntityRenderer;
 import software.bernie.geckolib.renderer.layer.BlockAndItemGeoLayer;
 import software.bernie.geckolib.renderer.layer.ItemArmorGeoLayer;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.lwjgl.system.NonnullDefault;
+import org.jetbrains.annotations.Nullable;
 
-
+// TODO: Verify NonnullDefault == Nonnull
 public class LivingArmorRenderer extends GeoEntityRenderer<LivingArmorEntity> {
 
     private static final String LEFT_HAND = "leftItem";
@@ -66,7 +66,7 @@ public class LivingArmorRenderer extends GeoEntityRenderer<LivingArmorEntity> {
                 return itemStack;
             }
 
-            @Nonnull
+            @NonnullDefault
             protected EquipmentSlot getEquipmentSlotForBone(GeoBone bone, ItemStack stack, LivingArmorEntity animatable) {
                 EquipmentSlot var10000;
                 switch (bone.getName()) {
@@ -95,7 +95,7 @@ public class LivingArmorRenderer extends GeoEntityRenderer<LivingArmorEntity> {
                 return var10000;
             }
 
-            @Nonnull
+            @NonnullDefault
             protected ModelPart getModelPartForBone(GeoBone bone, EquipmentSlot slot, ItemStack stack, LivingArmorEntity animatable, HumanoidModel<?> baseModel) {
                 ModelPart var10000;
                 switch (bone.getName()) {

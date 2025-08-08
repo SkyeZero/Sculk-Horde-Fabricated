@@ -80,8 +80,9 @@ public class SculkStingerEntity extends FlyingMob implements GeoEntity, ISculkSm
                 .add(Attributes.ATTACK_DAMAGE, ATTACK_DAMAGE)
                 .add(Attributes.FOLLOW_RANGE,FOLLOW_RANGE)
                 .add(Attributes.MOVEMENT_SPEED, MOVEMENT_SPEED)
-                .add(Attributes.FLYING_SPEED, 0.2F)
-                .add(net.minecraftforge.common.ForgeMod.ENTITY_GRAVITY.get(), 0.0);
+                .add(Attributes.FLYING_SPEED, 0.2F);
+                // TODO: INVESTIGATE
+                // .add(net.minecraftforge.common.ForgeMod.ENTITY_GRAVITY.get(), 0.0);
     }
 
 

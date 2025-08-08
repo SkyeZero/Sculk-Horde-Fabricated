@@ -4,12 +4,12 @@ import com.github.sculkhorde.core.ModConfig;
 import com.github.sculkhorde.core.ModSavedData;
 import com.github.sculkhorde.core.SculkHorde;
 import com.github.sculkhorde.systems.gravemind_system.Gravemind;
+import io.github.fabricators_of_create.porting_lib.config.ModConfigSpec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobSpawnType;
-import net.minecraftforge.common.ForgeConfigSpec;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -37,7 +37,7 @@ public class EntityFactoryEntry {
     private Gravemind.evolution_states minEvolutionRequired = Gravemind.evolution_states.Undeveloped;
 
     boolean experimentalMode = false;
-    private ForgeConfigSpec.ConfigValue<Boolean> requiredConfig = ModConfig.SERVER.experimental_features_enabled;
+    private ModConfigSpec.ConfigValue<Boolean> requiredConfig = ModConfig.SERVER.experimental_features_enabled;
 
     public EntityFactoryEntry(EntityType entity)
     {
@@ -78,7 +78,7 @@ public class EntityFactoryEntry {
         return this;
     }
 
-    public EntityFactoryEntry enableExperimentalMode(ForgeConfigSpec.ConfigValue<Boolean> configOptionThatNeedsToBeTrue)
+    public EntityFactoryEntry enableExperimentalMode(ModConfigSpec.ConfigValue<Boolean> configOptionThatNeedsToBeTrue)
     {
         experimentalMode = true;
         requiredConfig = configOptionThatNeedsToBeTrue;

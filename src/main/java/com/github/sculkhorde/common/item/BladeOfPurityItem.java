@@ -5,6 +5,7 @@ import com.github.sculkhorde.core.ModMobEffects;
 import com.github.sculkhorde.util.EntityAlgorithms;
 import com.github.sculkhorde.util.TickUnits;
 import com.mojang.blaze3d.platform.InputConstants;
+import io.github.fabricators_of_create.porting_lib.item.api.extensions.RepairableItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -18,19 +19,18 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.extensions.IForgeItem;
+import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvType;
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class BladeOfPurityItem extends SwordItem implements IForgeItem {
+public class BladeOfPurityItem extends SwordItem implements RepairableItem {
 
     public BladeOfPurityItem() {
-        this(Tiers.DIAMOND, 4, -3F, new Properties().rarity(Rarity.EPIC).setNoRepair().durability(1561));
+        this(Tiers.DIAMOND, 4, -3F, new Properties().rarity(Rarity.EPIC).durability(1561));
     }
     public BladeOfPurityItem(Tier tier, int baseDamage, float baseAttackSpeed, Properties prop) {
         super(tier, baseDamage, baseAttackSpeed, prop);
@@ -78,14 +78,17 @@ public class BladeOfPurityItem extends SwordItem implements IForgeItem {
         return InteractionResultHolder.pass(itemstack);
     }
 
+    // TODO: INVESTIGATE
+    /*
     @Override
     public @NotNull AABB getSweepHitBox(@NotNull ItemStack stack, @NotNull Player player, @NotNull Entity target)
     {
         return target.getBoundingBox().inflate(3.0D, 0.25D, 3.0D);
     }
+    */
 
     @Override
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
         if(InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), GLFW.GLFW_KEY_LEFT_SHIFT))
         {
@@ -99,5 +102,10 @@ public class BladeOfPurityItem extends SwordItem implements IForgeItem {
         {
             tooltip.add(Component.translatable("tooltip.sculkhorde.default"));
         }
+    }
+
+    @Override
+    public boolean isRepairable(ItemStack stack) {
+        return false;
     }
 }

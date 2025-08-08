@@ -1,5 +1,6 @@
 package com.github.sculkhorde.common.entity;
 
+import com.github.sculkhorde.client.SculkHordeClient;
 import com.github.sculkhorde.common.entity.components.TargetParameters;
 import com.github.sculkhorde.common.entity.goal.*;
 import com.github.sculkhorde.util.SquadHandler;
@@ -36,7 +37,7 @@ public class SculkSheepEntity extends Monster implements GeoEntity, ISculkSmartE
      * In order to create a mob, the following java files were created/edited.<br>
      * Edited {@link com.github.sculkhorde.core.ModEntities}<br>
      * Edited {@link com.github.sculkhorde.util.ModEventSubscriber}<br>
-     * Edited {@link com.github.sculkhorde.client.ClientModEventSubscriber}<br>
+     * Edited {@link SculkHordeClient}<br>
      * Added {@link com.github.sculkhorde.client.model.enitity.SculkSheepModel}<br>
      * Added {@link com.github.sculkhorde.client.renderer.entity.SculkSheepRenderer}
      */

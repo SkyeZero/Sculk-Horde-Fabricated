@@ -59,6 +59,8 @@ public class ChunkInfectEntity extends Entity {
 
     protected int t = 0;
 
+    // TODO: INVESTIGATE OR REMOVE - NOT NEEDED IN FORGE EITHER
+    /*
     @Override
     public void onAddedToWorld() {
         super.onAddedToWorld();
@@ -99,6 +101,7 @@ public class ChunkInfectEntity extends Entity {
             if (ready) infector.tick();
         }
     }
+     */
 
     public void end() {
         ready = false;

@@ -5,42 +5,47 @@ import com.github.sculkhorde.common.blockentity.SoulHarvesterBlockEntity;
 import com.github.sculkhorde.core.ModBlocks;
 import com.github.sculkhorde.core.ModMenuTypes;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.items.SlotItemHandler;
 import org.jetbrains.annotations.Nullable;
 
 public class SoulHarvesterMenu extends AbstractContainerMenu {
     public final SoulHarvesterBlockEntity blockEntity;
     private final Level level;
+
+    private final Container container;
     private final ContainerData data;
 
-    public SoulHarvesterMenu(int pContainerId, Inventory inv, FriendlyByteBuf extraData) {
-        this(pContainerId, inv, inv.player.level().getBlockEntity(extraData.readBlockPos()), new SimpleContainerData(2));
+    public SoulHarvesterMenu(int syncId, Inventory inventory, FriendlyByteBuf buf) {
+        this(syncId, inventory, inventory.player.level().getBlockEntity(buf.readBlockPos()), new SimpleContainerData(2));
     }
 
     public SoulHarvesterMenu(int pContainerId, Inventory inv, BlockEntity entity, ContainerData data) {
-        super(ModMenuTypes.SOUL_HARVESTER_MENU.get(), pContainerId);
+        super(ModMenuTypes.SOUL_HARVESTER_MENU, pContainerId);
         checkContainerSize(inv, 2);
-        blockEntity = ((SoulHarvesterBlockEntity) entity);
+
+        this.blockEntity = ((SoulHarvesterBlockEntity) entity);
+
+        this.container = ((Container) entity);
+        this.container.startOpen(inv.player);
+
         this.level = inv.player.level();
         this.data = data;
 
         addPlayerInventory(inv);
         addPlayerHotbar(inv);
 
-        this.blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(iItemHandler -> {
-            this.addSlot(new SlotItemHandler(iItemHandler, 0, 80, 11));
-            this.addSlot(new SlotItemHandler(iItemHandler, 1, 80, 59));
-        });
+        this.addSlot(new Slot(container, 0, 80, 11));
+        this.addSlot(new Slot(container, 1, 80, 59));
 
         addDataSlots(data);
     }
+
 
     public boolean isCrafting() {
         return data.get(0) > 0;

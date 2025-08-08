@@ -404,10 +404,13 @@ public abstract class CursorEntity extends Entity
         this.target = target;
     }
 
+    // TODO: INVESTIGATE - NEEDED?
+    /*
     @Override
     public void onRemovedFromWorld() {
         if(level().isClientSide()) { return; }
     }
+     */
 
     public void chanceToThanosSnapThisCursor()
     {

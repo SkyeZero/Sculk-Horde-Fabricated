@@ -1,5 +1,6 @@
 package com.github.sculkhorde.common.entity;
 
+import com.github.sculkhorde.client.SculkHordeClient;
 import com.github.sculkhorde.client.model.enitity.SculkRavagerModel;
 import com.github.sculkhorde.client.renderer.entity.SculkRavagerRenderer;
 import com.github.sculkhorde.common.entity.components.TargetParameters;
@@ -28,13 +29,13 @@ import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * In order to create a mob, the following java files were created/edited.<br>
  * Edited {@link ModEntities}<br>
  * Edited {@link com.github.sculkhorde.util.ModEventSubscriber}<br>
- * Edited {@link com.github.sculkhorde.client.ClientModEventSubscriber}<br>
+ * Edited {@link SculkHordeClient}<br>
  * Edited {@link com.github.sculkhorde.common.world.ModWorldEvents} (this might not be necessary)<br>
  * Edited {@link com.github.sculkhorde.common.world.gen.ModEntityGen}<br>
  * Added {@link SculkRavagerEntity}<br>

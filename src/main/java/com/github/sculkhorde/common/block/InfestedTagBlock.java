@@ -8,9 +8,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.extensions.IForgeBlock;
 
-public class InfestedTagBlock extends BaseEntityBlock implements IForgeBlock, ITagInfestedBlock {
+public class InfestedTagBlock extends BaseEntityBlock implements ITagInfestedBlock {
 
     /**
      * The Constructor that takes in properties

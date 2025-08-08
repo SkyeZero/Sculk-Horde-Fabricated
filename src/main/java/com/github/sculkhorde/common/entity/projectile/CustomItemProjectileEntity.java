@@ -8,6 +8,7 @@ import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.Entity;
@@ -22,10 +23,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.util.ITeleporter;
-import net.minecraftforge.network.NetworkHooks;
+import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvType;
 
 /**
  * This class is mainly used as a parent class and is used for
@@ -99,7 +98,9 @@ public class CustomItemProjectileEntity extends ThrowableItemProjectile {
      */
     @Override
     public Packet<ClientGamePacketListener> getAddEntityPacket() {
-        return NetworkHooks.getEntitySpawningPacket(this);
+        return new ClientboundAddEntityPacket(this);
+        // TODO: INVESTIGATE
+        // return NetworkHooks.getEntitySpawningPacket(this);
     }
 
 
@@ -187,6 +188,7 @@ public class CustomItemProjectileEntity extends ThrowableItemProjectile {
      * @param iTeleporter The teleporter object
      * @return ???
      */
+    /*
     @Override
     public Entity changeDimension(ServerLevel serverWorld, ITeleporter iTeleporter)
     {
@@ -197,12 +199,15 @@ public class CustomItemProjectileEntity extends ThrowableItemProjectile {
         }
         return super.changeDimension(serverWorld, iTeleporter);
     }
+    */
+
+    // TODO: INVESTIGATE
 
 
     /**
      * Handles an entity event fired from net.minecraft.world.level.Level#broadcastEntityEvent.
      */
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public void handleEntityEvent(byte pId) {
         if (pId == 3) {
             ParticleOptions iparticledata = this.getParticle();

@@ -1,5 +1,6 @@
 package com.github.sculkhorde.common.entity;
 
+import com.github.sculkhorde.client.SculkHordeClient;
 import com.github.sculkhorde.common.block.GolemOfWrathAnimatorBlock;
 import com.github.sculkhorde.common.entity.goal.CustomAttackGoal;
 import com.github.sculkhorde.common.entity.goal.NearestInfectionModEntityTargetGoal;
@@ -53,7 +54,7 @@ public class GolemOfWrathEntity extends PathfinderMob implements GeoEntity, IPur
      * In order to create a mob, the following java files were created/edited.<br>
      * Edited {@link com.github.sculkhorde.core.ModEntities}<br>
      * Edited {@link com.github.sculkhorde.util.ModEventSubscriber}<br>
-     * Edited {@link com.github.sculkhorde.client.ClientModEventSubscriber}.java<br>
+     * Edited {@link SculkHordeClient}.java<br>
      * Added {@link GolemOfWrathEntity}<br>
      * Added {@link com.github.sculkhorde.client.model.enitity.GolemOfWrathModel}<br>
      * Added {@link com.github.sculkhorde.client.renderer.entity.GolemOfWrathRenderer}

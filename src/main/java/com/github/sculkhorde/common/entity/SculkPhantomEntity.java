@@ -42,7 +42,7 @@ import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumSet;
@@ -119,8 +119,9 @@ public class SculkPhantomEntity extends FlyingMob implements GeoEntity, ISculkSm
                 .add(Attributes.ATTACK_KNOCKBACK, ATTACK_KNOCKBACK)
                 .add(Attributes.FOLLOW_RANGE,FOLLOW_RANGE)
                 .add(Attributes.MOVEMENT_SPEED, MOVEMENT_SPEED)
-                .add(Attributes.FLYING_SPEED, 3F)
-                .add(net.minecraftforge.common.ForgeMod.ENTITY_GRAVITY.get(), 0.0);
+                .add(Attributes.FLYING_SPEED, 3F);
+                // TODO: INVESTIGATE
+                // .add(net.minecraftforge.common.ForgeMod.ENTITY_GRAVITY.get(), 0.0);
     }
 
 

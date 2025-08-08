@@ -2,7 +2,7 @@ package com.github.sculkhorde.common.block;
 
 import java.util.function.Supplier;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 import com.github.sculkhorde.systems.infestation_systems.block_infestation_system.infestation_entries.ITagInfestedBlock;
 import com.github.sculkhorde.systems.infestation_systems.block_infestation_system.infestation_entries.ITagInfestedBlockEntity;
@@ -16,17 +16,20 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.extensions.IForgeBlock;
 
-public class InfestedStairBlock extends StairBlock implements EntityBlock, IForgeBlock, ITagInfestedBlock {
+public class InfestedStairBlock extends StairBlock implements EntityBlock, ITagInfestedBlock {
 	
 	public InfestedStairBlock(Properties properties) {
 		this(() -> InfestedStairBlock.stateById(0), properties);
 	}
 
 	public InfestedStairBlock(Supplier<BlockState> state, Properties properties) {
-		super(state, properties);
+		super(state.get(), properties);
 	}
+
+    public InfestedStairBlock(BlockState state, Properties properties) {
+        super(state, properties);
+    }
 	
 	/* Properties from BaseEntityBlock */
 	

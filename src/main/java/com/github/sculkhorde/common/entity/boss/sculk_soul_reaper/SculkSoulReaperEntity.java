@@ -1,5 +1,6 @@
 package com.github.sculkhorde.common.entity.boss.sculk_soul_reaper;
 
+import com.github.sculkhorde.client.SculkHordeClient;
 import com.github.sculkhorde.common.entity.ISculkSmartEntity;
 import com.github.sculkhorde.common.entity.SculkRavagerEntity;
 import com.github.sculkhorde.common.entity.SculkVindicatorEntity;
@@ -64,7 +65,7 @@ public class SculkSoulReaperEntity extends Monster implements GeoEntity, ISculkS
      * In order to create a mob, the following java files were created/edited.<br>
      * Edited {@link ModEntities}<br>
      * Edited {@link com.github.sculkhorde.util.ModEventSubscriber}<br>
-     * Edited {@link com.github.sculkhorde.client.ClientModEventSubscriber}<br>
+     * Edited {@link SculkHordeClient}<br>
      * Added {@link SculkSoulReaperEntity}<br>
      * Added {@link com.github.sculkhorde.client.model.enitity.SculkSoulReaperModel}<br>
      * Added {@link com.github.sculkhorde.client.renderer.entity.SculkSoulReaperRenderer}
@@ -324,12 +325,13 @@ public class SculkSoulReaperEntity extends Monster implements GeoEntity, ISculkS
                 new FloorSoulSpearsAttackGoal(this)
         ));
 
+        // TODO: INVESTIGATE LAG SPIKE WHEN ELEMENTAL CIRCLE IS SUMMONED
         this.goalSelector.addGoal(2, new ReaperAttackSequenceGoal(this, TickUnits.convertSecondsToTicks(15), 2,2,
                 new ShootElementalSoulProjectilesGoal(this),
-                new ElementalMagicCircleAttackGoal(this),
+                // new ElementalMagicCircleAttackGoal(this),
                 new FloorSoulSpearsAttackGoal(this),
                 new ShootElementalSoulProjectilesGoal(this),
-                new ElementalMagicCircleAttackGoal(this),
+                // new ElementalMagicCircleAttackGoal(this),
                 new FloorSoulSpearsAttackGoal(this)
         ));
 
@@ -366,12 +368,13 @@ public class SculkSoulReaperEntity extends Monster implements GeoEntity, ISculkS
                 new ZoltraakBarrageAttackGoal(this)
         ));
 
+        // TODO: INVESTIGATE LAG SPIKE WHEN ELEMENTAL CIRCLE IS SUMMONED
         this.goalSelector.addGoal(3, new ReaperAttackSequenceGoal(this, TickUnits.convertSecondsToTicks(15), 3,-1,
                 new ShootElementalSoulProjectilesGoal(this),
-                new ElementalMagicCircleAttackGoal(this),
+                // new ElementalMagicCircleAttackGoal(this),
                 new FloorSoulSpearsAttackGoal(this),
                 new ShootElementalSoulProjectilesGoal(this),
-                new ElementalMagicCircleAttackGoal(this),
+                // new ElementalMagicCircleAttackGoal(this),
                 new FloorSoulSpearsAttackGoal(this)
         ));
 

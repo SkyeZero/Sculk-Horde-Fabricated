@@ -14,12 +14,9 @@ import com.github.sculkhorde.systems.gravemind_system.Gravemind;
 import com.github.sculkhorde.systems.path_builder_system.PathBuilderSystem;
 import com.github.sculkhorde.systems.raid_system.RaidData;
 import com.github.sculkhorde.systems.raid_system.RaidHandler;
-import com.github.sculkhorde.util.BlockAlgorithms;
+import com.github.sculkhorde.util.*;
 import com.github.sculkhorde.util.ChunkLoading.BlockEntityChunkLoaderHelper;
 import com.github.sculkhorde.util.ChunkLoading.EntityChunkLoaderHelper;
-import com.github.sculkhorde.util.DeathAreaInvestigator;
-import com.github.sculkhorde.util.EntityAlgorithms;
-import com.github.sculkhorde.util.TickUnits;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
@@ -31,8 +28,7 @@ import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.SavedData;
-import net.minecraftforge.event.level.LevelEvent;
-import net.minecraftforge.server.ServerLifecycleHooks;
+import io.github.fabricators_of_create.porting_lib.util.ServerLifecycleHooks;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -115,10 +111,10 @@ public class ModSavedData extends SavedData {
 
     /**
      * Note: We initialize systems in {@link ModSavedData#load(CompoundTag)}
-     * instead of {@link com.github.sculkhorde.util.ForgeEventSubscriber#onWorldLoad(LevelEvent.Load)} because
+     * instead of { com.github.sculkhorde.util.ForgeEventSubscriber#onWorldLoad(LevelEvent.Load)} because
      * it fires after {@link ModSavedData#load(CompoundTag)} which causes the following side effects.
      * <br><br>
-     * 1. Data will be loaded into systems, then wiped out by {@link com.github.sculkhorde.util.ForgeEventSubscriber#onWorldLoad(LevelEvent.Load)}<br>
+     * 1. Data will be loaded into systems, then wiped out by {com.github.sculkhorde.util.ForgeEventSubscriber#onWorldLoad(LevelEvent.Load)}<br>
      * 2. Data won't be properly reset between world loads if you try to remedy this with individual null checks.<br>
      * 3. If data not properly reset between world loads, the {@link CursorSystem} will cause the world to get stuck at 100% loading.<br><br>
      * In conclusion, it is better to initialize systems first, then load their data.
@@ -733,7 +729,7 @@ public class ModSavedData extends SavedData {
     /**
      * Will verify all enties to see if they exist in the world.
      * If not, they will be removed. <br>
-     * Gets called in {@link com.github.sculkhorde.util.ForgeEventSubscriber#WorldTickEvent}
+     * Gets called in {@link FabricEventSubscriber#WorldTickEvent}
      */
     public void validateNodeEntries() {
         long startTime = System.nanoTime();
@@ -759,7 +755,7 @@ public class ModSavedData extends SavedData {
      * Will verify all enties to see if they exist in the world.
      * Will also reasses the parentNode for each one.
      * If not, they will be removed. <br>
-     * Gets called in {@link com.github.sculkhorde.util.ForgeEventSubscriber#WorldTickEvent}
+     * Gets called in {@link FabricEventSubscriber#WorldTickEvent}
      */
     public void validateBeeNestEntries() {
         long startTime = System.nanoTime();

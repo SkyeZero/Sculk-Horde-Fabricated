@@ -1,10 +1,10 @@
 package com.github.sculkhorde.systems.infestation_systems.block_infestation_system.infestation_entries;
 
+import com.github.sculkhorde.fabricated.Ut;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.TierSortingRegistry;
 
 public class MultiTagInfestationTableEntry extends BlockEntityInfestationTableEntry {
 
@@ -22,6 +22,6 @@ public class MultiTagInfestationTableEntry extends BlockEntityInfestationTableEn
 
     @Override
     public boolean isNormalVariant(BlockState blockState) {
-        return blockState.is(normalVariantTag1) && blockState.is(normalVariantTag2) && TierSortingRegistry.isCorrectTierForDrops(tierRequired, blockState);
+        return blockState.is(normalVariantTag1) && blockState.is(normalVariantTag2) && Ut.isCorrectTierVanilla(tierRequired, blockState);
     }
 }

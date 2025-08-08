@@ -16,25 +16,25 @@ import com.github.sculkhorde.common.entity.projectile.AcidBlobProjectileEntity;
 import com.github.sculkhorde.common.entity.projectile.CustomItemProjectileEntity;
 import com.github.sculkhorde.common.entity.projectile.PurificationFlaskProjectileEntity;
 import com.github.sculkhorde.common.entity.projectile.SculkAcidicProjectileEntity;
+import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobCategory;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import io.github.fabricators_of_create.porting_lib.util.LazyRegistrar;
+import io.github.fabricators_of_create.porting_lib.util.RegistryObject;
 
 public class ModEntities {
 
     /** ENTITY TYPES **/
 
-    public static DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, SculkHorde.MOD_ID);
+    public static LazyRegistrar<EntityType<?>> ENTITY_TYPES = LazyRegistrar.create(Registries.ENTITY_TYPE, SculkHorde.MOD_ID);
 
-    public static void register(IEventBus eventBus){
-        ENTITY_TYPES.register(eventBus);
+    public static void register(){
+        ENTITY_TYPES.register();
+        initAttributes();
     }
 
     public static <T extends Mob> RegistryObject<EntityType<T>> registerMob(String name, EntityType.EntityFactory<T> entity, float width, float height, int primaryEggColor, int secondaryEggColor) {
@@ -112,6 +112,41 @@ public class ModEntities {
     public static String ACID_BLOB_PROJECTILE_ENTITY_ID = "acid_blob_projectile";
     public static final RegistryObject<EntityType<AcidBlobProjectileEntity>> ACID_BLOB_PROJECTILE_ENTITY = ENTITY_TYPES.register(ACID_BLOB_PROJECTILE_ENTITY_ID, () -> EntityType.Builder.<AcidBlobProjectileEntity>of(AcidBlobProjectileEntity::new, MobCategory.MISC).sized(0.9f, 0.9f).clientTrackingRange(4).updateInterval(10).build(ACID_BLOB_PROJECTILE_ENTITY_ID));
 
+    // [FABRIC] TRANSFERED FROM ModEventSubscriber
+    public static void initAttributes() {
+        FabricDefaultAttributeRegistry.register(ModEntities.SCULK_ZOMBIE.get(), SculkZombieEntity.createAttributes());
+        FabricDefaultAttributeRegistry.register(ModEntities.SCULK_MITE.get(), SculkMiteEntity.createAttributes());
+        FabricDefaultAttributeRegistry.register(ModEntities.SCULK_MITE_AGGRESSOR.get(), SculkMiteAggressorEntity.createAttributes());
+        FabricDefaultAttributeRegistry.register(ModEntities.SCULK_SPITTER.get(), SculkSpitterEntity.createAttributes());
+        FabricDefaultAttributeRegistry.register(ModEntities.SCULK_BEE_INFECTOR.get(), SculkBeeInfectorEntity.createAttributes());
+        FabricDefaultAttributeRegistry.register(ModEntities.SCULK_BEE_HARVESTER.get(), SculkBeeHarvesterEntity.createAttributes());
+        FabricDefaultAttributeRegistry.register(ModEntities.SCULK_HATCHER.get(), SculkHatcherEntity.createAttributes());
+        FabricDefaultAttributeRegistry.register(ModEntities.SCULK_SPORE_SPEWER.get(), SculkSporeSpewerEntity.createAttributes());
+        FabricDefaultAttributeRegistry.register(ModEntities.SCULK_RAVAGER.get(), SculkRavagerEntity.createAttributes());
+        FabricDefaultAttributeRegistry.register(ModEntities.INFESTATION_PURIFIER.get(), InfestationPurifierEntity.createAttributes());
+        FabricDefaultAttributeRegistry.register(ModEntities.SCULK_VINDICATOR.get(), SculkVindicatorEntity.createAttributes());
+        FabricDefaultAttributeRegistry.register(ModEntities.SCULK_CREEPER.get(), SculkCreeperEntity.createAttributes());
+        FabricDefaultAttributeRegistry.register(ModEntities.SCULK_ENDERMAN.get(), SculkEndermanEntity.createAttributes());
+        FabricDefaultAttributeRegistry.register(ModEntities.SCULK_PHANTOM.get(), SculkPhantomEntity.createAttributes());
+        FabricDefaultAttributeRegistry.register(ModEntities.SCULK_PHANTOM_CORPSE.get(), SculkPhantomCorpseEntity.createAttributes());
+        FabricDefaultAttributeRegistry.register(ModEntities.SCULK_SALMON.get(), SculkSalmonEntity.createAttributes());
+        FabricDefaultAttributeRegistry.register(ModEntities.SCULK_SQUID.get(), SculkSquidEntity.createAttributes());
+        FabricDefaultAttributeRegistry.register(ModEntities.SCULK_PUFFERFISH.get(), SculkPufferfishEntity.createAttributes());
+        FabricDefaultAttributeRegistry.register(ModEntities.SCULK_WITCH.get(), SculkWitchEntity.createAttributes());
+        FabricDefaultAttributeRegistry.register(ModEntities.SCULK_SOUL_REAPER.get(), SculkSoulReaperEntity.createAttributes());
+        FabricDefaultAttributeRegistry.register(ModEntities.SCULK_VEX.get(), SculkVexEntity.createAttributes());
+        FabricDefaultAttributeRegistry.register(ModEntities.LIVING_ARMOR.get(), LivingArmorEntity.createAttributes());
+        FabricDefaultAttributeRegistry.register(ModEntities.GOLEM_OF_WRATH.get(), GolemOfWrathEntity.createAttributes());
+        FabricDefaultAttributeRegistry.register(ModEntities.SCULK_GUARDIAN.get(), SculkGuardianEntity.createAttributes());
+        FabricDefaultAttributeRegistry.register(ModEntities.SCULK_BROOD_HATCHER.get(), SculkBroodHatcherEntity.createAttributes());
+        FabricDefaultAttributeRegistry.register(ModEntities.SCULK_BROODLING.get(), SculkBroodlingEntity.createAttributes());
+        FabricDefaultAttributeRegistry.register(ModEntities.SCULK_SHEEP.get(), SculkSheepEntity.createAttributes());
+        FabricDefaultAttributeRegistry.register(ModEntities.SCULK_METAMORPHOSIS_POD.get(), SculkMetamorphosisPodEntity.createAttributes());
+        FabricDefaultAttributeRegistry.register(ModEntities.SCULK_GHAST.get(), SculkGhastEntity.createAttributes());
+        FabricDefaultAttributeRegistry.register(ModEntities.SCULK_LEECH.get(), SculkLeechEntity.createAttributes());
+        FabricDefaultAttributeRegistry.register(ModEntities.SCULK_STINGER.get(), SculkStingerEntity.createAttributes());
+    }
+    
     public static class EntityTags
     {
         public static TagKey<EntityType<?>> SCULK_ENTITY = create("sculk_entity");

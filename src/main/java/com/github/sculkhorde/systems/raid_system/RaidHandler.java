@@ -6,6 +6,7 @@ import com.github.sculkhorde.common.entity.SculkPhantomEntity;
 import com.github.sculkhorde.common.entity.boss.sculk_enderman.SculkEndermanEntity;
 import com.github.sculkhorde.common.entity.SculkSporeSpewerEntity;
 import com.github.sculkhorde.core.*;
+import com.github.sculkhorde.fabricated.Ut;
 import com.github.sculkhorde.systems.gravemind_system.Gravemind;
 import com.github.sculkhorde.systems.gravemind_system.entity_factory.EntityFactory;
 import com.github.sculkhorde.systems.gravemind_system.entity_factory.EntityFactoryEntry;
@@ -28,7 +29,7 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.server.ServerLifecycleHooks;
+import io.github.fabricators_of_create.porting_lib.util.ServerLifecycleHooks;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -135,17 +136,17 @@ public class RaidHandler {
 
     public boolean isScoutingLocationLoaded()
     {
-        return raidData.getDimension().isAreaLoaded(scoutingLocation, 3);
+        return Ut.isAreaLoaded(raidData.getDimension(), scoutingLocation, 3);
     }
 
     public boolean isRaidCenterLocationLoaded()
     {
-        return raidData.getDimension().isAreaLoaded(raidData.getRaidCenter(), 5);
+        return Ut.isAreaLoaded(raidData.getDimension(), raidData.getRaidCenter(), 5);
     }
 
     public boolean isSpawningLocationLoaded()
     {
-        return raidData.getDimension().isAreaLoaded(raidData.getSpawnLocation(), 1);
+        return Ut.isAreaLoaded(raidData.getDimension(), raidData.getSpawnLocation(), 1);
     }
 
     public void loadRaidChunksCenter()

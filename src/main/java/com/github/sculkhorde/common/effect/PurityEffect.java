@@ -1,6 +1,7 @@
 package com.github.sculkhorde.common.effect;
 
 import com.github.sculkhorde.core.ModMobEffects;
+import com.github.sculkhorde.fabricated.CurableEffect;
 import com.github.sculkhorde.util.EntityAlgorithms;
 import com.github.sculkhorde.util.TickUnits;
 import net.minecraft.world.effect.MobEffect;
@@ -11,7 +12,7 @@ import net.minecraft.world.item.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PurityEffect extends MobEffect {
+public class PurityEffect extends MobEffect implements CurableEffect {
 
     public static int liquidColor = 15518533;
     public static MobEffectCategory effectType = MobEffectCategory.BENEFICIAL;

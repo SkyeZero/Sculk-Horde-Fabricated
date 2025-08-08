@@ -4,6 +4,7 @@ import com.github.sculkhorde.systems.cursor_system.CursorSystem;
 import com.github.sculkhorde.systems.cursor_system.ICursor;
 import com.github.sculkhorde.util.TickUnits;
 import com.mojang.blaze3d.platform.InputConstants;
+import io.github.fabricators_of_create.porting_lib.item.api.extensions.RepairableItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -12,18 +13,16 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.extensions.IForgeItem;
+import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvType;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.List;
 
-public class DiasciteAxeItem extends AxeItem implements IForgeItem, IHealthRepairable {
+public class DiasciteAxeItem extends AxeItem implements RepairableItem, IHealthRepairable {
     protected static float ATTACK_SPEED = -3.0F;
     protected static int ATTACK_DAMAGE = 5;
     protected static Properties PROPERTIES = new Properties()
-            .setNoRepair()
             .rarity(Rarity.EPIC)
             .durability(3000)
             .defaultDurability(3000);
@@ -40,7 +39,7 @@ public class DiasciteAxeItem extends AxeItem implements IForgeItem, IHealthRepai
     @Override
     public boolean mineBlock(ItemStack itemStack, Level level, BlockState blockState, BlockPos pos, LivingEntity entity) {
 
-        if(entity instanceof Player player && isCorrectToolForDrops(itemStack, blockState))
+        if(entity instanceof Player player && isCorrectToolForDrops(blockState)) // TODO: INVESTIGATE - isCorrectToolForDrops(itemStack, blockState))
         {
             ICursor cursor = CursorSystem.createOreMinerCursor(level, blockState.getBlock(), player, pos, itemStack);
             cursor.setMaxTransformations(64);
@@ -60,7 +59,7 @@ public class DiasciteAxeItem extends AxeItem implements IForgeItem, IHealthRepai
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
         if(InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), GLFW.GLFW_KEY_LEFT_SHIFT))
         {

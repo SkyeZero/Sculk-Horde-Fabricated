@@ -1,6 +1,7 @@
 package com.github.sculkhorde.common.block;
 
 import com.github.sculkhorde.core.ModBlocks;
+import com.github.sculkhorde.fabricated.Ut;
 import com.github.sculkhorde.util.BlockAlgorithms;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -29,7 +30,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 public class SouliteBudBlock extends AmethystBlock implements SimpleWaterloggedBlock {
 
@@ -112,7 +113,7 @@ public class SouliteBudBlock extends AmethystBlock implements SimpleWaterloggedB
    }
 
    public void randomTick(BlockState blockState, ServerLevel level, BlockPos pos, RandomSource randomSource) {
-      if (!level.isAreaLoaded(pos, 1))
+      if (!Ut.isAreaLoaded(level, pos, 1))
       {
          return; // Forge: prevent loading unloaded chunks when checking neighbor's light
       }

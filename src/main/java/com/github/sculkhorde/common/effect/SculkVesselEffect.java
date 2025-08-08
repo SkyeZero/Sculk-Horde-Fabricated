@@ -1,6 +1,7 @@
 package com.github.sculkhorde.common.effect;
 
 import com.github.sculkhorde.core.ModSavedData;
+import com.github.sculkhorde.fabricated.CurableEffect;
 import com.github.sculkhorde.util.BlockAlgorithms;
 import com.github.sculkhorde.util.EntityAlgorithms;
 import com.github.sculkhorde.util.TickUnits;
@@ -15,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class SculkVesselEffect extends MobEffect {
+public class SculkVesselEffect extends MobEffect implements CurableEffect {
 
     public static int liquidColor = 338997;
     public static MobEffectCategory effectType = MobEffectCategory.BENEFICIAL;

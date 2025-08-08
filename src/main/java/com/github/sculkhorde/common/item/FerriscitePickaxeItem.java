@@ -1,6 +1,7 @@
 package com.github.sculkhorde.common.item;
 
 import com.mojang.blaze3d.platform.InputConstants;
+import io.github.fabricators_of_create.porting_lib.item.api.extensions.RepairableItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -11,21 +12,19 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.extensions.IForgeItem;
+import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvType;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.List;
 
-public class FerriscitePickaxeItem extends PickaxeItem implements IForgeItem, IHealthRepairable {
+public class FerriscitePickaxeItem extends PickaxeItem implements RepairableItem, IHealthRepairable {
     protected static float ATTACK_SPEED = -2.8F;
     protected static int ATTACK_DAMAGE = 1;
     public static String blocksBrokenTagID = "blocks_broken";
     public static String lastBlockBrokenID = "last_block_broken";
 
     protected static Properties PROPERTIES = new Properties()
-            .setNoRepair()
             .rarity(Rarity.EPIC)
             .durability(3000)
             .defaultDurability(3000);
@@ -36,7 +35,7 @@ public class FerriscitePickaxeItem extends PickaxeItem implements IForgeItem, IH
 
     @Override
     public float getDestroySpeed(ItemStack itemStack, BlockState blockState) {
-        if(isCorrectToolForDrops(itemStack, blockState))
+        if (isCorrectToolForDrops(blockState)) // TODO: INVESTIGATE - if(isCorrectToolForDrops(itemStack, blockState))
         {
             float baseMiningSpeed = 10F;
             float additionalMiningSpeed = Math.abs(Math.min(getBlocksBroken(itemStack) / 10F, 100F));
@@ -157,7 +156,7 @@ public class FerriscitePickaxeItem extends PickaxeItem implements IForgeItem, IH
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
         if(InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), GLFW.GLFW_KEY_LEFT_SHIFT))
         {

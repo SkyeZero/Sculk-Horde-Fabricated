@@ -18,18 +18,17 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.material.MapColor;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.extensions.IForgeBlock;
+import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvType;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 /**
  * Chunk Loader Code created by SuperMartijn642
  */
 
-public class DevStructureTesterBlock extends BaseEntityBlock implements IForgeBlock {
+public class DevStructureTesterBlock extends BaseEntityBlock {
 
     /**
      * HARDNESS determines how difficult a block is to break<br>
@@ -127,7 +126,7 @@ public class DevStructureTesterBlock extends BaseEntityBlock implements IForgeBl
      * @param flagIn The flag
      */
     @Override
-    @OnlyIn(Dist.CLIENT)
+    @Environment(EnvType.CLIENT)
     public void appendHoverText(ItemStack stack, @Nullable BlockGetter iBlockReader, List<Component> tooltip, TooltipFlag flagIn) {
 
         super.appendHoverText(stack, iBlockReader, tooltip, flagIn); //Not sure why we need this
