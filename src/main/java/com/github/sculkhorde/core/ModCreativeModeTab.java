@@ -76,6 +76,7 @@ public class ModCreativeModeTab {
                 event.accept(ModBlocks.SMALL_SHROOM.get());
                 event.accept(ModBlocks.SPIKE.get());
                 event.accept(Blocks.SCULK);
+                event.accept(ModBlocks.DISEASED_KELP_BLOCK.get());
 
                 event.accept(ModBlocks.SCULK_SUMMONER_BLOCK.get());
                 event.accept(Blocks.SCULK_CATALYST);
@@ -205,11 +206,11 @@ public class ModCreativeModeTab {
                 event.accept(ModBlocks.DEPLETED_SOULITE_BLOCK .get());
                 event.accept(ModBlocks.SOULITE_BUD_BLOCK.get());
                 event.accept(ModBlocks.SOULITE_CLUSTER_BLOCK.get());
+                event.accept(ModItems.SOULITE_SHARD.get());
                 event.accept(ModBlocks.FUNGAL_SHROOM_CORE_BLOCK.get());
                 event.accept(ModBlocks.FUNGAL_SCULK_BLOCK.get());
                 event.accept(ModBlocks.FUNGAL_SCULK_STEM_BLOCK.get());
                 event.accept(ModBlocks.TENDRIL_CORE_BLOCK.get());
-                event.accept(ModBlocks.DISEASED_KELP_BLOCK.get());
                 event.accept(ModBlocks.TENDRILS.get());
                 event.accept(ModBlocks.BROOD_NEST_BLOCK.get());
                 event.accept(ModBlocks.BROOD_NEST_CORE_BLOCK.get());

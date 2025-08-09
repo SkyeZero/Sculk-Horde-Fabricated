@@ -3,6 +3,7 @@ package com.github.sculkhorde.common.entity;
 import com.github.sculkhorde.common.entity.components.TargetParameters;
 import com.github.sculkhorde.common.entity.goal.*;
 import com.github.sculkhorde.core.ModSounds;
+import com.github.sculkhorde.core.SculkHorde;
 import com.github.sculkhorde.util.EntityAlgorithms;
 import com.github.sculkhorde.util.SquadHandler;
 import com.github.sculkhorde.util.TickUnits;
@@ -237,7 +238,7 @@ public class SculkLeechEntity extends Salmon implements GeoEntity, ISculkSmartEn
             float targetMobRemainingHealth = target.getHealth() / target.getMaxHealth();
             if(targetMobRemainingHealth <= 0.5 && !target.hasEffect(SculkMiteEntity.INFECT_EFFECT))
             {
-                EntityAlgorithms.applyEffectToTarget(target, SculkMiteEntity.INFECT_EFFECT, SculkMiteEntity.INFECT_DURATION, SculkMiteEntity.INFECT_LEVEL);
+                EntityAlgorithms.applyEffectToTarget(target, SculkMiteEntity.INFECT_EFFECT, SculkMiteEntity.INFECT_DURATION, SculkHorde.gravemind.getPotionAmplificationBasedOnGravemindState());
 
                 //Kill The Bastard
                 /**

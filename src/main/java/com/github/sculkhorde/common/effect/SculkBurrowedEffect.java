@@ -60,18 +60,25 @@ public class SculkBurrowedEffect extends MobEffect implements EntityEvents.MobEf
         int infectionDamage = 4;
         BlockPos entityPosition = entity.blockPosition();
 
-        // Choose to spawn Mite or Salmon depending on if in a fluid like water. Salmon requires Experimental Features
-        if (level.getFluidState(entityPosition) == Fluids.EMPTY.defaultFluidState() || !ModConfig.isExperimentalFeaturesEnabled()) {
+        //Spawn Mite
+        if(entity.level().getFluidState(entityPosition) != Fluids.EMPTY.defaultFluidState())
+        {
+            ModEntities.SCULK_LEECH.get().spawn((ServerLevel) level, entityPosition, MobSpawnType.SPAWNER);
+
+        }
+        else if(EntityAlgorithms.getHeightOffGround(entity) > 2)
+        {
+            ModEntities.SCULK_STINGER.get().spawn((ServerLevel) level, entityPosition, MobSpawnType.SPAWNER);
+        }
+        else
+        {
             ModEntities.SCULK_MITE.get().spawn((ServerLevel) level, entityPosition, MobSpawnType.SPAWNER);
         }
-        else {
-            ModEntities.SCULK_SALMON.get().spawn((ServerLevel) level, entityPosition, MobSpawnType.SPAWNER);
-        }
 
-        // Place Sculk Mass
+        // Spawn Sculk Mass
         placeSculkMass(entity);
 
-        // Damage entity
+        // Do infectionDamage to victim per mite
         entity.hurt(entity.damageSources().magic(), infectionDamage);
 
         // Spawn Particles for Burst Animation

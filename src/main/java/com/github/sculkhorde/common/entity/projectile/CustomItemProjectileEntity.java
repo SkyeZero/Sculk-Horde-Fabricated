@@ -14,8 +14,6 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -167,16 +165,7 @@ public class CustomItemProjectileEntity extends ThrowableItemProjectile {
     protected void onHitBlock(BlockHitResult raytrace)
     {
         super.onHitBlock(raytrace);
-        if (random.nextFloat() < 0.028F && !(getOwner() instanceof Player && ((Player) getOwner()).isCreative()))
-        {
-            final Vec3 vec = raytrace.getLocation();
-            final ItemEntity item = new ItemEntity(this.level(), vec.x, vec.y + 0.25D, vec.z, new ItemStack(getDefaultItem()));
-            this.level().addFreshEntity(item);
-        }
-        else
-        {
-            this.playSound(SoundEvents.HONEY_BLOCK_BREAK, 1.0F, 1.0F + random.nextFloat() * 0.2F);
-        }
+        this.playSound(SoundEvents.HONEY_BLOCK_BREAK, 1.0F, 1.0F + random.nextFloat() * 0.2F);
         this.remove(RemovalReason.DISCARDED);
     }
 

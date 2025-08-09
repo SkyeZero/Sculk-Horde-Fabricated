@@ -1,5 +1,5 @@
 {
-	"variants": {
-		"default": "outlined_sprite:sculkhorde/sculk_creeper.png"
-	}
+  "variants": {
+    "default": "outlined_sprite:sculkhorde/sculk_creeper.png"
+  }
 }
