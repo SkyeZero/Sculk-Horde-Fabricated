@@ -2,6 +2,7 @@ package com.github.sculkhorde.common.block;
 
 import com.github.sculkhorde.core.ModBlocks;
 import com.github.sculkhorde.core.ModMobEffects;
+import com.github.sculkhorde.util.BlockAlgorithms;
 import com.github.sculkhorde.util.EntityAlgorithms;
 import com.github.sculkhorde.util.TickUnits;
 import com.mojang.blaze3d.platform.InputConstants;
@@ -119,7 +120,7 @@ public class DiseasedKelpBlock extends Block implements IForgeBlock, LiquidBlock
 
     /** MODIFIERS **/
 
-    public static void setEndBlock(Level pLevel, BlockState pState, BlockPos pPos, Boolean value)
+    public static void setEndBlock(Level pLevel, BlockState pState, BlockPos pPos, Boolean isEndBlock)
     {
         /**
          * Sets a block state into this world.Flags are as follows:
@@ -132,7 +133,22 @@ public class DiseasedKelpBlock extends Block implements IForgeBlock, LiquidBlock
          * 64 will signify the block is being moved.
          * Flags can be OR-ed
          */
-        pLevel.setBlock(pPos, pState.setValue(END, value), 3);
+        if(pState.is(Blocks.KELP_PLANT) || pState.is(Blocks.KELP))
+        {
+            if(isEndBlock)
+            {
+                BlockAlgorithms.setBlockMisc(pLevel, pPos, Blocks.KELP.defaultBlockState());
+
+            }
+            else
+            {
+                BlockAlgorithms.setBlockMisc(pLevel, pPos, Blocks.KELP_PLANT.defaultBlockState());
+            }
+        }
+        else
+        {
+            BlockAlgorithms.setBlockMisc(pLevel, pPos, pState.setValue(END, isEndBlock));
+        }
     }
 
     public boolean isBlockAboveKelpOrDiseasedKelp(LevelReader level, BlockPos pos)
@@ -291,7 +307,7 @@ public class DiseasedKelpBlock extends Block implements IForgeBlock, LiquidBlock
 
         if(isBlockBelowKelpOrDiseasedKelp(level, pos))
         {
-            setEndBlock(level, newState, pos.below(), true);
+            setEndBlock(level, oldState, pos.below(), true);
         }
     }
 
