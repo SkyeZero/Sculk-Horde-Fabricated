@@ -3,7 +3,6 @@ package com.github.sculkhorde.common.entity;
 import com.github.sculkhorde.common.entity.components.ImprovedFlyingNavigator;
 import com.github.sculkhorde.common.entity.components.TargetParameters;
 import com.github.sculkhorde.common.entity.goal.*;
-import com.github.sculkhorde.core.ModMobEffects;
 import com.github.sculkhorde.core.ModSounds;
 import com.github.sculkhorde.core.SculkHorde;
 import com.github.sculkhorde.util.EntityAlgorithms;
@@ -351,18 +350,22 @@ public class SculkStingerEntity extends FlyingMob implements GeoEntity, ISculkSm
             }
 
             SculkStingerEntity.this.getNavigation().moveTo(target, 1.0D);
-            float attackReach = (getBbWidth()/2) + 2;
-            boolean doesPhantomIntersectTarget = EntityAlgorithms.getDistanceBetweenEntities(target, SculkStingerEntity.this) <= attackReach;
+            float attackReach = (getBbWidth()/2) + 3;
+            boolean doesIntersectTarget = EntityAlgorithms.getDistanceBetweenEntities(target, SculkStingerEntity.this) <= attackReach;
             boolean isHealthBelow50Percent = target.getHealth() / target.getMaxHealth() <= 0.5F;
 
-            if (doesPhantomIntersectTarget && isHealthBelow50Percent)
+            if (doesIntersectTarget)
             {
                 SculkStingerEntity.this.doHurtTarget(target);
-                EntityAlgorithms.reducePurityEffectDuration(target, TickUnits.convertMinutesToTicks(5));
-                EntityAlgorithms.applyEffectToTarget(target, ModMobEffects.SCULK_INFECTION.get(), TickUnits.convertSecondsToTicks(30), SculkHorde.gravemind.getPotionAmplificationBasedOnGravemindState());
+
+                if(isHealthBelow50Percent && !target.hasEffect(SculkMiteEntity.INFECT_EFFECT))
+                {
+                    EntityAlgorithms.applyEffectToTarget(target, SculkMiteEntity.INFECT_EFFECT, SculkMiteEntity.INFECT_DURATION, SculkHorde.gravemind.getPotionAmplificationBasedOnGravemindState());
+                }
                 lastTimeOfAttack = level().getGameTime();
                 return;
             }
+
 
             if (SculkStingerEntity.this.horizontalCollision || SculkStingerEntity.this.hurtTime > 0) {
                 lastTimeOfAttack = level().getGameTime();
