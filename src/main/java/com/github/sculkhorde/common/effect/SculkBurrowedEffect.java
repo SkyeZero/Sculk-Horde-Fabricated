@@ -63,8 +63,19 @@ public class SculkBurrowedEffect extends MobEffect implements IPotionExpireEffec
         BlockPos entityPosition = entity.blockPosition();
 
         //Spawn Mite
-        if(entity.level().getFluidState(entityPosition) == Fluids.EMPTY.defaultFluidState() || !ModConfig.isExperimentalFeaturesEnabled()) { ModEntities.SCULK_MITE.get().spawn((ServerLevel) event.getEntity().level(), entityPosition, MobSpawnType.SPAWNER); }
-        else { ModEntities.SCULK_SALMON.get().spawn((ServerLevel) event.getEntity().level(), entityPosition, MobSpawnType.SPAWNER); }
+        if(entity.level().getFluidState(entityPosition) != Fluids.EMPTY.defaultFluidState())
+        {
+            ModEntities.SCULK_LEECH.get().spawn((ServerLevel) event.getEntity().level(), entityPosition, MobSpawnType.SPAWNER);
+
+        }
+        else if(EntityAlgorithms.getHeightOffGround(entity) > 2)
+        {
+            ModEntities.SCULK_STINGER.get().spawn((ServerLevel) event.getEntity().level(), entityPosition, MobSpawnType.SPAWNER);
+        }
+        else
+        {
+            ModEntities.SCULK_MITE.get().spawn((ServerLevel) event.getEntity().level(), entityPosition, MobSpawnType.SPAWNER);
+        }
 
         //Spawn Sculk Mass
         placeSculkMass(entity);
