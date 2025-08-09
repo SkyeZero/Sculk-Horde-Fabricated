@@ -201,6 +201,7 @@ public class ModCreativeModeTab {
                 event.accept(ModBlocks.DEPLETED_SOULITE_BLOCK .get());
                 event.accept(ModBlocks.SOULITE_BUD_BLOCK.get());
                 event.accept(ModBlocks.SOULITE_CLUSTER_BLOCK.get());
+                event.accept(ModItems.SOULITE_SHARD.get());
                 event.accept(ModBlocks.FUNGAL_SHROOM_CORE_BLOCK.get());
                 event.accept(ModBlocks.FUNGAL_SCULK_BLOCK.get());
                 event.accept(ModBlocks.FUNGAL_SCULK_STEM_BLOCK.get());
