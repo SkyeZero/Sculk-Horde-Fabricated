@@ -151,7 +151,6 @@ public class SculkLeechEntity extends Salmon implements GeoEntity, ISculkSmartEn
     private static final RawAnimation SWIM_ANIMATION = RawAnimation.begin().thenLoop("misc.swim");
     private static final RawAnimation LAND_ANIMATION = RawAnimation.begin().thenLoop("misc.land");
 
-
     // Add our animations
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {

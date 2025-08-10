@@ -47,7 +47,11 @@ public class SculkSalmonEntity extends Salmon implements GeoEntity, ISculkSmartE
     public static final float MOVEMENT_SPEED = 2.0F;
 
     // Controls what types of entities this mob can target
-    private TargetParameters TARGET_PARAMETERS = new TargetParameters(this).enableTargetPassives().enableTargetHostiles().enableTargetSwimmers();
+    private TargetParameters TARGET_PARAMETERS = new TargetParameters(this)
+            .enableTargetPassives()
+            .enableTargetHostiles()
+            .enableTargetSwimmers()
+            .enableTargetInfected();
     private SquadHandler squad = new SquadHandler(this);
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
@@ -145,56 +149,6 @@ public class SculkSalmonEntity extends Salmon implements GeoEntity, ISculkSmartE
     }
 
 
-    //Animation Stuff below
-    private static final RawAnimation SWIM_ANIMATION = RawAnimation.begin().thenLoop("misc.idle");
-    private static final RawAnimation LAND_ANIMATION = RawAnimation.begin().thenLoop("misc.land");
-
-
-    // Add our animations
-    @Override
-    public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(
-                new AnimationController<>(this, "walk_cycle", 5, this::poseWalkCycle)
-        );
-    }
-
-    protected PlayState poseWalkCycle(AnimationState<SculkSalmonEntity> state)
-    {
-
-        if(state.getAnimatable().isInWaterOrBubble())
-        {
-            state.setAnimation(SWIM_ANIMATION);
-        }
-        else
-        {
-            state.setAnimation(LAND_ANIMATION);
-        }
-
-        return PlayState.CONTINUE;
-    }
-
-    @Override
-    public AnimatableInstanceCache getAnimatableInstanceCache() {
-        return this.cache;
-    }
-
-    private boolean isParticipatingInRaid = false;
-
-    @Override
-    public SquadHandler getSquad() {
-        return squad;
-    }
-
-    @Override
-    public boolean isParticipatingInRaid() {
-        return false;
-    }
-
-    @Override
-    public void setParticipatingInRaid(boolean isParticipatingInRaidIn) {
-        this.isParticipatingInRaid = isParticipatingInRaidIn;
-    }
-
     @Override
     public TargetParameters getTargetParameters() {
         return TARGET_PARAMETERS;
@@ -215,9 +169,10 @@ public class SculkSalmonEntity extends Salmon implements GeoEntity, ISculkSmartE
         @Override
         public boolean canUse()
         {
-            boolean canWeUse = ((ISculkSmartEntity)this.mob).getTargetParameters().isEntityValidTarget(this.mob.getTarget(), true);
+            boolean isTargetValid = ((ISculkSmartEntity)this.mob).getTargetParameters().isEntityValidTarget(this.mob.getTarget(), true);
+            boolean isInWater = isInWater();
             // If the mob is already targeting something valid, don't bother
-            return canWeUse;
+            return isTargetValid && isInWater;
         }
 
         @Override
@@ -233,8 +188,65 @@ public class SculkSalmonEntity extends Salmon implements GeoEntity, ISculkSmartE
 
         @Override
         protected void triggerAnimation() {
-            //((SculkRavagerEntity)mob).triggerAnim("attack_controller", "attack_animation");
+            ((SculkSalmonEntity)mob).triggerAnim(ATTACK_ANIMATION_CONTROLLER_ID, ATTACK_ANIMATION_ID);
         }
+    }
+
+    // #### Squad & Raid Mechanics ####
+    private boolean isParticipatingInRaid = false;
+
+    @Override
+    public SquadHandler getSquad() {
+        return squad;
+    }
+
+    @Override
+    public boolean isParticipatingInRaid() {
+        return false;
+    }
+
+    @Override
+    public void setParticipatingInRaid(boolean isParticipatingInRaidIn) {
+        this.isParticipatingInRaid = isParticipatingInRaidIn;
+    }
+
+
+    // #### Annimation Mechanics ####
+
+    @Override
+    public AnimatableInstanceCache getAnimatableInstanceCache() {
+        return this.cache;
+    }
+    private static final RawAnimation SWIM_ANIMATION = RawAnimation.begin().thenLoop("misc.idle");
+    private static final RawAnimation LAND_ANIMATION = RawAnimation.begin().thenLoop("misc.land");
+    private static final String ATTACK_ANIMATION_ID = "attack";
+    private static final String ATTACK_ANIMATION_CONTROLLER_ID = "attack";
+    private static final RawAnimation ATTACK_ANIMATION = RawAnimation.begin().thenPlay(ATTACK_ANIMATION_ID);
+    private final AnimationController ATTACK_ANIMATION_CONTROLLER = new AnimationController<>(this, ATTACK_ANIMATION_CONTROLLER_ID, state -> PlayState.STOP)
+            .triggerableAnim(ATTACK_ANIMATION_ID, ATTACK_ANIMATION).transitionLength(5);
+
+    // Add our animations
+    @Override
+    public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
+        controllers.add(
+                new AnimationController<>(this, "walk_cycle", 5, this::poseWalkCycle),
+                ATTACK_ANIMATION_CONTROLLER
+        );
+    }
+
+    protected PlayState poseWalkCycle(AnimationState<SculkSalmonEntity> state)
+    {
+
+        if(state.getAnimatable().isInWaterOrBubble())
+        {
+            state.setAnimation(SWIM_ANIMATION);
+        }
+        else
+        {
+            state.setAnimation(LAND_ANIMATION);
+        }
+
+        return PlayState.CONTINUE;
     }
 
 }
