@@ -316,6 +316,15 @@ public class DiseasedKelpBlock extends Block implements IForgeBlock, LiquidBlock
         } else {
             setEndBlock(level, pos, true);
         }
+
+        if(isDiseasedKelp(level.getBlockState(pos.below())))
+        {
+            setEndBlock(level, pos.below(), false);
+        }
+        else if(isKelp(level.getBlockState(pos.below())))
+        {
+            level.setBlock(pos.below(), Blocks.KELP_PLANT.defaultBlockState(), 16);
+        }
     }
 
 

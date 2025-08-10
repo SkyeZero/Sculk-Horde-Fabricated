@@ -20,9 +20,10 @@ public class ModCreativeModeTab {
 
                 event.accept(ModItems.SCULK_SPORE_SPEWER_SPAWN_EGG.get());
                 event.accept(ModItems.SCULK_MITE_SPAWN_EGG.get());
-                event.accept(ModItems.SCULK_LEECH_SPAWN_EGG.get());
-                event.accept(ModItems.SCULK_STINGER_SPAWN_EGG.get());
                 event.accept(ModItems.SCULK_MITE_AGGRESSOR_SPAWN_EGG.get());
+                event.accept(ModItems.SCULK_LEECH_SPAWN_EGG.get());
+                event.accept(ModItems.SCULK_SALMON_SPAWN_EGG.get());
+                event.accept(ModItems.SCULK_STINGER_SPAWN_EGG.get());
                 event.accept(ModItems.SCULK_ZOMBIE_SPAWN_EGG.get());
                 event.accept(ModItems.SCULK_SPITTER_SPAWN_EGG.get());
                 event.accept(ModItems.SCULK_CREEPER_SPAWN_EGG.get());
@@ -211,7 +212,6 @@ public class ModCreativeModeTab {
                 event.accept(ModBlocks.BROOD_NEST_BLOCK.get());
                 event.accept(ModBlocks.BROOD_NEST_CORE_BLOCK.get());
 
-                event.accept(ModItems.SCULK_SALMON_SPAWN_EGG.get());
                 event.accept(ModItems.SCULK_SQUID_SPAWN_EGG.get());
                 event.accept(ModItems.SCULK_PUFFERFISH_SPAWN_EGG.get());
                 event.accept(ModItems.SCULK_GUARDIAN_SPAWN_EGG.get());
