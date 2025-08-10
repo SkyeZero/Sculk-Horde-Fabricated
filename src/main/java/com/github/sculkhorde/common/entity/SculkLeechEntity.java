@@ -73,7 +73,7 @@ public class SculkLeechEntity extends Salmon implements GeoEntity, ISculkSmartEn
         return LivingEntity.createLivingAttributes()
                 .add(Attributes.MAX_HEALTH, MAX_HEALTH)
                 .add(Attributes.ATTACK_DAMAGE, ATTACK_DAMAGE)
-                .add(Attributes.ATTACK_KNOCKBACK, 0.1)
+                .add(Attributes.ATTACK_KNOCKBACK, 0.05)
                 .add(Attributes.FOLLOW_RANGE,FOLLOW_RANGE)
                 .add(Attributes.MOVEMENT_SPEED, MOVEMENT_SPEED);
     }

@@ -564,7 +564,7 @@ public class BlockInfestationSystem {
 
             if(lastPlacedKelp.isPresent() && world.getBlockState(lastPlacedKelp.get()).is(ModBlocks.DISEASED_KELP_BLOCK.get()))
             {
-                DiseasedKelpBlock.setEndBlock(world, world.getBlockState(lastPlacedKelp.get()), lastPlacedKelp.get(), true);
+                DiseasedKelpBlock.setEndBlock(world, lastPlacedKelp.get(), true);
             }
         }
 
