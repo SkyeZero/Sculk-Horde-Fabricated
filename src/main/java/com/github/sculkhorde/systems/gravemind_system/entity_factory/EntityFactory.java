@@ -216,8 +216,7 @@ public class EntityFactory {
 
                 new EntityFactoryEntry(ModEntities.SCULK_SHEEP.get())
                         .setMinEvolutionRequired(Gravemind.evolution_states.Immature)
-                        .setCost((int) SculkBroodlingEntity.MAX_HEALTH)
-                        .enableExperimentalMode(ModConfig.SERVER.experimental_sheep_enabled)
+                        .setCost((int) SculkSheepEntity.MAX_HEALTH)
                         .addStrategicValues(
                         EntityFactoryEntry.StrategicValues.Combat,
                         EntityFactoryEntry.StrategicValues.Melee,
