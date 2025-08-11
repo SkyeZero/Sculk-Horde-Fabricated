@@ -26,6 +26,7 @@ public class ModCreativeModeTab {
                 event.accept(ModItems.SCULK_SPITTER_SPAWN_EGG.get());
                 event.accept(ModItems.SCULK_CREEPER_SPAWN_EGG.get());
                 event.accept(ModItems.SCULK_HATCHER_SPAWN_EGG.get());
+                event.accept(ModItems.SCULK_SHEEP_SPAWN_EGG.get());
                 event.accept(ModItems.SCULK_VINDICATOR_SPAWN_EGG.get());
                 event.accept(ModItems.SCULK_RAVAGER_SPAWN_EGG.get());
                 event.accept(ModItems.SCULK_WITCH_SPAWN_EGG.get());
@@ -223,7 +224,6 @@ public class ModCreativeModeTab {
                 event.accept(ModItems.SCULK_GUARDIAN_SPAWN_EGG.get());
                 event.accept(ModItems.SCULK_BROOD_HATCHER_SPAWN_EGG.get());
                 event.accept(ModItems.SCULK_BROODLING_SPAWN_EGG.get());
-                event.accept(ModItems.SCULK_SHEEP_SPAWN_EGG.get());
                 event.accept(ModItems.SCULK_GHAST_SPAWN_EGG.get());
 
                 event.accept(ModItems.FERRISCITE.get());
