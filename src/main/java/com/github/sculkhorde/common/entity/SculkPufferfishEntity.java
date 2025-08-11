@@ -1,11 +1,11 @@
 package com.github.sculkhorde.common.entity;
 
+import com.github.sculkhorde.common.entity.components.TargetParameters;
 import com.github.sculkhorde.common.entity.goal.*;
 import com.github.sculkhorde.core.ModMobEffects;
 import com.github.sculkhorde.core.SculkHorde;
 import com.github.sculkhorde.util.EntityAlgorithms;
 import com.github.sculkhorde.util.SquadHandler;
-import com.github.sculkhorde.common.entity.components.TargetParameters;
 import com.github.sculkhorde.util.TickUnits;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -34,6 +34,7 @@ import net.minecraft.world.entity.animal.WaterAnimal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -473,6 +474,12 @@ public class SculkPufferfishEntity extends WaterAnimal implements GeoEntity, ISc
                 spawnLingeringCloud(MobEffects.REGENERATION);
                 addEffect(new MobEffectInstance(MobEffects.REGENERATION, TickUnits.convertSecondsToTicks(60)), getTarget());
                 getMob().hurt(damageSources().genericKill(), Integer.MAX_VALUE);
+                AABB hithox = EntityAlgorithms.createBoundingBoxCubeAtBlockPos(getEyePosition(), 8);
+                List<LivingEntity> mobsToHeal = EntityAlgorithms.getSculkHordeEntitiesInBoundingBox((ServerLevel) level(), hithox);
+                for(LivingEntity e : mobsToHeal)
+                {
+                    e.addEffect(new MobEffectInstance(MobEffects.REGENERATION, TickUnits.convertSecondsToTicks(60), SculkHorde.gravemind.getPotionAmplificationBasedOnGravemindState()));
+                }
 
             }
 

@@ -182,8 +182,7 @@ public class EntityFactory {
                                 EntityFactoryEntry.StrategicValues.Support,
                                 EntityFactoryEntry.StrategicValues.Combat,
                                 EntityFactoryEntry.StrategicValues.Melee,
-                                EntityFactoryEntry.StrategicValues.Aquatic)
-                        .enableExperimentalMode(ModConfig.SERVER.experimental_features_enabled),
+                                EntityFactoryEntry.StrategicValues.Aquatic),
 
                 new EntityFactoryEntry(ModEntities.SCULK_WITCH.get())
                         .setMinEvolutionRequired(Gravemind.evolution_states.Mature)
