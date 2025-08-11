@@ -60,7 +60,7 @@ public class BlockInfestationSystem {
     private static void initializeSculkFlora()
     {
         SculkHorde.randomSculkFlora = new PoolBlocks();
-        SculkHorde.randomSculkFlora.addExperimentalEntry(ModBlocks.SOULITE_CORE_BLOCK.get(), WEIGHT_SOULITE);
+        SculkHorde.randomSculkFlora.addEntry(ModBlocks.SOULITE_CORE_BLOCK.get(), WEIGHT_SOULITE);
         SculkHorde.randomSculkFlora.addEntry(ModBlocks.FUNGAL_SHROOM_CORE_BLOCK.get(), WEIGHT_LARGE_FLORA);
         SculkHorde.randomSculkFlora.addEntry(ModBlocks.TENDRIL_CORE_BLOCK.get(), WEIGHT_LARGE_FLORA);
         SculkHorde.randomSculkFlora.addEntry(ModBlocks.BEE_COLONY_CORE_BLOCK.get(), WEIGHT_LARGE_FLORA);

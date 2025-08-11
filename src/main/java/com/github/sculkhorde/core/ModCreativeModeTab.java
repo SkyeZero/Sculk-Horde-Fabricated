@@ -44,38 +44,66 @@ public class ModCreativeModeTab {
                 // Special Mobs
                 event.accept(ModItems.SCULK_ENDERMAN_SPAWN_EGG.get());
 
-                event.accept(ModItems.ESSENCE_OF_PURITY.get());
+                // Tools & Utilities
                 event.accept(ModItems.EYE_OF_PURITY.get());
                 event.accept(ModItems.PURIFICATION_FLASK.get());
                 event.accept(ModBlocks.INFESTATION_WARD_BLOCK.get());
-                event.accept(ModItems.CHUNK_O_BRAIN.get());
                 event.accept(ModItems.DORMANT_HEART_OF_THE_HORDE.get());
                 event.accept(ModItems.HEART_OF_THE_HORDE.get());
                 event.accept(ModItems.HEART_OF_PURITY.get());
                 event.accept(ModItems.INFESTATION_PURIFIER.get());
                 event.accept(ModBlocks.SOUL_HARVESTER_BLOCK.get());
+
+                event.accept(ModItems.FERRISCITE.get());
+                event.accept(ModItems.FERRISCITE_PICKAXE.get());
+                event.accept(ModItems.FERRISCITE_AXE.get());
+                event.accept(ModItems.FERRISCITE_SHOVEL.get());
+                event.accept(ModItems.FERRISCITE_HOE.get());
+                event.accept(ModItems.DIASCITE.get());
+                event.accept(ModItems.DIASCITE_PICKAXE.get());
+                event.accept(ModItems.DIASCITE_AXE.get());
+                event.accept(ModItems.DIASCITE_SHOVEL.get());
+                event.accept(ModItems.DIASCITE_HOE.get());
+                event.accept(ModItems.SCULK_SWEEPER_SWORD.get());
+                event.accept(ModItems.BLADE_OF_PURITY.get());
+
+                // Resources
+                event.accept(ModItems.ESSENCE_OF_PURITY.get());
                 event.accept(ModBlocks.INFESTED_CRYING_OBSIDIAN.get());
                 event.accept(ModItems.CRYING_SOULS.get());
                 event.accept(ModItems.PURE_SOULS.get());
                 event.accept(ModItems.SCULK_ENDERMAN_CLEAVER.get());
-                event.accept(ModItems.SCULK_SWEEPER_SWORD.get());
+                event.accept(ModItems.CHUNK_O_BRAIN.get());
+                event.accept(ModBlocks.CALCITE_ORE.get());
+                event.accept(ModItems.CALCITE_CLUMP.get());
+                event.accept(ModItems.SCULK_ACIDIC_PROJECTILE.get());
+                event.accept(ModItems.SCULK_RESIN.get());
+                event.accept(ModItems.SOULITE_SHARD.get());
+
+                // Structures
                 event.accept(ModBlocks.SCULK_ANCIENT_NODE_BLOCK.get());
                 event.accept(ModBlocks.SCULK_NODE_BLOCK.get());
                 event.accept(ModBlocks.SCULK_ARACHNOID.get());
                 event.accept(ModBlocks.SCULK_DURA_MATTER.get());
-
+                event.accept(ModBlocks.BEE_COLONY_CORE_BLOCK.get());
                 event.accept(ModBlocks.SCULK_BEE_NEST_BLOCK.get());
                 event.accept(ModBlocks.SCULK_BEE_NEST_CELL_BLOCK.get());
-                event.accept(ModItems.SCULK_RESIN.get());
                 event.accept(ModBlocks.SCULK_LIVING_ROCK_ROOT_BLOCK.get());
                 event.accept(ModBlocks.SCULK_LIVING_ROCK_BLOCK.get());
-                event.accept(ModBlocks.CALCITE_ORE.get());
-                event.accept(ModItems.CALCITE_CLUMP.get());
-                event.accept(ModItems.SCULK_ACIDIC_PROJECTILE.get());
 
-                event.accept(ModItems.DEEP_GREEN_MUSIC_DISC.get());
-                event.accept(ModItems.BLIND_AND_ALONE_MUSIC_DISC.get());
+                event.accept(ModBlocks.SOULITE_CORE_BLOCK.get());
+                event.accept(ModBlocks.BUDDING_SOULITE_BLOCK.get());
+                event.accept(ModBlocks.SOULITE_BLOCK.get());
+                event.accept(ModBlocks.DEPLETED_SOULITE_BLOCK .get());
+                event.accept(ModBlocks.SOULITE_BUD_BLOCK.get());
+                event.accept(ModBlocks.SOULITE_CLUSTER_BLOCK.get());
 
+                // Flora
+                event.accept(ModBlocks.FUNGAL_SHROOM_CORE_BLOCK.get());
+                event.accept(ModBlocks.FUNGAL_SCULK_BLOCK.get());
+                event.accept(ModBlocks.FUNGAL_SCULK_STEM_BLOCK.get());
+                event.accept(ModBlocks.TENDRIL_CORE_BLOCK.get());
+                event.accept(ModBlocks.TENDRILS.get());
                 event.accept(ModBlocks.GRASS.get());
                 event.accept(ModBlocks.GRASS_SHORT.get());
                 event.accept(ModBlocks.SCULK_SHROOM_CULTURE.get());
@@ -83,11 +111,14 @@ public class ModCreativeModeTab {
                 event.accept(ModBlocks.SPIKE.get());
                 event.accept(Blocks.SCULK);
                 event.accept(ModBlocks.DISEASED_KELP_BLOCK.get());
-
                 event.accept(ModBlocks.SCULK_SUMMONER_BLOCK.get());
                 event.accept(Blocks.SCULK_CATALYST);
                 event.accept(Blocks.SCULK_SHRIEKER);
                 event.accept(Blocks.SCULK_SENSOR);
+
+                // Discs
+                event.accept(ModItems.DEEP_GREEN_MUSIC_DISC.get());
+                event.accept(ModItems.BLIND_AND_ALONE_MUSIC_DISC.get());
 
                 event.accept(ModBlocks.INFESTED_LOG.get());
                 event.accept(ModBlocks.INFESTED_SAND.get());
@@ -205,19 +236,7 @@ public class ModCreativeModeTab {
                 event.accept(ModItems.DEV_RAID_WAND.get());
                 event.accept(ModBlocks.DEV_MASS_INFECTINATOR_3000_BLOCK.get());
                 event.accept(ModBlocks.STRUCTURE_ORIGIN_BLOCK.get());
-                event.accept(ModBlocks.BEE_COLONY_CORE_BLOCK.get());
-                event.accept(ModBlocks.SOULITE_CORE_BLOCK.get());
-                event.accept(ModBlocks.BUDDING_SOULITE_BLOCK.get());
-                event.accept(ModBlocks.SOULITE_BLOCK.get());
-                event.accept(ModBlocks.DEPLETED_SOULITE_BLOCK .get());
-                event.accept(ModBlocks.SOULITE_BUD_BLOCK.get());
-                event.accept(ModBlocks.SOULITE_CLUSTER_BLOCK.get());
-                event.accept(ModItems.SOULITE_SHARD.get());
-                event.accept(ModBlocks.FUNGAL_SHROOM_CORE_BLOCK.get());
-                event.accept(ModBlocks.FUNGAL_SCULK_BLOCK.get());
-                event.accept(ModBlocks.FUNGAL_SCULK_STEM_BLOCK.get());
-                event.accept(ModBlocks.TENDRIL_CORE_BLOCK.get());
-                event.accept(ModBlocks.TENDRILS.get());
+
                 event.accept(ModBlocks.BROOD_NEST_BLOCK.get());
                 event.accept(ModBlocks.BROOD_NEST_CORE_BLOCK.get());
 
@@ -226,20 +245,10 @@ public class ModCreativeModeTab {
                 event.accept(ModItems.SCULK_BROODLING_SPAWN_EGG.get());
                 event.accept(ModItems.SCULK_GHAST_SPAWN_EGG.get());
 
-                event.accept(ModItems.FERRISCITE.get());
-                event.accept(ModItems.FERRISCITE_PICKAXE.get());
-                event.accept(ModItems.FERRISCITE_AXE.get());
-                event.accept(ModItems.FERRISCITE_SHOVEL.get());
-                event.accept(ModItems.FERRISCITE_HOE.get());
-                event.accept(ModItems.DIASCITE.get());
-                event.accept(ModItems.DIASCITE_PICKAXE.get());
-                event.accept(ModItems.DIASCITE_AXE.get());
-                event.accept(ModItems.DIASCITE_SHOVEL.get());
-                event.accept(ModItems.DIASCITE_HOE.get());
+
                 event.accept(ModItems.SOUL_DISRUPTER.get());
                 event.accept(ModItems.SOUL_ANIMATOR.get());
                 event.accept(ModBlocks.GOLEM_OF_WRATH_ANIMATOR_BLOCK.get());
                 event.accept(ModBlocks.DEPLETED_GOLEM_OF_WRATH_ANIMATOR_BLOCK.get());
-                event.accept(ModItems.BLADE_OF_PURITY.get());
             }).build());
 }
