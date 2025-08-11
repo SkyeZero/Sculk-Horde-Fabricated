@@ -63,7 +63,7 @@ public class BlockInfestationSystem {
         SculkHorde.randomSculkFlora.addExperimentalEntry(ModBlocks.SOULITE_CORE_BLOCK.get(), WEIGHT_SOULITE);
         SculkHorde.randomSculkFlora.addExperimentalEntry(ModBlocks.FUNGAL_SHROOM_CORE_BLOCK.get(), WEIGHT_LARGE_FLORA);
         SculkHorde.randomSculkFlora.addExperimentalEntry(ModBlocks.TENDRIL_CORE_BLOCK.get(), WEIGHT_LARGE_FLORA);
-        SculkHorde.randomSculkFlora.addExperimentalEntry(ModBlocks.BEE_COLONY_CORE_BLOCK.get(), WEIGHT_LARGE_FLORA);
+        SculkHorde.randomSculkFlora.addEntry(ModBlocks.BEE_COLONY_CORE_BLOCK.get(), WEIGHT_LARGE_FLORA);
         SculkHorde.randomSculkFlora.addEntry(Blocks.SCULK_CATALYST, WEIGHT_SCULK_CATALYST);
         SculkHorde.randomSculkFlora.addEntry(ModBlocks.SCULK_SUMMONER_BLOCK.get(), WEIGHT_SCULK_SUMMONER);
         SculkHorde.randomSculkFlora.addEntry(Blocks.SCULK_SENSOR, WEIGHT_SCULK_SENSOR);
@@ -349,11 +349,6 @@ public class BlockInfestationSystem {
 
         // Chance to place a sculk node above the block
         SculkNodeBlock.tryPlaceSculkNode(world, targetPos, false);
-
-        // Chance to place a sculk bee hive above the block
-        if(!ModConfig.isExperimentalFeaturesEnabled()) {
-            BlockInfestationSystem.tryPlaceSculkBeeHive(world, targetPos.above());
-        }
 
         BlockInfestationSystem.tryPlaceDiseasedKelp(world, targetPos.above());
     }
