@@ -18,22 +18,29 @@ public class ModCreativeModeTab {
             .icon(() -> new ItemStack(ModBlocks.SCULK_ANCIENT_NODE_BLOCK.get()))
             .displayItems((enabledFeatures, event) -> {
 
+                // Land Mobs
                 event.accept(ModItems.SCULK_SPORE_SPEWER_SPAWN_EGG.get());
                 event.accept(ModItems.SCULK_MITE_SPAWN_EGG.get());
                 event.accept(ModItems.SCULK_MITE_AGGRESSOR_SPAWN_EGG.get());
-                event.accept(ModItems.SCULK_LEECH_SPAWN_EGG.get());
-                event.accept(ModItems.SCULK_SALMON_SPAWN_EGG.get());
-                event.accept(ModItems.SCULK_STINGER_SPAWN_EGG.get());
                 event.accept(ModItems.SCULK_ZOMBIE_SPAWN_EGG.get());
                 event.accept(ModItems.SCULK_SPITTER_SPAWN_EGG.get());
                 event.accept(ModItems.SCULK_CREEPER_SPAWN_EGG.get());
                 event.accept(ModItems.SCULK_HATCHER_SPAWN_EGG.get());
                 event.accept(ModItems.SCULK_VINDICATOR_SPAWN_EGG.get());
                 event.accept(ModItems.SCULK_RAVAGER_SPAWN_EGG.get());
-                event.accept(ModItems.SCULK_PHANTOM_SPAWN_EGG.get());
-                event.accept(ModItems.SCULK_ENDERMAN_SPAWN_EGG.get());
                 event.accept(ModItems.SCULK_WITCH_SPAWN_EGG.get());
 
+                // Swimming Mobs
+                event.accept(ModItems.SCULK_LEECH_SPAWN_EGG.get());
+                event.accept(ModItems.SCULK_SALMON_SPAWN_EGG.get());
+                event.accept(ModItems.SCULK_SQUID_SPAWN_EGG.get());
+
+                // Flying Mobs
+                event.accept(ModItems.SCULK_PHANTOM_SPAWN_EGG.get());
+                event.accept(ModItems.SCULK_STINGER_SPAWN_EGG.get());
+
+                // Special Mobs
+                event.accept(ModItems.SCULK_ENDERMAN_SPAWN_EGG.get());
 
                 event.accept(ModItems.ESSENCE_OF_PURITY.get());
                 event.accept(ModItems.EYE_OF_PURITY.get());
@@ -212,7 +219,6 @@ public class ModCreativeModeTab {
                 event.accept(ModBlocks.BROOD_NEST_BLOCK.get());
                 event.accept(ModBlocks.BROOD_NEST_CORE_BLOCK.get());
 
-                event.accept(ModItems.SCULK_SQUID_SPAWN_EGG.get());
                 event.accept(ModItems.SCULK_PUFFERFISH_SPAWN_EGG.get());
                 event.accept(ModItems.SCULK_GUARDIAN_SPAWN_EGG.get());
                 event.accept(ModItems.SCULK_BROOD_HATCHER_SPAWN_EGG.get());
