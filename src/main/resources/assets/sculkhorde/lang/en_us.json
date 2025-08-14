@@ -416,6 +416,7 @@
   "block.sculkhorde.fungal_sculk_stem_block": "Fungal Sculk Stem Block",
   "block.sculkhorde.brood_nest_block": "Brood Nest Block",
   "block.sculkhorde.brood_nest_core_block": "Brood Nest Core Block",
+  "block.sculkhorde.tendril_core_block": "Tendril Core Block",
   "item.sculkhorde.soul_disrupter": "Soul Disrupter",
   "tooltip.sculkhorde.soul_disrupter.functionality": "§7§oA weapon that when pointed at a Soul Reaper, will weaken it for 1 minute. While the weakness is active, it brings down it's difficulty by one level.",
   "tooltip.sculkhorde.soul_disrupter.lore": "§7§oAn improvised weapon designed to disrupt the powers of the Soul Reaper temporarily.",
@@ -470,4 +471,5 @@
   "item.minecraft.lingering_potion.effect.corroded_potion": "Lingering Potion of Corroded",
   "item.minecraft.tipped_arrow.effect.corroded_potion": "Arrow of Corroded"
 }
+
 
