@@ -46,7 +46,7 @@ public class SculkStingerEntity extends FlyingMob implements GeoEntity, ISculkSm
     //ATTACK_DAMAGE determines How much damage its melee attacks do
     public static final float ATTACK_DAMAGE = 1F;
     //ATTACK_KNOCKBACK determines the knockback a mob will take
-    public static final float ATTACK_KNOCKBACK = 2F;
+    public static final float ATTACK_KNOCKBACK = 0.5F;
     //FOLLOW_RANGE determines how far away this mob can see and chase enemies
     public static final float FOLLOW_RANGE = 16F;
     //MOVEMENT_SPEED determines how far away this mob can see other mobs
@@ -350,7 +350,7 @@ public class SculkStingerEntity extends FlyingMob implements GeoEntity, ISculkSm
             }
 
             SculkStingerEntity.this.getNavigation().moveTo(target, 1.0D);
-            float attackReach = (getBbWidth()/2) + 3;
+            float attackReach = (getBbWidth()/1) + 1;
             boolean doesIntersectTarget = EntityAlgorithms.getDistanceBetweenEntities(target, SculkStingerEntity.this) <= attackReach;
             boolean isHealthBelow50Percent = target.getHealth() / target.getMaxHealth() <= 0.5F;
 
