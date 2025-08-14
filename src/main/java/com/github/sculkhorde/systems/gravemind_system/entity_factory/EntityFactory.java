@@ -148,8 +148,7 @@ public class EntityFactory {
                         .setCost((int) SculkSalmonEntity.MAX_HEALTH)
                         .addStrategicValues(
                                 EntityFactoryEntry.StrategicValues.Melee,
-                                EntityFactoryEntry.StrategicValues.Aquatic)
-                        .enableExperimentalMode(ModConfig.SERVER.experimental_features_enabled),
+                                EntityFactoryEntry.StrategicValues.Aquatic),
 
                 new EntityFactoryEntry(ModEntities.SCULK_LEECH.get())
                         .setMinEvolutionRequired(Gravemind.evolution_states.Undeveloped)
@@ -168,13 +167,13 @@ public class EntityFactory {
                                 EntityFactoryEntry.StrategicValues.EffectiveInSkies),
 
                 new EntityFactoryEntry(ModEntities.SCULK_SQUID.get())
-                        .setMinEvolutionRequired(Gravemind.evolution_states.Undeveloped)
+                        .setMinEvolutionRequired(Gravemind.evolution_states.Immature)
                         .setCost((int) SculkSquidEntity.MAX_HEALTH)
+                        .setLimit(1)
                         .addStrategicValues(
                                 EntityFactoryEntry.StrategicValues.Infector,
                                 EntityFactoryEntry.StrategicValues.Melee,
-                                EntityFactoryEntry.StrategicValues.Aquatic)
-                        .enableExperimentalMode(ModConfig.SERVER.experimental_features_enabled),
+                                EntityFactoryEntry.StrategicValues.Aquatic),
 
                 new EntityFactoryEntry(ModEntities.SCULK_PUFFERFISH.get())
                         .setMinEvolutionRequired(Gravemind.evolution_states.Immature)
@@ -183,8 +182,7 @@ public class EntityFactory {
                                 EntityFactoryEntry.StrategicValues.Support,
                                 EntityFactoryEntry.StrategicValues.Combat,
                                 EntityFactoryEntry.StrategicValues.Melee,
-                                EntityFactoryEntry.StrategicValues.Aquatic)
-                        .enableExperimentalMode(ModConfig.SERVER.experimental_features_enabled),
+                                EntityFactoryEntry.StrategicValues.Aquatic),
 
                 new EntityFactoryEntry(ModEntities.SCULK_WITCH.get())
                         .setMinEvolutionRequired(Gravemind.evolution_states.Mature)
@@ -218,8 +216,7 @@ public class EntityFactory {
 
                 new EntityFactoryEntry(ModEntities.SCULK_SHEEP.get())
                         .setMinEvolutionRequired(Gravemind.evolution_states.Immature)
-                        .setCost((int) SculkBroodlingEntity.MAX_HEALTH)
-                        .enableExperimentalMode(ModConfig.SERVER.experimental_sheep_enabled)
+                        .setCost((int) SculkSheepEntity.MAX_HEALTH)
                         .addStrategicValues(
                         EntityFactoryEntry.StrategicValues.Combat,
                         EntityFactoryEntry.StrategicValues.Melee,

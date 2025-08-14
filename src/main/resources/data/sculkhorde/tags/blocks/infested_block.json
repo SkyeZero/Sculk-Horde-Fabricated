@@ -43,8 +43,15 @@
     "sculkhorde:infested_clay",
 
     "minecraft:sculk",
+    "minecraft:sculk_catalyst",
     "sculkhorde:infested_sand",
+    "sculkhorde:sculk_ancient_node",
+    "sculkhorde:sculk_node",
     "sculkhorde:sculk_arachnoid",
+    "sculkhorde:sculk_dura_matter",
+    "sculkhorde:sculk_living_rock",
+    "sculkhorde:sculk_living_rock_root",
+    "sculkhorde:calcite_ore",
     "sculkhorde:infested_snow",
     "sculkhorde:infested_gravel",
     "sculkhorde:infested_red_sand",
@@ -52,6 +59,11 @@
     "sculkhorde:infested_packed_mud",
     "sculkhorde:infested_mud_bricks",
     "sculkhorde:infested_moss",
+
+    "sculkhorde:sculk_bee_nest",
+    "sculkhorde:sculk_bee_nest_cell",
+    "sculkhorde:diseased_kelp_block",
+    "sculkhorde:tendrils",
 
     "sculkhorde:infested_sturdy_mass",
     "sculkhorde:infested_crumpled_mass",
@@ -74,6 +86,7 @@
     "sculkhorde:infested_mossy_stone_brick_stairs",
     "sculkhorde:infested_blackstone_brick_stairs",
 
+    "sculkhorde:infested_wood_slab",
     "sculkhorde:infested_cobblestone_slab",
     "sculkhorde:infested_stone_slab",
     "sculkhorde:infested_mossy_cobblestone_slab",
@@ -103,6 +116,12 @@
     "sculkhorde:infested_mud_brick_wall",
     "sculkhorde:infested_cobbled_deepslate_wall",
     "sculkhorde:infested_sturdy_wall",
-    "sculkhorde:infested_crumbling_wall"
+    "sculkhorde:infested_crumbling_wall",
+
+    "sculkhorde:infested_wood_fence",
+    "sculkhorde:infested_sturdy_fence",
+
+    "sculkhorde:infested_wood_fence_gate",
+    "sculkhorde:infested_sturdy_fence_gate"
   ]
 }

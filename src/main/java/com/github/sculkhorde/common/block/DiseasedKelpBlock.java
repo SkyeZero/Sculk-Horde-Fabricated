@@ -111,15 +111,71 @@ public class DiseasedKelpBlock extends Block implements LiquidBlockContainer {
         builder.add(END);
     }
 
-    public static boolean isEndBlock(BlockState pState)
+    /// #### ACCESSORS ####
+    public static boolean isKelp(BlockState blockState)
     {
-        return pState.getValue(END);
+        if(blockState.is(Blocks.KELP) || blockState.is(Blocks.KELP_PLANT))
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    public static boolean isDiseasedKelp(BlockState blockState)
+    {
+        if(blockState.is(ModBlocks.DISEASED_KELP_BLOCK.get()))
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    public static boolean isKelpOrDiseasedKelp(BlockState blockState)
+    {
+        return isKelp(blockState) || isDiseasedKelp(blockState);
+    }
+
+    public static boolean isDiseasedKelpEndBlock(BlockState blockState)
+    {
+        if(!isDiseasedKelp(blockState) || !blockState.hasProperty(END))
+        {
+            return false;
+        }
+
+        return blockState.getValue(END);
+    }
+
+    public static boolean isKelpEndBlock(BlockState blockState)
+    {
+        if(!isKelp(blockState))
+        {
+            return false;
+        }
+
+        return blockState.is(Blocks.KELP_PLANT);
+    }
+
+
+    public boolean isBlockAboveKelpOrDiseasedKelp(LevelReader level, BlockPos pos)
+    {
+        return isKelpOrDiseasedKelp(level.getBlockState(pos.above()));
+    }
+
+    public boolean isBlockBelowKelpOrDiseasedKelp(LevelReader level, BlockPos pos)
+    {
+        return isKelpOrDiseasedKelp(level.getBlockState(pos.below()));
     }
 
     /** MODIFIERS **/
 
-    public static void setEndBlock(Level pLevel, BlockState pState, BlockPos pPos, Boolean isEndBlock)
+
+
+    public static void setEndBlock(Level level, BlockPos pos, Boolean setEndBlock)
     {
+        BlockState blockState = level.getBlockState(pos);
+
         /**
          * Sets a block state into this world.Flags are as follows:
          * 1 will cause a block update.
@@ -131,46 +187,17 @@ public class DiseasedKelpBlock extends Block implements LiquidBlockContainer {
          * 64 will signify the block is being moved.
          * Flags can be OR-ed
          */
-        if(pState.is(Blocks.KELP_PLANT) || pState.is(Blocks.KELP))
+        if(isDiseasedKelp(blockState))
         {
-            if(isEndBlock)
+            if(setEndBlock && !isDiseasedKelpEndBlock(blockState))
             {
-                BlockAlgorithms.setBlockMisc(pLevel, pPos, Blocks.KELP.defaultBlockState());
-
+                BlockAlgorithms.setBlockMisc(level, pos, blockState.setValue(END, true));
             }
-            else
+            else if(!setEndBlock)
             {
-                BlockAlgorithms.setBlockMisc(pLevel, pPos, Blocks.KELP_PLANT.defaultBlockState());
+                BlockAlgorithms.setBlockMisc(level, pos, blockState.setValue(END, false));
             }
         }
-        else
-        {
-            BlockAlgorithms.setBlockMisc(pLevel, pPos, pState.setValue(END, isEndBlock));
-        }
-    }
-
-    public boolean isBlockAboveKelpOrDiseasedKelp(LevelReader level, BlockPos pos)
-    {
-        if(level.getBlockState(pos.above()).is(ModBlocks.DISEASED_KELP_BLOCK.get())
-        || level.getBlockState(pos.above()).is(Blocks.KELP)
-        || level.getBlockState(pos.above()).is(Blocks.KELP_PLANT))
-        {
-            return true;
-        }
-
-        return false;
-    }
-
-    public boolean isBlockBelowKelpOrDiseasedKelp(LevelReader level, BlockPos pos)
-    {
-        if(level.getBlockState(pos.below()).is(ModBlocks.DISEASED_KELP_BLOCK.get())
-                || level.getBlockState(pos.below()).is(Blocks.KELP)
-                || level.getBlockState(pos.below()).is(Blocks.KELP_PLANT))
-        {
-            return true;
-        }
-
-        return false;
     }
 
     // TODO: PORT OR REFORMAT INTO SAME AS KELP PLANT
@@ -179,9 +206,9 @@ public class DiseasedKelpBlock extends Block implements LiquidBlockContainer {
     public void onNeighborChange(BlockState state, LevelReader level, BlockPos pos, BlockPos neighbor) {
 
         if (isBlockAboveKelpOrDiseasedKelp(level, pos)) {
-            setEndBlock((Level) level, state, pos, false);
+            setEndBlock((Level) level, pos, false);
         } else {
-            setEndBlock((Level) level, state, pos, true);
+            setEndBlock((Level) level, pos, true);
         }
     }
      */
@@ -289,31 +316,21 @@ public class DiseasedKelpBlock extends Block implements LiquidBlockContainer {
         }
 
         if (isBlockAboveKelpOrDiseasedKelp(level, pos)) {
-            setEndBlock(level, newState, pos, false);
+            setEndBlock(level, pos, false);
         } else {
-            setEndBlock(level, newState, pos, true);
+            setEndBlock(level, pos, true);
         }
 
-        if(isBlockBelowKelpOrDiseasedKelp(level, pos))
+        if(isDiseasedKelp(level.getBlockState(pos.below())))
         {
-            setEndBlock(level, newState, pos.below(), false);
+            setEndBlock(level, pos.below(), false);
+        }
+        else if(isKelp(level.getBlockState(pos.below())))
+        {
+            level.setBlock(pos.below(), Blocks.KELP_PLANT.defaultBlockState(), 16);
         }
     }
 
-    @Override
-    public void onRemove(BlockState newState, Level level, BlockPos pos, BlockState oldState, boolean p_60519_) {
-        super.onRemove(newState, level, pos, oldState, p_60519_);
-
-        if(level.isClientSide)
-        {
-            return;
-        }
-
-        if(isBlockBelowKelpOrDiseasedKelp(level, pos))
-        {
-            setEndBlock(level, oldState, pos.below(), true);
-        }
-    }
 
     public FluidState getFluidState(BlockState p_54319_) {
         return Fluids.WATER.getSource(false);
