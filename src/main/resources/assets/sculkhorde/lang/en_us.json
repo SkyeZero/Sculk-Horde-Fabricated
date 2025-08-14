@@ -154,7 +154,7 @@
   "tooltip.sculkhorde.eye_of_purity.lore": "§7§oIt seems purifying an eye of ender creates an entity attracted to the presence of nodes. This entity radiates warmth and shines with a golden hue.",
   "block.sculkhorde.soul_harvester": "Soul Harvester",
   "tooltip.sculkhorde.soul_harvester.functionality": "§7§oA block used to convert a Dormant Heart of the Horde into an active variant. Requires souls to function. Sacrifice mobs near this block to collect souls.",
-  "tooltip.sculkhorde.soul_harvester.lore": "§7§oSteal the souls of the living, then dam them to a fate worse than death. Putting your ear up to this block, you can hear their cries for help. This soul harvester can imbue objects with the collected souls, transforming them into objects of value and sin.",
+  "tooltip.sculkhorde.soul_harvester.lore": "§7§oSteal the souls of the living, then damn them to a fate worse than death. Putting your ear up to this block, you can hear their cries for help. This soul harvester can imbue objects with the collected souls, transforming them into objects of value and sin.",
 
   "block.sculkhorde.infestation_ward_block": "Infestation Ward Block",
   "tooltip.sculkhorde.infestation_ward_block.functionality": "§7§oA block that prevents Sculk Infestation from spreading to any of it's neighboring blocks. This includes diagonals. Ideally used to create perimeters around an area to prevent block infestation from crossing.",
@@ -366,7 +366,7 @@
   "item.sculkhorde.tome_of_sacrifice": "Tome of Sacrifice",
   "item.sculkhorde.graveminds_symbiote": "Gravemind's Symbiote",
 
-  "sounds.sculkhorde.burrowed_burst": "A Mite bursts out of the body a creature.",
+  "sounds.sculkhorde.burrowed_burst": "Sculk Mite Bursts Out",
   "sounds.sculkhorde.sculk_mite_idle": "Sculk Mite Squeaks",
   "sounds.sculkhorde.sculk_mite_hurt": "Sculk Mite Hurts",
   "sounds.sculkhorde.sculk_mite_death": "Sculk Mite Dies",
@@ -400,7 +400,7 @@
   "block.sculkhorde.soulite_bud_block": "Immature Soulite Bud",
   "item.sculkhorde.soulite_shard": "Soulite Shard",
   "tooltip.sculkhorde.soulite_shard.functionality": "§7§oA rare crafting ingredient that can be made into a soul disrupter.",
-  "tooltip.sculkhorde.soulite_shard.lore": "§7§oAn sharp, cold, and glowing crystal that makes your hand numb when holding it. It is suspected that the Horde may use these to store souls for later use.",
+  "tooltip.sculkhorde.soulite_shard.lore": "§7§oA sharp, cold, and glowing crystal that makes your hand numb when holding it. It is suspected that the Horde may use these to store souls for later use.",
   "block.sculkhorde.structure_origin_block": "Structure Origin Block",
   "tooltip.sculkhorde.structure_origin_block": "§7§oUsed to determine where the origin of a structure is. When a structure is built, the structure will be offset so that the block building the structure is in the same position as this block.",
   "block.sculkhorde.structure_core_block": "Structure Core Block",
@@ -417,11 +417,11 @@
   "block.sculkhorde.brood_nest_block": "Brood Nest Block",
   "block.sculkhorde.brood_nest_core_block": "Brood Nest Core Block",
   "item.sculkhorde.soul_disrupter": "Soul Disrupter",
-  "tooltip.sculkhorde.soul_disrupter.functionality": "§7§oAn weapon that when pointed at a Soul Reaper, will weaken it for 1 minute. While the weakness is active, it brings down it's difficulty by one level.",
+  "tooltip.sculkhorde.soul_disrupter.functionality": "§7§oA weapon that when pointed at a Soul Reaper, will weaken it for 1 minute. While the weakness is active, it brings down it's difficulty by one level.",
   "tooltip.sculkhorde.soul_disrupter.lore": "§7§oAn improvised weapon designed to disrupt the powers of the Soul Reaper temporarily.",
   "item.sculkhorde.ferriscite": "Ferriscite",
   "tooltip.sculkhorde.ferriscite.functionality": "§7§oA resource that made from putting Iron in a Soul Harvester. Tools made with this material will mine faster the more of the same block you mine; mining a block different than the last block you mined will incur a small speed penalty. Additionally, the tools will be repairable from killing non-sculk mobs.",
-  "tooltip.sculkhorde.ferriscite.lore": "§7§o An unholy fusion of Sculk and Iron, forged from the tormented souls of the living. This eerie metal radiates an unnatural chill and instills a sense of deep unease in those who dare to grasp it.",
+  "tooltip.sculkhorde.ferriscite.lore": "§7§oAn unholy fusion of Sculk and Iron, forged from the tormented souls of the living. This eerie metal radiates an unnatural chill and instills a sense of deep unease in those who dare to grasp it.",
   "item.sculkhorde.ferriscite_pickaxe": "Ferriscite Pickaxe",
   "tooltip.sculkhorde.ferriscite_pickaxe.functionality": "§7§oA pickaxe that will mine faster, the more of the same block you mine. If the block you mine is different from your last mined block, it will incur a minor speed penalty. Additionally, the tool is repairable by killing non-sculk mobs.",
   "tooltip.sculkhorde.ferriscite_pickaxe.lore": "§7§oThis pickaxe is imbued with the anguished souls of the living. Holding it instills a deep sense of unease. The power within grants the unmatched ability to swiftly mine entire mountains. It is a formidable instrument in the hands of sinners.",
@@ -470,3 +470,4 @@
   "item.minecraft.lingering_potion.effect.corroded_potion": "Lingering Potion of Corroded",
   "item.minecraft.tipped_arrow.effect.corroded_potion": "Arrow of Corroded"
 }
+
