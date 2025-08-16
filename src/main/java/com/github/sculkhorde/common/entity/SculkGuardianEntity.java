@@ -261,14 +261,14 @@ public class SculkGuardianEntity extends WaterAnimal implements GeoEntity, IScul
     private static final RawAnimation IDLE_ANIMATION = RawAnimation.begin().thenLoop("idle");
     private static final RawAnimation SWIM_ANIMATION = RawAnimation.begin().thenLoop("swim");
     private static final RawAnimation STUCK_ANIMATION = RawAnimation.begin().thenLoop("stuck");
-    private static final RawAnimation BOOST_ANIMATION = RawAnimation.begin().thenPlay("boost");
-    private static final RawAnimation ATTACK_ANIMATION = RawAnimation.begin().thenPlay("attack");
 
-    private final AnimationController ATTACK_ANIMATION_CONTROLLER = new AnimationController<>(this, "attack_controller", state -> PlayState.STOP)
-            .triggerableAnim("attack", ATTACK_ANIMATION);
+    private static  final String ATTACK_ANIMATION_ID = "attack";
+    private static  final String ATTACK_ANIMATION_CONTROLLER_ID = "attack_controller";
+    private static final RawAnimation ATTACK_ANIMATION = RawAnimation.begin().thenPlay(ATTACK_ANIMATION_ID);
 
-    private final AnimationController BOOST_ANIMATION_CONTROLLER = new AnimationController<>(this, "boost_controller", state -> PlayState.STOP)
-            .triggerableAnim("boost", BOOST_ANIMATION);
+    private final AnimationController ATTACK_ANIMATION_CONTROLLER = new AnimationController<>(this, ATTACK_ANIMATION_CONTROLLER_ID, state -> PlayState.STOP)
+            .triggerableAnim(ATTACK_ANIMATION_ID, ATTACK_ANIMATION);
+
 
 
     // Add our animations
@@ -276,8 +276,7 @@ public class SculkGuardianEntity extends WaterAnimal implements GeoEntity, IScul
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
         controllers.add(
                 new AnimationController<>(this, "walk_cycle", 5, this::poseSwimCycle),
-                ATTACK_ANIMATION_CONTROLLER,
-                BOOST_ANIMATION_CONTROLLER
+                ATTACK_ANIMATION_CONTROLLER
         );
     }
 
@@ -286,7 +285,7 @@ public class SculkGuardianEntity extends WaterAnimal implements GeoEntity, IScul
 
         if(state.getAnimatable().level().getFluidState(state.getAnimatable().blockPosition()).isEmpty())
         {
-            state.setAnimation(STUCK_ANIMATION);
+            //state.setAnimation(STUCK_ANIMATION);
         }
         else if(state.getAnimatable().getX() != state.getAnimatable().xOld || state.getAnimatable().getZ() != state.getAnimatable().zOld)
         {
@@ -384,7 +383,7 @@ public class SculkGuardianEntity extends WaterAnimal implements GeoEntity, IScul
 
         @Override
         protected void triggerAnimation() {
-            //((SculkGuardianEntity)mob).triggerAnim("attack_controller", "attack");
+            triggerAnim(ATTACK_ANIMATION_CONTROLLER_ID, ATTACK_ANIMATION_ID);
         }
 
         @Override
