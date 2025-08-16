@@ -350,8 +350,9 @@ public class SculkStingerEntity extends FlyingMob implements GeoEntity, ISculkSm
             }
 
             SculkStingerEntity.this.getNavigation().moveTo(target, 1.0D);
-            float attackReach = (getBbWidth()/1) + 1;
-            boolean doesIntersectTarget = EntityAlgorithms.getDistanceBetweenEntities(target, SculkStingerEntity.this) <= attackReach;
+            float attackReach = 0.5F;
+            //boolean doesIntersectTarget = EntityAlgorithms.getDistanceBetweenEntities(target, SculkStingerEntity.this) <= attackReach;
+            boolean doesIntersectTarget = getBoundingBox().inflate(attackReach).intersects(target.getBoundingBox());
             boolean isHealthBelow50Percent = target.getHealth() / target.getMaxHealth() <= 0.5F;
 
             if (doesIntersectTarget)
