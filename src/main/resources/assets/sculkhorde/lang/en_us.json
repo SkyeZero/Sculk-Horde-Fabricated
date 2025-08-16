@@ -469,7 +469,10 @@
   "item.minecraft.potion.effect.corroded_potion": "Potion of Corroded",
   "item.minecraft.splash_potion.effect.corroded_potion": "Splash Potion of Corroded",
   "item.minecraft.lingering_potion.effect.corroded_potion": "Lingering Potion of Corroded",
-  "item.minecraft.tipped_arrow.effect.corroded_potion": "Arrow of Corroded"
+  "item.minecraft.tipped_arrow.effect.corroded_potion": "Arrow of Corroded",
+
+  "sounds.sculkhorde.infestation_ambience": "Infestation Ambience",
+  "sounds.sculkhorde.soulite_ambience": "Soulite Chimes"
 }
 
 

@@ -1,7 +1,6 @@
 package com.github.sculkhorde.util;
 
 import com.github.sculkhorde.core.ModSavedData;
-import com.github.sculkhorde.core.SculkHorde;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 
@@ -102,6 +101,53 @@ public class PlayerProfileHandler {
             return entry.get().isActiveVessel();
         }
         return false;
+    }
+
+    public static boolean isTimeForNextAmbientSound(Player player, long currentGameTime)
+    {
+        return currentGameTime - getTimeOfLastAmbientSound(player) >= getTimeUntilNextAmbientSound(player);
+    }
+
+    public static long getTimeOfLastAmbientSound(Player player)
+    {
+        Optional<ModSavedData.PlayerProfileEntry> entry = getPlayerProfile(player);
+
+        if(entry.isPresent())
+        {
+            return entry.get().getTimeOfLastAmbientSound();
+        }
+        return 0;
+    }
+
+    public static void setTimeOfLastAmbientSound(Player player, long value)
+    {
+        Optional<ModSavedData.PlayerProfileEntry> entry = getPlayerProfile(player);
+
+        if(entry.isPresent())
+        {
+            entry.get().setTimeOfLastAmbientSound(value);
+        }
+    }
+
+    public static long getTimeUntilNextAmbientSound(Player player)
+    {
+        Optional<ModSavedData.PlayerProfileEntry> entry = getPlayerProfile(player);
+
+        if(entry.isPresent())
+        {
+            return entry.get().getTimeUntilNextAmbientSound();
+        }
+        return 0;
+    }
+
+    public static void setTimeUntilNextAmbientSound(Player player, long value)
+    {
+        Optional<ModSavedData.PlayerProfileEntry> entry = getPlayerProfile(player);
+
+        if(entry.isPresent())
+        {
+            entry.get().setTimeUntilNextAmbientSound(value);
+        }
     }
 
 }

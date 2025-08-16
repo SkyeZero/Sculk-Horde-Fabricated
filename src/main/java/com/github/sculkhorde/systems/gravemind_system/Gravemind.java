@@ -280,8 +280,9 @@ public class Gravemind
         SculkHorde.chunkInfestationSystem.serverTick();
         SculkHorde.debugSlimeSystem.serverTick();
         SculkHorde.pathBuilderSystem.serverTick();
-
         SculkHorde.autoPerformanceSystem.onServerTick();
+        SculkHorde.ambientSFXSystem.serverTick();
+
 
         if(ModConfig.isExperimentalFeaturesEnabled())
         {

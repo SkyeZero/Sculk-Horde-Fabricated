@@ -58,6 +58,8 @@ public class SculkHorde {
     public static ChunkInfestationSystem chunkInfestationSystem;
     public static PathBuilderSystem pathBuilderSystem;
 
+    public static AmbientSFXSystem ambientSFXSystem = new AmbientSFXSystem();
+
     //This is the instance of our class, and we register it to the ModEventBus (which I have stored in a variable).
     public SculkHorde()
     {

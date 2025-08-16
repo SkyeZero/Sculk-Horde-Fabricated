@@ -229,5 +229,18 @@
     "sounds": [
       "sculkhorde:sculk_ravager_bite"
     ]
+  },
+
+  "soulite_ambience": {
+    "subtitle": "sounds.sculkhorde.soulite_ambience",
+    "sounds": [
+      "sculkhorde:soulite_ambience"
+    ]
+  },
+  "infestation_ambience": {
+    "subtitle": "sounds.sculkhorde.infestation_ambience",
+    "sounds": [
+      "sculkhorde:infestation_ambience"
+    ]
   }
 }
