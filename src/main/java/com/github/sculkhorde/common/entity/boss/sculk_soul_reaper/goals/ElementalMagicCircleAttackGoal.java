@@ -128,7 +128,7 @@ public class ElementalMagicCircleAttackGoal extends ReaperCastSpellGoal
             case 0 -> new ElementalFireMagicCircleAttackEntity(mob.level(), x, y, z, angle, owner);
             case 1 -> new ElementalPoisonMagicCircleAttackEntity(mob.level(), x, y, z, angle, owner);
             case 2 -> new ElementalIceMagicCircleAttackEntity(mob.level(), x, y, z, angle, owner);
-            case 3 -> new ElementalBreezeMagicCircleAttackAttackEntity(mob.level(), x, y, z, angle, owner);
+            case 3 -> new ElementalBreezeMagicCircleAttackEntity(mob.level(), x, y, z, angle, owner);
             default -> new ElementalFireMagicCircleAttackEntity(mob.level(), x, y, z, angle, owner);
         };
     }

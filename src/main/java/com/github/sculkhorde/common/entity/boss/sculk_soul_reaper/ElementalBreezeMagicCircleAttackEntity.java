@@ -17,18 +17,18 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.List;
 
-public class ElementalBreezeMagicCircleAttackAttackEntity extends ElementalFireMagicCircleAttackEntity {
+public class ElementalBreezeMagicCircleAttackEntity extends ElementalFireMagicCircleAttackEntity {
 
 
-    public ElementalBreezeMagicCircleAttackAttackEntity(EntityType<?> entityType, Level level) {
+    public ElementalBreezeMagicCircleAttackEntity(EntityType<?> entityType, Level level) {
         super(entityType, level);
     }
 
-    public ElementalBreezeMagicCircleAttackAttackEntity(Level level) {
+    public ElementalBreezeMagicCircleAttackEntity(Level level) {
         this(ModEntities.ELEMENTAL_BREEZE_MAGIC_CIRCLE.get(), level);
     }
 
-    public ElementalBreezeMagicCircleAttackAttackEntity(Level level, double x, double y, double z, float angle, LivingEntity owner) {
+    public ElementalBreezeMagicCircleAttackEntity(Level level, double x, double y, double z, float angle, LivingEntity owner) {
         this(level);
         setPos(x,y,z);
         this.setYRot(angle * (180F / (float)Math.PI));
