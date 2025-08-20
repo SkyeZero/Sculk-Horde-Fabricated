@@ -118,7 +118,9 @@ public class ElementalMagicCircleAttackGoal extends ReaperCastSpellGoal
 
         // Add the spell entity to the world if a suitable position is found
         if (foundSuitablePosition) {
-            mob.level().addFreshEntity(getElementalSpellEntity(x, (double)blockPos.getY() + yOffset, z, angle, mob));
+            ElementalFireMagicCircleAttackEntity spell = getElementalSpellEntity(x, (double)blockPos.getY() + yOffset, z, angle, mob);
+            spell.setDelay(delay);
+            mob.level().addFreshEntity(spell);
         }
     }
 
