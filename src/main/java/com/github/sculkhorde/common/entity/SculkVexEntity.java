@@ -1,10 +1,10 @@
 package com.github.sculkhorde.common.entity;
 
+import com.github.sculkhorde.common.entity.components.TargetParameters;
 import com.github.sculkhorde.common.entity.goal.*;
 import com.github.sculkhorde.core.ModEntities;
 import com.github.sculkhorde.core.ModSounds;
 import com.github.sculkhorde.util.SquadHandler;
-import com.github.sculkhorde.common.entity.components.TargetParameters;
 import com.github.sculkhorde.util.TickUnits;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -24,8 +24,6 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.entity.ai.goal.target.TargetGoal;
-import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.Vex;
 import net.minecraft.world.item.ItemStack;
@@ -35,9 +33,11 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib.animatable.GeoEntity;
+import software.bernie.geckolib.constant.DefaultAnimations;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
@@ -317,16 +317,37 @@ public class SculkVexEntity extends Monster implements GeoEntity, ISculkSmartEnt
 
     }
 
-    private static final RawAnimation ATTACK_ANIMATION = RawAnimation.begin().thenPlay("attack");
+    private static final String ATTACK_ANIMATION_ID = "attack.melee";
+    private static final RawAnimation ATTACK_ANIMATION = RawAnimation.begin().thenPlay(ATTACK_ANIMATION_ID);
 
-    private final AnimationController ATTACK_ANIMATION_CONTROLLER = new AnimationController<>(this, "attack_controller", state -> PlayState.STOP)
-            .triggerableAnim("attack", ATTACK_ANIMATION).transitionLength(5);
+    private static final String CHARGE_ANIMATION_ID = "attack.charging";
+    private static final RawAnimation CHARGE_ANIMATION = RawAnimation.begin().thenLoop(CHARGE_ANIMATION_ID);
 
+    private static final String ATTACK_ANIMATION_CONTROLLER_ID = "attack_controller";
+    private final AnimationController ATTACK_ANIMATION_CONTROLLER = new AnimationController<>(this, ATTACK_ANIMATION_CONTROLLER_ID, state -> PlayState.STOP)
+            .triggerableAnim(ATTACK_ANIMATION_ID, ATTACK_ANIMATION).transitionLength(5);
+
+    protected PlayState poseCharging(AnimationState<SculkVexEntity> state)
+    {
+
+        if(isCharging())
+        {
+            state.setAnimation(CHARGE_ANIMATION);
+        }
+        else
+        {
+            return PlayState.STOP;
+        }
+
+        return PlayState.CONTINUE;
+    }
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
         controllers.add(
-                //DefaultAnimations.genericWalkIdleController(this),
-                //ATTACK_ANIMATION_CONTROLLER
+                DefaultAnimations.genericLivingController(this),
+                ATTACK_ANIMATION_CONTROLLER,
+                new AnimationController<>(this, "charging_controller", 5, this::poseCharging)
+
         );
     }
     @Override
@@ -416,6 +437,7 @@ public class SculkVexEntity extends Monster implements GeoEntity, ISculkSmartEnt
             if (livingentity != null) {
                 if (getBoundingBox().intersects(livingentity.getBoundingBox())) {
                     doHurtTarget(livingentity);
+                    triggerAnim(ATTACK_ANIMATION_CONTROLLER_ID, ATTACK_ANIMATION_ID);
                     setIsCharging(false);
                 } else {
                     double d0 = distanceToSqr(livingentity);
@@ -426,23 +448,6 @@ public class SculkVexEntity extends Monster implements GeoEntity, ISculkSmartEnt
                 }
 
             }
-        }
-    }
-
-    class VexCopyOwnerTargetGoal extends TargetGoal {
-        private final TargetingConditions copyOwnerTargeting = TargetingConditions.forNonCombat().ignoreLineOfSight().ignoreInvisibilityTesting();
-
-        public VexCopyOwnerTargetGoal(PathfinderMob p_34056_) {
-            super(p_34056_, false);
-        }
-
-        public boolean canUse() {
-            return owner != null && owner.getTarget() != null && this.canAttack(owner.getTarget(), this.copyOwnerTargeting);
-        }
-
-        public void start() {
-            setTarget(owner.getTarget());
-            super.start();
         }
     }
 
