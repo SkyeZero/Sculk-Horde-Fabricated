@@ -10,7 +10,6 @@ public class ReaperCastSpellGoal extends AttackStepGoal {
     protected final SculkSoulReaperEntity mob;
     protected int cooldownTicksElapsed = getExecutionCooldown();
     protected int castingTime = 0;
-    protected boolean spellCasted = false;
 
     public ReaperCastSpellGoal(SculkSoulReaperEntity mob) {
         this.mob = mob;
@@ -35,10 +34,6 @@ public class ReaperCastSpellGoal extends AttackStepGoal {
         return true;
     }
 
-    protected void setSpellCompleted()
-    {
-        spellCasted = true;
-    }
 
 
     @Override
@@ -50,7 +45,7 @@ public class ReaperCastSpellGoal extends AttackStepGoal {
     @Override
     public boolean canContinueToUse()
     {
-        return !spellCasted && mob.getTarget() != null;
+        return !isAttackStepComplete() && mob.getTarget() != null;
     }
 
     @Override
@@ -79,7 +74,7 @@ public class ReaperCastSpellGoal extends AttackStepGoal {
 
     protected void doAttackTick()
     {
-        setSpellCompleted();
+        setAttackStepComplete(true);
     }
 
     @Override
@@ -98,7 +93,7 @@ public class ReaperCastSpellGoal extends AttackStepGoal {
             return;
         }
 
-        if(spellCasted)
+        if(isAttackStepComplete())
         {
             return;
         }
@@ -111,7 +106,6 @@ public class ReaperCastSpellGoal extends AttackStepGoal {
     {
         super.stop();
         cooldownTicksElapsed = 0;
-        spellCasted = false;
         castingTime = 0;
     }
 }

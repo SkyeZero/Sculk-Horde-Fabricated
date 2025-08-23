@@ -34,7 +34,7 @@ public class ShootSoulSpearAttackGoal extends ReaperCastSpellGoal
     @Override
     protected void doAttackTick() {
         shootProjectileAtTarget();
-        setSpellCompleted();
+        setAttackStepComplete(true);
     }
 
 

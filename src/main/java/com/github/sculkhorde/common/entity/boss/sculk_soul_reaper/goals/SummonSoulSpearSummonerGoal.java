@@ -37,7 +37,7 @@ public class SummonSoulSpearSummonerGoal extends ReaperCastSpellGoal
     @Override
     protected void doAttackTick() {
         summonSoulSpearSummoner();
-        setSpellCompleted();
+        setAttackStepComplete(true);
     }
 
     public void summonSoulSpearSummoner()

@@ -7,6 +7,7 @@ import com.github.sculkhorde.common.entity.SculkWitchEntity;
 import com.github.sculkhorde.common.entity.boss.sculk_soul_reaper.goals.*;
 import com.github.sculkhorde.common.entity.components.TargetParameters;
 import com.github.sculkhorde.common.entity.entity_debugging.GoalDebuggerUtility;
+import com.github.sculkhorde.common.entity.entity_debugging.IDebuggableGoal;
 import com.github.sculkhorde.common.entity.goal.ImprovedRandomStrollGoal;
 import com.github.sculkhorde.common.entity.goal.InvalidateTargetGoal;
 import com.github.sculkhorde.common.entity.goal.NearestLivingEntityTargetGoal;
@@ -261,7 +262,7 @@ public class SculkSoulReaperEntity extends Monster implements GeoEntity, ISculkS
     {
         if(currentAttack != null && currentAttack.isAttackSequenceFinished())
         {
-            currentAttack = null;
+            clearCurrentAttack();
         }
 
         return currentAttack;
@@ -425,6 +426,33 @@ public class SculkSoulReaperEntity extends Monster implements GeoEntity, ISculkS
 
         this.jumping = false;
         super.aiStep();
+    }
+
+    public void tick()
+    {
+        super.tick();
+        if (this.level().isClientSide)
+        {
+            return;
+        }
+
+        String customDebugName = "";
+        for(WrappedGoal wrappedGoal : goalSelector.getRunningGoals().toList())
+        {
+            Goal goal = wrappedGoal.getGoal();
+            if(goal instanceof IDebuggableGoal debugGoal)
+            {
+                customDebugName += debugGoal.getGoalName().get();
+
+            }
+            else
+            {
+                customDebugName += goal.getClass().getSimpleName();
+            }
+            customDebugName += " | ";
+        }
+
+        setCustomName(Component.literal(customDebugName));
     }
 
     // ####### Boss Bar Event Stuff #######

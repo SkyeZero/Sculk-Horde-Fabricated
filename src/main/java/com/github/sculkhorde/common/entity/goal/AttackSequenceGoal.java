@@ -6,6 +6,7 @@ import net.minecraft.world.entity.ai.goal.Goal;
 
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.UUID;
 
 public class AttackSequenceGoal extends Goal implements IDebuggableGoal
 {
@@ -17,6 +18,7 @@ public class AttackSequenceGoal extends Goal implements IDebuggableGoal
     protected Mob mob;
     protected boolean finishedAttackSequence = false;
     protected long executionCooldown = 0;
+    public UUID uuid = UUID.randomUUID();
 
     public AttackSequenceGoal(Mob mob, long executionCooldown, AttackStepGoal... attacksIn)
     {
@@ -34,7 +36,7 @@ public class AttackSequenceGoal extends Goal implements IDebuggableGoal
         return finishedAttackSequence;
     }
 
-    protected Goal getCurrentGoal()
+    protected AttackStepGoal getCurrentGoal()
     {
         return attacks.get(currentAttackIndex);
     }
@@ -74,6 +76,7 @@ public class AttackSequenceGoal extends Goal implements IDebuggableGoal
             return false;
         }
 
+        /*
         if(!getCurrentGoal().canUse())
         {
             reasonForNoStart = "Attack in Sequence `canUse()` returned false.";
@@ -81,11 +84,18 @@ public class AttackSequenceGoal extends Goal implements IDebuggableGoal
             return false;
         }
 
+         */
+
         return getCurrentGoal().canUse();
     }
 
     @Override
     public boolean canContinueToUse() {
+        if(isAttackSequenceFinished())
+        {
+            return false;
+        }
+
         return getCurrentGoal().canContinueToUse();
     }
 
@@ -98,6 +108,11 @@ public class AttackSequenceGoal extends Goal implements IDebuggableGoal
         }
 
         getCurrentGoal().tick();
+
+        if(getCurrentGoal().isAttackStepComplete())
+        {
+            incrementAttackIndexOrFinishSequence();
+        }
     }
 
     @Override
@@ -135,7 +150,7 @@ public class AttackSequenceGoal extends Goal implements IDebuggableGoal
     public Optional<String> getGoalName() {
         if(getCurrentGoal() != null)
         {
-            return Optional.of("Attack Sequence | " + getCurrentGoal().getClass().getName());
+            return Optional.of("Attack Sequence | " + getCurrentGoal().getClass().getSimpleName());
         }
 
         return Optional.of("Attack Sequence");
@@ -149,5 +164,16 @@ public class AttackSequenceGoal extends Goal implements IDebuggableGoal
     @Override
     public long getTimeRemainingBeforeCooldownOver() {
         return mob.level().getGameTime() - timeOfLastExecution;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+
+        if(obj instanceof AttackSequenceGoal goal)
+        {
+            return goal.uuid.equals(uuid);
+        }
+
+        return false;
     }
 }

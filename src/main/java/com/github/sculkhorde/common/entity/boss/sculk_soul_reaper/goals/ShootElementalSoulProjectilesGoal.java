@@ -35,8 +35,6 @@ public class ShootElementalSoulProjectilesGoal extends ReaperCastSpellGoal
         projectileType = mob.level().getRandom().nextInt(4);
     }
 
-
-
     @Override
     protected void doAttackTick() {
         elapsedAttackDuration++;
@@ -44,7 +42,7 @@ public class ShootElementalSoulProjectilesGoal extends ReaperCastSpellGoal
 
         if(elapsedAttackDuration >= maxAttackDuration)
         {
-            setSpellCompleted();
+            setAttackStepComplete(true);
         }
     }
 

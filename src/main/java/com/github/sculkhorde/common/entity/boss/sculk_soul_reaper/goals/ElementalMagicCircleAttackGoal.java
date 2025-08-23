@@ -45,7 +45,7 @@ public class ElementalMagicCircleAttackGoal extends ReaperCastSpellGoal
     @Override
     protected void doAttackTick() {
         performSpellCasting();
-        setSpellCompleted();
+        setAttackStepComplete(true);
     }
 
     // Performs the spell casting action

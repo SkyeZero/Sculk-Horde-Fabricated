@@ -32,6 +32,6 @@ public class ZoltraakAttackGoal extends ReaperCastSpellGoal
     protected void doAttackTick() {
         //performTargetedZoltraakAttack(mob, mob.getEyePosition(), mob.getTarget(), DAMAGE);
         ZoltraakAttackEntity.castZoltraakOnEntity(mob, mob.getTarget(), mob.getEyePosition());
-        setSpellCompleted();
+        setAttackStepComplete(true);
     }
 }

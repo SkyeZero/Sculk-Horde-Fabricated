@@ -40,7 +40,7 @@ public class ZoltraakBarrageAttackGoal extends ReaperCastSpellGoal
 
         if(elapsedAttackDuration >= maxAttackDuration)
         {
-            setSpellCompleted();
+            setAttackStepComplete(true);
             return;
         }
 
