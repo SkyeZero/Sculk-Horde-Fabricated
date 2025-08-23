@@ -16,6 +16,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -96,6 +97,7 @@ public class SculkVexEntity extends Monster implements GeoEntity, ISculkSmartEnt
     public SculkVexEntity(EntityType<? extends SculkVexEntity> type, Level worldIn) {
         super(type, worldIn);
         this.moveControl = new VexMoveControl(this);
+        this.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.IRON_AXE));
     }
 
     public SculkVexEntity(Level worldIn) {
