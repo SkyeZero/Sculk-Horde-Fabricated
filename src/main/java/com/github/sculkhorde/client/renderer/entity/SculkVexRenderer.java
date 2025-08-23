@@ -2,6 +2,7 @@ package com.github.sculkhorde.client.renderer.entity;
 
 import com.github.sculkhorde.client.model.enitity.SculkVexModel;
 import com.github.sculkhorde.common.entity.SculkVexEntity;
+import com.github.sculkhorde.core.ModConfig;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
@@ -16,6 +17,7 @@ import net.minecraft.world.item.ShieldItem;
 import software.bernie.geckolib.cache.object.BakedGeoModel;
 import software.bernie.geckolib.cache.object.GeoBone;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
+import software.bernie.geckolib.renderer.layer.AutoGlowingGeoLayer;
 import software.bernie.geckolib.renderer.layer.BlockAndItemGeoLayer;
 import software.bernie.geckolib.renderer.layer.ItemArmorGeoLayer;
 
@@ -40,6 +42,7 @@ public class SculkVexRenderer extends GeoEntityRenderer<SculkVexEntity> {
     public SculkVexRenderer(EntityRendererProvider.Context renderManager)
     {
         super(renderManager, new SculkVexModel());
+        if(!ModConfig.SERVER.enable_gpu_compatibility_mode.get()) {this.addRenderLayer(new AutoGlowingGeoLayer(this));}
 
         this.addRenderLayer(new ItemArmorGeoLayer<SculkVexEntity>(this) {
             @Nullable
