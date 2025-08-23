@@ -58,8 +58,8 @@ public class ZoltraakAttackEntity extends SpecialEffectEntity implements GeoEnti
 
     public void syncPitchAndYaw()
     {
-        setYRot(getYaw());
-        setXRot(getPitch());
+        setYRot(getSyncedEntityYaw());
+        setXRot(getSyncedEntityPitch());
     }
 
     @Override
@@ -68,7 +68,7 @@ public class ZoltraakAttackEntity extends SpecialEffectEntity implements GeoEnti
 
         if(level().isClientSide()) { return; }
 
-        setYaw(value);
+        setSyncedEntityYaw(value);
     }
 
     @Override
@@ -77,25 +77,25 @@ public class ZoltraakAttackEntity extends SpecialEffectEntity implements GeoEnti
 
         if(level().isClientSide()) { return; }
 
-        setPitch(value);
+        setSyncedEntityPitch(value);
     }
 
-    public float getYaw()
+    public float getSyncedEntityYaw()
     {
         return entityData.get(DATA_YAW);
     }
 
-    public void setYaw(float value)
+    public void setSyncedEntityYaw(float value)
     {
         entityData.set(DATA_YAW, value);
     }
 
-    public float getPitch()
+    public float getSyncedEntityPitch()
     {
         return entityData.get(DATA_PITCH);
     }
 
-    public void setPitch(float value)
+    public void setSyncedEntityPitch(float value)
     {
         entityData.set(DATA_PITCH, value);
     }
