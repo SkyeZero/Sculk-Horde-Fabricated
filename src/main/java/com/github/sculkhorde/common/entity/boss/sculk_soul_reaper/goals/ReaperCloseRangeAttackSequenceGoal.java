@@ -18,6 +18,11 @@ public class ReaperCloseRangeAttackSequenceGoal extends ReaperAttackSequenceGoal
             return false;
         }
 
+        if(getReaper().getTarget() == null)
+        {
+            return false;
+        }
+
         if(getReaper().getTarget().distanceTo(getReaper()) > REQUIRED_TARGET_DISTANCE)
         {
             reasonForNoStart = "Entity too far for close range attack";

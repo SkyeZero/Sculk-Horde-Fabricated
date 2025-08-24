@@ -30,17 +30,18 @@ public class AttackStepGoal extends Goal implements IDebuggableGoal
 
     @Override
     public boolean canUse() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean canContinueToUse() {
-        return isAttackStepComplete();
+        return !isAttackStepComplete();
     }
 
     @Override
     public void stop() {
         super.stop();
+        setAttackStepComplete(false);
     }
 
     @Override

@@ -34,20 +34,6 @@ public class ReaperCastSpellGoal extends AttackStepGoal {
         return true;
     }
 
-
-
-    @Override
-    public boolean canUse()
-    {
-        return mob.getTarget() != null;
-    }
-
-    @Override
-    public boolean canContinueToUse()
-    {
-        return !isAttackStepComplete() && mob.getTarget() != null;
-    }
-
     @Override
     public void start()
     {
@@ -64,12 +50,12 @@ public class ReaperCastSpellGoal extends AttackStepGoal {
 
     protected void playCastingAnimation()
     {
-        //mob.triggerAnim(SculkSoulReaperEntity.COMBAT_ATTACK_ANIMATION_CONTROLLER_ID, SculkSoulReaperEntity.ATTACK_SPELL_CHARGE_ID);
+
     }
 
     protected void playAttackAnimation()
     {
-        //mob.triggerAnim(SculkSoulReaperEntity.COMBAT_ATTACK_ANIMATION_CONTROLLER_ID, SculkSoulReaperEntity.ATTACK_SPELL_USE_ID);
+        
     }
 
     protected void doAttackTick()

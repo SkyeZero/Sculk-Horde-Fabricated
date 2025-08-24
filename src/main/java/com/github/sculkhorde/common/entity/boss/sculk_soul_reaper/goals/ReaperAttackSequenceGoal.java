@@ -29,6 +29,11 @@ public class ReaperAttackSequenceGoal extends AttackSequenceGoal {
             return false;
         }
 
+        if(getReaper().getTarget() == null)
+        {
+            return false;
+        }
+
         if(getReaper().isThereAnotherAttackActive(this))
         {
             if(getReaper().getCurrentAttack().getCurrentGoal() == null)
@@ -57,11 +62,6 @@ public class ReaperAttackSequenceGoal extends AttackSequenceGoal {
     }
 
     @Override
-    public boolean canContinueToUse() {
-        return super.canUse();
-    }
-
-    @Override
     public void start() {
         super.start();
         getReaper().setCurrentAttack(this);
@@ -69,11 +69,11 @@ public class ReaperAttackSequenceGoal extends AttackSequenceGoal {
 
     @Override
     public void stop() {
-        super.stop();
-
-        if(finishedAttackSequence)
+        if(finishedAttackSequence || !canContinueToUse())
         {
             getReaper().clearCurrentAttack();
         }
+
+        super.stop();
     }
 }

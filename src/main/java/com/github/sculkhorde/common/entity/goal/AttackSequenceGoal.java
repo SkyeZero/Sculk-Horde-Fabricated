@@ -86,17 +86,12 @@ public class AttackSequenceGoal extends Goal implements IDebuggableGoal
 
          */
 
-        return getCurrentGoal().canUse();
+        return true;
     }
 
     @Override
     public boolean canContinueToUse() {
-        if(isAttackSequenceFinished())
-        {
-            return false;
-        }
-
-        return getCurrentGoal().canContinueToUse();
+        return !isAttackSequenceFinished();
     }
 
     @Override
@@ -105,6 +100,7 @@ public class AttackSequenceGoal extends Goal implements IDebuggableGoal
         if(mob.getTarget() == null)
         {
             cancelAttackSequence();
+            return;
         }
 
         getCurrentGoal().tick();
@@ -122,6 +118,9 @@ public class AttackSequenceGoal extends Goal implements IDebuggableGoal
 
     @Override
     public void stop() {
+        super.stop();
+        getCurrentGoal().stop();
+
         if(finishedAttackSequence)
         {
             currentAttackIndex = 0;
@@ -131,9 +130,9 @@ public class AttackSequenceGoal extends Goal implements IDebuggableGoal
         else
         {
             //SculkHorde.LOGGER.debug("Sculk Reaper Entity | Stopping Attack: " + getCurrentGoal().getClass());
-            getCurrentGoal().stop();
+            //getCurrentGoal().stop();
         }
-        super.stop();
+
     }
 
     public void cancelAttackSequence()
