@@ -2063,7 +2063,7 @@
 			}
 		},
 		"attack.elemental_projectiles.shoot": {
-			"animation_length": 0.56,
+			"animation_length": 0.32,
 			"bones": {
 				"upper_body": {
 					"rotation": {
@@ -2074,7 +2074,7 @@
 							"vector": [-2.5, 2.5, 0],
 							"easing": "easeInOutSine"
 						},
-						"0.56": {
+						"0.32": {
 							"vector": [0, 0, 0],
 							"easing": "easeInOutSine"
 						}
@@ -2089,7 +2089,7 @@
 							"vector": [2.49294, -2.4786, 0.32652],
 							"easing": "easeInOutSine"
 						},
-						"0.56": {
+						"0.32": {
 							"vector": [0, 0, 0],
 							"easing": "easeInOutSine"
 						}
@@ -2104,7 +2104,7 @@
 							"vector": [2.5, 0, -2.5],
 							"easing": "easeOutBack"
 						},
-						"0.56": {
+						"0.32": {
 							"vector": [0, 0, 0],
 							"easing": "easeInOutSine"
 						}
@@ -2119,7 +2119,7 @@
 							"vector": [2.5, 0, 2.5],
 							"easing": "easeOutBack"
 						},
-						"0.56": {
+						"0.32": {
 							"vector": [0, 0, 0],
 							"easing": "easeInOutSine"
 						}
@@ -2134,7 +2134,7 @@
 							"vector": [-2.5, 0, 2.5],
 							"easing": "easeOutBack"
 						},
-						"0.56": {
+						"0.32": {
 							"vector": [0, 0, 0],
 							"easing": "easeInOutSine"
 						}
@@ -2149,7 +2149,7 @@
 							"vector": [-2.5, 0, -2.5],
 							"easing": "easeOutBack"
 						},
-						"0.56": {
+						"0.32": {
 							"vector": [0, 0, 0],
 							"easing": "easeInOutSine"
 						}
@@ -2168,7 +2168,7 @@
 							"vector": [-92.02136, -0.32621, 7.49294],
 							"easing": "easeOutSine"
 						},
-						"0.52": {
+						"0.28": {
 							"vector": [-80.02136, -0.32621, 7.49294],
 							"easing": "easeInOutSine"
 						}
@@ -2185,7 +2185,7 @@
 							"vector": [0, -0.5, 2.5],
 							"easing": "easeOutSine"
 						},
-						"0.4": {
+						"0.24": {
 							"vector": [0, 0, 0],
 							"easing": "easeInOutSine"
 						}
@@ -2204,7 +2204,7 @@
 							"vector": [-15.91527, 19.291, -5.38152],
 							"easing": "easeOutSine"
 						},
-						"0.56": {
+						"0.32": {
 							"vector": [-10, 0, 0],
 							"easing": "easeInOutSine"
 						}

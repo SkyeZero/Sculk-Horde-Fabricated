@@ -8,7 +8,6 @@ import net.minecraft.sounds.SoundSource;
 
 public class ReaperCastSpellGoal extends AttackStepGoal {
     protected final SculkSoulReaperEntity mob;
-    protected int cooldownTicksElapsed = getExecutionCooldown();
     protected int castingTime = 0;
 
     public ReaperCastSpellGoal(SculkSoulReaperEntity mob) {
@@ -18,20 +17,10 @@ public class ReaperCastSpellGoal extends AttackStepGoal {
     public boolean requiresUpdateEveryTick() {
         return true;
     }
-
-
     protected int getBaseCastingTime() { return TickUnits.convertSecondsToTicks(1);}
     protected int getCastingTimeElapsed()
     {
         return castingTime;
-    }
-
-    protected int getExecutionCooldown() { return TickUnits.convertSecondsToTicks(0); }
-    protected int getCooldownTicksElapsed() { return cooldownTicksElapsed; }
-
-    protected boolean mustSeeTarget()
-    {
-        return true;
     }
 
     @Override
@@ -55,7 +44,7 @@ public class ReaperCastSpellGoal extends AttackStepGoal {
 
     protected void playAttackAnimation()
     {
-        
+
     }
 
     protected void doAttackTick()
@@ -91,7 +80,6 @@ public class ReaperCastSpellGoal extends AttackStepGoal {
     public void stop()
     {
         super.stop();
-        cooldownTicksElapsed = 0;
         castingTime = 0;
     }
 }

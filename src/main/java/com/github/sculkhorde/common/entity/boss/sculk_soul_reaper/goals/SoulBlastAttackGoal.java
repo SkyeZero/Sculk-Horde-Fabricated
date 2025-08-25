@@ -18,11 +18,6 @@ public class SoulBlastAttackGoal extends ReaperCastSpellGoal implements IDebugga
     }
 
     @Override
-    protected boolean mustSeeTarget() {
-        return false;
-    }
-
-    @Override
     public void start()
     {
         super.start();

@@ -14,11 +14,6 @@ public class ShootSoulSpearAttackGoal extends ReaperCastSpellGoal
     }
 
     @Override
-    protected boolean mustSeeTarget() {
-        return false;
-    }
-
-    @Override
     public void start()
     {
         super.start();
