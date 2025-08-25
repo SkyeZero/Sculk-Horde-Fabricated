@@ -40,8 +40,14 @@ public class ShootElementalSoulProjectilesGoal extends ReaperCastSpellGoal
         elapsedAttackDuration++;
         spawnSoulAndShootAtTarget(5);
 
+        if(!mob.isShootingElementals())
+        {
+            mob.setFlagIsShootingElementals(true);
+        }
+
         if(elapsedAttackDuration >= maxAttackDuration)
         {
+            mob.setFlagIsShootingElementals(false);
             setAttackStepComplete(true);
         }
     }
@@ -52,6 +58,7 @@ public class ShootElementalSoulProjectilesGoal extends ReaperCastSpellGoal
         super.stop();
         elapsedAttackDuration = 0;
         ticksElapsed = 0;
+
     }
 
     public double getRandomDoubleInRange(double min, double max)

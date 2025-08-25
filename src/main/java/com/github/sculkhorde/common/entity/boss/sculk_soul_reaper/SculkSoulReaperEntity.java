@@ -23,6 +23,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.TickTask;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerPlayer;
@@ -98,6 +101,9 @@ public class SculkSoulReaperEntity extends Monster implements GeoEntity, ISculkS
 
     public static final String parentEventUUIDIdentifier = "parent_event_uuid";
     protected UUID parentEventUUID;
+
+    protected static final EntityDataAccessor<Byte> DATA_FLAGS_ID = SynchedEntityData.defineId(SculkSoulReaperEntity.class, EntityDataSerializers.BYTE);
+    private static final int FLAG_IS_SHOOTING_ELEMENTALS = 1;
 
     /**
      * The Constructor
@@ -210,6 +216,16 @@ public class SculkSoulReaperEntity extends Monster implements GeoEntity, ISculkS
     @Override
     public void setParticipatingInRaid(boolean isParticipatingInRaidIn) {
         isParticipatingInRaid = isParticipatingInRaidIn;
+    }
+
+    public boolean isShootingElementals()
+    {
+        return getFlag(FLAG_IS_SHOOTING_ELEMENTALS);
+    }
+
+    public void setFlagIsShootingElementals(boolean isShootingElementals)
+    {
+        setFlag(FLAG_IS_SHOOTING_ELEMENTALS, isShootingElementals);
     }
 
 
@@ -527,9 +543,25 @@ public class SculkSoulReaperEntity extends Monster implements GeoEntity, ISculkS
     }
 
     // ###### Data Code ########
-    protected void defineSynchedData()
-    {
+    protected void defineSynchedData() {
         super.defineSynchedData();
+        this.entityData.define(DATA_FLAGS_ID, (byte)0);
+    }
+
+    private boolean getFlag(int id) {
+        int i = this.entityData.get(DATA_FLAGS_ID);
+        return (i & id) != 0;
+    }
+
+    private void setFlag(int id, boolean value) {
+        int i = this.entityData.get(DATA_FLAGS_ID);
+        if (value) {
+            i |= id;
+        } else {
+            i &= ~id;
+        }
+
+        this.entityData.set(DATA_FLAGS_ID, (byte)(i & 255));
     }
 
     public void addAdditionalSaveData(CompoundTag nbt)
@@ -557,12 +589,10 @@ public class SculkSoulReaperEntity extends Monster implements GeoEntity, ISculkS
         return source.is(DamageTypeTags.WITHER_IMMUNE_TO);
     }
 
-    // ####### Animation Code ###########
+    // #### Animation Code ####
 
-    //public static final String ATTACK_SPELL_CHARGE_ID = "attack.spell_charge";
-    //private static final RawAnimation ATTACK_SPELL_CHARGE = RawAnimation.begin().thenLoop(ATTACK_SPELL_CHARGE_ID);
-    //public static final String ATTACK_SPELL_USE_ID = "attack.spell_use";
-    //private static final RawAnimation ATTACK_SPELL_USE = RawAnimation.begin().thenPlay(ATTACK_SPELL_USE_ID);
+    public static final String SHOOTING_ELEMENTALS_ID = "attack.shooting_elementals";
+    private static final RawAnimation SHOOTING_ELEMENTALS_ANIMATION = RawAnimation.begin().thenLoop(SHOOTING_ELEMENTALS_ID);
 
     public static final String ATTACK_SPELL_USE_ID = "attack.spell_use";
     public static final RawAnimation FANGS_SPELL_USE = RawAnimation.begin().thenPlay(ATTACK_SPELL_USE_ID);
@@ -592,7 +622,10 @@ public class SculkSoulReaperEntity extends Monster implements GeoEntity, ISculkS
             .triggerableAnim(ELEMENTAL_PROJECTILE_SPELL_CHARGE_ID, ELEMENTAL_PROJECTILE_SPELL_CHARGE)
             .triggerableAnim(ELEMENTAL_PROJECTILE_SPELL_SHOOT_ID, ELEMENTAL_PROJECTILE_SPELL_SHOOT)
             .triggerableAnim(SOUL_SPEAR_SPELL_USE_ID, SOUL_SPEAR_SPELL_USE)
-            .triggerableAnim(ATTACK_SPELL_USE_ID, FANGS_SPELL_USE);
+            .triggerableAnim(ATTACK_SPELL_USE_ID, FANGS_SPELL_USE)
+            .triggerableAnim(ELEMENTAL_PROJECTILE_SPELL_CHARGE_ID, ELEMENTAL_PROJECTILE_SPELL_CHARGE)
+            .triggerableAnim(ELEMENTAL_PROJECTILE_SPELL_SHOOT_ID, ELEMENTAL_PROJECTILE_SPELL_SHOOT);;
+
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers)

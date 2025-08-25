@@ -25,7 +25,6 @@ import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.entity.monster.Vex;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
@@ -79,7 +78,7 @@ public class SculkVexEntity extends Monster implements GeoEntity, ISculkSmartEnt
 
     public static final float FLAP_DEGREES_PER_TICK = 45.836624F;
     public static final int TICKS_PER_FLAP = Mth.ceil(3.9269907F);
-    protected static final EntityDataAccessor<Byte> DATA_FLAGS_ID = SynchedEntityData.defineId(Vex.class, EntityDataSerializers.BYTE);
+    protected static final EntityDataAccessor<Byte> DATA_FLAGS_ID = SynchedEntityData.defineId(SculkVexEntity.class, EntityDataSerializers.BYTE);
     private static final int FLAG_IS_CHARGING = 1;
     private static final double RIDING_OFFSET = 0.4D;
     @Nullable

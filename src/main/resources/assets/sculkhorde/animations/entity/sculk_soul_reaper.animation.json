@@ -2063,7 +2063,8 @@
 			}
 		},
 		"attack.elemental_projectiles.shoot": {
-			"animation_length": 0.32,
+			"animation_length": 1,
+			"override_previous_animation": true,
 			"bones": {
 				"upper_body": {
 					"rotation": {
@@ -2152,6 +2153,9 @@
 						"0.32": {
 							"vector": [0, 0, 0],
 							"easing": "easeInOutSine"
+						},
+						"1.0": {
+							"vector": [0, 0, 0]
 						}
 					}
 				},
@@ -2207,6 +2211,9 @@
 						"0.32": {
 							"vector": [-10, 0, 0],
 							"easing": "easeInOutSine"
+						},
+						"1.0": {
+							"vector": [-10, 0, 0]
 						}
 					}
 				}
@@ -3582,6 +3589,54 @@
 							"vector": [0, 0, 0],
 							"easing": "easeInOutSine"
 						}
+					}
+				}
+			}
+		},
+		"attack.shooting_elementals": {
+			"loop": true,
+			"bones": {
+				"upper_body": {
+					"rotation": {
+						"vector": [0, 0, 0]
+					}
+				},
+				"head": {
+					"rotation": {
+						"vector": [0, 0, 0]
+					}
+				},
+				"head_chunk_NE": {
+					"rotation": {
+						"vector": [0, 0, 0]
+					}
+				},
+				"head_chunk_NW": {
+					"rotation": {
+						"vector": [0, 0, 0]
+					}
+				},
+				"head_chunk_SW": {
+					"rotation": {
+						"vector": [0, 0, 0]
+					}
+				},
+				"head_chunk_SE": {
+					"rotation": {
+						"vector": [0, 0, 0]
+					}
+				},
+				"right_arm": {
+					"rotation": {
+						"vector": [-80.02136, -0.32621, 7.49294]
+					},
+					"position": {
+						"vector": [0, 0, 0]
+					}
+				},
+				"lower_right_arm": {
+					"rotation": {
+						"vector": [-10, 0, 0]
 					}
 				}
 			}
