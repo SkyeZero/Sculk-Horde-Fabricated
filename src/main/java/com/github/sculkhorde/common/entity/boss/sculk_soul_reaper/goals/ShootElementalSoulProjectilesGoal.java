@@ -58,6 +58,7 @@ public class ShootElementalSoulProjectilesGoal extends ReaperCastSpellGoal
         super.stop();
         elapsedAttackDuration = 0;
         ticksElapsed = 0;
+        mob.setFlagIsShootingElementals(false);
 
     }
 
