@@ -6,6 +6,8 @@ import com.github.sculkhorde.core.ModSounds;
 import com.github.sculkhorde.util.EntityAlgorithms;
 import com.github.sculkhorde.util.ParticleUtil;
 import com.github.sculkhorde.util.TickUnits;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -15,8 +17,11 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib.animatable.GeoEntity;
@@ -122,6 +127,18 @@ public class ZoltraakAttackEntity extends SpecialEffectEntity implements GeoEnti
         return zoltraak;
     }
 
+    public static ZoltraakAttackEntity castZoltraakFromPlayer(Player owner)
+    {
+        Vec3 playerLookPos = EntityAlgorithms.playerTargetBlockPos(owner, false).getCenter();
+
+        ZoltraakAttackEntity zoltraak = new ZoltraakAttackEntity(owner.level());
+        zoltraak.setPos(owner.getEyePosition());
+        zoltraak.setOwner(owner);
+        EntityAlgorithms.lookAt(zoltraak, playerLookPos);
+        owner.level().addFreshEntity(zoltraak);
+        return zoltraak;
+    }
+
     @Override
     public void tick() {
         super.tick();
@@ -129,10 +146,8 @@ public class ZoltraakAttackEntity extends SpecialEffectEntity implements GeoEnti
         if(level().isClientSide())
         {
             syncPitchAndYaw();
-            float yrot = getYRot();
             return;
         }
-        float yrot = getYRot();
         if(target.isPresent() && !completedAttack)
         {
             EntityAlgorithms.lookAt(this, target.get());
@@ -151,14 +166,15 @@ public class ZoltraakAttackEntity extends SpecialEffectEntity implements GeoEnti
             {
 
                 performTargetedZoltraakAttack(target.get());
-                timeOfDespawnStart = level().getGameTime();
-                completedAttack = true;
-                triggerAnim(DESPAWN_ANIMATION_CONTROLLER_ID, DESPAWN_ANIMATION_ID);
             }
             else if(targetPos.isEmpty())
             {
-                discard();
+                performForwardZoltraakAttack();
             }
+
+            timeOfDespawnStart = level().getGameTime();
+            completedAttack = true;
+            triggerAnim(DESPAWN_ANIMATION_CONTROLLER_ID, DESPAWN_ANIMATION_ID);
         }
 
         if(completedAttack && Math.abs(timeOfDespawnStart - level().getGameTime()) >= DESPAWN_DELAY)
@@ -166,6 +182,34 @@ public class ZoltraakAttackEntity extends SpecialEffectEntity implements GeoEnti
             discard();
         }
 
+    }
+
+    public void performForwardZoltraakAttack() {
+        // Eye position of the entity (so it doesn't shoot from feet)
+        Vec3 origin = this.position();
+
+        // Direction the entity is looking
+        Vec3 lookVec = this.getLookAngle().normalize();
+
+        // Extend direction up to 50 blocks
+        Vec3 targetPos = origin.add(lookVec.scale(50.0D));
+
+        // Do a ray trace to see what we hit (block/entity)
+        HitResult hitResult = this.level().clip(new ClipContext(
+                origin,
+                targetPos,
+                ClipContext.Block.COLLIDER,   // stop on solid blocks
+                ClipContext.Fluid.NONE,       // ignore fluids (change if you want fluids to count)
+                this
+        ));
+
+        // If we didn't hit anything, just use the end of the 50-block vector
+        if (hitResult.getType() == HitResult.Type.MISS) {
+            hitResult = BlockHitResult.miss(targetPos, Direction.getNearest(lookVec.x, lookVec.y, lookVec.z), BlockPos.containing(targetPos));
+        }
+
+        // Reuse your existing attack logic
+        performZoltraakAttack(hitResult, origin, DAMAGE);
     }
 
     public void performTargetedZoltraakAttack(Entity target)
@@ -206,14 +250,31 @@ public class ZoltraakAttackEntity extends SpecialEffectEntity implements GeoEnti
     public static void doMagicDamageToTargetsInHitBox(LivingEntity sourceEntity, AABB hitbox, float damage)
     {
         // Check for entities within the hitbox
-        List<LivingEntity> entitiesHit = EntityAlgorithms.getNonSculkUnitsInBoundingBox(sourceEntity.level(), hitbox);
+        List<LivingEntity> entitiesHit;
+
+        if(sourceEntity instanceof Player)
+        {
+            entitiesHit = EntityAlgorithms.getEntitiesExceptOwnerInBoundingBox(sourceEntity, (ServerLevel) sourceEntity.level(), hitbox);
+        }
+        else
+        {
+            entitiesHit = EntityAlgorithms.getNonSculkUnitsInBoundingBox(sourceEntity.level(), hitbox);
+        }
 
         for (LivingEntity entity : entitiesHit) {
             // Handle entity hit logic here
-            if(entity.getUUID() != sourceEntity.getUUID() && !entity.isBlocking())
+            if(entity.getUUID() == sourceEntity.getUUID())
             {
-                entity.hurt(sourceEntity.damageSources().magic(), damage);
+                continue;
             }
+
+            if(entity instanceof Player player && entity.isBlocking())
+            {
+                ZoltraakAttackEntity.castZoltraakFromPlayer(player);
+            }
+
+            entity.hurt(sourceEntity.damageSources().magic(), damage);
+
         }
     }
     protected static final EntityDataAccessor<Float> DATA_YAW = SynchedEntityData.defineId(ZoltraakAttackEntity.class, EntityDataSerializers.FLOAT);
