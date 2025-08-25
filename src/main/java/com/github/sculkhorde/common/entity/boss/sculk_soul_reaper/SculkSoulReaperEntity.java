@@ -1,9 +1,6 @@
 package com.github.sculkhorde.common.entity.boss.sculk_soul_reaper;
 
-import com.github.sculkhorde.common.entity.ISculkSmartEntity;
-import com.github.sculkhorde.common.entity.SculkRavagerEntity;
-import com.github.sculkhorde.common.entity.SculkVindicatorEntity;
-import com.github.sculkhorde.common.entity.SculkWitchEntity;
+import com.github.sculkhorde.common.entity.*;
 import com.github.sculkhorde.common.entity.boss.sculk_soul_reaper.goals.*;
 import com.github.sculkhorde.common.entity.components.TargetParameters;
 import com.github.sculkhorde.common.entity.entity_debugging.GoalDebuggerUtility;
@@ -55,6 +52,7 @@ import software.bernie.geckolib.constant.DefaultAnimations;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
@@ -592,7 +590,7 @@ public class SculkSoulReaperEntity extends Monster implements GeoEntity, ISculkS
     // #### Animation Code ####
 
     public static final String SHOOTING_ELEMENTALS_ID = "attack.shooting_elementals";
-    private static final RawAnimation SHOOTING_ELEMENTALS_ANIMATION = RawAnimation.begin().thenLoop(SHOOTING_ELEMENTALS_ID);
+    private static final RawAnimation SHOOTING_ELEMENTALS_ANIMATION = RawAnimation.begin().thenPlayAndHold(SHOOTING_ELEMENTALS_ID);
 
     public static final String ATTACK_SPELL_USE_ID = "attack.spell_use";
     public static final RawAnimation FANGS_SPELL_USE = RawAnimation.begin().thenPlay(ATTACK_SPELL_USE_ID);
@@ -633,8 +631,20 @@ public class SculkSoulReaperEntity extends Monster implements GeoEntity, ISculkS
         controllers.add(
                 DefaultAnimations.genericWalkIdleController(this).transitionLength(5),
                 DefaultAnimations.genericLivingController(this).transitionLength(5),
-                COMBAT_ATTACK_ANIMATION_CONTROLLER.transitionLength(5)
+                COMBAT_ATTACK_ANIMATION_CONTROLLER.transitionLength(5),
+                new AnimationController<>(this, "shooting", 5, this::poseElementalShooting)
         );
+    }
+
+    protected PlayState poseElementalShooting(AnimationState<SculkSoulReaperEntity> state)
+    {
+        if(state.getAnimatable().isShootingElementals())
+        {
+            state.setAnimation(SHOOTING_ELEMENTALS_ANIMATION);
+            return PlayState.CONTINUE;
+        }
+
+        return PlayState.STOP;
     }
 
     @Override

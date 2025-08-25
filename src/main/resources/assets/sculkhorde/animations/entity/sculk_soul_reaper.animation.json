@@ -2063,7 +2063,7 @@
 			}
 		},
 		"attack.elemental_projectiles.shoot": {
-			"animation_length": 1,
+			"animation_length": 0.36,
 			"override_previous_animation": true,
 			"bones": {
 				"upper_body": {
@@ -2153,9 +2153,6 @@
 						"0.32": {
 							"vector": [0, 0, 0],
 							"easing": "easeInOutSine"
-						},
-						"1.0": {
-							"vector": [0, 0, 0]
 						}
 					}
 				},
@@ -2211,9 +2208,6 @@
 						"0.32": {
 							"vector": [-10, 0, 0],
 							"easing": "easeInOutSine"
-						},
-						"1.0": {
-							"vector": [-10, 0, 0]
 						}
 					}
 				}
@@ -3594,7 +3588,7 @@
 			}
 		},
 		"attack.shooting_elementals": {
-			"loop": true,
+			"loop": "hold_on_last_frame",
 			"bones": {
 				"upper_body": {
 					"rotation": {
