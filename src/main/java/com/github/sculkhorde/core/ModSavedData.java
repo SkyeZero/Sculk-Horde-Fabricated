@@ -40,6 +40,7 @@ import static com.github.sculkhorde.util.BlockAlgorithms.getBlockDistance;
  * This class handels all data that gets saved to and loaded from the world. <br>
  * Learned World Data mechanics from: <a href="https://www.youtube.com/watch?v=tyTsdCzVz6w">...</a>
  */
+@SuppressWarnings("ALL")
 public class ModSavedData extends SavedData {
 
     // identifier for debugmode
@@ -1581,6 +1582,9 @@ public class ModSavedData extends SavedData {
 
         private int difficultyOfNextHit = 1;
 
+        protected long timeUntilNextAmbientSound = 0;
+        protected long timeOfLastAmbientSound = 0;
+
         private static final int MAX_RELATIONSHIP_VALUE = 1000;
         private static final int MIN_RELATIONSHIP_VALUE = -1000;
 
@@ -1594,7 +1598,7 @@ public class ModSavedData extends SavedData {
             this.playerUUID = uuid;
         }
 
-        public PlayerProfileEntry(UUID playerIn, int relationshipToTheHordeIn, boolean isVesselIn, boolean isActiveVesselIn, int nodesDestroyed, long timeOfLastHit, int difficultyOfNextHit)
+        public PlayerProfileEntry(UUID playerIn, int relationshipToTheHordeIn, boolean isVesselIn, boolean isActiveVesselIn, int nodesDestroyed, long timeOfLastHit, int difficultyOfNextHit,long timeOfLastAmbientSound, long timeUntilNextAmbientSound)
         {
             this.playerUUID = playerIn;
             this.relationshipToTheHorde = relationshipToTheHordeIn;
@@ -1603,6 +1607,8 @@ public class ModSavedData extends SavedData {
             this.nodesDestroyed = nodesDestroyed;
             this.timeOfLastHit = timeOfLastHit;
             this.difficultyOfNextHit = difficultyOfNextHit;
+            this.timeOfLastAmbientSound = timeOfLastAmbientSound;
+            this.timeUntilNextAmbientSound = timeUntilNextAmbientSound;
         }
 
         public Optional<Player> getPlayer()
@@ -1699,6 +1705,26 @@ public class ModSavedData extends SavedData {
             difficultyOfNextHit = Math.max(1, difficultyOfNextHit - 1);
         }
 
+        public long getTimeOfLastAmbientSound()
+        {
+            return timeOfLastAmbientSound;
+        }
+
+        public void setTimeOfLastAmbientSound(long time)
+        {
+            timeOfLastAmbientSound = time;
+        }
+
+        public long getTimeUntilNextAmbientSound()
+        {
+            return timeUntilNextAmbientSound;
+        }
+
+        public void setTimeUntilNextAmbientSound(long time)
+        {
+            timeUntilNextAmbientSound = time;
+        }
+
         /**
          * Making nbt to be stored in memory
          * @return The nbt with our data
@@ -1713,6 +1739,7 @@ public class ModSavedData extends SavedData {
             nbt.putInt("nodesDestroyed", nodesDestroyed);
             nbt.putLong("timeOfLastHit", timeOfLastHit);
             nbt.putInt("difficultyOfNextHit", difficultyOfNextHit);
+            nbt.putLong("timeUntilNextAmbientSound", timeUntilNextAmbientSound);
             return nbt;
         }
 
@@ -1729,7 +1756,9 @@ public class ModSavedData extends SavedData {
                     nbt.getBoolean("isActiveVessel"),
                     nbt.getInt("nodesDestroyed"),
                     nbt.getLong("timeOfLastHit"),
-                    nbt.getInt("difficultyOfNextHit")
+                    nbt.getInt("difficultyOfNextHit"),
+                    nbt.getLong("timeOfLastAmbientSound"),
+                    nbt.getLong("timeUntilNextAmbientSound")
             );
         }
 
@@ -1744,6 +1773,8 @@ public class ModSavedData extends SavedData {
                     ", nodesDestroyed=" + nodesDestroyed +
                     ", timeOfLastHit=" + timeOfLastHit +
                     ", difficultyOfNextHit=" + difficultyOfNextHit +
+                    ", timeOfLastAmbientSound=" + timeOfLastAmbientSound +
+                    ", timeUntilNextAmbientSound=" + timeUntilNextAmbientSound +
                     '}';
         }
     }

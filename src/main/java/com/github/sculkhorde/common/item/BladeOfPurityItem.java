@@ -9,9 +9,6 @@ import io.github.fabricators_of_create.porting_lib.item.api.extensions.Repairabl
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -65,18 +62,7 @@ public class BladeOfPurityItem extends SwordItem implements RepairableItem {
 
         return true;
     }
-
-    @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
-
-        ItemStack itemstack = player.getItemInHand(hand);
-        if(!itemstack.isDamaged() && !level.isClientSide())
-        {
-            level.playSound(player, player.blockPosition(), SoundEvents.EVOKER_FANGS_ATTACK, player.getSoundSource());
-            return InteractionResultHolder.success(itemstack);
-        }
-        return InteractionResultHolder.pass(itemstack);
-    }
+    
 
     // TODO: INVESTIGATE
     /*

@@ -2,7 +2,6 @@ package com.github.sculkhorde.common.entity.boss.sculk_soul_reaper;
 
 import com.github.sculkhorde.client.SculkHordeClient;
 import com.github.sculkhorde.common.entity.boss.SpecialEffectEntity;
-import com.github.sculkhorde.common.entity.boss.sculk_enderman.SculkEndermanEntity;
 import com.github.sculkhorde.core.ModEntities;
 import com.github.sculkhorde.core.ModSounds;
 import com.github.sculkhorde.util.EntityAlgorithms;
@@ -58,7 +57,7 @@ public class SoulBlastAttackEntity extends SpecialEffectEntity implements GeoEnt
             } else if (entity instanceof Player p) {
                 //p.hurtMarked = true;
                 return false;
-            } else if (entity instanceof SculkEndermanEntity) {
+            } else if (entity.getUUID().equals(getOwner().getUUID())) {
                 return false;
             }
 

@@ -1,7 +1,6 @@
 package com.github.sculkhorde.common.block;
 
-import com.github.sculkhorde.core.ModBlocks;
-import com.github.sculkhorde.core.ModMobEffects;
+import com.github.sculkhorde.core.*;
 import com.github.sculkhorde.util.BlockAlgorithms;
 import com.github.sculkhorde.util.EntityAlgorithms;
 import com.github.sculkhorde.util.TickUnits;
@@ -12,6 +11,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -221,27 +221,45 @@ public class DiseasedKelpBlock extends Block implements LiquidBlockContainer {
      */
     public void entityInside(BlockState blockState, Level world, BlockPos blockPos, Entity entity) {
         // If the entity is not a living entity, don't do anything
-        if (!(entity instanceof LivingEntity) || world.isClientSide)
+        if (world.isClientSide)
         {
             return;
         }
 
-        // If the entity is a sculk, don't do anything
-        if(EntityAlgorithms.isLivingEntityExplicitDenyTarget((LivingEntity) entity))
+
+        if(entity instanceof LivingEntity livingEntity)
         {
-            return;
+            // If the entity is a sculk, don't do anything
+            if(EntityAlgorithms.isLivingEntityExplicitDenyTarget(livingEntity))
+            {
+                return;
+            }
+
+            LivingEntity vicitim = (livingEntity);
+
+            if(vicitim.getMaxHealth() / 2 >= vicitim.getHealth())
+            {
+                return;
+            }
+
+            livingEntity.makeStuckInBlock(blockState, new Vec3(0.8F, 0.75D, (double)0.8F));
+            livingEntity.hurt(livingEntity.damageSources().generic(), 1.0F);
+            EntityAlgorithms.applyEffectToTarget((livingEntity), ModMobEffects.SCULK_INFECTION.get(), TickUnits.convertSecondsToTicks(30), 0);
+
+        }
+        else if(entity instanceof ItemEntity item)
+        {
+            if(!ModConfig.SERVER.isItemEdibleToCursors(item))
+            {
+                return;
+            }
+
+            entity.discard();
+            int massToAdd = ((ItemEntity)entity).getItem().getCount();
+            ModSavedData.getSaveData().addSculkAccumulatedMass(massToAdd);
+            SculkHorde.statisticsData.addTotalMassFromInfestedCursorItemEating(massToAdd);
         }
 
-        LivingEntity vicitim = ((LivingEntity) entity);
-
-        if(vicitim.getMaxHealth() / 2 >= vicitim.getHealth())
-        {
-            return;
-        }
-
-        entity.makeStuckInBlock(blockState, new Vec3(0.8F, 0.75D, (double)0.8F));
-        entity.hurt(entity.damageSources().generic(), 1.0F);
-        EntityAlgorithms.applyEffectToTarget(((LivingEntity) entity), ModMobEffects.SCULK_INFECTION.get(), TickUnits.convertSecondsToTicks(30), 0);
     }
 
     @Override

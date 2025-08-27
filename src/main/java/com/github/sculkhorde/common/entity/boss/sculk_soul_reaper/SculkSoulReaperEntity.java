@@ -1,13 +1,11 @@
 package com.github.sculkhorde.common.entity.boss.sculk_soul_reaper;
 
 import com.github.sculkhorde.client.SculkHordeClient;
-import com.github.sculkhorde.common.entity.ISculkSmartEntity;
-import com.github.sculkhorde.common.entity.SculkRavagerEntity;
-import com.github.sculkhorde.common.entity.SculkVindicatorEntity;
-import com.github.sculkhorde.common.entity.SculkWitchEntity;
+import com.github.sculkhorde.common.entity.*;
 import com.github.sculkhorde.common.entity.boss.sculk_soul_reaper.goals.*;
 import com.github.sculkhorde.common.entity.components.TargetParameters;
 import com.github.sculkhorde.common.entity.entity_debugging.GoalDebuggerUtility;
+import com.github.sculkhorde.common.entity.entity_debugging.IDebuggableGoal;
 import com.github.sculkhorde.common.entity.goal.ImprovedRandomStrollGoal;
 import com.github.sculkhorde.common.entity.goal.InvalidateTargetGoal;
 import com.github.sculkhorde.common.entity.goal.NearestLivingEntityTargetGoal;
@@ -23,6 +21,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.TickTask;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerPlayer;
@@ -52,6 +53,7 @@ import software.bernie.geckolib.constant.DefaultAnimations;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
@@ -98,6 +100,9 @@ public class SculkSoulReaperEntity extends Monster implements GeoEntity, ISculkS
 
     public static final String parentEventUUIDIdentifier = "parent_event_uuid";
     protected UUID parentEventUUID;
+
+    protected static final EntityDataAccessor<Byte> DATA_FLAGS_ID = SynchedEntityData.defineId(SculkSoulReaperEntity.class, EntityDataSerializers.BYTE);
+    private static final int FLAG_IS_SHOOTING_ELEMENTALS = 1;
 
     /**
      * The Constructor
@@ -212,6 +217,16 @@ public class SculkSoulReaperEntity extends Monster implements GeoEntity, ISculkS
         isParticipatingInRaid = isParticipatingInRaidIn;
     }
 
+    public boolean isShootingElementals()
+    {
+        return getFlag(FLAG_IS_SHOOTING_ELEMENTALS);
+    }
+
+    public void setFlagIsShootingElementals(boolean isShootingElementals)
+    {
+        setFlag(FLAG_IS_SHOOTING_ELEMENTALS, isShootingElementals);
+    }
+
 
     @Override
     public TargetParameters getTargetParameters() {
@@ -262,7 +277,7 @@ public class SculkSoulReaperEntity extends Monster implements GeoEntity, ISculkS
     {
         if(currentAttack != null && currentAttack.isAttackSequenceFinished())
         {
-            currentAttack = null;
+            clearCurrentAttack();
         }
 
         return currentAttack;
@@ -325,13 +340,12 @@ public class SculkSoulReaperEntity extends Monster implements GeoEntity, ISculkS
                 new FloorSoulSpearsAttackGoal(this)
         ));
 
-        // TODO: INVESTIGATE LAG SPIKE WHEN ELEMENTAL CIRCLE IS SUMMONED
         this.goalSelector.addGoal(2, new ReaperAttackSequenceGoal(this, TickUnits.convertSecondsToTicks(15), 2,2,
                 new ShootElementalSoulProjectilesGoal(this),
-                // new ElementalMagicCircleAttackGoal(this),
+                new ElementalMagicCircleAttackGoal(this),
                 new FloorSoulSpearsAttackGoal(this),
                 new ShootElementalSoulProjectilesGoal(this),
-                // new ElementalMagicCircleAttackGoal(this),
+                new ElementalMagicCircleAttackGoal(this),
                 new FloorSoulSpearsAttackGoal(this)
         ));
 
@@ -368,13 +382,12 @@ public class SculkSoulReaperEntity extends Monster implements GeoEntity, ISculkS
                 new ZoltraakBarrageAttackGoal(this)
         ));
 
-        // TODO: INVESTIGATE LAG SPIKE WHEN ELEMENTAL CIRCLE IS SUMMONED
         this.goalSelector.addGoal(3, new ReaperAttackSequenceGoal(this, TickUnits.convertSecondsToTicks(15), 3,-1,
                 new ShootElementalSoulProjectilesGoal(this),
-                // new ElementalMagicCircleAttackGoal(this),
+                new ElementalMagicCircleAttackGoal(this),
                 new FloorSoulSpearsAttackGoal(this),
                 new ShootElementalSoulProjectilesGoal(this),
-                // new ElementalMagicCircleAttackGoal(this),
+                new ElementalMagicCircleAttackGoal(this),
                 new FloorSoulSpearsAttackGoal(this)
         ));
 
@@ -428,6 +441,33 @@ public class SculkSoulReaperEntity extends Monster implements GeoEntity, ISculkS
 
         this.jumping = false;
         super.aiStep();
+    }
+
+    public void tick()
+    {
+        super.tick();
+        if (this.level().isClientSide)
+        {
+            return;
+        }
+
+        String customDebugName = "";
+        for(WrappedGoal wrappedGoal : goalSelector.getRunningGoals().toList())
+        {
+            Goal goal = wrappedGoal.getGoal();
+            if(goal instanceof IDebuggableGoal debugGoal)
+            {
+                customDebugName += debugGoal.getGoalName().get();
+
+            }
+            else
+            {
+                customDebugName += goal.getClass().getSimpleName();
+            }
+            customDebugName += " | ";
+        }
+
+        setCustomName(Component.literal(customDebugName));
     }
 
     // ####### Boss Bar Event Stuff #######
@@ -502,9 +542,25 @@ public class SculkSoulReaperEntity extends Monster implements GeoEntity, ISculkS
     }
 
     // ###### Data Code ########
-    protected void defineSynchedData()
-    {
+    protected void defineSynchedData() {
         super.defineSynchedData();
+        this.entityData.define(DATA_FLAGS_ID, (byte)0);
+    }
+
+    private boolean getFlag(int id) {
+        int i = this.entityData.get(DATA_FLAGS_ID);
+        return (i & id) != 0;
+    }
+
+    private void setFlag(int id, boolean value) {
+        int i = this.entityData.get(DATA_FLAGS_ID);
+        if (value) {
+            i |= id;
+        } else {
+            i &= ~id;
+        }
+
+        this.entityData.set(DATA_FLAGS_ID, (byte)(i & 255));
     }
 
     public void addAdditionalSaveData(CompoundTag nbt)
@@ -532,12 +588,10 @@ public class SculkSoulReaperEntity extends Monster implements GeoEntity, ISculkS
         return source.is(DamageTypeTags.WITHER_IMMUNE_TO);
     }
 
-    // ####### Animation Code ###########
+    // #### Animation Code ####
 
-    //public static final String ATTACK_SPELL_CHARGE_ID = "attack.spell_charge";
-    //private static final RawAnimation ATTACK_SPELL_CHARGE = RawAnimation.begin().thenLoop(ATTACK_SPELL_CHARGE_ID);
-    //public static final String ATTACK_SPELL_USE_ID = "attack.spell_use";
-    //private static final RawAnimation ATTACK_SPELL_USE = RawAnimation.begin().thenPlay(ATTACK_SPELL_USE_ID);
+    public static final String SHOOTING_ELEMENTALS_ID = "attack.shooting_elementals";
+    private static final RawAnimation SHOOTING_ELEMENTALS_ANIMATION = RawAnimation.begin().thenPlayAndHold(SHOOTING_ELEMENTALS_ID);
 
     public static final String ATTACK_SPELL_USE_ID = "attack.spell_use";
     public static final RawAnimation FANGS_SPELL_USE = RawAnimation.begin().thenPlay(ATTACK_SPELL_USE_ID);
@@ -567,7 +621,10 @@ public class SculkSoulReaperEntity extends Monster implements GeoEntity, ISculkS
             .triggerableAnim(ELEMENTAL_PROJECTILE_SPELL_CHARGE_ID, ELEMENTAL_PROJECTILE_SPELL_CHARGE)
             .triggerableAnim(ELEMENTAL_PROJECTILE_SPELL_SHOOT_ID, ELEMENTAL_PROJECTILE_SPELL_SHOOT)
             .triggerableAnim(SOUL_SPEAR_SPELL_USE_ID, SOUL_SPEAR_SPELL_USE)
-            .triggerableAnim(ATTACK_SPELL_USE_ID, FANGS_SPELL_USE);
+            .triggerableAnim(ATTACK_SPELL_USE_ID, FANGS_SPELL_USE)
+            .triggerableAnim(ELEMENTAL_PROJECTILE_SPELL_CHARGE_ID, ELEMENTAL_PROJECTILE_SPELL_CHARGE)
+            .triggerableAnim(ELEMENTAL_PROJECTILE_SPELL_SHOOT_ID, ELEMENTAL_PROJECTILE_SPELL_SHOOT);;
+
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers)
@@ -575,8 +632,20 @@ public class SculkSoulReaperEntity extends Monster implements GeoEntity, ISculkS
         controllers.add(
                 DefaultAnimations.genericWalkIdleController(this).transitionLength(5),
                 DefaultAnimations.genericLivingController(this).transitionLength(5),
-                COMBAT_ATTACK_ANIMATION_CONTROLLER.transitionLength(5)
+                COMBAT_ATTACK_ANIMATION_CONTROLLER.transitionLength(5),
+                new AnimationController<>(this, "shooting", 5, this::poseElementalShooting)
         );
+    }
+
+    protected PlayState poseElementalShooting(AnimationState<SculkSoulReaperEntity> state)
+    {
+        if(state.getAnimatable().isShootingElementals())
+        {
+            state.setAnimation(SHOOTING_ELEMENTALS_ANIMATION);
+            return PlayState.CONTINUE;
+        }
+
+        return PlayState.STOP;
     }
 
     @Override

@@ -6,7 +6,7 @@ import com.github.sculkhorde.common.entity.boss.sculk_enderman.EnderBubbleAttack
 import com.github.sculkhorde.common.entity.boss.sculk_enderman.SculkEndermanEntity;
 import com.github.sculkhorde.common.entity.boss.sculk_enderman.SculkSpineSpikeAttackEntity;
 import com.github.sculkhorde.common.entity.boss.sculk_soul_reaper.*;
-import com.github.sculkhorde.common.entity.boss.sculk_soul_reaper.ElementalBreezeMagicCircleAttackAttackEntity;
+import com.github.sculkhorde.common.entity.boss.sculk_soul_reaper.ElementalBreezeMagicCircleAttackEntity;
 import com.github.sculkhorde.common.entity.boss.sculk_soul_reaper.ElementalFireMagicCircleAttackEntity;
 import com.github.sculkhorde.common.entity.boss.sculk_soul_reaper.ElementalIceMagicCircleAttackEntity;
 import com.github.sculkhorde.common.entity.boss.sculk_soul_reaper.ElementalPoisonMagicCircleAttackEntity;
@@ -71,7 +71,7 @@ public class ModEntities {
     public static final RegistryObject<EntityType<SculkGuardianEntity>> SCULK_GUARDIAN = registerMob("sculk_guardian", SculkGuardianEntity::new, 1f, 1f, 0x000000, 0x000000);
     public static final RegistryObject<EntityType<SculkBroodHatcherEntity>> SCULK_BROOD_HATCHER = registerMob("sculk_brood_hatcher", SculkBroodHatcherEntity::new, 2.9f, 2.9f, 0x000000, 0x000000);
     public static final RegistryObject<EntityType<SculkBroodlingEntity>> SCULK_BROODLING = registerMob("sculk_broodling", SculkBroodlingEntity::new, 1.4f, 1.5f, 0x000000, 0x000000);
-    public static final RegistryObject<EntityType<SculkSheepEntity>> SCULK_SHEEP = registerMob("sculk_sheep", SculkSheepEntity::new, 0.9f, 0.9f, 0x000000, 0x000000);
+    public static final RegistryObject<EntityType<SculkSheepEntity>> SCULK_SHEEP = registerMob("sculk_sheep", SculkSheepEntity::new, 0.9f, 1.4f, 0x000000, 0x000000);
     public static final RegistryObject<EntityType<SculkMetamorphosisPodEntity>> SCULK_METAMORPHOSIS_POD = registerMob("sculk_metamorphosis_pod", SculkMetamorphosisPodEntity::new, 1f, 1.9f, 0x000000, 0x000000);
     public static final RegistryObject<EntityType<SculkGhastEntity>> SCULK_GHAST = registerMob("sculk_ghast", SculkGhastEntity::new, 4.9f, 4.9f, 0x000000, 0x000000);
     public static final RegistryObject<EntityType<SculkLeechEntity>> SCULK_LEECH = registerMob("sculk_leech", SculkLeechEntity::new, 0.8f, 0.8f, 0x000000, 0x000000);
@@ -104,7 +104,7 @@ public class ModEntities {
     public static final RegistryObject<EntityType<ElementalFireMagicCircleAttackEntity>> ELEMENTAL_FIRE_MAGIC_CIRCLE = ENTITY_TYPES.register("elemental_fire_magic_circle", () -> EntityType.Builder.<ElementalFireMagicCircleAttackEntity>of(ElementalFireMagicCircleAttackEntity::new, MobCategory.MISC).sized(3f, 3f).clientTrackingRange(4).updateInterval(10).build("elemental_fire_magic_circle"));
     public static final RegistryObject<EntityType<ElementalPoisonMagicCircleAttackEntity>> ELEMENTAL_POISON_MAGIC_CIRCLE = ENTITY_TYPES.register("elemental_poison_magic_circle", () -> EntityType.Builder.<ElementalPoisonMagicCircleAttackEntity>of(ElementalPoisonMagicCircleAttackEntity::new, MobCategory.MISC).sized(3f, 3f).clientTrackingRange(4).updateInterval(10).build("elemental_poison_magic_circle"));
     public static final RegistryObject<EntityType<ElementalIceMagicCircleAttackEntity>> ELEMENTAL_ICE_MAGIC_CIRCLE = ENTITY_TYPES.register("elemental_ice_magic_circle", () -> EntityType.Builder.<ElementalIceMagicCircleAttackEntity>of(ElementalIceMagicCircleAttackEntity::new, MobCategory.MISC).sized(3f, 3f).clientTrackingRange(4).updateInterval(10).build("elemental_ice_magic_circle"));
-    public static final RegistryObject<EntityType<ElementalBreezeMagicCircleAttackAttackEntity>> ELEMENTAL_BREEZE_MAGIC_CIRCLE = ENTITY_TYPES.register("elemental_breeze_magic_circle", () -> EntityType.Builder.<ElementalBreezeMagicCircleAttackAttackEntity>of(ElementalBreezeMagicCircleAttackAttackEntity::new, MobCategory.MISC).sized(3f, 3f).clientTrackingRange(4).updateInterval(10).build("elemental_breeze_magic_circle"));
+    public static final RegistryObject<EntityType<ElementalBreezeMagicCircleAttackEntity>> ELEMENTAL_BREEZE_MAGIC_CIRCLE = ENTITY_TYPES.register("elemental_breeze_magic_circle", () -> EntityType.Builder.<ElementalBreezeMagicCircleAttackEntity>of(ElementalBreezeMagicCircleAttackEntity::new, MobCategory.MISC).sized(3f, 3f).clientTrackingRange(4).updateInterval(10).build("elemental_breeze_magic_circle"));
     public static final RegistryObject<EntityType<SoulSpearSummonerAttackEntity>> SOUL_SPEAR_SUMMONER = ENTITY_TYPES.register("soul_spear_summoner_entity", () -> EntityType.Builder.<SoulSpearSummonerAttackEntity>of(SoulSpearSummonerAttackEntity::new, MobCategory.MISC).sized(3f, 3f).clientTrackingRange(4).updateInterval(10).build("soul_spear_summoner_entity"));
     public static final RegistryObject<EntityType<ZoltraakAttackEntity>> ZOLTRAAK_ATTACK_ENTITY = ENTITY_TYPES.register("zoltraak_attack_entity", () -> EntityType.Builder.<ZoltraakAttackEntity>of(ZoltraakAttackEntity::new, MobCategory.MISC).sized(3f, 3f).clientTrackingRange(4).updateInterval(10).build("zoltraak_attack_entity"));
     public static String SOUL_BLAST_ENTITY_ID = "soul_blast";

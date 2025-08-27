@@ -44,7 +44,7 @@
 
     "minecraft:sculk",
     "minecraft:sculk_catalyst",
-    "sculkhorde:infested_sand",
+    "minecraft:sculk_vein",
     "sculkhorde:sculk_ancient_node",
     "sculkhorde:sculk_node",
     "sculkhorde:sculk_arachnoid",
@@ -52,6 +52,7 @@
     "sculkhorde:sculk_living_rock",
     "sculkhorde:sculk_living_rock_root",
     "sculkhorde:calcite_ore",
+    "sculkhorde:infested_sand",
     "sculkhorde:infested_snow",
     "sculkhorde:infested_gravel",
     "sculkhorde:infested_red_sand",
@@ -62,6 +63,15 @@
 
     "sculkhorde:sculk_bee_nest",
     "sculkhorde:sculk_bee_nest_cell",
+    "sculkhorde:bee_colony_core_block",
+    "sculkhorde:soulite_core_block",
+    "sculkhorde:budding_soulite_block",
+    "sculkhorde:soulite_block",
+    "sculkhorde:depleted_soulite_block",
+    "sculkhorde:fungal_shroom_core_block",
+    "sculkhorde:fungal_sculk_block",
+    "sculkhorde:fungal_sculk_stem_block",
+    "sculkhorde:tendril_core_block",
     "sculkhorde:diseased_kelp_block",
     "sculkhorde:tendrils",
 

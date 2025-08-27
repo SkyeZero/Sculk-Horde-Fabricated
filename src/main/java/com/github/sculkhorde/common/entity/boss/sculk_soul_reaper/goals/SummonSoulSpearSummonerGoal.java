@@ -12,11 +12,6 @@ public class SummonSoulSpearSummonerGoal extends ReaperCastSpellGoal
     }
 
     @Override
-    protected boolean mustSeeTarget() {
-        return false;
-    }
-
-    @Override
     public void start()
     {
         super.start();
@@ -37,7 +32,7 @@ public class SummonSoulSpearSummonerGoal extends ReaperCastSpellGoal
     @Override
     protected void doAttackTick() {
         summonSoulSpearSummoner();
-        setSpellCompleted();
+        setAttackStepComplete(true);
     }
 
     public void summonSoulSpearSummoner()

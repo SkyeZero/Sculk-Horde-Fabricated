@@ -8,9 +8,7 @@ import net.minecraft.sounds.SoundSource;
 
 public class ReaperCastSpellGoal extends AttackStepGoal {
     protected final SculkSoulReaperEntity mob;
-    protected int cooldownTicksElapsed = getExecutionCooldown();
     protected int castingTime = 0;
-    protected boolean spellCasted = false;
 
     public ReaperCastSpellGoal(SculkSoulReaperEntity mob) {
         this.mob = mob;
@@ -19,38 +17,10 @@ public class ReaperCastSpellGoal extends AttackStepGoal {
     public boolean requiresUpdateEveryTick() {
         return true;
     }
-
-
     protected int getBaseCastingTime() { return TickUnits.convertSecondsToTicks(1);}
     protected int getCastingTimeElapsed()
     {
         return castingTime;
-    }
-
-    protected int getExecutionCooldown() { return TickUnits.convertSecondsToTicks(0); }
-    protected int getCooldownTicksElapsed() { return cooldownTicksElapsed; }
-
-    protected boolean mustSeeTarget()
-    {
-        return true;
-    }
-
-    protected void setSpellCompleted()
-    {
-        spellCasted = true;
-    }
-
-
-    @Override
-    public boolean canUse()
-    {
-        return mob.getTarget() != null;
-    }
-
-    @Override
-    public boolean canContinueToUse()
-    {
-        return !spellCasted && mob.getTarget() != null;
     }
 
     @Override
@@ -69,17 +39,17 @@ public class ReaperCastSpellGoal extends AttackStepGoal {
 
     protected void playCastingAnimation()
     {
-        //mob.triggerAnim(SculkSoulReaperEntity.COMBAT_ATTACK_ANIMATION_CONTROLLER_ID, SculkSoulReaperEntity.ATTACK_SPELL_CHARGE_ID);
+
     }
 
     protected void playAttackAnimation()
     {
-        //mob.triggerAnim(SculkSoulReaperEntity.COMBAT_ATTACK_ANIMATION_CONTROLLER_ID, SculkSoulReaperEntity.ATTACK_SPELL_USE_ID);
+
     }
 
     protected void doAttackTick()
     {
-        setSpellCompleted();
+        setAttackStepComplete(true);
     }
 
     @Override
@@ -98,7 +68,7 @@ public class ReaperCastSpellGoal extends AttackStepGoal {
             return;
         }
 
-        if(spellCasted)
+        if(isAttackStepComplete())
         {
             return;
         }
@@ -110,8 +80,6 @@ public class ReaperCastSpellGoal extends AttackStepGoal {
     public void stop()
     {
         super.stop();
-        cooldownTicksElapsed = 0;
-        spellCasted = false;
         castingTime = 0;
     }
 }

@@ -244,13 +244,19 @@ public class EntityAlgorithms {
     @Nullable
     public static BlockPos playerTargetBlockPos(Player player, boolean isFluid)
     {
-        HitResult block =  player.pick(200.0D, 0.0F, isFluid);
+        // Perform ray trace
+        HitResult hitResult = player.pick(200.0D, 0.0F, isFluid);
 
-        if(block.getType() == HitResult.Type.BLOCK)
-        {
-            return ((BlockHitResult)block).getBlockPos();
+        if (hitResult.getType() == HitResult.Type.BLOCK) {
+            // Normal block hit
+            return ((BlockHitResult) hitResult).getBlockPos();
+        } else {
+            // If no block was hit, calculate position in the air along the look vector
+            Vec3 eyePos = player.getEyePosition(0.0F); // Player eye position
+            Vec3 lookVec = player.getLookAngle();      // Direction they're looking
+            Vec3 targetVec = eyePos.add(lookVec.scale(200.0D)); // 200 block range
+            return BlockPos.containing(targetVec);
         }
-        return null;
     }
 
     /**

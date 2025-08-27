@@ -24,7 +24,7 @@ public class FloorSoulSpearsAttackGoal extends ReaperCastSpellGoal
     protected int maxAttackDuration = TickUnits.convertSecondsToTicks(10);
     protected int elapsedAttackDuration = 0;
     FloorSoulSpearsSpawner spawner;
-    List<LivingEntity> enemies;
+    List<LivingEntity> enemies = new ArrayList<>();
     ArrayList<FloorSoulSpearsSpawner> spawners = new ArrayList<>();
     protected long UPDATE_INTERVAL = TickUnits.convertSecondsToTicks(0.15F);
     protected long lastUpdate = 0;
@@ -67,7 +67,7 @@ public class FloorSoulSpearsAttackGoal extends ReaperCastSpellGoal
 
         if(elapsedAttackDuration >= maxAttackDuration || areAllTargetsDead())
         {
-            setSpellCompleted();
+            setAttackStepComplete(true);
             return;
         }
 

@@ -96,7 +96,6 @@ public class ModConfig {
         public final ModConfigSpec.ConfigValue<Boolean> enable_gpu_compatibility_mode;
 
         public final ModConfigSpec.ConfigValue<Boolean> experimental_features_enabled;
-        public final ModConfigSpec.ConfigValue<Boolean> experimental_sheep_enabled;
         public final ModConfigSpec.ConfigValue<Boolean> experimental_hit_squad_event_enabled;
         public final ModConfigSpec.ConfigValue<Boolean> experimental_brood_hatcher_enabled;
 
@@ -233,7 +232,7 @@ public class ModConfig {
             infection_speed_multiplier = builder.comment("How much faster or slower should infection spread? (Default 1)").defineInRange("infection_speed_multiplier",1.0, 0.001, 10);
             max_infestation_cursor_population = builder.comment("How many infestation cursors are allowed to exist at one time. WARNING: This only applies if performance mode is at HIGH. To keep performance at HIGH, set disable_auto_performance_system to true (Default 200)").defineInRange("max_infestation_cursor_population", 200, 1, Integer.MAX_VALUE);
             infestation_purifier_range = builder.comment("How far should the infestation purifier reach? (Default 5)").defineInRange("purifier_range",48, 0, 100);
-            items_infection_cursors_can_eat = builder.comment("What dropped items should cursors eat? This prevents lag and boosts their lifespan.").defineList("items_infection_cursors_can_eat", Arrays.asList("minecraft:wheat_seeds", "minecraft:bamboo", "minecraft:stick", "minecraft:poppy", "minecraft:dandelion", "minecraft:blue_orchid", "minecraft:allium", "minecraft:azure_bluet", "minecraft:red_tulip", "minecraft:orange_tulip", "minecraft:white_tulip", "minecraft:pink_tulip", "minecraft:oxeye_daisy", "minecraft:cornflower", "minecraft:lily_of_the_valley", "minecraft:sunflower", "minecraft:lilac", "minecraft:rose_bush", "minecraft:peony"), entry -> true);
+            items_infection_cursors_can_eat = builder.comment("What dropped items should cursors eat? This prevents lag and boosts their lifespan.").defineList("items_infection_cursors_can_eat", Arrays.asList("minecraft:wheat_seeds", "minecraft:bamboo", "minecraft:stick", "minecraft:poppy", "minecraft:dandelion", "minecraft:blue_orchid", "minecraft:allium", "minecraft:azure_bluet", "minecraft:red_tulip", "minecraft:orange_tulip", "minecraft:white_tulip", "minecraft:pink_tulip", "minecraft:oxeye_daisy", "minecraft:cornflower", "minecraft:lily_of_the_valley", "minecraft:sunflower", "minecraft:lilac", "minecraft:rose_bush", "minecraft:peony", "minecraft:pink_petals"), entry -> true);
             make_block_infestable = builder.comment("Add blocks to this list to make them infestable. I.E. minecraft:dirt. Be careful what you put in here, this can potentially lead to issues. This will not work with blocks that are air, have a block entity, are already considered an infested block, or have the not infestable tag.").defineList("make_block_infestable", Arrays.asList(""), entry -> true);
             builder.pop();
 
@@ -259,7 +258,6 @@ public class ModConfig {
 
             builder.push("Experimental Features");
             experimental_features_enabled = builder.comment("Should experimental features be enabled? (Default false)").define("experimental_features_enabled",false);
-            experimental_sheep_enabled = builder.comment("Should the experimental sculk sheep be enabled? (Default false)").define("experimental_sheep_enabled",false);
             experimental_brood_hatcher_enabled = builder.comment("Should the experimental brood hatcher be enabled? (Default false)").define("experimental_brood_hatcher_enabled",false);
             experimental_hit_squad_event_enabled = builder.comment("Should experimental hit squad event feature be enabled? (Default false)").define("experimental_hit_squad_event_enabled",false);
             builder.pop();

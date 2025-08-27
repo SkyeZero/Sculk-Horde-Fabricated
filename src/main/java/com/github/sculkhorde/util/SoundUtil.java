@@ -8,6 +8,10 @@ import net.minecraft.world.level.Level;
 
 public class SoundUtil {
 
+    public static void playAmbientSoundInLevel(Level level, BlockPos blockPos, SoundEvent sound)
+    {
+        level.playSound((Player) null,blockPos, sound, SoundSource.AMBIENT, 1.0F, 1.0F);
+    }
     public static void playSoundInLevel(Level level, BlockPos blockPos, SoundEvent sound, SoundSource soundSource)
     {
         level.playSound((Player) null,blockPos, sound, soundSource, 1.0F, 1.0F);

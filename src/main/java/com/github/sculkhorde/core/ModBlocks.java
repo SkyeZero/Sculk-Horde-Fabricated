@@ -214,8 +214,8 @@ public class ModBlocks {
 					.sound(SoundType.SAND)
 			));
 
-	public static final RegistryObject<Block> INFESTED_DEEPSLATE =
-			registerBlock("infested_deepslate", () -> new Block(BlockBehaviour.Properties.of()
+	public static final RegistryObject<InfestedPillarBlock> INFESTED_DEEPSLATE =
+			registerBlock("infested_deepslate", () -> new InfestedPillarBlock(BlockBehaviour.Properties.of()
 					.mapColor(MapColor.TERRACOTTA_BLUE)
 					.strength(4f, 30f)//Hardness & Resistance
 					.destroyTime(5f)
@@ -301,7 +301,7 @@ public class ModBlocks {
 					.strength(4f, 30f)//Hardness & Resistance
 					.destroyTime(5f)
 					.requiresCorrectToolForDrops()
-					.sound(SoundType.STONE)
+					.sound(SoundType.TUFF)
 			));
 
 	public static final RegistryObject<Block> INFESTED_CALCITE =
@@ -319,7 +319,7 @@ public class ModBlocks {
 					.strength(4f, 30f)//Hardness & Resistance
 					.destroyTime(5f)
 					.requiresCorrectToolForDrops()
-					.sound(SoundType.STONE)
+					.sound(SoundType.DEEPSLATE)
 			));
 
 	public static final RegistryObject<StairBlock> INFESTED_COBBLED_DEEPSLATE_STAIRS =
@@ -592,13 +592,13 @@ public class ModBlocks {
 	public static final RegistryObject<WallBlock> INFESTED_BLACKSTONE_WALL =
 			noDatagenWall(INFESTED_BLACKSTONE);
 
-	public static final RegistryObject<Block> INFESTED_BASALT =
-			registerBlock("infested_basalt", () -> new Block(BlockBehaviour.Properties.of()
+	public static final RegistryObject<InfestedPillarBlock> INFESTED_BASALT =
+			registerBlock("infested_basalt", () -> new InfestedPillarBlock(BlockBehaviour.Properties.of()
 					.mapColor(MapColor.COLOR_GRAY)
 					.strength(4f, 30f)//Hardness & Resistance
 					.destroyTime(5f)
 					.requiresCorrectToolForDrops()
-					.sound(SoundType.STONE)
+					.sound(SoundType.BASALT)
 			));
 
 	public static final RegistryObject<Block> INFESTED_SMOOTH_BASALT =
@@ -607,7 +607,7 @@ public class ModBlocks {
 					.strength(4f, 30f)//Hardness & Resistance
 					.destroyTime(5f)
 					.requiresCorrectToolForDrops()
-					.sound(SoundType.STONE)
+					.sound(SoundType.BASALT)
 			));
 
 	public static final RegistryObject<Block> INFESTED_ENDSTONE =
@@ -625,7 +625,7 @@ public class ModBlocks {
 					.strength(4f, 30f)//Hardness & Resistance
 					.destroyTime(5f)
 					.requiresCorrectToolForDrops()
-					.sound(SoundType.STONE)
+					.sound(SoundType.NETHERRACK)
 			));
 
 	public static final RegistryObject<Block> INFESTED_CRIMSON_NYLIUM =
@@ -634,7 +634,7 @@ public class ModBlocks {
 					.strength(4f, 30f)//Hardness & Resistance
 					.destroyTime(5f)
 					.requiresCorrectToolForDrops()
-					.sound(SoundType.STONE)
+					.sound(SoundType.NYLIUM)
 			));
 
 	public static final RegistryObject<Block> INFESTED_WARPED_NYLIUM =
@@ -643,7 +643,7 @@ public class ModBlocks {
 					.strength(4f, 30f)//Hardness & Resistance
 					.destroyTime(5f)
 					.requiresCorrectToolForDrops()
-					.sound(SoundType.STONE)
+					.sound(SoundType.NYLIUM)
 			));
 
 	public static final RegistryObject<Block> INFESTED_MOSSY_COBBLESTONE =
@@ -670,7 +670,7 @@ public class ModBlocks {
 					.strength(4f, 30f)//Hardness & Resistance
 					.destroyTime(5f)
 					.requiresCorrectToolForDrops()
-					.sound(SoundType.MUD)
+					.sound(SoundType.GRAVEL)
 			));
 
 	public static final RegistryObject<Block> INFESTED_STONE_BRICKS =

@@ -7,6 +7,7 @@ import java.util.Optional;
 
 public class AttackStepGoal extends Goal implements IDebuggableGoal
 {
+    protected boolean isAttackStepComplete = false;
     protected String lastReasonOfNoStart = "None";
     protected AttackSequenceGoal sequenceParent;
 
@@ -20,15 +21,27 @@ public class AttackStepGoal extends Goal implements IDebuggableGoal
         sequenceParent = parent;
     }
 
+
+    @Override
+    public void start() {
+        super.start();
+        setAttackStepComplete(false);
+    }
+
     @Override
     public boolean canUse() {
-        return false;
+        return true;
+    }
+
+    @Override
+    public boolean canContinueToUse() {
+        return !isAttackStepComplete();
     }
 
     @Override
     public void stop() {
         super.stop();
-        if(sequenceParent != null) { sequenceParent.incrementAttackIndexOrFinishSequence(); }
+        setAttackStepComplete(false);
     }
 
     @Override
@@ -49,5 +62,13 @@ public class AttackStepGoal extends Goal implements IDebuggableGoal
     @Override
     public long getTimeRemainingBeforeCooldownOver() {
         return -1;
+    }
+
+    public boolean isAttackStepComplete() {
+        return isAttackStepComplete;
+    }
+
+    public void setAttackStepComplete(boolean attackStepComplete) {
+        isAttackStepComplete = attackStepComplete;
     }
 }

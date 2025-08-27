@@ -2,6 +2,7 @@ package com.github.sculkhorde.common.entity.boss.sculk_soul_reaper.goals;
 
 import com.github.sculkhorde.common.entity.boss.sculk_soul_reaper.*;
 import com.github.sculkhorde.util.BlockAlgorithms;
+import com.github.sculkhorde.util.EntityAlgorithms;
 import com.github.sculkhorde.util.TickUnits;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -44,7 +45,7 @@ public class ElementalMagicCircleAttackGoal extends ReaperCastSpellGoal
     @Override
     protected void doAttackTick() {
         performSpellCasting();
-        setSpellCompleted();
+        setAttackStepComplete(true);
     }
 
     // Performs the spell casting action
@@ -80,9 +81,9 @@ public class ElementalMagicCircleAttackGoal extends ReaperCastSpellGoal
             });
 
         } else {
-            // Create 16 spell entities in a line
-            for (int l = 0; l < mob.distanceToSqr(targetEntity); l += 3) {
-                double distanceMultiplier = 1.25D * (double)(l + 1);
+            // Create spell entities in a line up to target
+            for (int l = 0; l < EntityAlgorithms.getDistanceBetweenEntities(mob, targetEntity); l += 4) {
+                double distanceMultiplier = l * 1.25D;
                 int delay = 1 * l;
                 this.createSpellEntity(mob.getX() + (double)Mth.cos(angleToTarget) * distanceMultiplier, mob.getZ() + (double)Mth.sin(angleToTarget) * distanceMultiplier, minY, maxY, angleToTarget, delay);
             }
@@ -117,7 +118,9 @@ public class ElementalMagicCircleAttackGoal extends ReaperCastSpellGoal
 
         // Add the spell entity to the world if a suitable position is found
         if (foundSuitablePosition) {
-            mob.level().addFreshEntity(getElementalSpellEntity(x, (double)blockPos.getY() + yOffset, z, angle, mob));
+            ElementalFireMagicCircleAttackEntity spell = getElementalSpellEntity(x, (double)blockPos.getY() + yOffset, z, angle, mob);
+            spell.setDelay(delay);
+            mob.level().addFreshEntity(spell);
         }
     }
 
@@ -127,7 +130,7 @@ public class ElementalMagicCircleAttackGoal extends ReaperCastSpellGoal
             case 0 -> new ElementalFireMagicCircleAttackEntity(mob.level(), x, y, z, angle, owner);
             case 1 -> new ElementalPoisonMagicCircleAttackEntity(mob.level(), x, y, z, angle, owner);
             case 2 -> new ElementalIceMagicCircleAttackEntity(mob.level(), x, y, z, angle, owner);
-            case 3 -> new ElementalBreezeMagicCircleAttackAttackEntity(mob.level(), x, y, z, angle, owner);
+            case 3 -> new ElementalBreezeMagicCircleAttackEntity(mob.level(), x, y, z, angle, owner);
             default -> new ElementalFireMagicCircleAttackEntity(mob.level(), x, y, z, angle, owner);
         };
     }

@@ -29,6 +29,11 @@ public class ReaperAttackSequenceGoal extends AttackSequenceGoal {
             return false;
         }
 
+        if(getReaper().getTarget() == null)
+        {
+            return false;
+        }
+
         if(getReaper().isThereAnotherAttackActive(this))
         {
             if(getReaper().getCurrentAttack().getCurrentGoal() == null)
@@ -37,7 +42,7 @@ public class ReaperAttackSequenceGoal extends AttackSequenceGoal {
                 return false;
             }
 
-            reasonForNoStart = "There is already an attack going on: \n   " + getReaper().getCurrentAttack().getCurrentGoal().getClass().getName();
+            reasonForNoStart = "There is already an attack going on: \n   " + getReaper().getCurrentAttack().getCurrentGoal().getClass().getSimpleName();
             return false;
         }
 
@@ -59,21 +64,16 @@ public class ReaperAttackSequenceGoal extends AttackSequenceGoal {
     @Override
     public void start() {
         super.start();
-
-        if(getReaper().getCurrentAttack() == null)
-        {
-            getReaper().setCurrentAttack(this);
-        }
-
+        getReaper().setCurrentAttack(this);
     }
 
     @Override
     public void stop() {
-        super.stop();
-
-        if(finishedAttackSequence)
+        if(finishedAttackSequence || !canContinueToUse())
         {
             getReaper().clearCurrentAttack();
         }
+
+        super.stop();
     }
 }

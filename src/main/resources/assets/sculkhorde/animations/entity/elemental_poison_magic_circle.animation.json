@@ -1,8 +1,32 @@
 {
 	"format_version": "1.8.0",
 	"animations": {
-		"animation.model.new": {
-			"loop": true
+		"hide": {
+			"loop": "hold_on_last_frame",
+			"bones": {
+				"root": {
+					"scale": {
+						"vector": [0, 0, 0]
+					}
+				}
+			}
+		},
+		"attack": {
+			"loop": "hold_on_last_frame",
+			"animation_length": 0.25,
+			"bones": {
+				"root": {
+					"scale": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.25": {
+							"vector": [1, 1, 1],
+							"easing": "easeInElastic"
+						}
+					}
+				}
+			}
 		}
 	},
 	"geckolib_format_version": 2

@@ -1,6 +1,7 @@
 {
-  "parent": "block/cube_all",
+  "parent": "minecraft:block/cube_column",
   "textures": {
-    "all": "sculkhorde:block/infested_deepslate"
+    "end": "sculkhorde:block/infested_deepslate_top",
+    "side": "sculkhorde:block/infested_deepslate"
   }
 }
